@@ -1,0 +1,58 @@
+[
+    {
+        "change_date": 1736420639348.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736420638397.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "UpdateSourcingRequest transformation - copy - 6",
+        "draft": null,
+        "factory_id": "50d5c4b3-14cc-40be-adda-e6a386f3f746",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "UpdateSourcingRequest",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "SourcingRequest"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "UpdateSourcingRequestAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n\t'CreateSourcingRequest' || '_' || \"SourcingRequestHistory\".\"ID\" AS \"ID\",\n    \"SourcingRequest\".\"ID\" AS SourcingRequest,\n\t\"SourcingRequestHistory\".\"TimeCreated\" AS \"Time\"\nFROM \"o_custom_SourcingRequest\" AS \"SourcingRequest\"\nJOIN \"o_custom_SourcingRequestHistory\" AS \"SourcingRequestHistory\" ON 1=1\n    AND \"SourcingRequest\".\"ID\" = \"SourcingRequestHistory\".\"SourcingRequest_ID\"\nWHERE 1=1\n    AND \"SourcingRequestHistory\".\"CREATEDATE\" IS NOT NULL\n    AND \"SourcingRequestHistory\".\"DocumentVersion\" < \"SourcingRequest\".\"DocumentVersion\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,93 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172986266.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "color": "#0C1CC0",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986266.0,
+    "description": "A legally binding document to customers for the supply of goods or the provision of services under specific conditions. The different entries are split into seperate QuotationItem entities.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CreationExecutionType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "fd2d6b23-f572-4760-beb3-fb92cbdaf934",
+    "managed": true,
+    "multi_link": false,
+    "name": "Quotation",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CreatedBy",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "User",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Items",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Header",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "QuotationItem",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "OrderManagement"
+    ]
+}

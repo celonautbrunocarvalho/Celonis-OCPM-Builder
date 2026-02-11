@@ -1,0 +1,230 @@
+{
+    "categories": [],
+    "change_date": 1736420932572.0,
+    "changed_by": {
+        "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+        "name": "c.demosthenous",
+        "type_": "USER"
+    },
+    "color": "#0A18BB",
+    "created_by": {
+        "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+        "name": "c.demosthenous",
+        "type_": "USER"
+    },
+    "creation_date": 1736244710947.0,
+    "description": null,
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ExpiryDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Quantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "TimeCreated",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "TiedRank",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExtendedPrice",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Status",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Price",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Active",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Reusequote",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "NextVersion",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SliceId",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "Rank",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "TimeUpdated",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "AodDataSyncScn",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Savings",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "EffectiveDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "QuantityAmount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "ExtendedPriceAmountInReportingCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "ExtendedPriceApproxAmountInBaseCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "ExtendedPriceAmount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ExtendedPriceConversionDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExtendedPriceCurrencyUniqueName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "PriceAmountInReportingCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "PriceApproxAmountInBaseCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "PriceAmount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "PriceConversionDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PriceCurrencyUniqueName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "SavingsAmount1AmountInReportingCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "SavingsAmount1ApproxAmountInBaseCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "SavingsAmount1Amount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "SavingsAmount1ConversionDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SavingsAmount1CurrencyUniqueName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "SavingsAmount2AmountInReportingCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "SavingsAmount2Amount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "SavingsAmount2ConversionDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SavingsAmount2CurrencyUniqueName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "NextVersionVersionId",
+            "namespace": "custom"
+        }
+    ],
+    "id": "abff7675-69f8-4f50-aa4c-8f7ae76a2824",
+    "managed": true,
+    "multi_link": false,
+    "name": "RfxItemValue",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "RfxDocumentItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "RFXItem",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": []
+}

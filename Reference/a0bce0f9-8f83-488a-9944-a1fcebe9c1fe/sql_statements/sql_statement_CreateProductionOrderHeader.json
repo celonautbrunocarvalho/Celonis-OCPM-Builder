@@ -1,0 +1,60 @@
+[
+    {
+        "change_date": 1770400812709.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400812709.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "CreateProductionOrderHeader",
+        "draft": null,
+        "factory_id": "41467813-0f56-41d1-8f1d-ae1a3b64b262_00000000-0000-0000-0000-000000000000",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "CreateProductionOrderHeader",
+                "namespace": "celonis"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "ProductionOrder"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ProductionOrder",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'CreateProductionOrderHeader' || '_' || \"ProductionOrder\".\"ID\" AS \"ID\",\n       \"ProductionOrder\".\"ID\"                                         AS \"ProductionOrder\",\n       \"ProductionOrder\".\"CreationTime\"                               AS \"Time\",\n       \"ProductionOrder\".\"CreatedBy_ID\"                               AS \"ExecutedBy\",\n       \"ProductionOrder\".\"CreationExecutionType\"                      AS \"ExecutionType\"\nFROM \"o_celonis_ProductionOrder\" AS \"ProductionOrder\"\nWHERE \"ProductionOrder\".\"CreationTime\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

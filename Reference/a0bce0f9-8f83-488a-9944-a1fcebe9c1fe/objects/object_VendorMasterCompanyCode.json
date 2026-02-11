@@ -1,0 +1,189 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172986363.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "color": "#6284FF",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986363.0,
+    "description": "Contains master data for vendors divided into company codes.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PaymentTerms",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "72a6e4e4-82b5-4058-9671-c6ead587e697",
+    "managed": true,
+    "multi_link": false,
+    "name": "VendorMasterCompanyCode",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Contracts",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "VendorMasterCompanyCode",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Contract",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "VendorMasterCompanyCode",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrder",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Vendor",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Vendor",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorAccountClearingAssignments",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "VendorMasterCompanyCode",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountClearingAssignment",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorAccountCreditItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "VendorMasterCompanyCode",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorAccountDebitItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "VendorMasterCompanyCode",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountDebitItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorInvoiceItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "VendorMasterCompanyCode",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoiceItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorInvoices",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "VendorMasterCompanyCode",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoice",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "AccountsPayable"
+    ]
+}

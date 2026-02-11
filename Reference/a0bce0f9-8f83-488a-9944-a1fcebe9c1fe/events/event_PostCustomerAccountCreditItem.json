@@ -1,0 +1,72 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987114.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987114.0,
+    "description": "This event describes the entering (posting) of Credit entries in the customer account side of the general ledger. It can be e.g. a customer credit memo.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "3a95843e-e2bb-42d6-80d3-14cd1f848fdd",
+    "name": "PostCustomerAccountCreditItem",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CustomerAccountCreditItem",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerAccountCreditItem",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsReceivable"
+    ]
+}

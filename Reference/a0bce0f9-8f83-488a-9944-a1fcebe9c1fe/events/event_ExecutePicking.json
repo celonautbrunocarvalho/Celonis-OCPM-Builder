@@ -1,0 +1,72 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987099.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987099.0,
+    "description": "This event involves taking goods from a storage location and staging the right quantity in a picking area where the goods will be prepared for shipping. This event takes place in a delivery process.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "345ca15c-117f-409b-be35-4a6baa83cbba",
+    "name": "ExecutePicking",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Delivery",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Delivery",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "OrderManagement"
+    ]
+}

@@ -1,0 +1,72 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987431.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987431.0,
+    "description": "This event indicates when a customer signs a document indicating that goods have been successfully delivered.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "ef11ed31-cf86-4ea5-bd61-9d0d471fc20c",
+    "name": "SignProofOfDelivery",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Delivery",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Delivery",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "OrderManagement"
+    ]
+}

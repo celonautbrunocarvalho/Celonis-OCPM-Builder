@@ -1,0 +1,85 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987317.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987317.0,
+    "description": "This event describes the reversal of Debit entries in the vendor account side of the general ledger. An example of this event is the reversal of a vendor credit memo.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "b5b3b838-43a2-4066-9ee5-fb1363a5a0a7",
+    "name": "ReverseVendorAccountDebitItem",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "VendorAccountCreditItem",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorAccountDebitItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountDebitItem",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable"
+    ]
+}

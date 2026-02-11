@@ -1,0 +1,108 @@
+[
+    {
+        "change_date": 1737037475212.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736341535824.0,
+        "data_connection_id": "ad7bbed7-c036-4eb3-8f14-4924d1759a4b",
+        "description": "",
+        "disabled": null,
+        "display_name": "Requisition transformation - 1000 - RAW test data sets_32 - Ariba Procurement - 2",
+        "draft": null,
+        "factory_id": "d714ffc5-8424-46a0-9c8d-53e1ecf7455b",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "TimezoneOffset",
+                "value": "-3"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Requisition",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Active",
+                    "ApprovalRequestsVersion",
+                    "ApprovedDate",
+                    "ApprovedState",
+                    "AreOrdersStuck",
+                    "BudgetCheckStatus",
+                    "ChangedByUniqueName",
+                    "CreateDate",
+                    "ERPRequisitionID",
+                    "ID",
+                    "InitialUniqueName",
+                    "IsExternalReq",
+                    "IsForecast",
+                    "IsServiceOrder",
+                    "IsServiceRequisition",
+                    "LastModified",
+                    "Name",
+                    "NumberBilled",
+                    "NumberCleared",
+                    "NumberReceivableOrders",
+                    "OrderedDate",
+                    "OrderedState",
+                    "PaymentTerms",
+                    "Preparer",
+                    "PreparerUniqueName",
+                    "PreviousApprovalRequestsVersion",
+                    "PreviousVersion",
+                    "PreviousVersionUniqueName",
+                    "ProcurementUnitUniqueName",
+                    "RealTimeBudgetResponseUniqueName",
+                    "ReceivedState",
+                    "ReportingCurrencyUniqueName",
+                    "Requester",
+                    "RequesterUniqueName",
+                    "ResubmitDate",
+                    "SourcingStatus",
+                    "StatusString",
+                    "SubmitDate",
+                    "TimeCreated",
+                    "TimeUpdated",
+                    "TotalCostAmount",
+                    "TotalCostAmountInReportingCurrency",
+                    "TotalCostApproxAmountInBaseCurrency",
+                    "TotalCostConversionDate",
+                    "TotalCostCurrencyUniqueName",
+                    "Type",
+                    "UniqueName",
+                    "Version",
+                    "VersionNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "RequisitionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH TMP_CEL_REQUISITION AS (\n    SELECT \n        * ,\n        ROW_NUMBER() OVER (\n            PARTITION BY \"InitialUniqueName\" \n            ORDER BY \n                CAST(\"VersionNumber\" AS integer) DESC\n        ) AS RN\n    FROM \"Requisition\"\n    WHERE 1=1\n        AND \"Requisition\".\"Active\" = 'true'\n        AND \"Requisition\".\"StatusString\" NOT IN ('Composing')\n)\nSELECT \n    'Requisition_' || \"Requisition\".\"InitialUniqueName\" as \"ID\",\n    \"Requisition\".\"ERPRequisitionID\" as \"ERPRequisitionID\",\n    \"Requisition\".\"UniqueName\" as \"UniqueName\",\n    \"Requisition\".\"IsForecast\" as \"IsForecast\",\n    \"Requisition\".\"IsServiceRequisition\" as \"IsServiceRequisition\",\n    \"Requisition\".\"StatusString\" as \"StatusString\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Requisition\".\"TimeUpdated\") as \"TimeUpdated\",\n    \"Requisition\".\"ApprovedState\" as \"ApprovedState\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Requisition\".\"CreateDate\") AS \"CreateDate\",\n    \"Requisition\".\"Name\" as \"Name\",\n    \"Requisition\".\"Version\" as \"Version\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Requisition\".\"ApprovedDate\") AS \"ApprovedDate\",\n    \"Requisition\".\"PreviousApprovalRequestsVersion\" as \"PreviousApprovalRequestsVersion\",\n    cast(\"Requisition\".\"NumberBilled\" as float) as \"NumberBilled\",\n    cast(\"Requisition\".\"BudgetCheckStatus\" as int) as \"BudgetCheckStatus\",\n    \"Requisition\".\"AreOrdersStuck\" as \"AreOrdersStuck\",\n    \"Requisition\".\"PaymentTerms\" as \"PaymentTerms\",\n    cast(\"Requisition\".\"ApprovalRequestsVersion\" as int) as \"ApprovalRequestsVersion\",\n    \"Requisition\".\"InitialUniqueName\" as \"InitialUniqueName\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Requisition\".\"SubmitDate\") AS \"SubmitDate\",\n    \"Requisition\".\"LastModified\" as \"LastModified\",\n    cast(\"Requisition\".\"NumberCleared\" as float) as \"NumberCleared\",\n    cast(\"Requisition\".\"VersionNumber\" as int) as \"VersionNumber\",\n    \"Requisition\".\"Type\" as \"Type\",\n    \"Requisition\".\"IsServiceOrder\" as \"IsServiceOrder\",\n    cast(\"Requisition\".\"SourcingStatus\" as int) as \"SourcingStatus\",\n    \"Requisition\".\"ReceivedState\" as \"ReceivedState\",\n    \"Requisition\".\"NumberReceivableOrders\" as \"NumberReceivableOrders\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,cast(\"Requisition\".\"TimeCreated\" as timestamp)) as \"TimeCreated\",\n    --\"Requisition\".\"Requester\" as \"Requester\",                                              JSON FORMAT\n    \"Requisition\".\"OrderedState\" as \"OrderedState\",\n    \"Requisition\".\"Active\" as \"Active\",\n    \"Requisition\".\"PreviousVersion\" as \"PreviousVersion\",\n    \"Requisition\".\"IsExternalReq\" as \"IsExternalReq\",\n    --\"Requisition\".\"Preparer\" as \"Preparer\",                                              JSON FORMAT\n    cast(\"Requisition\".\"TotalCost_AmountInReportingCurrency\" as float) as \"TotalCostAmountInReportingCurrency\",\n    cast(\"Requisition\".\"TotalCost_ApproxAmountInBaseCurrency\" as float) as \"TotalCostApproxAmountInBaseCurrency\",\n    cast(\"Requisition\".\"TotalCost_Amount\" as float) as \"TotalCostAmount\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Requisition\".\"TotalCost_ConversionDate\") AS \"TotalCostConversionDate\",\n    \"Requisition\".\"TotalCost_Currency_UniqueName\" as \"TotalCostCurrencyUniqueName\",\n    \"Requisition\".\"Requester_UniqueName\" as \"RequesterUniqueName\",\n    \"Requisition\".\"ChangedBy_UniqueName\" as \"ChangedByUniqueName\",\n    \"Requisition\".\"RealTimeBudgetResponse_UniqueName\" as \"RealTimeBudgetResponseUniqueName\",\n    \"Requisition\".\"ProcurementUnit_UniqueName\" as \"ProcurementUnitUniqueName\",\n    \"Requisition\".\"ReportingCurrency_UniqueName\" as \"ReportingCurrencyUniqueName\",\n    \"Requisition\".\"CustomCatalogPurchaseOrg_UniqueName\" as \"CustomCatalogPurchaseOrgUniqueName\",\n    \"Requisition\".\"PreviousVersion_UniqueName\" as \"PreviousVersionUniqueName\",\n    \"Requisition\".\"Preparer_UniqueName\" as \"PreparerUniqueName\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Requisition\".\"ResubmitDate\") AS \"ResubmitDate\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Requisition\".\"OrderedDate\") AS \"OrderedDate\"\nFROM TMP_CEL_REQUISITION AS \"Requisition\"\nWHERE 1=1\n    AND \"Requisition\".\"RN\" = 1\n    --AND \"Requisition\".\"Active\" = 'true'\n    --AND \"InitialUniqueName\" = 'PR8117'"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

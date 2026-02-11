@@ -1,0 +1,81 @@
+[
+    {
+        "change_date": 1770400799131.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400799131.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "Customer",
+        "draft": null,
+        "factory_id": "c3d4835d-065a-4799-95d7-a02e8c2b2a8e_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "KNA1 (1)",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'Customer_' || \"KNA1\".\"MANDT\" || \"KNA1\".\"KUNNR\" AS \"ObjectID\",\n\t<%=sourceSystem%>  || \"CDPOS\".\"TABKEY\" || \"CDPOS\".\"TABNAME\" || \"CDPOS\".\"FNAME\"\n       || \"CDPOS\".\"CHANGENR\" || \"CDPOS\".\"CHNGIND\"                            AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME)         AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'LAND1' THEN 'Country'\n           WHEN \"CDPOS\".\"FNAME\" = 'NAME1' THEN 'Name'\n           WHEN \"CDPOS\".\"FNAME\" = 'ORT01' THEN 'City'\n           WHEN \"CDPOS\".\"FNAME\" = 'PSTLZ' THEN 'PostalCode'\n           WHEN \"CDPOS\".\"FNAME\" = 'REGIO' THEN 'Region'\n           WHEN \"CDPOS\".\"FNAME\" = 'STRAS' THEN 'AddressLine1'\n           WHEN \"CDPOS\".\"FNAME\" = 'VBUND' THEN 'InternalTradingPartner'\n           END                                                               AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\" END                                      AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_NEW\" END                                      AS \"NewValue\",\n       'User_' || \"CDHDR\".\"MANDANT\" || \"CDHDR\".\"USERNAME\"                    AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                       AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                                    AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                                 AS \"ExecutionType\"\nFROM \"KNA1\" AS \"KNA1\"\n         LEFT JOIN \"CDPOS\" AS \"CDPOS\" ON\n            \"KNA1\".\"MANDT\" = \"CDPOS\".\"MANDANT\"\n            AND \"CDPOS\".\"TABNAME\" = 'KNA1'\n            AND \"CDPOS\".\"TABKEY\" = \"KNA1\".\"MANDT\" || \"KNA1\".\"KUNNR\"\n            AND \"CDPOS\".\"CHNGIND\" = 'U'\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\" ON\n            \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"FNAME\" IN ('LAND1', 'NAME1', 'ORT01', 'PSTLZ', 'REGIO', 'STRAS', 'VBUND')\n  AND \"KNA1\".\"MANDT\" IS NOT NULL\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                    }
+                ],
+                "foreign_key_names": [],
+                "namespace": "celonis",
+                "property_names": [
+                    "AddressLine1",
+                    "AddressLine2",
+                    "City",
+                    "Country",
+                    "ID",
+                    "InternalFlag",
+                    "Name",
+                    "Number",
+                    "PostalCode",
+                    "Region",
+                    "SourceSystemInstance",
+                    "SourceSystemType"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "KNA1",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'Customer_' || \"KNA1\".\"MANDT\" || \"KNA1\".\"KUNNR\" AS \"ID\",\n    \"KNA1\".\"NAME1\"                                                           AS \"Name\",\n    CASE WHEN \"KNA1\".\"VBUND\" IS NULL THEN FALSE ELSE TRUE END                AS \"InternalFlag\",\n    \"KNA1\".\"LAND1\"                                                           AS \"Country\",\n    \"KNA1\".\"REGIO\"                                                           AS \"Region\",\n    \"KNA1\".\"ORT01\"                                                           AS \"City\",\n    \"KNA1\".\"PSTLZ\"                                                           AS \"PostalCode\",\n    \"KNA1\".\"STRAS\"                                                           AS \"AddressLine1\",\n    NULL                                                                     AS \"AddressLine2\",\n    \"KNA1\".\"KUNNR\"                                                           AS \"Number\",\n    'SAP'                                                                    AS \"SourceSystemType\",\n    \"KNA1\".\"MANDT\"                                                           AS \"SourceSystemInstance\"\nFROM \"KNA1\" AS \"KNA1\"\nWHERE \"KNA1\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

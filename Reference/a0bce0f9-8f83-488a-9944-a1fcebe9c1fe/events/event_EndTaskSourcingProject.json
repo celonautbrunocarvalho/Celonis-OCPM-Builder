@@ -1,0 +1,67 @@
+{
+    "categories": [],
+    "change_date": 1736420940703.0,
+    "changed_by": {
+        "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+        "name": "c.demosthenous",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+        "name": "c.demosthenous",
+        "type_": "USER"
+    },
+    "creation_date": 1736244733432.0,
+    "description": "",
+    "fields": [
+        {
+            "data_type": "CT_INSTANT",
+            "name": "BeginTime",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Task",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "TaskTitle",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ActivityText",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "86b3fe63-4a3f-491d-992d-31b7373cacec",
+    "name": "EndTaskSourcingProject",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Sourcingproject",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Sourcingproject",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": []
+}

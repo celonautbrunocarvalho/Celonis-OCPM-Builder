@@ -1,0 +1,150 @@
+[
+    {
+        "change_date": 1770400808842.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400808842.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseOrderItem",
+        "draft": null,
+        "factory_id": "1e5a8d31-72cd-4c31-8ea9-eda3d5899468_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseOrderItem",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'PurchaseOrderItem_' || \"CDPOS\".\"TABKEY\" AS \"ObjectID\",\n\t<%=sourceSystem%>  || \"CDPOS\".\"TABKEY\" || \"CDPOS\".\"TABNAME\" || \"CDPOS\".\"FNAME\"\n       || \"CDPOS\".\"CHANGENR\" || \"CDPOS\".\"CHNGIND\"                     AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME)  AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'ABSKZ' THEN 'RejectionIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'EGLKZ' THEN 'OutwardDeliveryIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'ELIKZ' THEN 'DeliveryIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'EREKZ' THEN 'FinalInvoiceIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'LGORT' THEN 'StorageLocation'\n           WHEN \"CDPOS\".\"FNAME\" = 'LOEKZ' THEN 'DeletionIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'MATKL' THEN 'MaterialGroup'\n           WHEN \"CDPOS\".\"FNAME\" = 'MATNR' THEN 'MaterialNumber'\n           WHEN \"CDPOS\".\"FNAME\" = 'MENGE' THEN 'Quantity'\n           WHEN \"CDPOS\".\"FNAME\" = 'NETPR' THEN 'NetUnitPrice'\n           WHEN \"CDPOS\".\"FNAME\" = 'LABNR' THEN 'OrderAcknowledgmentNumber'\n           WHEN \"CDPOS\".\"FNAME\" = 'KONNR' THEN 'SystemContractNumber'\n           WHEN \"CDPOS\".\"FNAME\" = 'KTPNR' THEN 'SystemContractItemNumber'\n           WHEN \"CDPOS\".\"FNAME\" = 'TXZ01' THEN 'ShortText'\n           END                                                        AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\"\n           END                                                        AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_NEW\"\n           END                                                        AS \"NewValue\",\n       'User_' || \"CDHDR\".\"MANDANT\" || \"CDHDR\".\"USERNAME\"             AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                             AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                          AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"CHNGIND\" = 'U'\n                       AND \"CDPOS\".\"TABNAME\" = 'EKPO'\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'EINKBELEG'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"FNAME\" IN ('ABSKZ', 'EGLKZ', 'ELIKZ', 'EREKZ', 'LABNR', 'LGORT', 'LOEKZ', 'MATKL', 'MATNR', 'MENGE',\n                          'NETPR', 'KONNR', 'KTPNR', 'TXZ01')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "ContractItem",
+                    "CreatedBy",
+                    "Header",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "RequestedBy"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "ChangeDate",
+                    "CompanyCode",
+                    "CompanyCodeText",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DatabaseContractItemNumber",
+                    "DatabaseContractNumber",
+                    "DatabasePurchaseOrderItemNumber",
+                    "DatabasePurchaseOrderNumber",
+                    "DeletionIndicator",
+                    "DownPaymentDueDate",
+                    "ExternalQuantityUnit",
+                    "GoodsReceiptIndicator",
+                    "ID",
+                    "InvoiceAfterGoodsReceiptIndicator",
+                    "InvoiceReceiptIndicator",
+                    "NetAmount",
+                    "NetUnitPrice",
+                    "PurchasingDocumentType",
+                    "Quantity",
+                    "QuantityUnit",
+                    "ShortText",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "SystemContractItemNumber",
+                    "SystemContractNumber",
+                    "SystemPurchaseOrderItemNumber",
+                    "SystemPurchaseOrderNumber",
+                    "ToleranceLimit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "EKPO",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Changes_EKPO\" AS (SELECT \"CDPOS\".\"MANDANT\",\n                                  \"CDPOS\".\"TABKEY\",\n                                  \"CDHDR\".\"UDATE\",\n                                  \"CDHDR\".\"UTIME\",\n                                  \"CDHDR\".\"USERNAME\",\n                                  ROW_NUMBER()\n                                  OVER (PARTITION BY \"CDPOS\".\"TABKEY\" ORDER BY \"CDHDR\".\"UDATE\" ASC, \"CDHDR\".\"UTIME\" DESC) AS \"rn\"\n                           FROM \"CDPOS\" AS \"CDPOS\"\n                                    LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                                              ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                                                  AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                                                  AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                                                  AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                           WHERE \"CDPOS\".\"OBJECTCLAS\" = 'EINKBELEG'\n                             AND \"CDPOS\".\"TABNAME\" = 'EKPO'\n                             AND \"CDPOS\".\"FNAME\" = 'KEY'\n                             AND \"CDPOS\".\"CHNGIND\" = 'I'),\n    \"CTE_Changes_EKKO\" AS (SELECT \"CDPOS\".\"MANDANT\",\n                                  \"CDPOS\".\"TABKEY\",\n                                  \"CDHDR\".\"UDATE\",\n                                  \"CDHDR\".\"UTIME\",\n                                  \"CDHDR\".\"USERNAME\",\n                                  ROW_NUMBER()\n                                  OVER (PARTITION BY \"CDPOS\".\"TABKEY\" ORDER BY \"CDHDR\".\"UDATE\" ASC, \"CDHDR\".\"UTIME\" DESC) AS \"rn\"\n                           FROM \"CDPOS\" AS \"CDPOS\"\n                                    LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                                              ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                                                  AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                                                  AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                                                  AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                           WHERE \"CDPOS\".\"OBJECTCLAS\" = 'EINKBELEG'\n                             AND \"CDPOS\".\"TABNAME\" = 'EKKO'\n                             AND \"CDPOS\".\"FNAME\" = 'KEY'\n                             AND \"CDPOS\".\"CHNGIND\" = 'I')\nSELECT <%=sourceSystem%>  || 'PurchaseOrderItem_' || \"EKPO\".\"MANDT\" || \"EKPO\".\"EBELN\" || \"EKPO\".\"EBELP\" AS \"ID\",\n       COALESCE(CAST(\"Changes_EKPO\".\"UDATE\" AS DATE) + CAST(\"Changes_EKPO\".\"UTIME\" AS TIME),\n                CAST(\"Changes_EKKO\".\"UDATE\" AS DATE) + CAST(\"Changes_EKKO\".\"UTIME\" AS TIME),\n                CAST(\"EKKO\".\"AEDAT\" AS DATE)\n                + CAST('00:00:01' AS TIME))                                                             AS \"CreationTime\",\n       \"EKPO\".\"LOEKZ\"                                                                                   AS \"DeletionIndicator\",\n\t<%=sourceSystem%>  || 'User_' || \"EKPO\".\"MANDT\" || COALESCE(\"Changes_EKPO\".\"USERNAME\", \"Changes_EKKO\".\"USERNAME\",\n                                             \"EKKO\".\"ERNAM\")                                            AS \"CreatedBy\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                                                            AS \"CreationExecutionType\",\n\t<%=sourceSystem%>  || 'PurchaseOrder_' || \"EKPO\".\"MANDT\" || \"EKPO\".\"EBELN\"                             AS \"Header\",\n       \"EKPO\".\"NETWR\"                                                                                   AS \"NetAmount\",\n       \"EKPO\".\"NETPR\" / COALESCE(\"EKPO\".\"PEINH\", 1)                                                     AS \"NetUnitPrice\",\n       \"EKPO\".\"MENGE\"                                                                                   AS \"Quantity\",\n       \"EKPO\".\"MEINS\"                                                                                   AS \"QuantityUnit\",\n\t<%=sourceSystem%>  || 'ContractItem_' || \"EKPO\".\"MANDT\" || \"EKKO\".\"KONNR\" || \"EKPO\".\"KTPNR\"            AS \"ContractItem\",\n\t<%=sourceSystem%>  || 'MaterialMasterPlant_' || \"EKPO\".\"MANDT\" || \"EKPO\".\"MATNR\"\n       || \"EKPO\".\"WERKS\"                                                                                AS \"MaterialMasterPlant\",\n\t<%=sourceSystem%>  || 'Material_' || \"EKPO\".\"MANDT\" || \"EKPO\".\"MATNR\"                                  AS \"Material\",\n       \"EKPO\".\"TXZ01\"                                                                                   AS \"ShortText\",\n       \"EKPO\".\"WEPOS\"                                                                                   AS \"GoodsReceiptIndicator\",\n       \"EKPO\".\"BUKRS\"                                                                                   AS \"CompanyCode\",\n       \"T001\".\"BUTXT\"                                                                                   AS \"CompanyCodeText\",\n       \"EKPO\".\"BPRME\"                                                                                   AS \"ExternalQuantityUnit\",\n       CAST(\"EKPO\".\"DPDAT\" AS TIMESTAMP)                                                                AS \"DownPaymentDueDate\",\n\t<%=sourceSystem%>  || 'User_' || \"EKPO\".\"AFNAM\"                                                        AS \"RequestedBy\",\n       \"EKPO\".\"REPOS\"                                                                                   AS \"InvoiceReceiptIndicator\",\n       CAST(\"EKPO\".\"AEDAT\" AS TIMESTAMP)                                                                AS \"ChangeDate\",\n\t<%=sourceSystem%>  || 'Plant_' || \"EKPO\".\"MANDT\" || \"EKPO\".\"WERKS\"                                     AS \"Plant\",\n       \"EKPO\".\"KONNR\"                                                                                   AS \"SystemContractNumber\",\n       \"EKPO\".\"KTPNR\"                                                                                   AS \"SystemContractItemNumber\",\n       \"EKPO\".\"EBELN\"                                                                                   AS \"SystemPurchaseOrderNumber\",\n       \"EKPO\".\"EBELP\"                                                                                   AS \"SystemPurchaseOrderItemNumber\",\n       \"EKPO\".\"KONNR\"                                                                                   AS \"DatabaseContractNumber\",\n       \"EKPO\".\"KTPNR\"                                                                                   AS \"DatabaseContractItemNumber\",\n       \"EKPO\".\"EBELN\"                                                                                   AS \"DatabasePurchaseOrderNumber\",\n       \"EKPO\".\"EBELP\"                                                                                   AS \"DatabasePurchaseOrderItemNumber\",\n       \"EKKO\".\"WAERS\"                                                                                   AS \"Currency\",\n       'SAP'                                                                                            AS \"SourceSystemType\",\n       \"EKPO\".\"MANDT\"                                                                                   AS \"SourceSystemInstance\",\n       \"T161T\".\"BATXT\"                                                                                  AS \"PurchasingDocumentType\",\n       CAST(\"EKPO\".\"UEBTO\" AS VARCHAR(255))                                                             AS \"ToleranceLimit\",\n       \"EKPO\".\"WEBRE\"                                                                                   AS \"InvoiceAfterGoodsReceiptIndicator\"\nFROM \"EKPO\" AS \"EKPO\"\n         LEFT JOIN \"EKKO\" AS \"EKKO\"\n                   ON \"EKPO\".\"MANDT\" = \"EKKO\".\"MANDT\"\n                       AND \"EKPO\".\"EBELN\" = \"EKKO\".\"EBELN\"\n         LEFT JOIN \"CTE_Changes_EKPO\" AS \"Changes_EKPO\"\n                   ON \"EKKO\".\"MANDT\" = \"Changes_EKPO\".\"MANDANT\"\n                       AND \"EKPO\".\"MANDT\" || \"EKPO\".\"EBELN\" || \"EKPO\".\"EBELP\" = \"Changes_EKPO\".\"TABKEY\"\n                       AND \"Changes_EKPO\".\"rn\" = 1\n         LEFT JOIN \"CTE_Changes_EKKO\" AS \"Changes_EKKO\"\n                   ON \"EKKO\".\"MANDT\" = \"Changes_EKKO\".\"MANDANT\"\n                       AND \"EKKO\".\"MANDT\" || \"EKKO\".\"EBELN\" = \"Changes_EKKO\".\"TABKEY\"\n                       AND \"Changes_EKKO\".\"rn\" = 1\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"EKPO\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"EKPO\".\"BUKRS\" = \"T001\".\"BUKRS\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"EKKO\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND COALESCE(\"Changes_EKPO\".\"USERNAME\", \"Changes_EKKO\".\"USERNAME\", \"EKKO\".\"ERNAM\") = \"USR02\".\"BNAME\"\n         LEFT JOIN \"T024E\" AS \"T024E\"\n                   ON \"EKKO\".\"MANDT\" = \"T024E\".\"MANDT\"\n                       AND \"EKKO\".\"EKORG\" = \"T024E\".\"EKORG\"\n         LEFT JOIN \"T161T\" AS \"T161T\"\n                   ON \"EKKO\".\"MANDT\" = \"T161T\".\"MANDT\"\n                       AND \"EKKO\".\"BSART\" = \"T161T\".\"BSART\"\n                       AND \"EKKO\".\"BSTYP\" = \"T161T\".\"BSTYP\"\n                       AND \"T161T\".\"SPRAS\" = <%=LanguageKey%> \nWHERE \"EKPO\".\"MANDT\" IS NOT NULL\n  AND \"EKPO\".\"BSTYP\" = 'F'\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "RecommendedMaterialContractItems",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "EKPO (2)",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "WITH \"CTE_TMP_MaterialContractItem\" AS\n         (SELECT \"EKPO\".\"MANDT\" || \"EKPO\".\"EBELN\" || \"EKPO\".\"EBELP\"    AS \"ID\",\n                 \"EKPO\".\"MANDT\",\n                 \"EKPO\".\"WERKS\",\n                 \"EKKO\".\"WAERS\",\n                 \"EKPO\".\"MATNR\",\n                 ROW_NUMBER() OVER (PARTITION BY \"EKPO\".\"MANDT\", \"EKPO\".\"WERKS\", \"EKKO\".\"WAERS\", \"EKPO\".\"MATNR\"\n                     ORDER BY \"EKKO\".\"KDATE\" DESC, \"EKPO\".\"NETPR\" ASC) AS \"rn\"\n          FROM \"EKPO\" AS \"EKPO\"\n                   LEFT JOIN \"EKKO\" AS \"EKKO\"\n                             ON \"EKPO\".\"MANDT\" = \"EKKO\".\"MANDT\"\n                                 AND \"EKPO\".\"EBELN\" = \"EKKO\".\"EBELN\"\n          WHERE \"EKPO\".\"BSTYP\" = 'K')\nSELECT <%=sourceSystem%>  || 'PurchaseOrderItem_' || \"EKPO\".\"MANDT\" || \"EKPO\".\"EBELN\" || \"EKPO\".\"EBELP\" AS \"ID\",\n\t<%=sourceSystem%>  || 'ContractItem_' || \"MaterialContractItem\".\"ID\"                                   AS \"RecommendedMaterialContractItems\"\nFROM \"EKPO\" AS \"EKPO\"\n         LEFT JOIN \"EKKO\" AS \"EKKO\"\n                   ON \"EKPO\".\"MANDT\" = \"EKKO\".\"MANDT\"\n                       AND \"EKPO\".\"EBELN\" = \"EKKO\".\"EBELN\"\n         LEFT JOIN \"CTE_TMP_MaterialContractItem\" AS \"MaterialContractItem\"\n                    ON \"EKPO\".\"WERKS\" = \"MaterialContractItem\".\"WERKS\"\n                        AND \"EKKO\".\"WAERS\" = \"MaterialContractItem\".\"WAERS\"\n                        AND \"EKPO\".\"MATNR\" = \"MaterialContractItem\".\"MATNR\"\n                        AND \"MaterialContractItem\".\"rn\" < 6\nWHERE \"EKPO\".\"BSTYP\" = 'F'\n  AND \"EKPO\".\"MANDT\" IS NOT NULL\n  AND \"MaterialContractItem\".\"MANDT\" IS NOT NULL\n"
+                            }
+                        ]
+                    },
+                    {
+                        "relationship_name": "RecommendedMaterialContracts",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "EKPO (1)",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "WITH \"CTE_TMP_MaterialContract\" AS\n         (SELECT \"EKPO\".\"MANDT\" || \"EKPO\".\"EBELN\"                      AS \"ID\",\n                 \"EKPO\".\"MANDT\",\n                 \"EKPO\".\"WERKS\",\n                 \"EKKO\".\"WAERS\",\n                 \"EKPO\".\"MATNR\",\n                 ROW_NUMBER() OVER (PARTITION BY \"EKPO\".\"MANDT\", \"EKPO\".\"WERKS\", \"EKKO\".\"WAERS\", \"EKPO\".\"MATNR\"\n                     ORDER BY \"EKKO\".\"KDATE\" DESC, \"EKPO\".\"NETPR\" ASC) AS \"rn\"\n          FROM \"EKPO\" AS \"EKPO\"\n                   LEFT JOIN \"EKKO\" AS \"EKKO\"\n                             ON \"EKPO\".\"MANDT\" = \"EKKO\".\"MANDT\"\n                                 AND \"EKPO\".\"EBELN\" = \"EKKO\".\"EBELN\"\n          WHERE \"EKPO\".\"BSTYP\" = 'K')\nSELECT DISTINCT <%=sourceSystem%>  || 'PurchaseOrderItem_' || \"EKPO\".\"MANDT\" || \"EKPO\".\"EBELN\" || \"EKPO\".\"EBELP\" AS \"ID\",\n\t<%=sourceSystem%>  || 'Contract_' || \"TMP_MaterialContract\".\"ID\"                                                AS \"RecommendedMaterialContracts\"\nFROM \"EKPO\" AS \"EKPO\"\n         LEFT JOIN \"EKKO\" AS \"EKKO\"\n                   ON \"EKPO\".\"MANDT\" = \"EKKO\".\"MANDT\"\n                       AND \"EKPO\".\"EBELN\" = \"EKKO\".\"EBELN\"\n         LEFT JOIN \"CTE_TMP_MaterialContract\" AS \"TMP_MaterialContract\"\n                    ON \"EKPO\".\"WERKS\" = \"TMP_MaterialContract\".\"WERKS\"\n                        AND \"EKKO\".\"WAERS\" = \"TMP_MaterialContract\".\"WAERS\"\n                        AND \"EKPO\".\"MATNR\" = \"TMP_MaterialContract\".\"MATNR\"\n                        AND \"TMP_MaterialContract\".\"rn\" < 6\nWHERE \"EKPO\".\"BSTYP\" = 'F'\n  AND \"EKPO\".\"MANDT\" IS NOT NULL\n  AND \"TMP_MaterialContract\".\"MANDT\" IS NOT NULL\n"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ID"
+                ],
+                "property_sql_factory_datasets": [],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

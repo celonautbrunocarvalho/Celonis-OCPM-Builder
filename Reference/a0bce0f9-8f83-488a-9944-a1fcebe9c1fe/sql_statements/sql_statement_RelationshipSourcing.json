@@ -1,0 +1,60 @@
+[
+    {
+        "change_date": 1736244758289.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736244757832.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "RelationshipSourcing transformation - OCPM Schema - 1",
+        "draft": null,
+        "factory_id": "1077861b-66cf-42cf-937a-e18e4e3b6a91",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "RelationshipSourcing",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "ContractWorkspace",
+                    "SourcingProject",
+                    "SourcingRequest"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "PredecessorRelationshipID"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "RelationshipSourcingAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH\n    TMP_CEL_Relation_SourcingProject AS (\n        SELECT\n            \"SourcingProject\".\"ID\" AS \"RelationID\",\n            \"SourcingProject\".\"ID\" AS \"SourcingProject\",\n            \"SourcingProject\".\"ParentDocumentInternalId\" AS \"ParentDocumentInternalId\",\n            \"SourcingProject\".\"DocumentIdInternalId\" AS \"DocumentIdInternalId\",\n            COALESCE(\"SourcingRequest_Parent\".\"ID\", \"SourcingRequest_Predecessor\".\"ID\") AS \"SourcingRequest\"            \n        FROM \"o_custom_SourcingProject\" AS \"SourcingProject\"\n        LEFT JOIN \"o_custom_SourcingRequest\" AS \"SourcingRequest_Parent\" ON 1=1\n            AND \"SourcingProject\".\"ParentDocumentInternalId\" = \"SourcingRequest_Parent\".\"InternalId\"\n        LEFT JOIN \"o_custom_SourcingRequest\" AS \"SourcingRequest_Predecessor\" ON 1=1\n            AND \"SourcingProject\".\"PredecessorId\" = \"SourcingRequest_Predecessor\".\"InternalId\"\n        WHERE 1=1\n            --AND ( \"SourcingRequest_Parent\".\"ID\" IS NOT NULL\n            --    OR \"SourcingRequest_Predecessor\".\"ID\" IS NOT NULL )\n    )\n\n    , TMP_CEL_Relation_ContractWorkspace AS (\n        SELECT\n            --'1' AS ID,\n            \"ContractWorkspace\".\"ID\" AS \"RelationID\",\n            \"ContractWorkspace\".\"ID\" AS \"ContractWorkspace\",\n            COALESCE(\"SourcingProject_Parent\".\"SourcingProject\",\"SourcingProject_Predecessor\".\"SourcingProject\") AS \"SourcingProject\",\n            COALESCE(\"SourcingProject_Parent\".\"SourcingRequest\",\"SourcingProject_Predecessor\".\"SourcingRequest\",\"SourcingRequest_Parent\".\"ID\", \"SourcingRequest_Predecessor\".\"ID\") AS \"SourcingRequest\"\n        FROM \"o_custom_ContractWorkspace\" AS \"ContractWorkspace\"\n        LEFT JOIN \"TMP_CEL_Relation_SourcingProject\" AS \"SourcingProject_Parent\" ON 1=1\n            AND \"ContractWorkspace\".\"ParentDocumentInternalId\" = \"SourcingProject_Parent\".\"ParentDocumentInternalId\"\n        LEFT JOIN \"TMP_CEL_Relation_SourcingProject\" AS \"SourcingProject_Predecessor\" ON 1=1\n            AND \"ContractWorkspace\".\"PredecessorId\" = \"SourcingProject_Predecessor\".\"DocumentIdInternalId\"\n        LEFT JOIN \"o_custom_SourcingRequest\" AS \"SourcingRequest_Parent\" ON 1=1\n            AND \"ContractWorkspace\".\"ParentDocumentInternalId\" = \"SourcingRequest_Parent\".\"InternalId\"\n        LEFT JOIN \"o_custom_SourcingRequest\" AS \"SourcingRequest_Predecessor\" ON 1=1\n            AND \"ContractWorkspace\".\"PredecessorId\" = \"SourcingRequest_Predecessor\".\"InternalId\"\n        WHERE 1=1\n            --AND ( COALESCE(\"SourcingProject_Parent\".\"SourcingProject\",\"SourcingProject_Predecessor\".\"SourcingProject\")  IS NOT NULL\n            --    OR COALESCE(\"SourcingProject_Parent\".\"SourcingRequest\",\"SourcingProject_Predecessor\".\"SourcingRequest\",\"SourcingRequest_Parent\".\"ID\", \"SourcingRequest_Predecessor\".\"ID\") IS NOT NULL )\n    ),\n    TMP_CEL_Relationship_UNION AS (\n        SELECT\n            'RelationshipSourcing_' || \"CW\".\"RelationID\" AS \"ID\",\n            \"CW\".\"ContractWorkspace\" AS \"ContractWorkspace\",\n            \"CW\".\"SourcingProject\" AS \"SourcingProject\",\n            \"CW\".\"SourcingRequest\" AS \"SourcingRequest\"\n        FROM TMP_CEL_Relation_ContractWorkspace AS \"CW\"\n        \n        UNION\n        \n        SELECT\n            'RelationshipSourcing_' || \"SP\".\"RelationID\" AS \"ID\"\n            , NULL AS \"ContractWorkspace\"\n            , \"SP\".\"SourcingProject\" AS \"SourcingProject\"\n            , \"SP\".\"SourcingRequest\" AS \"SourcingRequest\"\n        FROM TMP_CEL_Relation_SourcingProject AS \"SP\"\n        WHERE 1=1\n            AND NOT EXISTS (\n                SELECT 1\n                FROM TMP_CEL_Relation_ContractWorkspace AS \"CW\"\n                WHERE \"SP\".\"SourcingProject\" = \"CW\".\"SourcingProject\"\n            )\n    )\nSELECT\n    \"Relationship_UNION\".\"ID\",\n    \"Relationship_UNION\".\"ContractWorkspace\",\n    \"Relationship_UNION\".\"SourcingProject\",\n    \"Relationship_UNION\".\"SourcingRequest\"\nFROM TMP_CEL_Relationship_UNION AS \"Relationship_UNION\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

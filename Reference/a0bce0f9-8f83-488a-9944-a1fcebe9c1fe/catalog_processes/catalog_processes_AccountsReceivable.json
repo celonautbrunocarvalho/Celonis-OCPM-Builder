@@ -1,0 +1,43 @@
+{
+    "change_date": 1732652288994.0,
+    "changed_by": {
+        "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+        "name": "Bruno Carvalho",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "85c7b727-381a-4cec-8f44-b3d474b3277d",
+        "name": "Philipp",
+        "type_": "USER"
+    },
+    "creation_date": 1730809886801.0,
+    "data_source_connections": [
+        {
+            "custom_transformation_count": 0,
+            "data_source_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+            "data_source_name": "1000 - RAW test data sets_13 - TS1 - Full",
+            "data_source_type": "imported",
+            "enabled": false,
+            "global_transformation_count": 40,
+            "mitigate_ccdm_differences": false,
+            "transformation_type": "sap-ecc"
+        },
+        {
+            "custom_transformation_count": 0,
+            "data_source_id": "da0fb715-059b-4a79-9625-e64f7226e30a",
+            "data_source_name": "1000 - RAW test data sets_21 - ORACLE_EBS Test system",
+            "data_source_type": "imported",
+            "enabled": false,
+            "global_transformation_count": 40,
+            "mitigate_ccdm_differences": false,
+            "transformation_type": "oracle-ebs"
+        }
+    ],
+    "description": null,
+    "display_name": "Accounts Receivable",
+    "enable_date": 1730884460939.0,
+    "enabled": true,
+    "event_count": 20,
+    "name": "AccountsReceivable",
+    "object_count": 20
+}

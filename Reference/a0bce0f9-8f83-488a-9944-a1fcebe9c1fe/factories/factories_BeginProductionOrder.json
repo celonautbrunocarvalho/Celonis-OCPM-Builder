@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1770400786540.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400786540.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "Celonis - BeginProductionOrder - SAP ECC",
+        "factory_id": "1a238b45-c6d7-4d64-be31-5f0b7b5b9e50_00000000-0000-0000-0000-000000000000",
+        "has_overwrites": null,
+        "name": "BeginProductionOrder",
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "BeginProductionOrder",
+                "namespace": "celonis"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "NOT_VALIDATED"
+    }
+]

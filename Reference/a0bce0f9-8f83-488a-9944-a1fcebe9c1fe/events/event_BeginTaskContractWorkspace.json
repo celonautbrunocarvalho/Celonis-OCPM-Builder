@@ -1,0 +1,62 @@
+{
+    "categories": [],
+    "change_date": 1736420940002.0,
+    "changed_by": {
+        "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+        "name": "c.demosthenous",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+        "name": "c.demosthenous",
+        "type_": "USER"
+    },
+    "creation_date": 1736244732745.0,
+    "description": "",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Task",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "TaskTitle",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ActivityText",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "ca1c44b7-d54a-4a4b-a589-5db778ba4d60",
+    "name": "BeginTaskContractWorkspace",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "ContractWorkspace",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ContractWorkspace",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": []
+}

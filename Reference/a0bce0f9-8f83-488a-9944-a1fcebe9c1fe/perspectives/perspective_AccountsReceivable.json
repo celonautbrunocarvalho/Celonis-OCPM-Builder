@@ -1,0 +1,701 @@
+{
+    "base_ref": null,
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987481.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987481.0,
+    "default_projection": "CustomerAccountDebitItemActivities",
+    "description": null,
+    "events": [],
+    "id": "ae529db4-8295-4f46-957f-efad43b0111a",
+    "name": "AccountsReceivable",
+    "namespace": "celonis",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "celonis"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Customer",
+                "namespace": "celonis"
+            },
+            "name": "Customer",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerMasterCreditManagement",
+                "namespace": "celonis"
+            },
+            "name": "CustomerMasterCreditManagement",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Customer",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerInvoiceItem",
+                "namespace": "celonis"
+            },
+            "name": "CustomerInvoiceItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderItemBlock",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderItemBlock",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "ReleasedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "BlockedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrder",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrder",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "CreditManagement",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Customer",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderBlock",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderBlock",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrder",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "ReleasedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "BlockedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerInvoice",
+                "namespace": "celonis"
+            },
+            "name": "CustomerInvoice",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerAccountDebitItem",
+                "namespace": "celonis"
+            },
+            "name": "CustomerAccountDebitItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "CustomerInvoice",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreditMemoCancellation",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Customer",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "CustomerMasterCompanyCode",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CreditMemoCancellation",
+                "namespace": "celonis"
+            },
+            "name": "CreditMemoCancellation",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CreditMemoCancellationItem",
+                "namespace": "celonis"
+            },
+            "name": "CreditMemoCancellationItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerAccountCreditItem",
+                "namespace": "celonis"
+            },
+            "name": "CustomerAccountCreditItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "CreditMemo",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CustomerInvoiceCancellation",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Customer",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerAccountClearingAssignment",
+                "namespace": "celonis"
+            },
+            "name": "CustomerAccountClearingAssignment",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "CustomerAccountCreditItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CustomerAccountDebitItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerInvoiceCancellation",
+                "namespace": "celonis"
+            },
+            "name": "CustomerInvoiceCancellation",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerInvoiceCancellationItem",
+                "namespace": "celonis"
+            },
+            "name": "CustomerInvoiceCancellationItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CreditMemo",
+                "namespace": "celonis"
+            },
+            "name": "CreditMemo",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CreditMemoItem",
+                "namespace": "celonis"
+            },
+            "name": "CreditMemoItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CancelCreditMemo",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelCreditMemoItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "RestoreSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeCustomerAccountDebitItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeCustomerMasterCreditManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderItemBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ClearCustomerAccountItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCreditMemoHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCreditMemoItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateDunningNotices",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostCustomerAccountDebitItem",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "CustomerAccountDebitItem",
+                "namespace": "celonis"
+            },
+            "name": "CustomerAccountDebitItemActivities",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            }
+        },
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CancelCreditMemo",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelCreditMemoItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "RestoreSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeCustomerAccountDebitItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeCustomerMasterCreditManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderItemBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ClearCustomerAccountItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCreditMemoHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCreditMemoItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateDunningNotices",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelSalesOrderItem",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "CustomerMasterCreditManagement",
+                "namespace": "celonis"
+            },
+            "name": "CustomerMasterCreditManagementActivities",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "celonis"
+            }
+        }
+    ],
+    "tags": [
+        "AccountsReceivable"
+    ]
+}

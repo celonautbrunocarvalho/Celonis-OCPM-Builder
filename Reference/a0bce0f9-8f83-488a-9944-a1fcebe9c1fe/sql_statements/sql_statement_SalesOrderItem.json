@@ -1,0 +1,115 @@
+[
+    {
+        "change_date": 1770400811166.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400811166.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "SalesOrderItem",
+        "draft": null,
+        "factory_id": "34283ae5-045a-4dd4-ac3a-9e8ad8f2c9a9_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrderItem",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'SalesOrderItem_' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 19) AS \"ObjectID\",\n\t<%=sourceSystem%>  || \"CDPOS\".\"TABKEY\" || \"CDPOS\".\"TABNAME\" || \"CDPOS\".\"FNAME\"\n       || \"CDPOS\".\"CHANGENR\" || \"CDPOS\".\"CHNGIND\"                                    AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME)                 AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'NETPR' THEN 'NetUnitPrice'\n           WHEN \"CDPOS\".\"FNAME\" = 'MATNR' THEN 'MaterialNumber'\n           WHEN \"CDPOS\".\"FNAME\" = 'ABGRU' THEN 'RejectionReason'\n           WHEN \"CDPOS\".\"FNAME\" = 'WERKS' THEN 'Plant'\n           WHEN \"CDPOS\".\"FNAME\" = 'KWMENG' THEN 'OrderedQuantity'\n           END                                                                       AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-'\n               THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\" END                                              AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-'\n               THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_NEW\" END                                              AS \"NewValue\",\n       'User_' || \"CDHDR\".\"MANDANT\" || \"CDHDR\".\"USERNAME\"                            AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                               AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                                            AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                                         AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'VERKBELEG'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"TABNAME\" = 'VBAP'\n  AND \"CDPOS\".\"FNAME\" IN ('NETPR', 'MATNR', 'ABGRU', 'WERKS', 'KWMENG')\n  AND \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "JCDS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'SalesOrderItem_' || \"VBAP\".\"MANDT\" || \"VBAP\".\"VBELN\" || \"VBAP\".\"POSNR\" AS \"ObjectID\",\n\t<%=sourceSystem%>  || \"VBAP\".\"VBELN\" || \"VBAP\".\"POSNR\" || \"JCDS\".\"UDATE\" || \"JCDS\".\"UTIME\" || \"JCDS\".\"STAT\" || \"JCDS\".\"USNAM\"\n       || \"JCDS\".\"CHGNR\"                                                                             AS \"ID\",\n       CAST(\"JCDS\".\"UDATE\" AS DATE) + CAST(\"JCDS\".\"UTIME\" AS TIME)                                   AS \"Time\",\n       'DocumentStatus'                                                                              AS \"Attribute\",\n       LAG(\"JCDS\".\"STAT\", 1, NULL)\n       OVER (PARTITION BY \"JCDS\".\"OBJNR\", \"JCDS\".\"STAT\"\n           ORDER BY \"JCDS\".\"OBJNR\", \"JCDS\".\"STAT\", \"JCDS\".\"CHGNR\", \"JCDS\".\"UDATE\", \"JCDS\".\"UTIME\")\n                                                                               AS \"OldValue\",\n       \"JCDS\".\"STAT\"                                                                                 AS \"NewValue\",\n       'User_' || \"JCDS\".\"USNAM\"                                                                     AS \"ChangedBy\",\n       \"JCDS\".\"CDTCODE\"                                                                              AS \"OperationType\",\n       CAST(\"JCDS\".\"CHGNR\" AS VARCHAR)                                                               AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                                                         AS \"ExecutionType\"\nFROM \"JCDS\" AS \"JCDS\"\n         LEFT JOIN \"VBAP\" AS \"VBAP\"\n                   ON \"JCDS\".\"OBJNR\" = \"VBAP\".\"OBJNR\"\n         LEFT JOIN \"VBAK\" AS \"VBAK\"\n                   ON \"VBAP\".\"MANDT\" = \"VBAK\".\"MANDT\"\n                       AND \"VBAP\".\"VBELN\" = \"VBAK\".\"VBELN\"\n         LEFT JOIN \"TJ02T\" AS \"TJ02T\"\n                   ON \"JCDS\".\"STAT\" = \"TJ02T\".\"ISTAT\"\n                       AND \"TJ02T\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"JCDS\".\"USNAM\" = \"USR02\".\"BNAME\"\n                       AND \"JCDS\".\"MANDT\" = \"USR02\".\"MANDT\"\nWHERE \"VBAK\".\"VBTYP\" IN ('C', 'I')\n  AND \"JCDS\".\"INACT\" IS NULL\n  AND \"JCDS\".\"UDATE\" IS NOT NULL\n  AND \"JCDS\".\"MANDT\" IS NOT NULL\n  AND \"VBAP\".\"MANDT\" IS NOT NULL\n  AND \"VBAK\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Header",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "QuotationItem"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "BillingRelevance",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DatabaseSalesOrderItemNumber",
+                    "DatabaseSalesOrderNumber",
+                    "ExternalMaterialNumber",
+                    "GrossItemWeight",
+                    "ID",
+                    "ItemCategory",
+                    "ItemCategoryText",
+                    "NetAmount",
+                    "NetItemWeight",
+                    "NetUnitPrice",
+                    "ObjectNumber",
+                    "OrderedQuantity",
+                    "ProcessingStatus",
+                    "QuantityUnit",
+                    "RejectionReason",
+                    "RejectionReasonText",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "SystemSalesOrderItemNumber",
+                    "SystemSalesOrderNumber",
+                    "TransitDurationDays",
+                    "WeightUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VBAP",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'SalesOrderItem_' || \"VBAP\".\"MANDT\" || \"VBAP\".\"VBELN\" || \"VBAP\".\"POSNR\"              AS \"ID\",\n    CAST(\"VBAP\".\"ERDAT\" AS DATE) + CAST(\"VBAP\".\"ERZET\" AS TIME)                                                   AS \"CreationTime\",\n\t<%=sourceSystem%>  || 'SalesOrder_' || \"VBAP\".\"MANDT\" || \"VBAP\".\"VBELN\"                                          AS \"Header\",\n\t<%=sourceSystem%>  || CASE\n        WHEN \"VBAP\".\"VGTYP\" = 'B' THEN 'QuotationItem_' || \"VBAP\".\"MANDT\" || \"VBAP\".\"VGBEL\" || \"VBAP\".\"VGPOS\" END AS \"QuotationItem\",\n\t<%=sourceSystem%>  || 'User_' || \"VBAP\".\"MANDT\" || \"VBAP\".\"ERNAM\"                                                AS \"CreatedBy\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                                                         AS \"CreationExecutionType\",\n    \"VBAP\".\"NETWR\"                                                                                                AS \"NetAmount\",\n    \"VBAP\".\"WAERK\"                                                                                                AS \"Currency\",\n    \"VBAP\".\"NETPR\" / COALESCE(\"VBAP\".\"KPEIN\", 1)                                                                  AS \"NetUnitPrice\",\n\t<%=sourceSystem%>  || 'Material_' || \"VBAP\".\"MANDT\" || \"VBAP\".\"MATNR\"                                            AS \"Material\",\n\t<%=sourceSystem%>  || 'Plant_' || \"VBAP\".\"MANDT\" || \"VBAP\".\"WERKS\"                                               AS \"Plant\",\n    \"VBAP\".\"ABGRU\"                                                                                                AS \"RejectionReason\",\n    \"TVAGT\".\"BEZEI\"                                                                                               AS \"RejectionReasonText\",\n    \"VBAP\".\"OBJNR\"                                                                                                AS \"ObjectNumber\",\n    \"VBAP\".\"FKREL\"                                                                                                AS \"BillingRelevance\",\n    \"VBAP\".\"PSTYV\"                                                                                                AS \"ItemCategory\",\n    \"TVAPT\".\"VTEXT\"                                                                                               AS \"ItemCategoryText\",\n    \"TVRO\".\"TRAZTD\" / 240000                                                                                      AS \"TransitDurationDays\",\n    \"VBAP\".\"MANDT\"                                                                                                AS \"SourceSystemInstance\",\n    \"VBAP\".\"VBELN\"                                                                                                AS \"SystemSalesOrderNumber\",\n    \"VBAP\".\"VBELN\"                                                                                                AS \"DatabaseSalesOrderNumber\",\n    'SAP'                                                                                                         AS \"SourceSystemType\",\n    \"VBAP\".\"POSNR\"                                                                                                AS \"SystemSalesOrderItemNumber\",\n    \"VBAP\".\"POSNR\"                                                                                                AS \"DatabaseSalesOrderItemNumber\",\n    \"VBAP\".\"BRGEW\"                                                                                                AS \"GrossItemWeight\",\n    \"VBAP\".\"GEWEI\"                                                                                                AS \"WeightUnit\",\n    \"VBAP\".\"NTGEW\"                                                                                                AS \"NetItemWeight\",\n\t<%=sourceSystem%>  || 'MaterialMasterPlant_' || \"VBAP\".\"MANDT\" || \"VBAP\".\"MATNR\" || \"VBAP\".\"WERKS\"               AS \"MaterialMasterPlant\",\n    NULL                                                                                                          AS \"ProcessingStatus\",\n    \"VBAP\".\"VRKME\"                                                                                                AS \"QuantityUnit\",\n    \"VBAP\".\"KWMENG\"                                                                                               AS \"OrderedQuantity\",\n    \"VBAP\".\"KDMAT\"                                                                                                AS \"ExternalMaterialNumber\"\nFROM \"VBAP\" AS \"VBAP\"\n         LEFT JOIN \"VBAK\" AS \"VBAK\"\n                   ON \"VBAP\".\"MANDT\" = \"VBAK\".\"MANDT\"\n                       AND \"VBAP\".\"VBELN\" = \"VBAK\".\"VBELN\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"VBAP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"VBAP\".\"ERNAM\" = \"USR02\".\"BNAME\"\n         LEFT JOIN \"TVAPT\" AS \"TVAPT\"\n                   ON \"VBAP\".\"MANDT\" = \"TVAPT\".\"MANDT\"\n                       AND \"VBAP\".\"PSTYV\" = \"TVAPT\".\"PSTYV\"\n                       AND \"TVAPT\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"TVAGT\" AS \"TVAGT\"\n                   ON \"VBAP\".\"MANDT\" = \"TVAGT\".\"MANDT\"\n                       AND \"VBAP\".\"ABGRU\" = \"TVAGT\".\"ABGRU\"\n                       AND \"TVAGT\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"TVRO\" AS \"TVRO\"\n                   ON \"VBAP\".\"MANDT\" = \"TVRO\".\"MANDT\"\n                       AND \"VBAP\".\"ROUTE\" = \"TVRO\".\"ROUTE\"\nWHERE \"VBAP\".\"MANDT\" IS NOT NULL\n  AND \"VBAK\".\"VBTYP\" IN ('C', 'I')\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

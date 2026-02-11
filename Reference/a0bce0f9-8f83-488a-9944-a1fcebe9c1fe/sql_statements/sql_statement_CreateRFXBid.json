@@ -1,0 +1,59 @@
+[
+    {
+        "change_date": 1736420976292.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736420975940.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CreateRFXBid transformation - copy - 7",
+        "draft": null,
+        "factory_id": "03aac2e3-1d79-48bd-bd0c-42d2f7eb67f7",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreateRFXBid",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Bid",
+                    "RfxDocument"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CreateRFXBidAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    \"RFXDocument\".\"SourcingProject_ID\" AS \"SourcingProject\",\n    'CreateRFXBid_' || \"Bid\".\"ID\" AS \"ID\",\n    \"Bid\".\"ID\" as \"Bid\",\n\t\"Bid\".\"ProcessedDate\"  AS \"Time\",\n    \"RFXDocument\".\"ID\" AS \"RfxDocument\"\nFROM \"o_custom_Bid\" AS \"Bid\" \nLEFT JOIN \"o_custom_RFXDocument\" as \"RFXDocument\" ON 1 = 1\n    AND \"Bid\".\"ContectDocumentReferenceDocumentId\" = \"RFXDocument\".\"InternalId\"\n    AND \"Bid\".\"ContectDocumentReferenceDocumentVersion\" = \"RFXDocument\".\"DocumentVersion\"\nWHERE 1=1\n    AND \"Bid\".\"ProcessedDate\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

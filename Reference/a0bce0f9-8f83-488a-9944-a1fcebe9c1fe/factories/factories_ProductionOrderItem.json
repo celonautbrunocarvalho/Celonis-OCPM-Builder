@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1770400786540.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400786540.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "disabled": null,
+        "display_name": "Celonis - ProductionOrderItem - 1000 - RAW test data sets_13 - TS1 - Full",
+        "factory_id": "c2d8e421-74ea-47d1-830d-ba6015b9a7cf_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "has_overwrites": null,
+        "name": "ProductionOrderItem",
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "ProductionOrderItem",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "NOT_VALIDATED"
+    }
+]

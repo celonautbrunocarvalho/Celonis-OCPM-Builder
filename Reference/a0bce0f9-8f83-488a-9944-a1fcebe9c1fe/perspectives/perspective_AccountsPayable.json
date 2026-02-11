@@ -1,0 +1,502 @@
+{
+    "base_ref": null,
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987475.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987475.0,
+    "default_projection": "VendorAccountCreditItemActivities",
+    "description": null,
+    "events": [],
+    "id": "449a6a6b-edd3-4407-ad49-e0fa18a00d42",
+    "name": "AccountsPayable",
+    "namespace": "celonis",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "celonis"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "IncomingMaterialDocumentItem",
+                "namespace": "celonis"
+            },
+            "name": "IncomingMaterialDocumentItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrder",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrder",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrderItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorInvoice",
+                "namespace": "celonis"
+            },
+            "name": "VendorInvoice",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorInvoiceItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorInvoiceItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorInvoiceCancellationItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorInvoiceCancellationItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "VendorInvoiceItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountCreditItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountCreditItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "VendorInvoice",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Vendor",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "VendorMasterCompanyCode",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountCreditItemBlock",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountCreditItemBlock",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountDebitItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountDebitItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Vendor",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "VendorMasterCompanyCode",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountClearingAssignment",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountClearingAssignment",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "VendorAccountCreditItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorAccountDebitItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "RelationshipThreeWayMatch",
+                "namespace": "celonis"
+            },
+            "name": "RelationshipThreeWayMatch",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "IncomingMaterialDocumentItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorInvoiceItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "ChangeVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeVendorAccountCreditItemBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ClearVendorAccountItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateVendorInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleasePaymentBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelVendorInvoiceItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetPaymentBlock",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "VendorAccountCreditItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountCreditItemActivities",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            }
+        },
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "ChangeVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeVendorAccountCreditItemBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ClearVendorAccountItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateVendorInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleasePaymentBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelVendorInvoiceItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetPaymentBlock",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "VendorAccountCreditItemBlock",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountCreditItemBlockActivities",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "celonis"
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable"
+    ]
+}

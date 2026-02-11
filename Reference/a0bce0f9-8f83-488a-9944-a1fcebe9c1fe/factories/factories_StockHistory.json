@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1770400786540.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400786540.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "disabled": null,
+        "display_name": "Celonis - StockHistory - 1000 - RAW test data sets_13 - TS1 - Full",
+        "factory_id": "aef0f5c1-3b9a-4f98-b316-b289f204b55e_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "has_overwrites": null,
+        "name": "StockHistory",
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "StockHistory",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "NOT_VALIDATED"
+    }
+]

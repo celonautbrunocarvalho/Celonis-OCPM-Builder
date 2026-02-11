@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1736341718155.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736341717264.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "disabled": null,
+        "display_name": "AuditEntry transformation - 1000 - RAW test data sets_31 - Ariba Sourcing - 1",
+        "factory_id": "0c0921b5-b318-46b6-8597-de58cea52014",
+        "has_overwrites": null,
+        "name": "AuditEntry transformation - 1000 - RAW test data sets_31 - Ariba Sourcing - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "AuditEntry",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

@@ -1,0 +1,229 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172986197.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "color": "#7E0100",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986197.0,
+    "description": "Contains master data for customers associated with the business data being analyzed.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Name",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "InternalFlag",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Country",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Region",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "City",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PostalCode",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "AddressLine1",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "AddressLine2",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Number",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "3257ea77-b038-4fc4-91c2-9a23fd0b4f23",
+    "managed": true,
+    "multi_link": false,
+    "name": "Customer",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Blocks",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Customer",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CompanyCodes",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Customer",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerMasterCompanyCode",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreditControlAreas",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Customer",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerMasterCreditManagement",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerAccountCreditItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Customer",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerAccountCreditItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerAccountDebitItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Customer",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerAccountDebitItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Deliveries",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Customer",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Delivery",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Invoices",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Customer",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoice",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Customer",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrder",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "MasterData",
+        "AccountsReceivable",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

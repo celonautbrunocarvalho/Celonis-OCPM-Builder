@@ -1,0 +1,84 @@
+[
+    {
+        "change_date": 1736341714239.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736341713285.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "description": "",
+        "disabled": null,
+        "display_name": "Task transformation - 1000 - RAW test data sets_31 - Ariba Sourcing - 1",
+        "draft": null,
+        "factory_id": "d6a0ecc2-d336-48f8-9f76-71f2170bf369",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "TimezoneOffset",
+                "value": "-3"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Task",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "ContractWorkspace",
+                    "SourcingProject",
+                    "SourcingRequest"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Active",
+                    "BeginDate",
+                    "CreateDate",
+                    "DueDate",
+                    "EndDate",
+                    "EndDateTime",
+                    "ID",
+                    "InternalId",
+                    "ParentPlan",
+                    "ParentPlanProcessId",
+                    "ParentPlanTitleDefaultStringTranslation",
+                    "ParentPlanWorkspaceInternalId",
+                    "ParentWorkspace",
+                    "ParentWorkspaceInternalId",
+                    "RoundNumber",
+                    "Status",
+                    "TemplateObject",
+                    "TimeCreated",
+                    "TimeUpdated",
+                    "Title",
+                    "TitleDefaultStringTranslation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "TaskAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH CEL_TMP_Task AS (\n    SELECT \n        * ,\n        COUNT(\"Task\".\"InternalId\") OVER (PARTITION BY \"Task\".\"TitleCleaned\") AS TaskFrequency\n    FROM \"TaskPreprocessing\" AS \"Task\"\n)\nSELECT \n    CASE \n        WHEN LEFT(\"Task\".\"ParentPlan_Workspace_InternalId\",2) = 'WS'\n        THEN 'SourcingProjectTask_'\n        WHEN LEFT(\"Task\".\"ParentPlan_Workspace_InternalId\",2) = 'SR'\n        THEN 'SourcingRequestTask_'\n        WHEN LEFT(\"Task\".\"ParentPlan_Workspace_InternalId\",2) = 'CW'\n        THEN 'ContractWorkspaceTask_'\n        ELSE 'Task_'\n    END || \"Task\".\"InternalId\" as \"ID\",\n    CASE \n        WHEN LEFT(\"Task\".\"ParentPlan_Workspace_InternalId\",2) = 'WS'\n        THEN 'SourcingProject_' || \"Task\".\"ParentPlan_Workspace_InternalId\"\n    END AS \"SourcingProject\",\n    CASE \n        WHEN LEFT(\"Task\".\"ParentPlan_Workspace_InternalId\",2) = 'SR'\n        THEN 'SourcingRequest_' || \"Task\".\"ParentPlan_Workspace_InternalId\" \n    END AS \"SourcingRequest\", \n    CASE \n        WHEN LEFT(\"Task\".\"ParentPlan_Workspace_InternalId\",2) = 'CW'\n        THEN 'ContractWorkspace_' || \"Task\".\"ParentPlan_Workspace_InternalId\" \n    END AS \"ContractWorkspace\", \n    \"Task\".\"InternalId\" as \"InternalId\",\n    \"Task\".\"Status\" as \"Status\",\n    \"Task\".\"ParentPlan\" as \"ParentPlan\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Task\".\"CreateDate\") AS \"CreateDate\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Task\".\"EndDate\") AS \"EndDate\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Task\".\"TimeUpdated\") as \"TimeUpdated\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Task\".\"BeginDate\") AS \"BeginDate\",\n    \"Task\".\"TemplateObject\" as \"TemplateObject\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,cast(\"Task\".\"TimeCreated\" as timestamp)) as \"TimeCreated\",\n    \"Task\".\"Active\" as \"Active\",\n    \"Task\".\"ParentWorkspace\" as \"ParentWorkspace\",\n    \"Task\".\"EndDateTime\" as \"EndDateTime\",\n    cast(\"Task\".\"RoundNumber\" as int) as \"RoundNumber\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"Task\".\"DueDate\") AS \"DueDate\",\n    \"Task\".\"ParentPlan_ProcessId\" as \"ParentPlanProcessId\",\n    \"Task\".\"ParentPlan_Workspace_InternalId\" as \"ParentPlanWorkspaceInternalId\",\n    \"Task\".\"Title_DefaultStringTranslation\" as \"TitleDefaultStringTranslation\",\n    \"Task\".\"ParentWorkspace_InternalId\" as \"ParentWorkspaceInternalId\",\n    CASE \n        WHEN TaskFrequency > 1\n        THEN TRY_CAST(\"Task\".\"TitleCleaned\" AS varchar) \n        ELSE 'Other tasks'\n    END AS \"Title\",\n    TRY_CAST(\"Task\".\"ParentPlan_Title_DefaultStringTranslationCleaned\" AS varchar) AS \"ParentPlanTitleDefaultStringTranslation\"\nFROM \"CEL_TMP_Task\" as \"Task\"\nWHERE 1=1\n    AND  \"Task\".\"Active\" = 'true'\n    AND TaskFrequency > 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

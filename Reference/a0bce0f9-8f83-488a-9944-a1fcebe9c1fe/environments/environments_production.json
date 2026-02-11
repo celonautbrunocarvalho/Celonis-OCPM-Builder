@@ -1,0 +1,21 @@
+{
+    "change_date": 1730810692381.0,
+    "changed_by": {
+        "id": "85c7b727-381a-4cec-8f44-b3d474b3277d",
+        "name": "Philipp",
+        "type_": "USER"
+    },
+    "content_tag": "v1.6.0",
+    "created_by": {
+        "id": "85c7b727-381a-4cec-8f44-b3d474b3277d",
+        "name": "Philipp",
+        "type_": "USER"
+    },
+    "creation_date": 1730809617816.0,
+    "display_name": "Production",
+    "id": "50525b9c-c9c0-4303-88f3-dbee909c1971",
+    "name": "production",
+    "package_key": "pig-3e291854-ab7d-4dde-8125-dfddf823b7b9",
+    "package_version": "0.0.1",
+    "readonly": true
+}

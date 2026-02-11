@@ -1,0 +1,105 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172986176.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "color": "#48BF96",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986176.0,
+    "description": null,
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DocumentItemNumber",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PurchasingDocumentNumber",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PurchasingDocumentItem",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MaterialNumber",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "Quantity",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "AmountInDocumentCurrency",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Plant",
+            "namespace": "DuplicateInvoiceChecker"
+        }
+    ],
+    "id": "fe27140f-cc81-4ef6-bb71-87912e36495f",
+    "managed": true,
+    "multi_link": false,
+    "name": "InvoiceIngestionDocumentItem",
+    "namespace": "DuplicateInvoiceChecker",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "InvoiceIngestionDocument",
+            "namespace": "DuplicateInvoiceChecker",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "InvoiceIngestionDocument",
+                    "namespace": "DuplicateInvoiceChecker"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "AccountsPayable"
+    ]
+}

@@ -1,0 +1,329 @@
+{
+    "base_ref": null,
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987468.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987468.0,
+    "default_projection": "VendorAccountItemActivities",
+    "description": null,
+    "events": [],
+    "id": "77fbfef2-d7d2-40a6-b482-ad72cffc54ca",
+    "name": "DuplicateInvoiceCheckerApp",
+    "namespace": "DuplicateInvoiceChecker",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorInvoice",
+                "namespace": "celonis"
+            },
+            "name": "VendorInvoice",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorInvoiceItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorInvoiceItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorInvoiceCancellationItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorInvoiceCancellationItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": [
+                {
+                    "name": "VendorInvoiceItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountCreditItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountCreditItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": [
+                {
+                    "name": "VendorInvoice",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountCreditItemBlock",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountCreditItemBlock",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": [
+                {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountDebitItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountDebitItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "celonis"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountItem",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "name": "VendorAccountItem",
+            "namespace": "DuplicateInvoiceChecker",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": [
+                {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "DuplicateInvoiceChecker",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorAccountDebitItem",
+                    "namespace": "DuplicateInvoiceChecker",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Vendor",
+                    "namespace": "DuplicateInvoiceChecker",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CheckedInvoice",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "name": "CheckedInvoice",
+            "namespace": "DuplicateInvoiceChecker",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": [
+                {
+                    "name": "VendorAccountItem",
+                    "namespace": "DuplicateInvoiceChecker",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "DuplicateGroup",
+                    "namespace": "DuplicateInvoiceChecker",
+                    "origin_ref": {
+                        "name": "DuplicateInvoiceCheckerApp",
+                        "namespace": "DuplicateInvoiceChecker"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "DuplicateGroup",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "name": "DuplicateGroup",
+            "namespace": "DuplicateInvoiceChecker",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "relationships": []
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "ChangeVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeVendorAccountCreditItemBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ClearVendorAccountItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateVendorInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleasePaymentBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelVendorInvoiceItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelVendorAccountCreditItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetPaymentBlock",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "VendorAccountItem",
+                "namespace": "DuplicateInvoiceChecker"
+            },
+            "name": "VendorAccountItemActivities",
+            "origin_ref": {
+                "name": "DuplicateInvoiceCheckerApp",
+                "namespace": "DuplicateInvoiceChecker"
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable"
+    ]
+}

@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1736341567277.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736341566885.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "PublishEventInvitationForParticipants transformation - copy - 3",
+        "factory_id": "52271bd0-1875-4856-b97c-f66698955333",
+        "has_overwrites": null,
+        "name": "PublishEventInvitationForParticipants transformation - copy - 3",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PublishEventInvitationForParticipants",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

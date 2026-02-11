@@ -1,0 +1,333 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172986242.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "color": "#A9AED1",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986242.0,
+    "description": "Contains material master data specific to a given plant.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ValidityPeriodStartDate",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ValidityPeriodEndDate",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "PlannedDeliveryTimeDays",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "SafetyStockLevel",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "FollowUpMaterial",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ProcurementType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "GoodsReceiptProcessingDays",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "PlannedProductionLeadTime",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MRPType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MRPController",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MRPGroup",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "ServiceLevel",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PlanningStrategyGroup",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "BaseTotalValuatedStockQuantity",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "BaseTotalValuatedStockAmount",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "MinimumLotSize",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "BaseUnitPrice",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CompanyCode",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CompanyCodeText",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "BaseCurrency",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "BaseQuantityUnit",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "e165d385-ca18-441f-bf68-7b0e712a6c09",
+    "managed": true,
+    "multi_link": false,
+    "name": "MaterialMasterPlant",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ContractItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ContractItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreditMemoItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CreditMemoItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "IncomingMaterialDocumentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "IncomingMaterialDocumentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Material",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Material",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "OutgoingMaterialDocumentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "OutgoingMaterialDocumentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Plant",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Plant",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ProductionOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ProductionOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseRequisitionItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "StockHistories",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "StockHistory",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

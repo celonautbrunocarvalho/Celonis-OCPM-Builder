@@ -1,0 +1,129 @@
+[
+    {
+        "change_date": 1736341708247.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736341707417.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "description": "",
+        "disabled": null,
+        "display_name": "DocumentTask transformation - 1000 - RAW test data sets_31 - Ariba Sourcing - 1",
+        "draft": null,
+        "factory_id": "2e470e20-96e9-4356-a932-eb27399849f5",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "TimezoneOffset",
+                "value": "-3"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "DocumentTask",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "ContractWorkspace",
+                    "SourcingProject",
+                    "SourcingRequest"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Active",
+                    "ActiveApprovers",
+                    "Alert",
+                    "AltStatus",
+                    "ApprovalRuleFlowType",
+                    "Approvers",
+                    "BeginDate",
+                    "BoardingType",
+                    "CommittedDueDate",
+                    "CreatedBy",
+                    "CreatedByEmailAddress",
+                    "CreatedByFax",
+                    "CreatedByFirstName",
+                    "CreatedByLastName",
+                    "CreatedByMiddleName",
+                    "CreatedByName",
+                    "CreatedByPhone",
+                    "CreatedByUniqueName",
+                    "Description",
+                    "DescriptionDefaultStringTranslation",
+                    "DueDate",
+                    "EndDate",
+                    "EndDateTime",
+                    "ExternalApprovalEnabled",
+                    "ID",
+                    "InternalId",
+                    "IsAutoComplete",
+                    "IsMilestone",
+                    "Observers",
+                    "OwnerUniqueName",
+                    "ParentPlanProcessId",
+                    "ParentPlanTitleDefaultStringTranslation",
+                    "ParentPlanUniqueId",
+                    "ParentPlanWorkspaceInternalId",
+                    "Required",
+                    "RoundNumber",
+                    "Status",
+                    "TaskApprovable",
+                    "TaskApprovableApprovalRequestsLastModified",
+                    "TaskApprovableApprovedDate",
+                    "TaskApprovableName",
+                    "TaskApprovablePreparerEmailAddress",
+                    "TaskApprovablePreparerFax",
+                    "TaskApprovablePreparerFirstName",
+                    "TaskApprovablePreparerLastName",
+                    "TaskApprovablePreparerMiddleName",
+                    "TaskApprovablePreparerName",
+                    "TaskApprovablePreparerPhone",
+                    "TaskApprovablePreparerUniqueName",
+                    "TaskApprovableRequesterEmailAddress",
+                    "TaskApprovableRequesterFax",
+                    "TaskApprovableRequesterFirstName",
+                    "TaskApprovableRequesterLastName",
+                    "TaskApprovableRequesterMiddleName",
+                    "TaskApprovableRequesterName",
+                    "TaskApprovableRequesterPhone",
+                    "TaskApprovableRequesterUniqueName",
+                    "TaskApprovableStatusString",
+                    "TaskApprovableType",
+                    "TaskApprovableUniqueName",
+                    "TemplateObjectInternalId",
+                    "TimeCreated",
+                    "TimeUpdated",
+                    "Title",
+                    "TitleDefaultStringTranslation",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "DocumentTaskAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH CEL_TMP_DocumentTask AS (\n    SELECT \n        * ,\n        COUNT(\"DocumentTask\".\"InternalId\") OVER (PARTITION BY \"DocumentTask\".\"TitleCleaned\") AS TaskFrequency\n    FROM \"DocumentTaskPreprocessing\" AS \"DocumentTask\"\n)\n\n\nSELECT\n    CASE \n        WHEN LEFT(\"DocumentTask\".\"ParentPlan_Workspace_InternalId\",2) = 'WS'\n        THEN 'SourcingProjectDocumentTask_'\n        WHEN LEFT(\"DocumentTask\".\"ParentPlan_Workspace_InternalId\",2) = 'SR'\n        THEN 'SourcingRequestDocumentTask_'\n        WHEN LEFT(\"DocumentTask\".\"ParentPlan_Workspace_InternalId\",2) = 'CW'\n        THEN 'ContractWorkspaceDocumentTask_'\n        ELSE 'DocumentTask_'\n    END || \"DocumentTask\".\"InternalId\" as \"ID\",\n    \n    CASE \n        WHEN LEFT(\"DocumentTask\".\"ParentPlan_Workspace_InternalId\",2) = 'WS'\n        THEN 'SourcingProject_' || \"DocumentTask\".\"ParentPlan_Workspace_InternalId\"\n    END AS \"SourcingProject\",\n    CASE \n        WHEN LEFT(\"DocumentTask\".\"ParentPlan_Workspace_InternalId\",2) = 'SR'\n        THEN 'SourcingRequest_' || \"DocumentTask\".\"ParentPlan_Workspace_InternalId\" \n    END AS \"SourcingRequest\", \n    CASE \n        WHEN LEFT(\"DocumentTask\".\"ParentPlan_Workspace_InternalId\",2) = 'CW'\n        THEN 'ContractWorkspace_' || \"DocumentTask\".\"ParentPlan_Workspace_InternalId\" \n    END AS \"ContractWorkspace\",\n    TRY_CAST(\"DocumentTask\".\"ExternalApprovalEnabled\" AS varchar) AS \"ExternalApprovalEnabled\",\n    --TRY_CAST(\"DocumentTask\".\"Owner\" AS varchar) AS \"Owner\",\n    TRY_CAST(\"DocumentTask\".\"Description\" AS varchar) AS \"Description\",\n    TRY_CAST(\"DocumentTask\".\"CommittedDueDate\" AS varchar) AS \"CommittedDueDate\",\n    --TRY_CAST(\"DocumentTask\".\"DocumentId\" AS varchar) AS \"DocumentId\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,TRY_CAST(\"DocumentTask\".\"TimeCreated\" AS timestamp)) AS \"TimeCreated\",\n    TRY_CAST(\"DocumentTask\".\"Required\" AS varchar) AS \"Required\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,TRY_CAST(\"DocumentTask\".\"EndDateTime\" AS timestamp)) AS \"EndDateTime\",\n    TRY_CAST(\"DocumentTask\".\"Approvers\" AS varchar) AS \"Approvers\",\n    TRY_CAST(\"DocumentTask\".\"BoardingType\" AS varchar) AS \"BoardingType\",\n    TRY_CAST(\"DocumentTask\".\"RoundNumber\" AS varchar) AS \"RoundNumber\",\n    TRY_CAST(\"DocumentTask\".\"ActiveApprovers\" AS varchar) AS \"ActiveApprovers\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,TRY_CAST(\"DocumentTask\".\"DueDate\" AS timestamp)) AS \"DueDate\",\n    TRY_CAST(\"DocumentTask\".\"Status\" AS varchar) AS \"Status\",\n    TRY_CAST(\"DocumentTask\".\"ApprovalRuleFlowType\" AS varchar) AS \"ApprovalRuleFlowType\",\n    TRY_CAST(\"DocumentTask\".\"InternalId\" AS varchar) AS \"InternalId\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy\" AS varchar) AS \"CreatedBy\",\n    TRY_CAST(\"DocumentTask\".\"Observers\" AS varchar) AS \"Observers\",\n    --TRY_CAST(\"DocumentTask\".\"ParentPlan\" AS varchar) AS \"ParentPlan\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,TRY_CAST(\"DocumentTask\".\"EndDate\" AS timestamp)) AS \"EndDate\",\n    TRY_CAST(\"DocumentTask\".\"IsMilestone\" AS varchar) AS \"IsMilestone\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,TRY_CAST(\"DocumentTask\".\"TimeUpdated\" AS timestamp)) AS \"TimeUpdated\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,TRY_CAST(\"DocumentTask\".\"BeginDate\" AS timestamp)) AS \"BeginDate\",\n    --TRY_CAST(\"DocumentTask\".\"TemplateObject\" AS varchar) AS \"TemplateObject\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable\" AS varchar) AS \"TaskApprovable\",\n    TRY_CAST(\"DocumentTask\".\"Active\" AS varchar) AS \"Active\",\n    TRY_CAST(\"DocumentTask\".\"Type\" AS varchar) AS \"Type\",\n    TRY_CAST(\"DocumentTask\".\"Alert\" AS varchar) AS \"Alert\",\n    TRY_CAST(\"DocumentTask\".\"IsAutoComplete\" AS varchar) AS \"IsAutoComplete\",\n    TRY_CAST(\"DocumentTask\".\"AltStatus\" AS varchar) AS \"AltStatus\",\n    TRY_CAST(\"DocumentTask\".\"Owner_UniqueName\" AS varchar) AS \"OwnerUniqueName\",\n    TRY_CAST(\"DocumentTask\".\"Description_DefaultStringTranslation\" AS varchar) AS \"DescriptionDefaultStringTranslation\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy_FirstName\" AS varchar) AS \"CreatedByFirstName\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy_Phone\" AS varchar) AS \"CreatedByPhone\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy_LastName\" AS varchar) AS \"CreatedByLastName\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy_Fax\" AS varchar) AS \"CreatedByFax\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy_MiddleName\" AS varchar) AS \"CreatedByMiddleName\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy_UniqueName\" AS varchar) AS \"CreatedByUniqueName\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy_EmailAddress\" AS varchar) AS \"CreatedByEmailAddress\",\n    TRY_CAST(\"DocumentTask\".\"CreatedBy_Name\" AS varchar) AS \"CreatedByName\",\n    TRY_CAST(\"DocumentTask\".\"ParentPlan_UniqueId\" AS varchar) AS \"ParentPlanUniqueId\",\n    TRY_CAST(\"DocumentTask\".\"ParentPlan_ProcessId\" AS varchar) AS \"ParentPlanProcessId\",\n    TRY_CAST(\"DocumentTask\".\"ParentPlan_Workspace_InternalId\" AS varchar) AS \"ParentPlanWorkspaceInternalId\",\n    TRY_CAST(\"DocumentTask\".\"Title_DefaultStringTranslation\" AS varchar) AS \"TitleDefaultStringTranslation\",\n    TRY_CAST(\"DocumentTask\".\"TemplateObject_InternalId\" AS varchar) AS \"TemplateObjectInternalId\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_ApprovalRequests_LastModified\" AS varchar) AS \"TaskApprovableApprovalRequestsLastModified\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Requester_FirstName\" AS varchar) AS \"TaskApprovableRequesterFirstName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Requester_Phone\" AS varchar) AS \"TaskApprovableRequesterPhone\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Requester_LastName\" AS varchar) AS \"TaskApprovableRequesterLastName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Requester_Fax\" AS varchar) AS \"TaskApprovableRequesterFax\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Requester_MiddleName\" AS varchar) AS \"TaskApprovableRequesterMiddleName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Requester_UniqueName\" AS varchar) AS \"TaskApprovableRequesterUniqueName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Requester_EmailAddress\" AS varchar) AS \"TaskApprovableRequesterEmailAddress\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Requester_Name\" AS varchar) AS \"TaskApprovableRequesterName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Type\" AS varchar) AS \"TaskApprovableType\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_StatusString\" AS varchar) AS \"TaskApprovableStatusString\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,TRY_CAST(\"DocumentTask\".\"TaskApprovable_ApprovedDate\" AS timestamp)) AS \"TaskApprovableApprovedDate\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_UniqueName\" AS varchar) AS \"TaskApprovableUniqueName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Preparer_FirstName\" AS varchar) AS \"TaskApprovablePreparerFirstName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Preparer_Phone\" AS varchar) AS \"TaskApprovablePreparerPhone\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Preparer_LastName\" AS varchar) AS \"TaskApprovablePreparerLastName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Preparer_Fax\" AS varchar) AS \"TaskApprovablePreparerFax\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Preparer_MiddleName\" AS varchar) AS \"TaskApprovablePreparerMiddleName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Preparer_UniqueName\" AS varchar) AS \"TaskApprovablePreparerUniqueName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Preparer_EmailAddress\" AS varchar) AS \"TaskApprovablePreparerEmailAddress\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Preparer_Name\" AS varchar) AS \"TaskApprovablePreparerName\",\n    TRY_CAST(\"DocumentTask\".\"TaskApprovable_Name\" AS varchar) AS \"TaskApprovableName\",\n    CASE \n        WHEN TaskFrequency > 1\n        THEN TRY_CAST(\"DocumentTask\".\"TitleCleaned\" AS varchar) \n        ELSE 'Other tasks'\n    END AS \"Title\",\n    TRY_CAST(\"DocumentTask\".\"ParentPlan_Title_DefaultStringTranslationCleaned\" AS varchar) AS \"ParentPlanTitleDefaultStringTranslation\"\nFROM \"CEL_TMP_DocumentTask\" AS \"DocumentTask\"\nWHERE 1=1\n    AND \"DocumentTask\".\"Active\" = 'true'\n    AND ParentPlan_Title_DefaultStringTranslation NOT IN ('Atualiza\u00e7\u00e3o Do Registro', 'Registro')\n    AND ParentPlan_Title_DefaultStringTranslation NOT LIKE ('QUESTION\u00c1RIO%')\n    AND TaskFrequency > 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

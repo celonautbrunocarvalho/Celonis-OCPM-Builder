@@ -1,0 +1,261 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172986338.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "color": "#0007A4",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986338.0,
+    "description": "Contains master data for vendors associated with the business data being analyzed.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Country",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Name",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "City",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "InternalFlag",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Number",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "60938abc-6dc8-455f-b9be-aa83519a0867",
+    "managed": true,
+    "multi_link": false,
+    "name": "Vendor",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Confirmations",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorConfirmation",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Contracts",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Contract",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "IncomingMaterialDocumentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "IncomingMaterialDocumentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "InvoiceItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoiceItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Invoices",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoice",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "OutgoingMaterialDocumentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "OutgoingMaterialDocumentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrder",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseRequisitionItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorAccountClearingAssignments",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountClearingAssignment",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorAccountCreditItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorAccountDebitItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountDebitItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorMasterCompanyCodes",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Vendor",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorMasterCompanyCode",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "AccountsPayable",
+        "InventoryManagement"
+    ]
+}

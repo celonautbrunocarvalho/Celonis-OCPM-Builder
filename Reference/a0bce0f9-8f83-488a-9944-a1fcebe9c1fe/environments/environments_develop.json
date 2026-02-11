@@ -1,0 +1,21 @@
+{
+    "change_date": 1740748261674.0,
+    "changed_by": {
+        "id": "945b3dbd-8a0a-42d4-8c9f-62dd51c531c5",
+        "name": "Timmy Smith",
+        "type_": "USER"
+    },
+    "content_tag": "v1.6.0",
+    "created_by": {
+        "id": "85c7b727-381a-4cec-8f44-b3d474b3277d",
+        "name": "Philipp",
+        "type_": "USER"
+    },
+    "creation_date": 1730809617803.0,
+    "display_name": "Development",
+    "id": "240c62ec-8794-4bca-b937-6de4d13bf824",
+    "name": "develop",
+    "package_key": "pig-3e291854-ab7d-4dde-8125-dfddf823b7b9",
+    "package_version": "0.0.1",
+    "readonly": false
+}

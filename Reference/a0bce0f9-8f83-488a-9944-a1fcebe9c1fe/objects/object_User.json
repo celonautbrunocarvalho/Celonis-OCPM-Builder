@@ -1,0 +1,708 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1736954751728.0,
+    "changed_by": {
+        "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+        "name": "c.demosthenous",
+        "type_": "USER"
+    },
+    "color": "#464C6A",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986327.0,
+    "description": "Contains master data for users associated with the business data being analyzed, such as changes made to employee emails and IDs.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DisplayName",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Type",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "FirstName",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "LastName",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "4d4e0e81-10dd-4144-89e6-801024692fc2",
+    "managed": true,
+    "multi_link": false,
+    "name": "User",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "RequestedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseRequisitionItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ApprovedPurchaseOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "ApprovedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrder",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "BlockedCustomers",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "BlockedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "BlockedSalesOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "BlockedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderItemBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "BlockedSalesOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "BlockedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "BlockedVendorAccountCreditItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "BlockedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountCreditItemBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedContractItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ContractItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedContracts",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Contract",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCreditMemoCancellationItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CreditMemoCancellationItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCreditMemoCancellations",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CreditMemoCancellation",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCreditMemoItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CreditMemoItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCreditMemos",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CreditMemo",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCustomerAccountClearingAssignments",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerAccountClearingAssignment",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCustomerAccountCreditItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerAccountCreditItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCustomerAccountDebitItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerAccountDebitItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCustomerInvoiceCancellationItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoiceCancellationItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCustomerInvoiceCancellations",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoiceCancellation",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCustomerInvoiceItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoiceItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedCustomerInvoices",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoice",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedDeliveries",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Delivery",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedDeliveryItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "DeliveryItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedIncomingMaterialDocumentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "IncomingMaterialDocumentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedOutgoingMaterialDocumentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "OutgoingMaterialDocumentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedProductionOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ProductionOrder",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedPurchaseOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedPurchaseOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrder",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedPurchaseRequisitionItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseRequisitionItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedQuotationItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "QuotationItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedQuotations",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Quotation",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedSalesOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedSalesOrderScheduleLines",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedSalesOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrder",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedShipmentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ShipmentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedShipments",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Shipment",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedVendorAccountClearingAssignments",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountClearingAssignment",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedVendorAccountCreditItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedVendorAccountDebitItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountDebitItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedVendorConfirmations",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorConfirmation",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedVendorInvoiceCancellationItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoiceCancellationItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedVendorInvoiceItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoiceItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatedVendorInvoices",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoice",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ReleasedCustomers",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "ReleasedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ReleasedSalesOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "ReleasedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderItemBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ReleasedSalesOrders",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "ReleasedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ReleasedVendorAccountCreditItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "ReleasedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountCreditItemBlock",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RequestedPurchaseOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "RequestedBy",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "AccountsPayable",
+        "AccountsReceivable",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

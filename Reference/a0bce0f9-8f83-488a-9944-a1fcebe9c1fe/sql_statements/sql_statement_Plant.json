@@ -1,0 +1,70 @@
+[
+    {
+        "change_date": 1770400800634.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400800634.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "Plant",
+        "draft": null,
+        "factory_id": "01350f93-a90b-4008-b9cb-67fd7aeecd1f_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "Plant",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "celonis",
+                "property_names": [
+                    "Country",
+                    "CountryText",
+                    "ID",
+                    "Name",
+                    "Number",
+                    "SourceSystemInstance",
+                    "SourceSystemType"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "T001W",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'Plant_' || \"T001W\".\"MANDT\" || \"T001W\".\"WERKS\" AS \"ID\",\n    \"T001W\".\"WERKS\"                                                         AS \"Number\",\n    \"T001W\".\"NAME1\"                                                         AS \"Name\",\n    \"T001W\".\"LAND1\"                                                         AS \"Country\",\n    \"T005T\".\"LANDX\"                                                         AS \"CountryText\",\n    'SAP'                                                                   AS \"SourceSystemType\",\n    \"T001W\".\"MANDT\"                                                         AS \"SourceSystemInstance\"\nFROM \"T001W\" AS \"T001W\"\n         LEFT JOIN \"T005T\" AS \"T005T\"\n                   ON \"T001W\".\"MANDT\" = \"T005T\".\"MANDT\"\n                       AND \"T001W\".\"LAND1\" = \"T005T\".\"LAND1\"\n                       AND \"T005T\".\"SPRAS\" = <%=LanguageKey%> \nWHERE \"T001W\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

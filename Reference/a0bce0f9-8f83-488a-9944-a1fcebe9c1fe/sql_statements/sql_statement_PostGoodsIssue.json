@@ -1,0 +1,75 @@
+[
+    {
+        "change_date": 1770400815208.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400815208.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "PostGoodsIssue",
+        "draft": null,
+        "factory_id": "18169d9e-e69a-4a09-82ed-627aacfd3648_00000000-0000-0000-0000-000000000000",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "PostGoodsIssue",
+                "namespace": "celonis"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "OutgoingMaterialDocumentItem"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "OutgoingMaterialDocumentItem",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'PostGoodsIssue' || '_' || \"OutgoingMaterialDocumentItem\".\"ID\" AS \"ID\",\n       \"OutgoingMaterialDocumentItem\".\"ID\"                            AS \"OutgoingMaterialDocumentItem\",\n       \"OutgoingMaterialDocumentItem\".\"CreationTime\"                  AS \"Time\",\n       \"OutgoingMaterialDocumentItem\".\"CreatedBy_ID\"                  AS \"ExecutedBy\",\n       \"OutgoingMaterialDocumentItem\".\"CreationExecutionType\"         AS \"ExecutionType\"\nFROM \"o_celonis_OutgoingMaterialDocumentItem\" AS \"OutgoingMaterialDocumentItem\"\nWHERE \"OutgoingMaterialDocumentItem\".\"MaterialTransactionType\" = 'GoodsIssue'\n  AND \"OutgoingMaterialDocumentItem\".\"CreationTime\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "DeliveryItems",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "PostGoodsIssue",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT DISTINCT \"Event\".\"ID\"  AS \"ID\",\n                \"Object\".\"ID\" AS \"DeliveryItems\"\nFROM \"e_celonis_PostGoodsIssue\" AS \"Event\"\n         LEFT JOIN \"o_celonis_OutgoingMaterialDocumentItem\" AS \"OutgoingMaterialDocumentItem\"\n                   ON \"Event\".\"OutgoingMaterialDocumentItem_ID\" = \"OutgoingMaterialDocumentItem\".\"ID\"\n         LEFT JOIN \"o_celonis_DeliveryItem\" AS \"Object\"\n                   ON \"OutgoingMaterialDocumentItem\".\"DeliveryItem_ID\" = \"Object\".\"ID\"\nWHERE TIMESTAMPDIFF(SECOND, \"Event\".\"Time\", \"Object\".\"CreationTime\") <= 5\n  AND \"Object\".\"ID\" IS NOT NULL\n"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,61 @@
+[
+    {
+        "change_date": 1736420645758.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736420645318.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "BeginTaskSourcingRequest transformation - copy - 6",
+        "draft": null,
+        "factory_id": "8c18dd67-58d8-4120-9de8-d01889d1891f",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BeginTaskSourcingRequest",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "SourcingRequest"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ActivityText",
+                    "ID",
+                    "Task",
+                    "TaskTitle",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "BeginTaskSourcingRequestAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    \"Task\".\"ID\"  AS  \"Task\",\n    \"Task\".\"SourcingRequest_ID\"  AS  \"SourcingRequest\",\n    'Begin_' || \"Task\".\"ID\" AS \"ID\",\n    \"Task\".\"BeginDate\" AS \"Time\",\n    'Iniciar tarefa: ' || \"Task\".\"Title\" AS \"ActivityText\",\n    --\"Task\".\"ParentPlanTitleDefaultStringTranslation\" AS \"ActivityPhase\",\n    \"Task\".\"Title\" AS \"TaskTitle\"\nFROM \"o_custom_Task\" AS  \"Task\"\nWHERE 1=1 \n  AND \"Task\".\"BeginDate\" IS NOT NULL\n  AND \"Task\".\"SourcingRequest_ID\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

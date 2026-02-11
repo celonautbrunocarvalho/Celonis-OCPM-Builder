@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1736430361688.0,
+        "changed_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1736430279741.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "disabled": null,
+        "display_name": "Sourcingproject - 1",
+        "factory_id": "5e039ee0-5acf-49a4-a09e-52df1381534b",
+        "has_overwrites": null,
+        "name": "Sourcingproject - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Sourcingproject",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

@@ -1,0 +1,295 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172986250.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "color": "#079870",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986250.0,
+    "description": "Contains master data for plants which is the organizational unit within logistics, the plant subdivides an enterprise from the viewpoints of production, procurement, maintenance, and materials planning.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Number",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Name",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Country",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CountryText",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemType",
+            "namespace": "celonis"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "celonis"
+        }
+    ],
+    "id": "30e6238a-7c6c-4abd-a1a8-1ea264ad0957",
+    "managed": true,
+    "multi_link": false,
+    "name": "Plant",
+    "namespace": "celonis",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ContractItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ContractItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreditMemoCancellationItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CreditMemoCancellationItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreditMemoItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CreditMemoItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerInvoiceCancellationItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoiceCancellationItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerInvoiceItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoiceItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "Deliverytems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "DeliveryItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "IncomingMaterialDocumentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "IncomingMaterialDocumentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialMasterPlants",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "OutgoingMaterialDocumentItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "OutgoingMaterialDocumentItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ProductionOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ProductionOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseRequisitionItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "StockHistories",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "StockHistory",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorInvoiceItems",
+            "namespace": "celonis",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoiceItem",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

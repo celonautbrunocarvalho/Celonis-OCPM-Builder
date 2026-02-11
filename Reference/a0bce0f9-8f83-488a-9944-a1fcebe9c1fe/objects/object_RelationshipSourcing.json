@@ -1,0 +1,76 @@
+{
+    "categories": [],
+    "change_date": 1736430535579.0,
+    "changed_by": {
+        "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+        "name": "Bruno Carvalho",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+        "name": "c.demosthenous",
+        "type_": "USER"
+    },
+    "creation_date": 1736244709778.0,
+    "description": "",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PredecessorRelationshipID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "7cbccb28-e6dc-40e0-9bd4-a0c52afd0ba7",
+    "managed": true,
+    "multi_link": false,
+    "name": "RelationshipSourcing",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "SourcingProject",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Sourcingproject",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "SourcingRequest",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SourcingRequest",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "ContractWorkspace",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ContractWorkspace",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": []
+}

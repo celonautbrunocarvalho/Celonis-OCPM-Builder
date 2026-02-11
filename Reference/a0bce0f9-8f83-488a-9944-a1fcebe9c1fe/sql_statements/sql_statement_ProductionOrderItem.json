@@ -1,0 +1,77 @@
+[
+    {
+        "change_date": 1770400807174.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400807174.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "ProductionOrderItem",
+        "draft": null,
+        "factory_id": "c2d8e421-74ea-47d1-830d-ba6015b9a7cf_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "ProductionOrderItem",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Header",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "BaseQuantityUnit",
+                    "CreationTime",
+                    "DatabaseProductionOrderItemNumber",
+                    "DatabaseProductionOrderNumber",
+                    "DeletionFlag",
+                    "DeliveryCompletedIndicator",
+                    "GoodsReceiptQuantity",
+                    "ID",
+                    "OrderItemQuantity",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "SystemProductionOrderItemNumber",
+                    "SystemProductionOrderNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "AFPO",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'ProductionOrderItem_' || \"AFPO\".\"MANDT\" || '_' || \"AFPO\".\"AUFNR\" || '_' || \"AFPO\".\"POSNR\" AS \"ID\",\n       CAST(\"AFPO\".\"ETRMP\" AS TIMESTAMP)                                                                                AS \"CreationTime\",\n       \"AFPO\".\"PSMNG\"                                                                                                   AS \"OrderItemQuantity\",\n       \"AFPO\".\"MEINS\"                                                                                                   AS \"BaseQuantityUnit\",\n       \"AFPO\".\"WEMNG\"                                                                                                   AS \"GoodsReceiptQuantity\",\n\t<%=sourceSystem%>  || 'ProductionOrder_' || \"AFPO\".\"MANDT\" || '_' || \"AFPO\".\"AUFNR\"                                    AS \"Header\",\n\t<%=sourceSystem%>  || 'Plant_' || \"AFPO\".\"MANDT\" || \"AFPO\".\"DWERK\"                                                     AS \"Plant\",\n\t<%=sourceSystem%>  || 'MaterialMasterPlant_' || \"AFPO\".\"MANDT\" || \"AFPO\".\"MATNR\"\n       || \"AFPO\".\"DWERK\"                                                                                                AS \"MaterialMasterPlant\",\n       'SAP'                                                                                                            AS \"SourceSystemType\",\n       \"AFPO\".\"MANDT\"                                                                                                   AS \"SourceSystemInstance\",\n       CAST(\"AFPO\".\"AUFNR\" AS VARCHAR(255))                                                                             AS \"SystemProductionOrderNumber\",\n       CAST(\"AFPO\".\"POSNR\" AS VARCHAR(255))                                                                             AS \"SystemProductionOrderItemNumber\",\n       CAST(\"AFPO\".\"AUFNR\" AS VARCHAR(255))                                                                             AS \"DatabaseProductionOrderNumber\",\n       CAST(\"AFPO\".\"POSNR\" AS VARCHAR(255))                                                                             AS \"DatabaseProductionOrderItemNumber\",\n       \"AFPO\".\"XLOEK\"                                                                                                   AS \"DeletionFlag\",\n       \"AFPO\".\"ELIKZ\"                                                                                                   AS \"DeliveryCompletedIndicator\",\n\t<%=sourceSystem%>  || 'Material_' || \"AFPO\".\"MANDT\" || \"AFPO\".\"MATNR\"                                                  AS \"Material\"\nFROM \"AFPO\" AS \"AFPO\"\n         LEFT JOIN \"AUFK\" AS \"AUFK\"\n                   ON \"AFPO\".\"MANDT\" = \"AUFK\".\"MANDT\"\n                       AND \"AFPO\".\"AUFNR\" = \"AUFK\".\"AUFNR\"\nWHERE \"AFPO\".\"MANDT\" IS NOT NULL\n  AND \"AUFK\".\"AUTYP\" IN ('10')\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

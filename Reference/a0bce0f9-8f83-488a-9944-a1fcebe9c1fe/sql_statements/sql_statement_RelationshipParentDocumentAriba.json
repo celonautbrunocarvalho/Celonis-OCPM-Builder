@@ -1,0 +1,57 @@
+[
+    {
+        "change_date": 1736341711038.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736341710177.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "description": "",
+        "disabled": null,
+        "display_name": "RelationshipParentDocumentAriba transformation - 1000 - RAW test data sets_31 - Ariba Sourcing - 2",
+        "draft": null,
+        "factory_id": "834e2514-a5e0-4a51-8615-9cb4992cdf70",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "RelationshipParentDocumentAriba",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "SourcingRequest"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "RelationshipParentDocumentAribaAtributos",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH CEL_PARENTIDS AS (\n    SELECT \"ParentDocument_InternalId\" \n    FROM \"ContractWorkspace\"\n    UNION\n    SELECT \"ParentDocument_InternalId\" \n    FROM \"SourcingProject\"\n    --UNION\n    --SELECT \"ParentDocument_InternalId\" \n    --FROM \"SourcingRequest\"\n)\nSELECT DISTINCT\n    'RelationshipParentDocumentAriba_' || \"ParentDocument_InternalId\" AS ID,\n    CASE \n        WHEN LEFT(\"ParentDocument_InternalId\",2) = 'SR' \n        THEN 'SourcingRequest_' || \"ParentDocument_InternalId\"\n    END AS SourcingRequest\nFROM CEL_PARENTIDS\nWHERE \"ParentDocument_InternalId\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

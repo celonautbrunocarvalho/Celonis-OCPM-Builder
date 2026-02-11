@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1740746769502.0,
+        "changed_by": {
+            "id": "945b3dbd-8a0a-42d4-8c9f-62dd51c531c5",
+            "name": "Timmy Smith",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736247015773.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": true,
+        "display_name": "Contract transformation - OCPM Schema - 2",
+        "factory_id": "1db0c655-33f7-4e3e-8e5b-af0d60ed51cf",
+        "has_overwrites": null,
+        "name": "Contract transformation - OCPM Schema - 2",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Contract",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

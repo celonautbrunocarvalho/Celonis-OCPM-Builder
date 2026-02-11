@@ -1,0 +1,59 @@
+[
+    {
+        "change_date": 1736244782921.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736244782512.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "UpdateOperationalContract transformation - copy - 1",
+        "draft": null,
+        "factory_id": "ec4ac71b-f1b2-45b3-b0e5-d2ee41d15178",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "UpdateOperationalContract",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Contract",
+                    "OperationalContract"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "UpdateOperationalContractAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    \"OpContractHistory\".\"OperationalContract_ID\" AS \"Contract\",\n    'UpdateOperationalContract_' || \"OpContractHistory\".\"ID\" AS \"ID\",\n    \"OpContractHistory\".\"OperationalContract_ID\" AS \"OperationalContract\",\n    \"OpContractHistory\".\"TimeCreated\" AS \"Time\"\nFROM \"o_custom_OperationalContractHistory\" AS \"OpContractHistory\"\nJOIN \"o_custom_OperationalContract\" AS \"OpContract\" ON 1=1\n  AND \"OpContractHistory\".\"OperationalContract_ID\" = \"OpContract\".\"ID\"\nWHERE 1=1\n    AND  \"OpContractHistory\".\"TimeCreated\" IS NOT NULL\n    AND  \"OpContractHistory\".\"VersionNumber\" <> 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

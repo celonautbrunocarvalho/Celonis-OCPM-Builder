@@ -1,0 +1,90 @@
+[
+    {
+        "change_date": 1770400813190.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400813190.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "CreatePurchaseOrderItem",
+        "draft": null,
+        "factory_id": "5ca90244-0a15-44c2-9c3e-8311253f8290_00000000-0000-0000-0000-000000000000",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "CreatePurchaseOrderItem",
+                "namespace": "celonis"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PurchaseOrder",
+                    "PurchaseOrderItem"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseOrderItem",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'CreatePurchaseOrderItem' || '_' || \"PurchaseOrderItem\".\"ID\" AS \"ID\",\n       \"PurchaseOrderItem\".\"ID\"                                     AS \"PurchaseOrderItem\",\n       \"PurchaseOrder\".\"ID\"                                         AS \"PurchaseOrder\",\n       \"PurchaseOrderItem\".\"CreationTime\"                           AS \"Time\",\n       \"PurchaseOrderItem\".\"CreatedBy_ID\"                           AS \"ExecutedBy\",\n       \"PurchaseOrderItem\".\"CreationExecutionType\"                  AS \"ExecutionType\"\nFROM \"o_celonis_PurchaseOrderItem\" AS \"PurchaseOrderItem\"\n         LEFT JOIN \"o_celonis_PurchaseOrder\" AS \"PurchaseOrder\"\n                   ON \"PurchaseOrderItem\".\"Header_ID\" = \"PurchaseOrder\".\"ID\"\nWHERE \"PurchaseOrderItem\".\"CreationTime\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "ContractItems",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "CreatePurchaseOrderItem",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT DISTINCT\n       \"Event\".\"ID\"  AS \"ID\",\n       \"Object\".\"ID\" AS \"ContractItems\"\nFROM \"e_celonis_CreatePurchaseOrderItem\" AS \"Event\"\n         LEFT JOIN \"o_celonis_PurchaseOrderItem\" AS \"PurchaseOrderItem\"\n                   ON \"Event\".\"PurchaseOrderItem_ID\" = \"PurchaseOrderItem\".\"ID\"\n         LEFT JOIN \"o_celonis_ContractItem\" AS \"Object\"\n                   ON \"PurchaseOrderItem\".\"ContractItem_ID\" = \"Object\".\"ID\"\nWHERE \"Object\".\"ID\" IS NOT NULL\n"
+                            }
+                        ]
+                    },
+                    {
+                        "relationship_name": "PurchaseRequisitionItems",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "CreatePurchaseOrderItem (1)",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT DISTINCT\n       \"Event\".\"ID\"  AS \"ID\",\n       \"Object\".\"ID\" AS \"PurchaseRequisitionItems\"\nFROM \"e_celonis_CreatePurchaseOrderItem\" AS \"Event\"\n         LEFT JOIN \"o_celonis_PurchaseOrderItem\" AS \"PurchaseOrderItem\"\n                   ON \"Event\".\"PurchaseOrderItem_ID\" = \"PurchaseOrderItem\".\"ID\"\n         LEFT JOIN \"r_o_celonis_PurchaseRequisitionItem__PurchaseOrderItems\" AS \"Relationship\"\n                   ON \"PurchaseOrderItem\".\"ID\" = \"Relationship\".\"PurchaseOrderItems_ID\"\n         LEFT JOIN \"o_celonis_PurchaseRequisitionItem\" AS \"Object\"\n                   ON \"Relationship\".\"ID\" = \"Object\".\"ID\"\nWHERE \"Object\".\"ID\" IS NOT NULL\n"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

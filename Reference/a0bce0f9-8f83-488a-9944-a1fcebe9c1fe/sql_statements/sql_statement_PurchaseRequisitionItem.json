@@ -1,0 +1,127 @@
+[
+    {
+        "change_date": 1770400809888.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400809888.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem",
+        "draft": null,
+        "factory_id": "9cdc1f5a-fa13-479b-bae2-fc5cf71db39e_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionItem",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'PurchaseRequisitionItem_' || \"CDPOS\".\"TABKEY\" AS \"ObjectID\",\n\t<%=sourceSystem%>  || \"CDPOS\".\"TABKEY\" || \"CDPOS\".\"TABNAME\" || \"CDPOS\".\"FNAME\"\n       || \"CDPOS\".\"CHANGENR\" || \"CDPOS\".\"CHNGIND\"                           AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME)        AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'FRGKZ' THEN 'ReleaseIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'LOEKZ' THEN 'DeletionIndicator'\n           END                                                              AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\"\n           END                                                              AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_NEW\"\n           END                                                              AS \"NewValue\",\n       'User_' || \"CDHDR\".\"MANDANT\" || \"CDHDR\".\"USERNAME\"                   AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                      AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                                   AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                                AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"TABNAME\" = 'EBAN'\n                       AND \"CDPOS\".\"CHNGIND\" = 'U'\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'BANF'\n                       AND (\"CDPOS\".\"FNAME\" IN ('FRGKZ', 'LOEKZ')\n                           OR \"CDHDR\".\"TCODE\" IN ('ME59', 'ME59N'))\n         LEFT JOIN \"EBAN\" AS \"EBAN\"\n                   ON \"CDPOS\".\"TABKEY\" = \"EBAN\".\"MANDT\" || \"EBAN\".\"BANFN\" || \"EBAN\".\"BNFPO\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"EBAN\".\"BSTYP\" = 'B'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n  AND \"EBAN\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "ContractItem",
+                    "CreatedBy",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "Vendor"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DatabasePurchaseRequisitionItemNumber",
+                    "DatabasePurchaseRequisitionNumber",
+                    "DeletionIndicator",
+                    "ID",
+                    "NetUnitPrice",
+                    "ProcessingStatus",
+                    "Quantity",
+                    "QuantityUnit",
+                    "ReleaseIndicator",
+                    "ReleaseIndicatorText",
+                    "Requester",
+                    "ShortText",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "SystemPurchaseRequisitionItemNumber",
+                    "SystemPurchaseRequisitionNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "EBAN",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Changes\" AS (SELECT \"CDPOS\".\"MANDANT\",\n                              \"CDPOS\".\"TABKEY\",\n                              \"CDHDR\".\"UDATE\",\n                              \"CDHDR\".\"UTIME\",\n                              \"CDHDR\".\"USERNAME\",\n                              ROW_NUMBER()\n                              OVER (PARTITION BY \"CDPOS\".\"TABKEY\" ORDER BY \"CDHDR\".\"UDATE\" ASC, \"CDHDR\".\"UTIME\" DESC) AS \"rn\"\n                       FROM \"CDPOS\" AS \"CDPOS\"\n                                LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                                          ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                                              AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                                              AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                                              AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       WHERE \"CDPOS\".\"OBJECTCLAS\" = 'BANF'\n                         AND \"CDPOS\".\"TABNAME\" = 'EBAN'\n                         AND \"CDPOS\".\"FNAME\" = 'KEY'\n                         AND \"CDPOS\".\"CHNGIND\" = 'I')\nSELECT <%=sourceSystem%>  || 'PurchaseRequisitionItem_' || \"EBAN\".\"MANDT\" || \"EBAN\".\"BANFN\" || \"EBAN\".\"BNFPO\" AS \"ID\",\n       COALESCE(CAST(\"Changes\".\"UDATE\" AS DATE) + CAST(\"Changes\".\"UTIME\" AS TIME),\n                CAST(\"EBAN\".\"BADAT\" AS DATE) + CAST('00:00:01' AS TIME))                                      AS \"CreationTime\",\n\t<%=sourceSystem%>  || 'User_' || \"EBAN\".\"MANDT\" || \"EBAN\".\"ERNAM\"                                            AS \"CreatedBy\",\n       CASE\n           WHEN \"EBAN\".\"ESTKZ\" = 'B' AND \"USR02\".\"USTYP\" IS NULL THEN 'Automatic'\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'S', 'C') THEN 'Automatic'\n           WHEN \"USR02\".\"USTYP\" = 'A' THEN 'Manual'\n           END                                                                                                AS \"CreationExecutionType\",\n       \"EBAN\".\"LOEKZ\"                                                                                         AS \"DeletionIndicator\",\n       \"EBAN\".\"AFNAM\"                                                                                         AS \"Requester\",\n\t<%=sourceSystem%>  || 'Vendor_' || \"EBAN\".\"MANDT\" || \"EBAN\".\"LIFNR\"                                          AS \"Vendor\",\n       \"EBAN\".\"WAERS\"                                                                                         AS \"Currency\",\n       \"EBAN\".\"PREIS\" / COALESCE(\"EBAN\".\"PEINH\", 1)                                                           AS \"NetUnitPrice\",\n       \"EBAN\".\"MENGE\"                                                                                         AS \"Quantity\",\n       \"EBAN\".\"MEINS\"                                                                                         AS \"QuantityUnit\",\n       \"EBAN\".\"STATU\"                                                                                         AS \"ProcessingStatus\",\n\t<%=sourceSystem%>  || 'ContractItem_' || \"EBAN\".\"MANDT\" || \"EBAN\".\"KONNR\" || \"EBAN\".\"KTPNR\"                  AS \"ContractItem\",\n\t<%=sourceSystem%>  || 'Material_' || \"EBAN\".\"MANDT\" || \"EBAN\".\"MATNR\"                                        AS \"Material\",\n\t<%=sourceSystem%>  || 'MaterialMasterPlant_' || \"EBAN\".\"MANDT\" || \"EBAN\".\"MATNR\" || \"EBAN\".\"WERKS\"           AS \"MaterialMasterPlant\",\n\t<%=sourceSystem%>  || 'Plant_' || \"EBAN\".\"MANDT\" || \"EBAN\".\"WERKS\"                                           AS \"Plant\",\n       \"EBAN\".\"FRGKZ\"                                                                                         AS \"ReleaseIndicator\",\n       \"T161U\".\"FKZTX\"                                                                                        AS \"ReleaseIndicatorText\",\n       \"EBAN\".\"TXZ01\"                                                                                         AS \"ShortText\",\n       'SAP'                                                                                                  AS \"SourceSystemType\",\n       \"EBAN\".\"MANDT\"                                                                                         AS \"SourceSystemInstance\",\n       \"EBAN\".\"BANFN\"                                                                                         AS \"SystemPurchaseRequisitionNumber\",\n       \"EBAN\".\"BNFPO\"                                                                                         AS \"SystemPurchaseRequisitionItemNumber\",\n       \"EBAN\".\"BANFN\"                                                                                         AS \"DatabasePurchaseRequisitionNumber\",\n       \"EBAN\".\"BNFPO\"                                                                                         AS \"DatabasePurchaseRequisitionItemNumber\"\nFROM \"EBAN\" AS \"EBAN\"\n         LEFT JOIN \"CTE_Changes\" AS \"Changes\"\n                   ON \"EBAN\".\"MANDT\" = \"Changes\".\"MANDANT\"\n                       AND \"EBAN\".\"MANDT\" || \"EBAN\".\"BANFN\" || \"EBAN\".\"BNFPO\" = \"Changes\".\"TABKEY\"\n                       AND \"Changes\".\"rn\" = 1\n         LEFT JOIN \"T161U\" AS \"T161U\"\n                   ON \"EBAN\".\"MANDT\" = \"T161U\".\"MANDT\"\n                       AND \"EBAN\".\"FRGKZ\" = \"T161U\".\"FRGKZ\"\n                       AND \"T161U\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"EBAN\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"EBAN\".\"ERNAM\" = \"USR02\".\"BNAME\"\nWHERE \"EBAN\".\"MANDT\" IS NOT NULL\n  AND \"EBAN\".\"BSTYP\" = 'B'\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseOrderItems",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "EBAN (1)",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT <%=sourceSystem%>  || 'PurchaseRequisitionItem_' || \"EBAN\".\"MANDT\" || \"EBAN\".\"BANFN\" || \"EBAN\".\"BNFPO\" AS \"ID\",\n\t<%=sourceSystem%>  || 'PurchaseOrderItem_' || \"EKPO\".\"MANDT\" || \"EKPO\".\"EBELN\" || \"EKPO\".\"EBELP\"             AS \"PurchaseOrderItems\"\nFROM \"EBAN\" AS \"EBAN\"\n         LEFT JOIN \"EKPO\" AS \"EKPO\"\n                   ON \"EBAN\".\"MANDT\" = \"EKPO\".\"MANDT\"\n                       AND \"EBAN\".\"BANFN\" = \"EKPO\".\"BANFN\"\n                       AND \"EBAN\".\"BNFPO\" = \"EKPO\".\"BNFPO\"\nWHERE \"EBAN\".\"BSTYP\" = 'B'\n  AND \"EKPO\".\"BSTYP\" = 'F'\n"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "RequestedBy"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "ItemDeliveryDate"
+                ],
+                "property_sql_factory_datasets": [],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,650 @@
+{
+    "base_ref": null,
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987487.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987487.0,
+    "default_projection": "ProductionOrderItemActivities",
+    "description": null,
+    "events": [],
+    "id": "33a1d4cb-94a5-4d4c-9406-bf33c73202a3",
+    "name": "InventoryManagement",
+    "namespace": "celonis",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "celonis"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "QuantityConversion",
+                "namespace": "celonis"
+            },
+            "name": "QuantityConversion",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "DeliveryItem",
+                "namespace": "celonis"
+            },
+            "name": "DeliveryItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Plant",
+                "namespace": "celonis"
+            },
+            "name": "Plant",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "IncomingMaterialDocumentItem",
+                "namespace": "celonis"
+            },
+            "name": "IncomingMaterialDocumentItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Material",
+                "namespace": "celonis"
+            },
+            "name": "Material",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Customer",
+                "namespace": "celonis"
+            },
+            "name": "Customer",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "MaterialMasterPlant",
+                "namespace": "celonis"
+            },
+            "name": "MaterialMasterPlant",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Plant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Material",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "IncomingMaterialDocumentItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "OutgoingMaterialDocumentItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "PurchaseRequisitionItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "OutgoingMaterialDocumentItem",
+                "namespace": "celonis"
+            },
+            "name": "OutgoingMaterialDocumentItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "DeliveryItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "ProductionOrder",
+                "namespace": "celonis"
+            },
+            "name": "ProductionOrder",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "ProductionOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "ProductionOrderItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrder",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrder",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Vendor",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrderItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseRequisitionItem",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseRequisitionItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "PurchaseOrderItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Material",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Vendor",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrder",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrder",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Customer",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "StockHistory",
+                "namespace": "celonis"
+            },
+            "name": "StockHistory",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Plant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Material",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderScheduleLine",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderScheduleLine",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrderScheduleLine",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrderScheduleLine",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Vendor",
+                "namespace": "celonis"
+            },
+            "name": "Vendor",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "BeginProductionOrder",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "FinishProductionOrder",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "ProductionOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "ProductionOrderItemActivities",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            }
+        },
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CreatePurchaseOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostGoodsReceipt",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "PurchaseOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrderItemActivities",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            }
+        },
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CreateSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostGoodsIssue",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReverseGoodsIssue",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "SalesOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderItemActivities",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "celonis"
+            }
+        }
+    ],
+    "tags": [
+        "InventoryManagement"
+    ]
+}

@@ -1,0 +1,1041 @@
+{
+    "base_ref": null,
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987493.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987493.0,
+    "default_projection": "SalesOrderItemActivities",
+    "description": null,
+    "events": [],
+    "id": "49e1eb89-2978-424f-bac6-87b6e86eb745",
+    "name": "OrderManagement",
+    "namespace": "celonis",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Customer",
+                "namespace": "celonis"
+            },
+            "name": "Customer",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerBlock",
+                "namespace": "celonis"
+            },
+            "name": "CustomerBlock",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Customer",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "ReleasedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "BlockedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerInvoice",
+                "namespace": "celonis"
+            },
+            "name": "CustomerInvoice",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerInvoiceCancellation",
+                "namespace": "celonis"
+            },
+            "name": "CustomerInvoiceCancellation",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerInvoiceCancellationItem",
+                "namespace": "celonis"
+            },
+            "name": "CustomerInvoiceCancellationItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CustomerInvoiceItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CustomerInvoiceItem",
+                "namespace": "celonis"
+            },
+            "name": "CustomerInvoiceItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Delivery",
+                "namespace": "celonis"
+            },
+            "name": "Delivery",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "DeliveryItem",
+                "namespace": "celonis"
+            },
+            "name": "DeliveryItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Material",
+                "namespace": "celonis"
+            },
+            "name": "Material",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "MaterialMasterPlant",
+                "namespace": "celonis"
+            },
+            "name": "MaterialMasterPlant",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Material",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Plant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "OutgoingMaterialDocumentItem",
+                "namespace": "celonis"
+            },
+            "name": "OutgoingMaterialDocumentItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrder",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrder",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrderItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrder",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrder",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Customer",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderBlock",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderBlock",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrder",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "ReleasedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "BlockedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Plant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderItemBlock",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderItemBlock",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "ReleasedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "BlockedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "SalesOrderScheduleLine",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderScheduleLine",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "ShipmentItem",
+                "namespace": "celonis"
+            },
+            "name": "ShipmentItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Delivery",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "celonis"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "RelationshipCustomerInvoiceItem",
+                "namespace": "celonis"
+            },
+            "name": "RelationshipCustomerInvoiceItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "OutgoingMaterialDocumentItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CustomerInvoiceItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "DeliveryItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "OrderManagement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CancelCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReverseGoodsIssue",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "RestoreSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrder",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderItemBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderScheduleLine",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateDeliveryHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateDeliveryItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreatePurchaseOrderHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateShipmentItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ExecutePicking",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostGoodsIssue",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostReturnGoodsReceipt",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseCreditBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseBillingBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseBillingBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseDeliveryBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseDeliveryBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetBillingBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetBillingBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetCreditBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetDeliveryBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetDeliveryBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelSalesOrderItem",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "SalesOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderItemActivities",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            }
+        },
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CancelCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReverseGoodsIssue",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "RestoreSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrder",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderItemBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderScheduleLine",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateDeliveryHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreatePurchaseOrderHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateShipmentItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ExecutePicking",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostGoodsIssue",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostReturnGoodsReceipt",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseCreditBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseBillingBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseBillingBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseDeliveryBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseDeliveryBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetBillingBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetBillingBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetCreditBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetDeliveryBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetDeliveryBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelSalesOrderItem",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "SalesOrder",
+                "namespace": "celonis"
+            },
+            "name": "SalesOrderActivities",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            }
+        },
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CancelCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReverseGoodsIssue",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "RestoreSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderItemBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeSalesOrderScheduleLine",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateCustomerInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateDeliveryHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateDeliveryItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreatePurchaseOrderHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderHeader",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateSalesOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateShipmentItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ExecutePicking",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostGoodsIssue",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostReturnGoodsReceipt",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseCreditBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseBillingBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseBillingBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseDeliveryBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReleaseDeliveryBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetBillingBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetBillingBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetCreditBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetDeliveryBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetDeliveryBlockOnItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CancelSalesOrderItem",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "DeliveryItem",
+                "namespace": "celonis"
+            },
+            "name": "DeliveryItemActivities",
+            "origin_ref": {
+                "name": "OrderManagement",
+                "namespace": "celonis"
+            }
+        }
+    ],
+    "tags": [
+        "OrderManagement"
+    ]
+}

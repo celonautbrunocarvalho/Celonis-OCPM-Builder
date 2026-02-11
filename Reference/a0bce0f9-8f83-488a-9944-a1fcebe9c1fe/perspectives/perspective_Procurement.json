@@ -1,0 +1,715 @@
+{
+    "base_ref": null,
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172987500.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172987500.0,
+    "default_projection": "PurchaseOrderItemActivities",
+    "description": null,
+    "events": [],
+    "id": "1d9ac34a-e2cb-47ff-8bd8-b3654141612d",
+    "name": "Procurement",
+    "namespace": "celonis",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Contract",
+                "namespace": "celonis"
+            },
+            "name": "Contract",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "ContractItem",
+                "namespace": "celonis"
+            },
+            "name": "ContractItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Plant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Material",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "IncomingMaterialDocumentItem",
+                "namespace": "celonis"
+            },
+            "name": "IncomingMaterialDocumentItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "MaterialMasterPlant",
+                "namespace": "celonis"
+            },
+            "name": "MaterialMasterPlant",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "OutgoingMaterialDocumentItem",
+                "namespace": "celonis"
+            },
+            "name": "OutgoingMaterialDocumentItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "ReversedIncomingGood",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "Vendor",
+                "namespace": "celonis"
+            },
+            "name": "Vendor",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrder",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrder",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Vendor",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrderItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "RecommendedMaterialContractItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "RecommendedMaterialContracts",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Material",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Plant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseOrderScheduleLine",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrderScheduleLine",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "PurchaseRequisitionItem",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseRequisitionItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Material",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Vendor",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                },
+                {
+                    "name": "Plant",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "celonis"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountCreditItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountCreditItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "VendorInvoice",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountCreditItemBlock",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountCreditItemBlock",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountDebitItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountDebitItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Vendor",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorAccountClearingAssignment",
+                "namespace": "celonis"
+            },
+            "name": "VendorAccountClearingAssignment",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "VendorAccountCreditItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorAccountDebitItems",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "CreatedBy",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorConfirmation",
+                "namespace": "celonis"
+            },
+            "name": "VendorConfirmation",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorInvoice",
+                "namespace": "celonis"
+            },
+            "name": "VendorInvoice",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "VendorInvoiceItem",
+                "namespace": "celonis"
+            },
+            "name": "VendorInvoiceItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "RelationshipThreeWayMatch",
+                "namespace": "celonis"
+            },
+            "name": "RelationshipThreeWayMatch",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "IncomingMaterialDocumentItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorInvoiceItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": null,
+            "entity_metadata": {
+                "name": "RelationshipContractItem",
+                "namespace": "celonis"
+            },
+            "name": "RelationshipContractItem",
+            "namespace": "celonis",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            },
+            "relationships": [
+                {
+                    "name": "PurchaseRequisitionItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "PurchaseOrderItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "ContractItem",
+                    "namespace": "celonis",
+                    "origin_ref": {
+                        "name": "Procurement",
+                        "namespace": "celonis"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "BlockPurchaseOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangePurchaseOrder",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangePurchaseOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangePurchaseOrderScheduleLine",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangeVendorConfirmation",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreatePurchaseOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreatePurchaseRequisitionItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "CreateVendorInvoice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "DeletePurchaseOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "PostGoodsReceipt",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReceiveAdvancedShipmentNotice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReceivePurchaseOrderConfirmation",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ChangePurchaseRequisitionItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "RestorePurchaseOrderItem",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "ReverseGoodsReceipt",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SendPurchaseOrderOverdueNotice",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SendPurchaseOrder",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SendPurchaseOrderUpdate",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetConfirmedPOItemDeliveryDate",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetPaymentBlock",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "SetRequestedPOItemDeliveryDate",
+                    "namespace": "celonis"
+                }
+            ],
+            "lead_object": {
+                "name": "PurchaseOrderItem",
+                "namespace": "celonis"
+            },
+            "name": "PurchaseOrderItemActivities",
+            "origin_ref": {
+                "name": "Procurement",
+                "namespace": "celonis"
+            }
+        }
+    ],
+    "tags": [
+        "Procurement"
+    ]
+}

@@ -1,0 +1,321 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1727172986183.0,
+    "changed_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "color": "#48BF96",
+    "created_by": {
+        "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+        "name": "Celonis",
+        "type_": "APPLICATION"
+    },
+    "creation_date": 1727172986183.0,
+    "description": null,
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "DeletionTime",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CreationExecutionType",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DocumentNumberOfTheClearingDocument",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PostingKey",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ReferenceTransaction",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DocumentType",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DocumentTypeText",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "DocumentDate",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PaymentMethod",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "TransactionCode",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ReferenceDocumentNumber",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "BaseLineDate",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "PaymentDays1",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "PaymentDays2",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "PaymentDays3",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "CashDiscountPercentage1",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "CashDiscountPercentage2",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ItemText",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "VendorCashDiscountPercentage1",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "VendorCashDiscountPercentage2",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "DocumentAmount",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DocumentAmountCurrency",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "DocumentCashDiscountTakenAmount",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "DocumentCashDiscountEligibleAmount",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "Amount",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Currency",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "CashDiscountTakenAmount",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "CashDiscountEligibleAmount",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ClearingDate",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PaymentTerms",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CompanyCode",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CompanyCodeText",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "VendorPaymentDays1",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "VendorPaymentDays2",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "VendorPaymentDays3",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemType",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "FiscalYear",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SystemAccountingDocumentNumber",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SystemAccountingDocumentItemNumber",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "VendorAccountTransactionType",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CashDiscountDueDate",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "DueDate",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ReversalIndicator",
+            "namespace": "DuplicateInvoiceChecker"
+        },
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "PurchaseOrderRelated",
+            "namespace": "DuplicateInvoiceChecker"
+        }
+    ],
+    "id": "773b58ef-59f3-4740-ab0c-4c647df606e7",
+    "managed": true,
+    "multi_link": false,
+    "name": "VendorAccountItem",
+    "namespace": "DuplicateInvoiceChecker",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "VendorAccountCreditItem",
+            "namespace": "DuplicateInvoiceChecker",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountCreditItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "VendorAccountDebitItem",
+            "namespace": "DuplicateInvoiceChecker",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountDebitItem",
+                    "namespace": "celonis"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Vendor",
+            "namespace": "DuplicateInvoiceChecker",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Vendor",
+                    "namespace": "celonis"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "AccountsPayable"
+    ]
+}

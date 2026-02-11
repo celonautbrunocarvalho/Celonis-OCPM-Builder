@@ -1,0 +1,135 @@
+[
+    {
+        "change_date": 1736420966829.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736420965962.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "description": "",
+        "disabled": null,
+        "display_name": "User transformation - 1000 - RAW test data sets_31 - Ariba Sourcing - 5",
+        "draft": null,
+        "factory_id": "b849bbb7-6926-4bf8-bd5f-cee78a28451d",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "celonis",
+                "property_names": [
+                    "DisplayName",
+                    "FirstName",
+                    "ID",
+                    "LastName",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [],
+                "relationship_transformations": []
+            },
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ID"
+                ],
+                "property_sql_factory_datasets": [],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1770400803109.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400803109.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "User",
+        "draft": null,
+        "factory_id": "1943f39f-9433-41c2-84e0-9a7abb31b17a_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "celonis",
+                "property_names": [
+                    "DisplayName",
+                    "FirstName",
+                    "ID",
+                    "LastName",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "USR02",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_ADRP_Latest\" AS (SELECT \"ADRP\".\"CLIENT\",\n                              \"ADRP\".\"PERSNUMBER\",\n                              \"ADRP\".\"NAME_FIRST\",\n                              \"ADRP\".\"NAME_LAST\",\n                              ROW_NUMBER() OVER (PARTITION BY \"ADRP\".\"CLIENT\", \"ADRP\".\"PERSNUMBER\"\n                                  ORDER BY \"ADRP\".\"DATE_FROM\", \"ADRP\".\"NATION\") AS \"rn\"\n                       FROM \"ADRP\" AS \"ADRP\")\nSELECT <%=sourceSystem%>  || 'User_' || \"USR02\".\"MANDT\" || \"USR02\".\"BNAME\" AS \"ID\",\n       \"USR02\".\"BNAME\"                                                     AS \"DisplayName\",\n       \"USR02\".\"USTYP\"                                                     AS \"Type\",\n       \"ADRP_Latest\".\"NAME_FIRST\"                                          AS \"FirstName\",\n       \"ADRP_Latest\".\"NAME_LAST\"                                           AS \"LastName\",\n       'SAP'                                                               AS \"SourceSystemType\",\n       \"USR02\".\"MANDT\"                                                     AS \"SourceSystemInstance\"\nFROM \"USR02\" AS \"USR02\"\n         LEFT JOIN \"USR21\" AS \"USR21\"\n                   ON \"USR02\".\"MANDT\" = \"USR21\".\"MANDT\"\n                       AND \"USR02\".\"BNAME\" = \"USR21\".\"BNAME\"\n         LEFT JOIN \"CTE_ADRP_Latest\" AS \"ADRP_Latest\"\n                   ON \"USR21\".\"MANDT\" = \"ADRP_Latest\".\"CLIENT\"\n                       AND \"USR21\".\"PERSNUMBER\" = \"ADRP_Latest\".\"PERSNUMBER\"\n                       AND \"ADRP_Latest\".\"rn\" = '1'\nWHERE \"USR02\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            },
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ID"
+                ],
+                "property_sql_factory_datasets": [],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

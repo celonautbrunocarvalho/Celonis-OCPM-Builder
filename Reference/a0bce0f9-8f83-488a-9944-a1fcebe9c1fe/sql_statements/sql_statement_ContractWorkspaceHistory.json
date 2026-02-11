@@ -1,0 +1,149 @@
+[
+    {
+        "change_date": 1737035004474.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736341699679.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "description": "",
+        "disabled": null,
+        "display_name": "ContractWorkspaceHistory transformation - 1000 - RAW test data sets_31 - Ariba Sourcing - 1",
+        "draft": null,
+        "factory_id": "b40b864e-b734-4989-b3ae-0a90ace6e294",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "TimezoneOffset",
+                "value": "-3"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ContractWorkspaceHistory",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "ContractWorkspace"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AclId",
+                    "Active",
+                    "AdapterFlag",
+                    "AffectedParties",
+                    "AgreementDate",
+                    "AgreementPath",
+                    "Alert",
+                    "AllowAdhocSpend",
+                    "AmendmentReason",
+                    "AmendmentReasonComment",
+                    "AmountAmount",
+                    "AmountCurrencyUniqueName",
+                    "AttrsBlobCharSet",
+                    "AttrsBlobLang",
+                    "AttrsBlobTextFlag",
+                    "AutoRenewalCount",
+                    "BaseLanguageUniqueName",
+                    "BusinessSystemId",
+                    "BusinessSystemName",
+                    "Changed",
+                    "Commodity",
+                    "ComplexSpendAvailableAmountAmount",
+                    "ContractStatus",
+                    "ContractType",
+                    "ContractsWithBlockedFactoriesNotAllow",
+                    "ContractsWithUnApprovedFactoriesNotAllow",
+                    "CreateDate",
+                    "DefaultScheduleSearchFilterRequired",
+                    "DefaultingSetBits",
+                    "Description",
+                    "DescriptionDefaultStringTranslation",
+                    "DocumentIdInternalId",
+                    "DocumentVersion",
+                    "EffectiveDate",
+                    "ExpirationDate",
+                    "ExpirationTermType",
+                    "ExpiringReminderBegin",
+                    "ExpiringReminderFrequency",
+                    "HasContentFromDMS",
+                    "HeadersLastModified",
+                    "HierarchicalType",
+                    "ID",
+                    "InternalId",
+                    "IsAdhocTaskRestricted",
+                    "IsComplexSpendWorkspace",
+                    "IsContractRequest",
+                    "IsEvergreen",
+                    "IsForMinervaInterface",
+                    "IsReportVersion",
+                    "IsSubContentPinned",
+                    "IsVersionPinned",
+                    "LastModified",
+                    "LastPublishedDate",
+                    "LockAccessControl",
+                    "MatchAtleastOneStatusPerProcessType",
+                    "MaxAutoRenewalsAllowed",
+                    "NoteBoxCreateDate",
+                    "NoteBoxInternalId",
+                    "NoticeDate",
+                    "NoticePeriod",
+                    "NoticeReminderBegin",
+                    "NoticeReminderFrequency",
+                    "Origin",
+                    "OriginalExpirationDate",
+                    "ParentDocument",
+                    "ParentDocumentInternalId",
+                    "ParentDocumentVersion",
+                    "PartitionNumber",
+                    "ProcessId",
+                    "ProcessStatus",
+                    "ProjectAddinIsSubproject",
+                    "ProjectAddinIsTest",
+                    "ProjectAddinPlanProcessId",
+                    "ProjectAddinPlanTitleDefaultStringTranslation",
+                    "PurgeState",
+                    "Rank",
+                    "Region",
+                    "SourceApplicationSite",
+                    "Status",
+                    "Supplier",
+                    "TemplateObject",
+                    "TemplateObjectInternalId",
+                    "TimeCreated",
+                    "TimeUpdated",
+                    "TimeZoneID",
+                    "Title",
+                    "TitleDefaultStringTranslation",
+                    "Version"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ContractWorkspaceHistoryAtributos",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'ContractWorkspace_' || \"CW\".\"DocumentId_InternalId\" AS \"ContractWorkspace\",\n    'ContractWorkspaceHistory_' || \"CW\".\"InternalId\" AS \"ID\",\n    --'SourcingProject_' ||  \"SourcingProject\".\"DocumentId_InternalId\" AS \"SourcingProject\",\n    \"CW\".\"InternalId\" AS \"InternalId\",\n    \"CW\".\"Origin\" AS \"Origin\",\n    \"CW\".\"IsReportVersion\" AS \"IsReportVersion\",\n    cast(\"CW\".\"NoticePeriod\"  AS int) AS \"NoticePeriod\", \n    cast(\"CW\".\"DefaultingSetBits\" AS int) AS \"DefaultingSetBits\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"LastModified\") AS \"LastModified\",\n    \"CW\".\"AmendmentReason\" AS \"AmendmentReason\",\n    --\"CW\".\"ParentDocument\" AS \"ParentDocument\",                                              JSON FORMAT\n    \"CW\".\"MatchAtleastOneStatusPerProcessType\" AS \"MatchAtleastOneStatusPerProcessType\",\n    \"CW\".\"Status\" AS \"Status\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"OriginalExpirationDate\") AS \"OriginalExpirationDate\",\n    --\"CW\".\"TemplateObject\" AS \"TemplateObject\",                                              JSON FORMAT\n    \"CW\".\"Description\" AS \"Description\",\n    \"CW\".\"IsForMinervaInterface\" AS \"IsForMinervaInterface\",\n    \"CW\".\"ProcessStatus\" AS \"ProcessStatus\",\n    \"CW\".\"AmendmentReasonComment\" AS \"AmendmentReasonComment\",\n    cast(\"CW\".\"NoticeReminderBegin\" AS int) AS \"NoticeReminderBegin\",\n    \"CW\".\"PartitionNumber\" AS \"PartitionNumber\",\n    --\"CW\".\"Supplier\" AS \"Supplier\",                                              JSON FORMAT\n    cast(\"CW\".\"DocumentVersion\" AS int) AS \"DocumentVersion\",\n    \"CW\".\"IsSubContentPinned\" AS \"IsSubContentPinned\",\n    cast(\"CW\".\"Rank\" AS int) AS \"Rank\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"TimeUpdated\") AS \"TimeUpdated\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"ExpirationDate\") AS \"ExpirationDate\",\n    cast(\"CW\".\"AdapterFlag\" AS int) AS \"AdapterFlag\",\n    \"CW\".\"IsContractRequest\" AS \"IsContractRequest\",\n    cast(\"CW\".\"PurgeState\" AS int) AS \"PurgeState\",\n    cast(\"CW\".\"NoticeReminderFrequency\" AS int) AS \"NoticeReminderFrequency\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"CreateDate\") AS \"CreateDate\",\n    cast(\"CW\".\"AutoRenewalCount\" AS int) AS \"AutoRenewalCount\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"LastPublishedDate\") AS \"LastPublishedDate\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,cast(\"CW\".\"TimeCreated\" AS timestamp)) AS \"TimeCreated\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,cast(\"CW\".\"HeadersLastModified\" AS timestamp)) AS \"HeadersLastModified\",\n    cast(\"CW\".\"Version\" AS int) AS \"Version\",\n    \"CW\".\"ExpirationTermType\" AS \"ExpirationTermType\",\n    \"CW\".\"AgreementPath\" AS \"AgreementPath\",\n    \"CW\".\"Active\" AS \"Active\",\n    \"CW\".\"ContractType\" AS \"ContractType\",\n    --\"CW\".\"Region\" AS \"Region\",                                              JSON FORMAT\n    \"CW\".\"HierarchicalType\" AS \"HierarchicalType\",\n    \"CW\".\"LockAccessControl\" AS \"LockAccessControl\",\n    \"CW\".\"DoNotAllowPublishingContractsWithUnApprovedFactories\" AS \"ContractsWithUnApprovedFactoriesNotAllow\",\n    \"CW\".\"HasContentFromDMS\" AS \"HasContentFromDMS\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"AgreementDate\") AS \"AgreementDate\",\n    \"CW\".\"ContractStatus\" AS \"ContractStatus\",\n    \"CW\".\"DoNotAllowPublishingContractsWithBlockedFactories\" AS \"ContractsWithBlockedFactoriesNotAllow\",\n    \"CW\".\"IsEvergreen\" AS \"IsEvergreen\",\n    --\"CW\".\"AffectedParties\" AS \"AffectedParties\",                                              JSON FORMAT\n    --\"CW\".\"Commodity\" AS \"Commodity\",                                              JSON FORMAT\n    \"CW\".\"isAdhocTaskRestricted\" AS \"IsAdhocTaskRestricted\",\n    \"CW\".\"Changed\" AS \"Changed\",\n    \"CW\".\"IsComplexSpendWorkspace\" AS \"IsComplexSpendWorkspace\",\n    \"CW\".\"TimeZoneID\" AS \"TimeZoneID\",\n    cast(\"CW\".\"ExpiringReminderFrequency\" AS int) AS \"ExpiringReminderFrequency\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"NoticeDate\") AS \"NoticeDate\",\n    \"CW\".\"IsVersionPinned\" AS \"IsVersionPinned\",\n    \"CW\".\"AllowAdhocSpend\" AS \"AllowAdhocSpend\",\n    \"CW\".\"AclId\" AS \"AclId\",\n    \"CW\".\"Title\" AS \"Title\",\n    \"CW\".\"SourceApplicationSite\" AS \"SourceApplicationSite\",\n    \"CW\".\"ExpiringReminderBegin\" AS \"ExpiringReminderBegin\",\n    \"CW\".\"MaxAutoRenewalsAllowed\" AS \"MaxAutoRenewalsAllowed\",\n    \"CW\".\"Alert\" AS \"Alert\",\n    \"CW\".\"ParentDocumentVersion\" AS \"ParentDocumentVersion\",\n    \"CW\".\"ProcessId\" AS \"ProcessId\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"EffectiveDate\") AS \"EffectiveDate\",\n    \"CW\".\"ProjectAddin_IsTest\" AS \"ProjectAddinIsTest\",\n    \"CW\".\"ProjectAddin_Plan_Title_DefaultStringTranslation\" AS \"ProjectAddinPlanTitleDefaultStringTranslation\",\n    \"CW\".\"ProjectAddin_Plan_ProcessId\" AS \"ProjectAddinPlanProcessId\",\n    \"CW\".\"ProjectAddin_IsSubproject\" AS \"ProjectAddinIsSubproject\",\n    \"CW\".\"ParentDocument_InternalId\" AS \"ParentDocumentInternalId\",\n    \"CW\".\"TemplateObject_InternalId\" AS \"TemplateObjectInternalId\",\n    \"CW\".\"Description_DefaultStringTranslation\" AS \"DescriptionDefaultStringTranslation\",\n    \"CW\".\"BusinessSystem_Id\" AS \"BusinessSystemId\",\n    \"CW\".\"BusinessSystem_Name\" AS \"BusinessSystemName\",\n    cast(\"CW\".\"Amount_Amount\" AS float) AS \"AmountAmount\",\n    \"CW\".\"Amount_Currency_UniqueName\" AS \"AmountCurrencyUniqueName\",\n    cast(\"CW\".\"ComplexSpendAvailableAmount_Amount\" AS float) AS \"ComplexSpendAvailableAmountAmount\",\n    \"CW\".\"BaseLanguage_UniqueName\" AS \"BaseLanguageUniqueName\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"CW\".\"NoteBox_CreateDate\") AS \"NoteBoxCreateDate\",\n    \"CW\".\"NoteBox_InternalId\" AS \"NoteBoxInternalId\",\n    \"CW\".\"AttrsBlob_TextFlag\" AS \"AttrsBlobTextFlag\",\n    \"CW\".\"AttrsBlob_CharSet\" AS \"AttrsBlobCharSet\",\n    \"CW\".\"AttrsBlob_Lang\" AS \"AttrsBlobLang\",\n    \"CW\".\"Title_DefaultStringTranslation\" AS \"TitleDefaultStringTranslation\",\n    \"CW\".\"DefaultScheduleSearchFilter_Required\" AS \"DefaultScheduleSearchFilterRequired\",\n    \"CW\".\"DocumentId_InternalId\" AS \"DocumentIdInternalId\"\nFROM \"ContractWorkspace\" AS \"CW\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

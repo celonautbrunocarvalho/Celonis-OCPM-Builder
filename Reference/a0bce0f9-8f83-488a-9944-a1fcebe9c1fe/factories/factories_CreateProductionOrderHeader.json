@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1770400786540.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400786540.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "Celonis - CreateProductionOrderHeader - SAP ECC",
+        "factory_id": "41467813-0f56-41d1-8f1d-ae1a3b64b262_00000000-0000-0000-0000-000000000000",
+        "has_overwrites": null,
+        "name": "CreateProductionOrderHeader",
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "CreateProductionOrderHeader",
+                "namespace": "celonis"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "NOT_VALIDATED"
+    }
+]

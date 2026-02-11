@@ -1,0 +1,94 @@
+[
+    {
+        "change_date": 1736420957478.0,
+        "changed_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736420955789.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "description": "",
+        "disabled": null,
+        "display_name": "RfxItemValue transformation - 1000 - RAW test data sets_31 - Ariba Sourcing - 4",
+        "draft": null,
+        "factory_id": "55bc4fed-b3de-4bd7-8370-5c6f0e73a02f",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "RfxItemValue",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "RfxDocumentItem"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Active",
+                    "AodDataSyncScn",
+                    "EffectiveDate",
+                    "ExpiryDate",
+                    "ExtendedPrice",
+                    "ExtendedPriceAmount",
+                    "ExtendedPriceAmountInReportingCurrency",
+                    "ExtendedPriceApproxAmountInBaseCurrency",
+                    "ExtendedPriceConversionDate",
+                    "ExtendedPriceCurrencyUniqueName",
+                    "ID",
+                    "NextVersion",
+                    "NextVersionVersionId",
+                    "Price",
+                    "PriceAmount",
+                    "PriceAmountInReportingCurrency",
+                    "PriceApproxAmountInBaseCurrency",
+                    "PriceConversionDate",
+                    "PriceCurrencyUniqueName",
+                    "Quantity",
+                    "QuantityAmount",
+                    "Rank",
+                    "Reusequote",
+                    "Savings",
+                    "SavingsAmount1Amount",
+                    "SavingsAmount1AmountInReportingCurrency",
+                    "SavingsAmount1ApproxAmountInBaseCurrency",
+                    "SavingsAmount1ConversionDate",
+                    "SavingsAmount1CurrencyUniqueName",
+                    "SavingsAmount2Amount",
+                    "SavingsAmount2AmountInReportingCurrency",
+                    "SavingsAmount2ConversionDate",
+                    "SavingsAmount2CurrencyUniqueName",
+                    "SliceId",
+                    "Status",
+                    "TiedRank",
+                    "TimeCreated",
+                    "TimeUpdated"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "RfxItemValueAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "select \n'RFXItemValue_' || COALESCE(\"RFXItemValue\".\"ItemId\" ||  \"RFXItemValue\".\"SliceId\" ||  \"RFXItemValue\".\"VersionId\") as \"ID\",\n'RFXItem_' || COALESCE(\"RFXItemValue\".\"ItemId\" ||  '_' ||  \"RFXItemValue\".\"VersionId\") as \"RFXDocumentItem\",\n\"RFXItemValue\".\"ExpiryDate\" AS \"ExpiryDate\",\n\"RFXItemValue\".\"QUANTITY\" AS \"Quantity\",\nCAST(\"RFXItemValue\".\"TimeCreated\" AS TIMESTAMP) AS \"TimeCreated\",\n\"RFXItemValue\".\"TiedRank\" AS \"TiedRank\",\n\"RFXItemValue\".\"EXTENDEDPRICE\" AS \"ExtendedPrice\",\n--\"RFXItemValue\".\"BESTPRICE\" AS \"BestPrice\", \n\"RFXItemValue\".\"STATUS\" AS \"Status\",\n\"RFXItemValue\".\"PRICE\" AS \"Price\",\n\"RFXItemValue\".\"Active\" AS \"Active\",\n\"RFXItemValue\".\"REUSEQUOTE\" AS \"Reusequote\",\n\"RFXItemValue\".\"NextVersion\" AS \"NextVersion\",\n\"RFXItemValue\".\"SliceId\" AS \"SliceId\",\nCAST(\"RFXItemValue\".\"Rank\" AS INT) AS \"Rank\",\n\"RFXItemValue\".\"TimeUpdated\" AS \"TimeUpdated\",\nCAST(\"RFXItemValue\".\"AODDataSyncScn\" AS INT) AS \"AodDataSyncScn\",\n\"RFXItemValue\".\"SAVINGS\" AS \"Savings\",\n\"RFXItemValue\".\"EffectiveDate\" AS \"EffectiveDate\",\n--\"RFXItemValue\".\"ExpiryDate\" AS \"QuantityAmount\",\nCAST(\"RFXItemValue\".\"EXTENDEDPRICE_AmountInReportingCurrency\" AS FLOAT) AS \"ExtendedPriceAmountInReportingCurrency\",\nCAST(\"RFXItemValue\".\"EXTENDEDPRICE_ApproxAmountInBaseCurrency\" AS FLOAT) AS \"ExtendedPriceApproxAmountInBaseCurrency\",\nCAST(\"RFXItemValue\".\"EXTENDEDPRICE_Amount\"  AS FLOAT) AS \"ExtendedPriceAmount\",\n\"RFXItemValue\".\"EXTENDEDPRICE_ConversionDate\" AS \"ExtendedPriceConversionDate\",\n\"RFXItemValue\".\"EXTENDEDPRICE_Currency_UniqueName\" AS \"ExtendedPriceCurrencyUniqueName\",\nCAST(\"RFXItemValue\".\"PRICE_AmountInReportingCurrency\" AS FLOAT) AS \"PriceAmountInReportingCurrency\",\nCAST(\"RFXItemValue\".\"PRICE_ApproxAmountInBaseCurrency\" AS FLOAT) AS \"PriceApproxAmountInBaseCurrency\",\nCAST(\"RFXItemValue\".\"PRICE_Amount\" AS FLOAT) AS \"PriceAmount\",\n\"RFXItemValue\".\"PRICE_ConversionDate\" AS \"PriceConversionDate\",\n\"RFXItemValue\".\"PRICE_Currency_UniqueName\" AS \"PriceCurrencyUniqueName\",\nCAST(\"RFXItemValue\".\"SAVINGS_Amount1_AmountInReportingCurrency\" AS FLOAT) AS \"SavingsAmount1AmountInReportingCurrency\",\nCAST(\"RFXItemValue\".\"SAVINGS_Amount1_ApproxAmountInBaseCurrency\" AS FLOAT) AS \"SavingsAmount1ApproxAmountInBaseCurrency\",\nCAST(\"RFXItemValue\".\"SAVINGS_Amount1_Amount\" AS FLOAT) AS \"SavingsAmount1Amount\",\n\"RFXItemValue\".\"SAVINGS_Amount1_ConversionDate\" AS \"SavingsAmount1ConversionDate\",\n\"RFXItemValue\".\"SAVINGS_Amount1_Currency_UniqueName\" AS \"SavingsAmount1CurrencyUniqueName\",\nCAST(\"RFXItemValue\".\"SAVINGS_Amount2_AmountInReportingCurrency\" AS FLOAT) AS \"SavingsAmount2AmountInReportingCurrency\",\nCAST(\"RFXItemValue\".\"SAVINGS_Amount2_Amount\" AS FLOAT) AS \"SavingsAmount2Amount\",\n\"RFXItemValue\".\"SAVINGS_Amount2_ConversionDate\" AS \"SavingsAmount2ConversionDate\",\n\"RFXItemValue\".\"SAVINGS_Amount2_Currency_UniqueName\" AS \"SavingsAmount2CurrencyUniqueName\",\nCAST(\"RFXItemValue\".\"NextVersion_VersionId\" AS INT) AS \"NextVersionVersionId\"\n--,\"RFXItemValue\".\"\" AS \"RfxDocumentItem\"\nFROM \"RFXItemValue\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

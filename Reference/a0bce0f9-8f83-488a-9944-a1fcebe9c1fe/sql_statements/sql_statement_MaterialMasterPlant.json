@@ -1,0 +1,87 @@
+[
+    {
+        "change_date": 1770400800130.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400800130.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMasterPlant",
+        "draft": null,
+        "factory_id": "ef56042e-55da-46e1-b5bb-4c9b78aa948a_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMasterPlant",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Material",
+                    "Plant"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "BaseCurrency",
+                    "BaseQuantityUnit",
+                    "BaseTotalValuatedStockAmount",
+                    "BaseTotalValuatedStockQuantity",
+                    "BaseUnitPrice",
+                    "CompanyCode",
+                    "CompanyCodeText",
+                    "CreationTime",
+                    "FollowUpMaterial",
+                    "GoodsReceiptProcessingDays",
+                    "ID",
+                    "MRPController",
+                    "MRPGroup",
+                    "MRPType",
+                    "MinimumLotSize",
+                    "PlannedDeliveryTimeDays",
+                    "PlannedProductionLeadTime",
+                    "PlanningStrategyGroup",
+                    "ProcurementType",
+                    "SafetyStockLevel",
+                    "ServiceLevel",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "ValidityPeriodEndDate",
+                    "ValidityPeriodStartDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MARC",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'MaterialMasterPlant_' || \"MARC\".\"MANDT\" || \"MARC\".\"MATNR\" || \"MARC\".\"WERKS\" AS \"ID\",\n    NULL                                                                                                  AS \"CreationTime\",\n    CAST(\"MARC\".\"MMSTD\" AS TIMESTAMP)                                                                     AS \"ValidityPeriodStartDate\",\n    CAST(\"MARC\".\"AUSDT\" AS TIMESTAMP)                                                                     AS \"ValidityPeriodEndDate\",\n    \"MARC\".\"PLIFZ\"                                                                                        AS \"PlannedDeliveryTimeDays\",\n\t<%=sourceSystem%>  || 'Material_' || \"MARC\".\"MANDT\" || \"MARC\".\"MATNR\"                                    AS \"Material\",\n\t<%=sourceSystem%>  || 'Plant_' || \"MARC\".\"MANDT\" || \"MARC\".\"WERKS\"                                       AS \"Plant\",\n    CAST(\"MARC\".\"EISBE\" AS BIGINT)                                                                        AS \"SafetyStockLevel\",\n    \"MARC\".\"NFMAT\"                                                                                        AS \"FollowUpMaterial\",\n    CASE\n        WHEN \"MARC\".\"BESKZ\" = 'E' THEN 'In-house Production'\n        WHEN \"MARC\".\"BESKZ\" = 'F' THEN 'External Procurement'\n        WHEN \"MARC\".\"BESKZ\" = 'X' THEN 'Both Procurement Types'\n        END                                                                                               AS \"ProcurementType\",\n    CAST(\"MARC\".\"WEBAZ\" AS BIGINT)                                                                        AS \"GoodsReceiptProcessingDays\",\n    CAST(\"MARC\".\"DZEIT\" AS FLOAT)                                                                         AS \"PlannedProductionLeadTime\",\n    \"MARC\".\"DISMM\"                                                                                        AS \"MRPType\",\n    \"MARC\".\"DISPO\"                                                                                        AS \"MRPController\",\n    \"MARC\".\"DISGR\"                                                                                        AS \"MRPGroup\",\n    \"MARC\".\"LGRAD\" / 100                                                                                  AS \"ServiceLevel\",\n    \"MARC\".\"STRGR\"                                                                                        AS \"PlanningStrategyGroup\",\n    \"MBEW\".\"LBKUM\"                                                                                        AS \"BaseTotalValuatedStockQuantity\",\n    \"MBEW\".\"SALK3\"                                                                                        AS \"BaseTotalValuatedStockAmount\",\n    CAST(\"MARC\".\"BSTMI\" AS FLOAT)                                                                         AS \"MinimumLotSize\",\n    CASE\n        WHEN \"MBEW\".\"VPRSV\" = 'V'\n            THEN COALESCE(\"MBEW\".\"VERPR\" / NULLIF(\"MBEW\".\"PEINH\", 0), \"MBEW\".\"VERPR\")\n        WHEN \"MBEW\".\"VPRSV\" = 'S'\n            THEN COALESCE(\"MBEW\".\"STPRS\" / NULLIF(\"MBEW\".\"PEINH\", 0), \"MBEW\".\"STPRS\")\n        ELSE \"MBEW\".\"SALK3\" / NULLIF(\"MBEW\".\"LBKUM\", 0)\n        END                                                                                               AS \"BaseUnitPrice\",\n    \"T001K\".\"BUKRS\"                                                                                       AS \"CompanyCode\",\n    \"T001\".\"BUTXT\"                                                                                        AS \"CompanyCodeText\",\n    \"T001\".\"WAERS\"                                                                                        AS \"BaseCurrency\",\n    \"MARA\".\"MEINS\"                                                                                        AS \"BaseQuantityUnit\",\n    'SAP'                                                                                                 AS \"SourceSystemType\",\n    \"MARC\".\"MANDT\"                                                                                        AS \"SourceSystemInstance\"\nFROM \"MARC\" AS \"MARC\"\n         LEFT JOIN \"T001W\" AS \"T001W\"\n                   ON \"MARC\".\"MANDT\" = \"T001W\".\"MANDT\"\n                       AND \"MARC\".\"WERKS\" = \"T001W\".\"WERKS\"\n         LEFT JOIN \"MBEW\" AS \"MBEW\"\n                   ON \"MARC\".\"MANDT\" = \"MBEW\".\"MANDT\"\n                       AND \"MARC\".\"MATNR\" = \"MBEW\".\"MATNR\"\n                       AND \"T001W\".\"BWKEY\" = \"MBEW\".\"BWKEY\"\n                       AND \"MBEW\".\"BWTAR\" IS NULL\n         LEFT JOIN \"MARA\" AS \"MARA\"\n                   ON \"MARC\".\"MANDT\" = \"MARA\".\"MANDT\"\n                       AND \"MARC\".\"MATNR\" = \"MARA\".\"MATNR\"\n         LEFT JOIN \"T001K\" AS \"T001K\"\n                   ON \"T001W\".\"MANDT\" = \"T001K\".\"MANDT\"\n                       AND \"T001W\".\"BWKEY\" = \"T001K\".\"BWKEY\"\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"T001K\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"T001K\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE \"MARC\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

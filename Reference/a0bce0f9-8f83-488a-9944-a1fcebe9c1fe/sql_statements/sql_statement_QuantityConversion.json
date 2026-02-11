@@ -1,0 +1,68 @@
+[
+    {
+        "change_date": 1770400801235.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400801235.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "QuantityConversion",
+        "draft": null,
+        "factory_id": "72c97d53-dc17-4553-823a-ac1c7c866e9e_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "QuantityConversion",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "celonis",
+                "property_names": [
+                    "ConversionDimension",
+                    "ConversionQualifier",
+                    "FromUnit",
+                    "ID",
+                    "MaterialNumber",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "ToUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MARA",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'QuantityConversion_' || \"MARA\".\"MANDT\" || \"MARA\".\"MATNR\"\n       || \"MARA\".\"MEINS\" || \"MARM\".\"MEINH\" AS \"ID\",\n       \"MARA\".\"MATNR\"                      AS \"MaterialNumber\",\n       \"MARA\".\"MATNR\"                      AS \"ConversionQualifier\",\n       \"MARA\".\"MEINS\"                      AS \"FromUnit\",\n       CASE\n           WHEN \"T006\".\"DIMID\" != 'AAAADL'\n               THEN \"T006D\".\"MSSIE\"\n           WHEN \"T006\".\"DIMID\" = 'AAAADL'\n               THEN \"MARM\".\"MEINH\"\n           END                             AS \"ToUnit\",\n       CASE\n           WHEN \"T006\".\"DIMID\" != 'AAAADL'\n               THEN \"T006\".\"ZAEHL\" / \"T006\".\"NENNR\" * POWER(10, \"T006\".\"EXP10\")\n           WHEN \"T006\".\"DIMID\" = 'AAAADL'\n               THEN \"MARM\".\"UMREN\" / \"MARM\".\"UMREZ\"\n           END                             AS \"Rate\",\n       \"T006\".\"DIMID\"                      AS \"ConversionDimension\",\n       'SAP'                               AS \"SourceSystemType\",\n       \"MARA\".\"MANDT\"                      AS \"SourceSystemInstance\"\nFROM \"MARA\" AS \"MARA\"\n         LEFT JOIN \"T006\" AS \"T006\"\n                   ON \"MARA\".\"MANDT\" = \"T006\".\"MANDT\"\n                       AND \"MARA\".\"MEINS\" = \"T006\".\"MSEHI\"\n         LEFT JOIN \"T006D\" AS \"T006D\"\n                   ON \"T006\".\"MANDT\" = \"T006D\".\"MANDT\"\n                       AND \"T006\".\"DIMID\" = \"T006D\".\"DIMID\"\n         LEFT JOIN \"MARM\" AS \"MARM\"\n                   ON \"MARA\".\"MANDT\" = \"MARM\".\"MANDT\"\n                       AND \"MARA\".\"MATNR\" = \"MARM\".\"MATNR\"\nWHERE \"T006\".\"MANDT\" IS NOT NULL\n  AND \"MARM\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

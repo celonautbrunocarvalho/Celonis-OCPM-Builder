@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1740746703009.0,
+        "changed_by": {
+            "id": "00000000-0000-0000-0000-000000000000",
+            "name": "Unknown User",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "00000000-0000-0000-0000-000000000000",
+            "name": "Unknown User",
+            "type_": "USER"
+        },
+        "creation_date": 1740746681925.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "disabled": true,
+        "display_name": "Celonis - SalesOrder - 1000 - RAW test data sets_13 - TS1 - Full",
+        "factory_id": "e2c22e02-4b39-4d03-8af7-e14dc213d52f_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "has_overwrites": null,
+        "name": "SalesOrder",
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrder",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "NOT_VALIDATED"
+    }
+]

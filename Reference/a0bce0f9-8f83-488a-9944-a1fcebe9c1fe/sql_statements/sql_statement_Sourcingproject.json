@@ -1,0 +1,106 @@
+[
+    {
+        "change_date": 1736430361688.0,
+        "changed_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1736430279741.0,
+        "data_connection_id": "468823c6-32f7-4d9b-a9d3-ff1971688698",
+        "description": null,
+        "disabled": null,
+        "display_name": "Sourcingproject - 1",
+        "draft": null,
+        "factory_id": "5e039ee0-5acf-49a4-a09e-52df1381534b",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "TimezoneOffset",
+                "value": "-3"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Sourcingproject",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "RelationshipParentDocumentAriba",
+                    "SourcingRequest"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Active",
+                    "Alert",
+                    "ArentWorkspaceInternalId",
+                    "BaseLanguageUniqueName",
+                    "BaselineSpend",
+                    "BaselineSpendAmount",
+                    "BaselineSpendCurrencyUniqueName",
+                    "Changed",
+                    "ContractEffectiveDate",
+                    "CreateDate",
+                    "CurrencyUniqueName",
+                    "DescriptionDefaultStringTranslation",
+                    "DocumentId",
+                    "DocumentIdInternalId",
+                    "DocumentVersion",
+                    "EndDate",
+                    "ExtVersion",
+                    "ID",
+                    "IsVersionPinned",
+                    "LastModified",
+                    "Owner",
+                    "OwnerName",
+                    "OwnerUniqueName",
+                    "ParentDocumentInternalId",
+                    "ParentWorkspaceInternalId",
+                    "PredecessorId",
+                    "ProcessId",
+                    "ProcessStatus",
+                    "ProjectAddin",
+                    "ProjectAddinFollowOnPath",
+                    "ProjectAddinIsSubproject",
+                    "ProjectAddinIsTest",
+                    "ProjectAddinPlanProcessId",
+                    "ProjectAddinPlanTitleDefaultStringTranslation",
+                    "ProjectAddinPlanWorkspaceInternalId",
+                    "ProjectId",
+                    "SourcingprojectId",
+                    "Status",
+                    "TemplateObjectInternalId",
+                    "TimeCreated",
+                    "TimeUpdated",
+                    "TitleDefaultStringTranslation",
+                    "UniqueId",
+                    "Vendor"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "SourcingprojectAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \n    TMP_CEL_SourcingProject AS (\n        SELECT \n            * ,\n            ROW_NUMBER() OVER (PARTITION BY \"DocumentId_InternalId\" ORDER BY CAST(\"DocumentVersion\" AS integer) DESC) AS RN\n        FROM \"SourcingProject\"\n        WHERE 1=1\n            AND \"SourcingProject\".\"Active\" = 'true'\n    )\nSELECT \n    'SourcingProject_' || \"SourcingProject\".\"InternalId\" as \"ID\",\n    'RelationshipParentDocumentAriba_' || \"SourcingProject\".\"ParentDocument_InternalId\" AS RelationshipParentDocumentAriba,\n    'SourcingRequest_' || \"SourcingProject\".\"ParentDocument_InternalId\" as \"SourcingRequest\",\n    \"SourcingProject\".\"DocumentId_InternalId\" as \"DocumentIdInternalId\",\n    --\"SourcingProject\".\"Owner\" as \"Owner\",                                              JSON FORMAT\n    --\"SourcingProject\".\"DocumentId\" as \"DocumentId\",                                              JSON FORMAT\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"SourcingProject\".\"CreateDate\") as \"CreateDate\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"SourcingProject\".\"LastModified\") as \"LastModified\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,cast(\"SourcingProject\".\"TimeCreated\" as timestamp)) as \"TimeCreated\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"SourcingProject\".\"ContractEffectiveDate\") as \"ContractEffectiveDate\",\n    --\"SourcingProject\".\"ProjectAddin\" as \"ProjectAddin\",                                              JSON FORMAT\n    \"SourcingProject\".\"Status\" as \"Status\",\n    \"SourcingProject\".\"UniqueId\" as \"UniqueId\",\n    \"SourcingProject\".\"Active\" as \"Active\",\n    \"SourcingProject\".\"NextVersion\" as \"ExtVersion\",\n    \"SourcingProject\".\"Description\" as \"Description\",\n    \"SourcingProject\".\"ProcessStatus\" as \"ProcessStatus\",\n    \"SourcingProject\".\"Changed\" as \"Changed\",\n    \"SourcingProject\".\"DocumentVersion\" as \"DocumentVersion\",\n    \"SourcingProject\".\"IsVersionPinned\" as \"IsVersionPinned\",\n    \"SourcingProject\".\"Title\" as \"TitleDefaultStringTranslation\",\n    TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"SourcingProject\".\"TimeUpdated\") as \"TimeUpdated\",\n    \"SourcingProject\".\"BaselineSpend\" as \"BaselineSpend\",\n    \"SourcingProject\".\"ParentWorkspace\" as \"ParentWorkspace\",\n    \"SourcingProject\".\"Alert\" as \"Alert\",\n    \"SourcingProject\".\"ProcessId\" as \"ProcessId\",\n    \"SourcingProject\".\"Owner_UniqueName\" as \"OwnerUniqueName\",\n    \"SourcingProject\".\"ProjectAddin_IsTest\" as \"ProjectAddinIsTest\",\n    \"SourcingProject\".\"ProjectAddin_FollowOnPath\" as \"ProjectAddinFollowOnPath\",\n    \"SourcingProject\".\"ProjectAddin_Plan_Title_DefaultStringTranslation\" as \"ProjectAddinPlanTitleDefaultStringTranslation\",\n    \"SourcingProject\".\"ProjectAddin_Plan_ProcessId\" as \"ProjectAddinPlanProcessId\",\n    \"SourcingProject\".\"ProjectAddin_Plan_Workspace_InternalId\" as \"ProjectAddinPlanWorkspaceInternalId\",\n    \"SourcingProject\".\"ProjectAddin_IsSubproject\" as \"ProjectAddinIsSubproject\",\n    \"SourcingProject\".\"ParentDocument_InternalId\" as \"ParentDocumentInternalId\",\n    \"SourcingProject\".\"Currency_UniqueName\" as \"CurrencyUniqueName\",\n    \"SourcingProject\".\"TemplateObject_InternalId\" as \"TemplateObjectInternalId\",\n    \"SourcingProject\".\"Description_DefaultStringTranslation\" as \"DescriptionDefaultStringTranslation\",\n    cast(\"SourcingProject\".\"BaselineSpend_Amount\" as float) as \"BaselineSpendAmount\",\n    \"SourcingProject\".\"BaselineSpend_Currency_UniqueName\" as \"BaselineSpendCurrencyUniqueName\",\n    \"SourcingProject\".\"ParentWorkspace_InternalId\" as \"ParentWorkspaceInternalId\",\n    \"SourcingProject\".\"BaseLanguage_UniqueName\" as \"BaseLanguageUniqueName\",\n    \"SourcingProject\".\"Owner_Name\" as \"OwnerName\",\n    \"SourcingProjectFact\".DependsOnProject_ProjectId AS PredecessorId,\n    CASE \n        WHEN DATE_TRUNC('DAY', \"SourcingProjectFact\".\"EndDate\") = DATE_TRUNC('DAY', \"SourcingProject\".\"LastModified\") \n        THEN TIMESTAMPADD(HOUR,<%=TimezoneOffset%>,\"SourcingProject\".\"LastModified\")\n        ELSE CAST(\"SourcingProjectFact\".\"EndDate\" AS DATE) + CAST('23:59:59' AS TIME)\n    END AS EndDate\nFROM \"TMP_CEL_SourcingProject\" AS \"SourcingProject\"\nLEFT JOIN \"SourcingProjectFact\" AS \"SourcingProjectFact\" ON 1=1\n  AND SourcingProject.InternalId = SourcingProjectFact.ProjectId\nWHERE 1=1\n    AND \"SourcingProject\".\"RN\" = 1\n    AND \"SourcingProject\".\"NextVersion\" IS NULL\n    AND \"SourcingProject\".\"Owner_Name\" NOT IN ('aribasystem')\n    AND \"SourcingProject\".\"UniqueId\" IS NULL\n    AND \"SourcingProject\".\"Status\" NOT IN ('Not Created')\n    \n    --AND \"SourcingProject\".\"InternalId\" = \"SourcingProject\".\"DocumentId_InternalId\"\n    --AND \"SourcingProject\".\"DocumentId_InternalId\" = 'WS1066374743'"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

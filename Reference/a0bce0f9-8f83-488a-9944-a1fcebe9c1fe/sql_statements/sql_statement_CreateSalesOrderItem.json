@@ -1,0 +1,76 @@
+[
+    {
+        "change_date": 1770400813949.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400813949.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "CreateSalesOrderItem",
+        "draft": null,
+        "factory_id": "7a637d1f-1d4a-400c-9ecd-799e820ad468_00000000-0000-0000-0000-000000000000",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "CreateSalesOrderItem",
+                "namespace": "celonis"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "SalesOrder",
+                    "SalesOrderItem"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "SalesOrderItem",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'CreateSalesOrderItem' || '_' || \"SalesOrderItem\".\"ID\" AS \"ID\",\n       \"SalesOrderItem\".\"ID\"                                  AS \"SalesOrderItem\",\n       \"SalesOrder\".\"ID\"                                      AS \"SalesOrder\",\n       \"SalesOrderItem\".\"CreationTime\"                        AS \"Time\",\n       \"SalesOrderItem\".\"CreatedBy_ID\"                        AS \"ExecutedBy\",\n       \"SalesOrderItem\".\"CreationExecutionType\"               AS \"ExecutionType\"\nFROM \"o_celonis_SalesOrderItem\" AS \"SalesOrderItem\"\n         LEFT JOIN \"o_celonis_SalesOrder\" AS \"SalesOrder\"\n                   ON \"SalesOrderItem\".\"Header_ID\" = \"SalesOrder\".\"ID\"\nWHERE \"SalesOrderItem\".\"CreationTime\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "QuotationItems",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "CreateSalesOrderItem",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT DISTINCT\n       \"Event\".\"ID\"  AS \"ID\",\n       \"Object\".\"ID\" AS \"QuotationItems\"\nFROM \"e_celonis_CreateSalesOrderItem\" AS \"Event\"\n         LEFT JOIN \"o_celonis_SalesOrderItem\" AS \"SalesOrderItem\"\n                   ON \"Event\".\"SalesOrderItem_ID\" = \"SalesOrderItem\".\"ID\"\n         LEFT JOIN \"o_celonis_QuotationItem\" AS \"Object\"\n                   ON \"SalesOrderItem\".\"QuotationItem_ID\" = \"Object\".\"ID\"\nWHERE \"Object\".\"ID\" IS NOT NULL\n"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1770400786540.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400786540.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "Celonis - ReverseGoodsIssue - SAP ECC",
+        "factory_id": "cd2feec2-dc6a-4318-96d0-ab4fd3d066d8_00000000-0000-0000-0000-000000000000",
+        "has_overwrites": null,
+        "name": "ReverseGoodsIssue",
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "ReverseGoodsIssue",
+                "namespace": "celonis"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "NOT_VALIDATED"
+    }
+]

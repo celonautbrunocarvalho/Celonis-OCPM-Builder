@@ -1,0 +1,86 @@
+[
+    {
+        "change_date": 1770400805984.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400805984.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "OutgoingMaterialDocumentItem",
+        "draft": null,
+        "factory_id": "dd407998-299d-46a6-8f90-97558359ed45_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "OutgoingMaterialDocumentItem",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "DeliveryItem",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "ReversedIncomingGood",
+                    "SalesOrderItem",
+                    "Vendor"
+                ],
+                "namespace": "celonis",
+                "property_names": [
+                    "Amount",
+                    "BasePrePostingTotalValuatedStockQuantity",
+                    "BaseQuantityUnit",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DatabaseOutgoingMaterialDocumentItemNumber",
+                    "DatabaseOutgoingMaterialDocumentNumber",
+                    "ID",
+                    "MaterialTransactionType",
+                    "Quantity",
+                    "QuantityUnit",
+                    "ReversalFlag",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "StorageLocation",
+                    "SystemOutgoingMaterialDocumentItemNumber",
+                    "SystemOutgoingMaterialDocumentNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MSEG",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_EKBE\" AS (SELECT DISTINCT \"EKBE\".\"MANDT\",\n                                    \"EKBE\".\"BELNR\",\n                                    \"EKBE\".\"GJAHR\",\n                                    \"EKBE\".\"BUZEI\",\n                                    \"EKBE\".\"WAERS\",\n                                    \"EKBE\".\"MENGE\",\n                                    \"EKBE\".\"WRBTR\"\n                    FROM \"EKBE\" AS \"EKBE\"\n                    WHERE \"EKBE\".\"VGABE\" = '1')\nSELECT <%=sourceSystem%>  || 'OutgoingMaterialDocumentItem_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"MBLNR\" || \"MSEG\".\"MJAHR\" || \"MSEG\".\"ZEILE\" AS \"ID\",\n    CAST(\"MSEG\".\"CPUDT_MKPF\" AS DATE) + CAST(\"MSEG\".\"CPUTM_MKPF\" AS TIME)                                                            AS \"CreationTime\",\n\t<%=sourceSystem%>  || 'User_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"USNAM_MKPF\"                                                              AS \"CreatedBy\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                                                                            AS \"CreationExecutionType\",\n    CASE\n        WHEN \"T156\".\"XSTBW\" = 'X' THEN '1'\n        ELSE 0\n        END                                                                                                                          AS \"ReversalFlag\",\n    CASE\n        WHEN \"MSEG\".\"BWART\" = '601' THEN 'GoodsIssue'\n        WHEN \"MSEG\".\"BWART\" = '102' THEN 'ReverseGoodsReceipt'\n        WHEN \"MSEG\".\"BWART\" = '651' THEN 'ReturnGoodsReceipt'\n        WHEN \"MSEG\".\"BWART\" = '122' THEN 'ReturnDeliveryToVendor'\n        END                                                                                                                          AS \"MaterialTransactionType\",\n    CASE\n        WHEN \"MSEG\".\"MATNR\" IS NULL THEN \"EKBE\".\"MENGE\"\n        WHEN \"T156\".\"XSTBW\" = 'X' THEN \"MSEG\".\"MENGE\" * -1.0\n        ELSE \"MSEG\".\"MENGE\"\n        END                                                                                                                          AS \"Quantity\",\n    \"MSEG\".\"ERFME\"                                                                                                                   AS \"QuantityUnit\",\n    \"MSEG\".\"MEINS\"                                                                                                                   AS \"BaseQuantityUnit\",\n    \"MSEG\".\"LGORT\"                                                                                                                   AS \"StorageLocation\",\n    \"MSEG\".\"LBKUM\"                                                                                                                   AS \"BasePrePostingTotalValuatedStockQuantity\",\n    \"EKBE\".\"WRBTR\"                                                                                                                   AS \"Amount\",\n    \"EKBE\".\"WAERS\"                                                                                                                   AS \"Currency\",\n    'SAP'                                                                                                                            AS \"SourceSystemType\",\n    \"MSEG\".\"MANDT\"                                                                                                                   AS \"SourceSystemInstance\",\n    \"MSEG\".\"MBLNR\"                                                                                                                   AS \"SystemOutgoingMaterialDocumentNumber\",\n    \"MSEG\".\"ZEILE\"                                                                                                                   AS \"SystemOutgoingMaterialDocumentItemNumber\",\n    \"MSEG\".\"MBLNR\"                                                                                                                   AS \"DatabaseOutgoingMaterialDocumentNumber\",\n    \"MSEG\".\"ZEILE\"                                                                                                                   AS \"DatabaseOutgoingMaterialDocumentItemNumber\",\n\t<%=sourceSystem%>  || 'DeliveryItem_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"VBELN_IM\"\n    || \"MSEG\".\"VBELP_IM\"                                                                                                             AS \"DeliveryItem\",\n\t<%=sourceSystem%>  || 'SalesOrderItem_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"KDAUF\" || \"MSEG\".\"KDPOS\"                                       AS \"SalesOrderItem\",\n\t<%=sourceSystem%>  || 'IncomingMaterialDocumentItem_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"SMBLN\" || \"MSEG\".\"SJAHR\"\n    || \"MSEG\".\"SMBLP\"                                                                                                                AS \"ReversedIncomingGood\",\n\t<%=sourceSystem%>  || 'Material_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"MATNR\"                                                               AS \"Material\",\n\t<%=sourceSystem%>  || 'MaterialMasterPlant_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"MATNR\"\n    || \"MSEG\".\"WERKS\"                                                                                                                AS \"MaterialMasterPlant\",\n\t<%=sourceSystem%>  || 'Plant_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"WERKS\"                                                                  AS \"Plant\",\n\t<%=sourceSystem%>  || 'Vendor_' || \"MSEG\".\"MANDT\" || \"MSEG\".\"LIFNR\"                                                                 AS \"Vendor\"\nFROM \"MSEG\" AS \"MSEG\"\n         LEFT JOIN \"CTE_EKBE\" AS \"EKBE\"\n                   ON \"MSEG\".\"MANDT\" = \"EKBE\".\"MANDT\"\n                       AND \"MSEG\".\"MBLNR\" = \"EKBE\".\"BELNR\"\n                       AND \"MSEG\".\"MJAHR\" = \"EKBE\".\"GJAHR\"\n                       AND \"MSEG\".\"ZEILE\" = \"EKBE\".\"BUZEI\"\n         LEFT JOIN \"T156\" AS \"T156\"\n                   ON \"MSEG\".\"MANDT\" = \"T156\".\"MANDT\"\n                       AND \"MSEG\".\"BWART\" = \"T156\".\"BWART\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"MSEG\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"MSEG\".\"USNAM_MKPF\" = \"USR02\".\"BNAME\"\nWHERE \"MSEG\".\"MANDT\" IS NOT NULL\n  AND \"MSEG\".\"SHKZG\" = 'H'\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

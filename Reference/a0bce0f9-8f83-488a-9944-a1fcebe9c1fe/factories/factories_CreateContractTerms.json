@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1740746813866.0,
+        "changed_by": {
+            "id": "945b3dbd-8a0a-42d4-8c9f-62dd51c531c5",
+            "name": "Timmy Smith",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2e501ed7-9bdf-4dd6-8328-d853f30e6a1b",
+            "name": "c.demosthenous",
+            "type_": "USER"
+        },
+        "creation_date": 1736341737413.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": true,
+        "display_name": "CreateContractTerms transformation - copy - 4",
+        "factory_id": "8f55cda5-bab7-4071-95bb-d06754fa366b",
+        "has_overwrites": null,
+        "name": "CreateContractTerms transformation - copy - 4",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreateContractTerms",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

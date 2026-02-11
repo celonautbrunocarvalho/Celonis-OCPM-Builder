@@ -1,0 +1,98 @@
+[
+    {
+        "change_date": 1770400799601.0,
+        "changed_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "created_by": {
+            "id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+            "name": "Celonis",
+            "type_": "APPLICATION"
+        },
+        "creation_date": 1770400799601.0,
+        "data_connection_id": "b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "description": null,
+        "disabled": null,
+        "display_name": "Material",
+        "draft": null,
+        "factory_id": "df177b45-1135-4dde-be1b-97bfdb01380f_b3c59e17-798d-49ea-b0b3-99d0bae2e011",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "SI-Unit",
+                "value": "'ST'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "''"
+            }
+        ],
+        "namespace": "celonis",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "celonis"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'Material_' || \"CDPOS\".\"TABKEY\"         AS \"ObjectID\",\n\t<%=sourceSystem%>  || \"CDPOS\".\"TABKEY\" || \"CDPOS\".\"TABNAME\" || \"CDPOS\".\"FNAME\"\n       || \"CDPOS\".\"CHANGENR\" || \"CDPOS\".\"CHNGIND\"                    AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME) AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'MATKL' THEN 'MaterialGroup'\n           WHEN \"CDPOS\".\"FNAME\" = 'MBRSH' THEN 'IndustrySector'\n           WHEN \"CDPOS\".\"FNAME\" = 'MTART' THEN 'MaterialType'\n           END                                                       AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\" END                              AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_NEW\" END                              AS \"NewValue\",\n       'User_' || \"CDHDR\".\"MANDANT\" || \"CDHDR\".\"USERNAME\"            AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                               AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                            AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                         AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\" ON\n            \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n    AND \"CDPOS\".\"OBJECTCLAS\" = 'MATERIAL'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"TABNAME\" = 'MARA'\n  AND \"CDPOS\".\"FNAME\" IN\n      ('MATKL', 'MBRSH', 'MTART')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "MARA (1)",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'Material_' || \"MARA\".\"MANDT\" || \"MARA\".\"MATNR\" AS \"ObjectID\",\n\t<%=sourceSystem%>  || \"CDPOS\".\"TABKEY\" || \"CDPOS\".\"TABNAME\" || \"CDPOS\".\"FNAME\"\n       || \"CDPOS\".\"CHANGENR\" || \"CDPOS\".\"CHNGIND\"                            AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME)         AS \"Time\",\n       'MaterialNumberText'                                                  AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\" END                                      AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_NEW\" END                                      AS \"NewValue\",\n       'User_' || \"CDHDR\".\"MANDANT\" || \"CDHDR\".\"USERNAME\"                    AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                       AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                                    AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                                 AS \"ExecutionType\"\nFROM \"MARA\" AS \"MARA\"\n         LEFT JOIN \"MAKT\" AS \"MAKT\" ON\n            \"MARA\".\"MANDT\" = \"MAKT\".\"MANDT\"\n            AND \"MARA\".\"MATNR\" = \"MAKT\".\"MATNR\"\n            AND \"MAKT\".\"SPRAS\" = 'E'\n         LEFT JOIN \"CDPOS\" AS \"CDPOS\" ON\n            \"MARA\".\"MANDT\" = \"CDPOS\".\"MANDANT\"\n            AND \"CDPOS\".\"TABKEY\" = \"MAKT\".\"MANDT\" || \"MAKT\".\"MATNR\" || \"MAKT\".\"SPRAS\"\n            AND \"CDPOS\".\"CHNGIND\" = 'U'\n            AND \"CDPOS\".\"TABNAME\" = 'MAKT'\n            AND \"CDPOS\".\"FNAME\" = 'MAKTX'\n         INNER JOIN \"CDHDR\" AS \"CDHDR\" ON\n            \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"MARA\".\"MANDT\" IS NOT NULL\n  AND \"MAKT\".\"MANDT\" IS NOT NULL\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                    }
+                ],
+                "foreign_key_names": [],
+                "namespace": "celonis",
+                "property_names": [
+                    "BaseQuantityUnit",
+                    "CreationTime",
+                    "Group",
+                    "GroupText",
+                    "ID",
+                    "Name",
+                    "Number",
+                    "ProductHierarchy",
+                    "SourceSystemInstance",
+                    "SourceSystemType",
+                    "StockKeepingUnit",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MARA",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || 'Material_' || \"MARA\".\"MANDT\" || \"MARA\".\"MATNR\" AS \"ID\",\n    CAST(\"MARA\".\"ERSDA\" AS TIMESTAMP)                                        AS \"CreationTime\",\n    \"MAKT\".\"MAKTX\"                                                           AS \"Name\",\n    \"MARA\".\"MTART\"                                                           AS \"Type\",\n    \"MARA\".\"MATKL\"                                                           AS \"Group\",\n    \"T023T\".\"WGBEZ\"                                                          AS \"GroupText\",\n    \"MARA\".\"PRDHA\"                                                           AS \"ProductHierarchy\",\n    \"MARA\".\"MEINS\"                                                           AS \"BaseQuantityUnit\",\n    \"MARA\".\"MATNR\"                                                           AS \"Number\",\n    CASE\n        WHEN \"T006\".\"DIMID\" != 'AAAADL'\n            THEN \"T006D\".\"MSSIE\"\n        WHEN \"T006\".\"DIMID\" = 'AAAADL'\n            THEN \"MARM\".\"MEINH\"\n        END                                                                  AS \"StockKeepingUnit\",\n    'SAP'                                                                    AS \"SourceSystemType\",\n    \"MARA\".\"MANDT\"                                                           AS \"SourceSystemInstance\"\nFROM \"MARA\" AS \"MARA\"\n         LEFT JOIN \"MAKT\" AS \"MAKT\"\n                   ON \"MARA\".\"MANDT\" = \"MAKT\".\"MANDT\"\n                       AND \"MARA\".\"MATNR\" = \"MAKT\".\"MATNR\"\n                       AND \"MAKT\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"T134T\" AS \"T134T\"\n                   ON \"MARA\".\"MANDT\" = \"T134T\".\"MANDT\"\n                       AND \"MARA\".\"MTART\" = \"T134T\".\"MTART\"\n                       AND \"T134T\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"T023T\" AS \"T023T\"\n                   ON \"MARA\".\"MANDT\" = \"T023T\".\"MANDT\"\n                       AND \"MARA\".\"MATKL\" = \"T023T\".\"MATKL\"\n                       AND \"T023T\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"T137T\" AS \"T137T\"\n                   ON \"MARA\".\"MANDT\" = \"T137T\".\"MANDT\"\n                       AND \"MARA\".\"MBRSH\" = \"T137T\".\"MBRSH\"\n                       AND \"T137T\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"MARA\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"MARA\".\"ERNAM\" = \"USR02\".\"BNAME\"\n         LEFT JOIN \"T006\" AS \"T006\"\n                   ON \"MARA\".\"MANDT\" = \"T006\".\"MANDT\"\n                       AND \"MARA\".\"MEINS\" = \"T006\".\"MSEHI\"\n         LEFT JOIN \"T006D\" AS \"T006D\"\n                   ON \"T006\".\"MANDT\" = \"T006D\".\"MANDT\"\n                       AND \"T006\".\"DIMID\" = \"T006D\".\"DIMID\"\n         LEFT JOIN \"MARM\" AS \"MARM\"\n                   ON \"MARA\".\"MANDT\" = \"MARM\".\"MANDT\"\n                       AND \"MARA\".\"MATNR\" = \"MARM\".\"MATNR\"\n                       AND \"MARM\".\"MEINH\" = <%=SI-Unit%> \n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]
