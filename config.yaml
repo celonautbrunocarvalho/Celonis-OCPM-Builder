@@ -1,0 +1,22 @@
+llm:
+  provider: anthropic                   # Options: anthropic, openai, google, ollama
+  model: claude-sonnet-4-5-20250929     # Model ID for the chosen provider
+  api_key: ${ANTHROPIC_API_KEY}         # Resolved from environment variable
+  max_tokens: 4096                      # Max tokens per LLM response
+
+paths:
+  input_files: Input/Project input files
+  template: Input/TEMPLATE
+  output: Output
+  prompts:
+    requirements: Tools/1_Requirements.md
+    builder: Tools/2_OCPM_Builder.md
+    knowledge_model: Tools/3_Knowledge_Model.md
+    apps: Tools/4_Apps.md
+
+  # Module-specific output subfolders (relative to output)
+  module_outputs:
+    requirements: 1_Requirements
+    builder: 2_OCPM_Builder
+    knowledge_model: 3_Knowledge_Model
+    apps: 4_Apps

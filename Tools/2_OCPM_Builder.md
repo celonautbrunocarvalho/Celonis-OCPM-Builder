@@ -16,10 +16,10 @@ You will be given:
 
 ## OUTPUT STRUCTURE
 
-Save all generated files to the `Output/` folder in the project root. Generate the following folder structure inside `Output/`. Every file is a `.json` file. All folders must be present even if empty.
+Save all generated files to the `Output/2_OCPM_Builder/` folder. Generate the following folder structure inside `Output/2_OCPM_Builder/`. Every file is a `.json` file. All folders must be present even if empty.
 
 ```
-Output/
+Output/2_OCPM_Builder/
 ├── catalog_processes/
 │   └── catalog_processes_<ProcessName>.json        (one per process)
 ├── data_sources/
@@ -695,7 +695,7 @@ After generating all files, validate the output against the reference template l
 
 ### 1. Folder Structure Validation
 
-The `Output/` folder must contain **exactly** the same set of subfolders as `Input/TEMPLATE/`:
+The `Output/2_OCPM_Builder/` folder must contain **exactly** the same set of subfolders as `Input/TEMPLATE/`:
 
 ```
 catalog_processes/
@@ -786,7 +786,7 @@ For each generated file, verify that its top-level JSON keys match the correspon
 
 After generating all output files, perform this checklist:
 
-1. List all subfolders in `Output/` and confirm they match the 13 template folders exactly.
+1. List all subfolders in `Output/2_OCPM_Builder/` and confirm they match the 13 template folders exactly.
 2. For each non-empty folder, verify every file uses the correct naming prefix and `.json` extension.
 3. For each generated file, parse the JSON and confirm all required top-level keys are present (compare against the key lists above).
 4. For object and event files, confirm mandatory fields (`ID` for objects; `ID` + `Time` for events) exist in the `fields` array.

@@ -42,9 +42,9 @@ If the `Input/Project input files/` folder is empty, inform the user that input 
 
 # OUTPUT STRUCTURE
 
-Save all output files to the `Output/` folder in the project root.
+Save all output files to the `Output/1_Requirements/` folder.
 
-Generate a Markdown file (e.g., `Output/<ProcessName>_Requirements.md`) with the following sections:
+Generate a Markdown file (e.g., `Output/1_Requirements/<ProcessName>_Requirements.md`) with the following sections:
 
 
 
