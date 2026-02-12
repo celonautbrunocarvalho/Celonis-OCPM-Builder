@@ -1,0 +1,69 @@
+[
+    {
+        "change_date": 1763745773057.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1750073071148.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "GoodsIssue - OCPM Schema",
+        "draft": null,
+        "factory_id": "8f4e0e8b-aa08-44ea-964b-6206abc98bbf",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "GoodsIssue",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "DeliveryLine",
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "CreationTime",
+                    "Currency",
+                    "ID",
+                    "MaterialMovementNumber",
+                    "MaterialTransactionType",
+                    "MovementDirection",
+                    "MovementQuantity",
+                    "MovementQuantityUnit",
+                    "SourceSystemInstance",
+                    "StorageLocation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMovementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    \"MaterialMovement\".\"ID\"                         AS \"ID\",\n    \"MaterialMovement\".\"CreatedBy_ID\"               AS \"CreatedBy\",\n    \"MaterialMovement\".\"MaterialMasterPlant_ID\"     AS \"MaterialMasterPlant\",\n    \"MaterialMovement\".\"MovementDirection\"          AS \"MovementDirection\",\n    \"MaterialMovement\".\"Amount\"                     AS \"Amount\",\n    \"MaterialMovement\".\"Currency\"                   AS \"Currency\",\n    \"MaterialMovement\".\"SourceSystemInstance\"       AS \"SourceSystemInstance\",\n    \"MaterialMovement\".\"MaterialMovementNumber\"     AS \"MaterialMovementNumber\",\n    \"MaterialMovement\".\"StorageLocation\"            AS \"StorageLocation\",\n    \"MaterialMovement\".\"MovementQuantityUnit\"       AS \"MovementQuantityUnit\",\n    \"MaterialMovement\".\"MovementQuantity\"           AS \"MovementQuantity\",\n    \"MaterialMovement\".\"MaterialTransactionType\"    AS \"MaterialTransactionType\",\n    \"MaterialMovement\".\"CreationTime\"               AS \"CreationTime\",\n    CASE\n        WHEN \"DeliveryLine\".\"ID\" IS NOT NULL\n        THEN \"MaterialMovement\".\"DeliveryLine_ID\"\n    END                                             AS \"DeliveryLine\"\nFROM \"o_custom_MaterialMovement\" AS \"MaterialMovement\"\n    LEFT JOIN \"o_custom_DeliveryLine\" AS \"DeliveryLine\"\n        ON \"MaterialMovement\".\"DeliveryLine_ID\" = \"DeliveryLine\".\"ID\"\nWHERE \"MaterialMovement\".\"MaterialTransactionType\" IN (\n    'GoodsIssue',\n    'GoodsIssueForStockTransportOrder',\n    'GoodsIssueForCrossCompanyStockTransportOrder',\n    'GoodsIssueForStockTransportOrderOneStep',\n    'GoodsIssueForCrossCompanyStockTransportOrderOneStep',\n    'GoodsIssueForSTO',\n    'GoodsIssueFromCustomerConsignment',\n    'GoodsIssueFromReturnablePackagingStock',\n    'GoodsIssueForSalesOrder'\n) "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,63 @@
+[
+    {
+        "change_date": 1760733204976.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1752251247603.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "ChangeDeliveryLine - 1",
+        "draft": null,
+        "factory_id": "1ce93e15-ea10-4e86-bd4c-558e7382b5c0",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ChangeDeliveryLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "DeliveryLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ChangedAttribute",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "NewValue",
+                    "OldValue",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ChangeDeliveryLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'ChangeDeliveryLine' || '::' || \"DeliveryLine_Changes\".\"ID\"  AS \"ID\",\n       \"DeliveryLine\".\"ID\"                                          AS \"DeliveryLine\",\n       \"DeliveryLine_Changes\".\"Time\"                                AS \"Time\",\n       \"DeliveryLine_Changes\".\"ChangedBy\"                           AS \"ExecutedBy\",\n       \"DeliveryLine_Changes\".\"Attribute\"                           AS \"ChangedAttribute\",\n       \"DeliveryLine_Changes\".\"ExecutionType\"                       AS \"ExecutionType\",\n       \"DeliveryLine_Changes\".\"OldValue\"                            AS \"OldValue\",\n       \"DeliveryLine_Changes\".\"NewValue\"                            AS \"NewValue\"\nFROM \"o_custom_DeliveryLine\" AS \"DeliveryLine\"\n    LEFT JOIN \"c_o_custom_DeliveryLine\" AS \"DeliveryLine_Changes\"\n        ON \"DeliveryLine\".\"ID\" = \"DeliveryLine_Changes\".\"ObjectID\"\n            AND \"DeliveryLine_Changes\".\"Attribute\" IN (\n                'WeightUnit',\n                'Quantity',\n                'StorageLocation',\n                'MaterialGroup',\n                'NetWeight',\n                'VolumeUnit',\n                'Volume',\n                'Plant'\n            )\nWHERE \"DeliveryLine_Changes\".\"Time\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

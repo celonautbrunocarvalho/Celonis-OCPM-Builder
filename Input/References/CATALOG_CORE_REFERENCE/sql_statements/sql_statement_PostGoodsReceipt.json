@@ -1,0 +1,64 @@
+[
+    {
+        "change_date": 1768295752873.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630862834.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "PostGoodsReceipt transformation - copy - 1",
+        "draft": null,
+        "factory_id": "9d7ee9da-1eca-4e62-8df2-9be029e22620",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PostGoodsReceipt",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "GoodsReceipt",
+                    "MaterialMovement",
+                    "PurchaseDocumentLine",
+                    "PurchaseOrderLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "MaterialTransactionType",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PostGoodsReceiptAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'PostGoodsReceipt' || '::' || \"GoodsReceipt\".\"ID\"         AS \"ID\",\n    \"GoodsReceipt\".\"ID\"                                       AS \"MaterialMovement\",\n    \"GoodsReceipt\".\"PurchaseDocumentLine_ID\"                  AS \"PurchaseDocumentLine\",\n    \"GoodsReceipt\".\"PurchaseDocumentLine_ID\"                  AS \"PurchaseOrderLine\",\n    \"GoodsReceipt\".\"ID\"                                       AS \"GoodsReceipt\",\n    \"GoodsReceipt\".\"MaterialTransactionType\"                  AS \"MaterialTransactionType\",\n    \"GoodsReceipt\".\"CreationTime\"                             AS \"Time\",\n    \"GoodsReceipt\".\"CreatedBy_ID\"                             AS \"ExecutedBy\",\n    NULL                                                      AS \"ExecutionType\"\nFROM \"o_custom_GoodsReceipt\" AS \"GoodsReceipt\"\nWHERE \"GoodsReceipt\".\"MaterialTransactionType\" IN (\n    'GoodsReceipt',\n    'ReturnDeliveryToVendorReversal',\n    'GoodsReceiptReversal'\n)\n    AND \"GoodsReceipt\".\"CreationTime\" IS NOT NULL\n\n\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,72 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1750947394102.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+        "name": "Brave Gujral",
+        "type_": "USER"
+    },
+    "creation_date": 1750063807013.0,
+    "description": "CreateSalesOrder",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "95bc946d-a54d-418a-92fb-c8ab8ab9ae12",
+    "name": "CreateSalesOrder",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "SalesOrder",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrder",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "OrderManagement"
+    ]
+}

@@ -1,0 +1,95 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1760436689795.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630741242.0,
+    "description": "Represents the event in the process when a vendor document (invoice or credit memo) is entered in the system.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "InvoiceCategory",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "6b9e9ae9-82c0-4678-be59-a31caec4b2a5",
+    "name": "EnterVendorInvoice",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "VendorInvoice",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorInvoice",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseDocumentLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseDocumentLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable",
+        "Procurement"
+    ]
+}

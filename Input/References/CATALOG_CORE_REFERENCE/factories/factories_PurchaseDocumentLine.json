@@ -1,0 +1,212 @@
+[
+    {
+        "change_date": 1763482006851.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649498636.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "PurchaseDocumentItem - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "factory_id": "47591ff9-8ccf-4051-a8db-e4c87e08c5d0",
+        "has_overwrites": null,
+        "name": "PurchaseDocumentItem - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1768833986282.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630798204.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "PurchaseDocumentItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "c2585b54-237a-472e-badf-5a89f3f012a9",
+        "has_overwrites": null,
+        "name": "PurchaseDocumentItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1767104635726.0,
+        "changed_by": {
+            "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+            "name": "Modester Mwangi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1753726524543.0,
+        "data_connection_id": "1b87451d-df3c-4f06-b5e6-622d18c93682",
+        "disabled": null,
+        "display_name": "PurchaseDocumentItem - 00. Central Extraction Pool_ARIBA",
+        "factory_id": "b5678f21-c810-464e-b1f7-cc5c23c2dc37",
+        "has_overwrites": null,
+        "name": "PurchaseDocumentItem - 00. Central Extraction Pool_ARIBA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1766781441887.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "creation_date": 1765762969579.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "disabled": true,
+        "display_name": "PurchaseDocumentLine - Coupa",
+        "factory_id": "a0c8779c-f1aa-4b35-aaa4-f9d6dceea0f9",
+        "has_overwrites": null,
+        "name": "PurchaseDocumentLine - Coupa",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1768470923292.0,
+        "changed_by": {
+            "id": "ec5a892b-8e4d-4beb-8bd1-4eea8ebcc303",
+            "name": "Sunil Rai",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764671304577.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "disabled": null,
+        "display_name": "PurchaseDocumentLine - MSDynamics_365",
+        "factory_id": "ca7d561e-ea41-47ca-8364-40cb34dc800b",
+        "has_overwrites": null,
+        "name": "PurchaseDocumentLine - MSDynamics_365",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1763482019383.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634089068.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "PurchaseDocumentItem - 00. Central Extraction Pool_TS1",
+        "factory_id": "2878c263-9a6d-40e7-a0ea-b375564c07b0",
+        "has_overwrites": null,
+        "name": "PurchaseDocumentItem - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1761317254651.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749658696339.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "PurchaseDocumentItem - 00. Central Extraction Pool_Oracle Fusion",
+        "factory_id": "3d168523-2d0e-4c88-bef3-b83c6c81107a",
+        "has_overwrites": null,
+        "name": "PurchaseDocumentItem - 00. Central Extraction Pool_Oracle Fusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

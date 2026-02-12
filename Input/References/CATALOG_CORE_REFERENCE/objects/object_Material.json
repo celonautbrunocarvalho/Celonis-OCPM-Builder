@@ -1,0 +1,217 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1767861812083.0,
+    "changed_by": {
+        "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+        "name": "Gokul",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630699594.0,
+    "description": "Contains master data for materials associated with orders and purchases.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "StockKeepingUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MaterialName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MaterialNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MaterialGroupName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MaterialGroupNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "86bbc390-813e-4c10-96e9-6e24bbcbcd97",
+    "managed": true,
+    "multi_link": false,
+    "name": "Material",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialMasterPlant",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Material",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipBillOfMaterialsProduct",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialProduct",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipBillOfMaterialsComponent",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialComponent",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "DeliveryLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Material",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "DeliveryLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Material",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerInvoiceLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Material",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "CustomerInvoiceLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseDocumentLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Material",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseDocumentLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseOrderLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Material",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseOrderLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Material",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseRequisitionLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

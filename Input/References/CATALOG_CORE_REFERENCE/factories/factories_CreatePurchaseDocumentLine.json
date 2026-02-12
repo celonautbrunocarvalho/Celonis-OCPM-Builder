@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1760437459668.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630849903.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "CreatePurchaseDocumentLine",
+        "factory_id": "c256378b-00c3-4d8a-8931-8f9c12dfb67f",
+        "has_overwrites": null,
+        "name": "CreatePurchaseDocumentLine",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreatePurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

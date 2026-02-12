@@ -1,0 +1,60 @@
+[
+    {
+        "change_date": 1761855937903.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1752056002199.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "RelationshipOrderToInvoice - 1",
+        "draft": null,
+        "factory_id": "efaacce2-c5bf-4b4e-98d0-756f2600b7ed",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "RelationshipOrderToInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CustomerInvoiceLine",
+                    "DeliveryLine",
+                    "GoodsIssue",
+                    "SalesOrderScheduleLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "RelationshipOrderToInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "/*\nThis relationship object resolves the cyclic relationships between the objects SalesOrderScheduleLine (SOL), DeliveryLine (DI), \nCustomerInvoiceLine (CII), and GoodsIssue (GI). SOL and DI each have three potential links to other objects, CII and GI each have two. \n      GI\n     / |\n  SOL\u2013DI\n     \\ |\n      CII\n\nTo resolve the cyclic relationships we iteratively discover available paths. We apply the following prioritization for the paths:\n\nSub-path\tPriority\n------------------\nSOL->DI\t     1\nDI->CII\t     1\nDI->GI\t     1\nSOL->CII\t 2\nSOL->GI\t     2\n\nThis means that e.g. a relationship DI-CII has priority over the relationship SOL-CII when linking the CII object. \nWe do not explore paths that logically should not occur e.g. SOL->CII->DI->GI where a DI would follow a CII. \n\nOverview over explored paths\n1. Paths with SOL-DI (CTE_SOL_DI_PATHS)\n  1.1 Fully conn. (P1)  |  1.2 Missing CII (P1)  |  1.3 Missing GI (P1)  |  1.4 Only SOL\u2013DI (P1) |  1.5 Fully conn. (P2)  |  1.6 Missing GI (P2) \n        GI              |        GI              |                       |                       |        GI              |                      \n         |              |         |              |                       |                       |         |              |                      \n    SOL\u2013DI              |    SOL\u2013DI              |    SOL\u2013DI             |    SOL\u2013DI             |    SOL\u2013DI              |    SOL\u2013DI            \n         |              |                        |         |             |                       |       \\                |       \\              \n        CII             |                        |        CII            |                       |        CII             |        CII           \n\n2. Paths with DI, without SOL (CTE_DI_PATHS)\n  2.1 Fully conn. (P1)  |  2.2 Missing CII (P1)  |  2.3 Missing GI (P1)\n        GI              |        GI              |         \n         |              |         |              |          \n        DI              |        DI              |        DI \n         |              |                        |         | \n        CII             |                        |        CII\n\n3. Paths with SOL, without DI (CTE_SOL_PATHS)\n  3.1 Fully conn. (P2)  |  3.2 Missing CII (P2)  |  3.3 Missing GI (P2)\n        GI              |        GI              |        \n       /                |       /                |          \n    SOL                 |    SOL                 |    SOL    \n       \\                |                        |       \\   \n        CII             |                        |        CII\n  \n\n*/\nWITH \"CTE_SOL_DI_PATHS\" AS (\n    SELECT DISTINCT -- distinct is required here as the tables might hold redundant information which leads to duplicates when the P2 path is joined\n        \"r_di_sol\".\"SalesOrderScheduleLines_ID\"               AS \"SalesOrderScheduleLine\",\n        \"r_di_sol\".\"ID\"                               AS \"DeliveryLine\",\n        COALESCE(\"p1_cii_di\".\"ID\", \"p2_cii_sol\".\"ID\") AS \"CustomerInvoiceLine\", -- Select the CustomerInvoiceLine_ID based on path priorities\n        \"p1_gi\".\"ID\"                                  AS \"GoodsIssue\"\n    -- The paths 1.1-1.6 are based on SOL\u2013DI links, all other potetial links are optional; therefore, we start with r_di_sol \n    -- and use left joins to explore all available links. \n    FROM \"r_o_custom_DeliveryLine__SalesOrderScheduleLines\" AS \"r_di_sol\"\n    -- Find potential P1 DI->CII paths\n    LEFT JOIN \"r_o_custom_CustomerInvoiceLine__DeliveryLines\" AS \"p1_cii_di\"\n        ON \"r_di_sol\".\"ID\" = \"p1_cii_di\".\"DeliveryLines_ID\"\n    -- Find potential P1 DI->GI paths\n    LEFT JOIN \"o_custom_GoodsIssue\" AS \"p1_gi\"\n        ON \"r_di_sol\".\"ID\" = \"p1_gi\".\"DeliveryLine_ID\"\n    -- Find potential P2 SOL->CII paths \n    LEFT JOIN \"r_o_custom_CustomerInvoiceLine__SalesOrderScheduleLines\" AS \"p2_cii_sol\"\n        ON \"r_di_sol\".\"SalesOrderScheduleLines_ID\" = \"p2_cii_sol\".\"SalesOrderScheduleLines_ID\"\n  ),\n  \"CTE_DI_PATHS\" AS (\n      --We perform the same matching twice and UNION results to simulate a FULL OUTER JOIN between \"r_cii_di\" and \"gi\", accounting for path 2.2 where no link in r_cii_di exists.\n\t  SELECT\n          NULL                                                             AS \"SalesOrderScheduleLine\",\n          \"r_cii_di\".\"DeliveryLines_ID\"\t\t\t\t\t\t\t\t\t   AS \"DeliveryLine\",\n          \"r_cii_di\".\"ID\"                                                  AS \"CustomerInvoiceLine\",\n          \"gi\".\"ID\"                                                        AS \"GoodsIssue\"\n      FROM \"r_o_custom_CustomerInvoiceLine__DeliveryLines\" AS \"r_cii_di\"\n      LEFT JOIN \"o_custom_GoodsIssue\" AS \"gi\"\n          ON \"r_cii_di\".\"DeliveryLines_ID\" = \"gi\".\"DeliveryLine_ID\"\n      -- Filter out the DIs which have a link to a SOL (SOL->DI links are already covered by CTE_SOL_DI_PATHS) with LEFT JOIN and WHERE condition.\n      LEFT JOIN \"r_o_custom_DeliveryLine__SalesOrderScheduleLines\" AS \"r_di_sol\"\n          ON \"r_di_sol\".\"ID\" = \"r_cii_di\".\"DeliveryLines_ID\"\n      -- DI must exist\n\t  WHERE \"r_cii_di\".\"DeliveryLines_ID\" IS NOT NULL\n\t  --Filter out DIs with link to a SOL\n      AND \"r_di_sol\".\"ID\" IS NULL\n\t  \n\t  UNION ALL\n\t  \n\t  SELECT\n          NULL                                                             AS \"SalesOrderScheduleLine\",\n          \"gi\".\"DeliveryLine_ID\"\t\t\t\t\t\t\t\t\t\t   AS \"DeliveryLine\",\n          \"r_cii_di\".\"ID\"                                                  AS \"CustomerInvoiceLine\",\n          \"gi\".\"ID\"                                                        AS \"GoodsIssue\"\n      FROM \"o_custom_GoodsIssue\" AS \"gi\" \n      LEFT JOIN \"r_o_custom_CustomerInvoiceLine__DeliveryLines\" AS \"r_cii_di\"\n          ON \"r_cii_di\".\"DeliveryLines_ID\" = \"gi\".\"DeliveryLine_ID\"\n      -- Filter out the DIs which have a link to a SOL (SOL->DI links are already covered by CTE_SOL_DI_PATHS) with LEFT JOIN and WHERE condition.\n      LEFT JOIN \"r_o_custom_DeliveryLine__SalesOrderScheduleLines\" AS \"r_di_sol\"\n          ON \"r_di_sol\".\"ID\" = \"gi\".\"DeliveryLine_ID\"\n      -- DI must exist\n\t  WHERE \"gi\".\"DeliveryLine_ID\" IS NOT NULL\n\t  --Filter out DIs with link to a SOL\n      AND \"r_di_sol\".\"ID\" IS NULL\n\t  --Exclude items captured in the above query\n\t  AND \"r_cii_di\".\"DeliveryLines_ID\" IS NULL\n  ), \n  \"CTE_SOL_PATHS\" AS (\n    --We perform the same matching twice and UNION results to simulate a FULL OUTER JOIN between \"p2_cii_sol\" and \"p2_gi\", accounting for path 3.2 where no link in p2_cii_sol exists\n    SELECT\n      \"p2_cii_sol\".\"SalesOrderScheduleLines_ID\"\t\t\t\t\t\t\t\t\t\t        AS \"SalesOrderScheduleLine\",\n      NULL                                                                          AS \"DeliveryLine\",\n      \"p2_cii_sol\".\"ID\"                                                             AS \"CustomerInvoiceLine\",\n      \"p2_gi\".\"GoodsIssue_ID\"                                                       AS \"GoodsIssue\"\n    FROM \"r_o_custom_CustomerInvoiceLine__SalesOrderScheduleLines\" AS \"p2_cii_sol\"\n    LEFT JOIN \"r_o_custom_SalesOrderScheduleLine__GoodsIssue\" AS \"p2_gi\"\n      ON \"p2_cii_sol\".\"SalesOrderScheduleLines_ID\" = \"p2_gi\".\"ID\"\n    -- Filter out the SOLs which have a link to a DI (SOL->DI links are already covered by CTE_SOL_DI_PATHS) with LEFT JOIN and WHERE condition\n    LEFT JOIN \"r_o_custom_DeliveryLine__SalesOrderScheduleLines\" AS \"r_di_sol\"\n      ON \"r_di_sol\".\"SalesOrderScheduleLines_ID\" = \"p2_cii_sol\".\"SalesOrderScheduleLines_ID\"\n    -- SOL must exist\n    WHERE \"p2_cii_sol\".\"SalesOrderScheduleLines_ID\" IS NOT NULL\n\t--Filter out the SOLs which have a link to a DI \n\tAND \"r_di_sol\".SalesOrderScheduleLines_ID IS NULL\n\t\n\tUNION ALL\n\t\n\tSELECT\n      \"p2_gi\".\"ID\"\t\t\t\t\t\t\t\t\t\t                            AS \"SalesOrderScheduleLine\",\n      NULL                                                                          AS \"DeliveryLine\",\n      \"p2_cii_sol\".\"ID\"                                                             AS \"CustomerInvoiceLine\",\n      \"p2_gi\".\"GoodsIssue_ID\"                                                       AS \"GoodsIssue\"\n    FROM \"r_o_custom_SalesOrderScheduleLine__GoodsIssue\" AS \"p2_gi\"\n    LEFT JOIN \"r_o_custom_CustomerInvoiceLine__SalesOrderScheduleLines\" AS \"p2_cii_sol\"\n      ON \"p2_cii_sol\".\"SalesOrderScheduleLines_ID\" = \"p2_gi\".\"ID\"\n    -- Filter out the SOLs which have a link to a DI (SOL->DI links are already covered by CTE_SOL_DI_PATHS) with LEFT JOIN and WHERE condition\n    LEFT JOIN \"r_o_custom_DeliveryLine__SalesOrderScheduleLines\" AS \"r_di_sol\"\n      ON \"r_di_sol\".\"SalesOrderScheduleLines_ID\" = \"p2_gi\".\"ID\"\n    -- SOL must exist\n    WHERE \"p2_gi\".\"ID\" IS NOT NULL\n\t--Filter out the SOLs which have a link to a DI \n\tAND \"r_di_sol\".\"SalesOrderScheduleLines_ID\" IS NULL\n),\n\"CTE_ALL_PATHS\" AS (\n    SELECT * FROM \"CTE_SOL_DI_PATHS\"\n    UNION\n    SELECT * FROM \"CTE_DI_PATHS\"\n    UNION\n    SELECT * FROM \"CTE_SOL_PATHS\"\n)\nSELECT\n    CAST(DENSE_RANK() OVER (ORDER BY \"t\".\"SalesOrderScheduleLine\", \"t\".\"DeliveryLine\", \"t\".\"CustomerInvoiceLine\", \"t\".\"GoodsIssue\") AS VARCHAR(10)) AS \"ID\",\n    \"t\".\"SalesOrderScheduleLine\"            AS \"SalesOrderScheduleLine\",\n    \"t\".\"DeliveryLine\"              AS \"DeliveryLine\",\n    \"t\".\"CustomerInvoiceLine\"       AS \"CustomerInvoiceLine\",\n    \"t\".\"GoodsIssue\"                AS \"GoodsIssue\"\nFROM \"CTE_ALL_PATHS\" AS \"t\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,270 @@
+[
+    {
+        "change_date": 1758532946760.0,
+        "changed_by": {
+            "id": "9009518c-e25c-4997-b8d1-49ec38885680",
+            "name": "Pooja Singh Dohare",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752492320754.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "Customer-OracleFusion",
+        "draft": null,
+        "factory_id": "b6f78752-fad4-48e4-9094-b09e477311f2",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Address",
+                    "City",
+                    "Country",
+                    "ID",
+                    "InternalFlag",
+                    "Name",
+                    "Number",
+                    "PostalCode",
+                    "Region",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CustomerAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' ||  \"HZ_CUST_ACCOUNTS\".\"CustAccountId\"    AS \"ID\",\n    \"HZ_CUST_ACCOUNTS\".\"AccountNumber\"                                   AS \"Number\",\n    \"HZ_PARTIES\".\"PartyName\"                                             AS \"Name\",\n    CASE\n        WHEN \"HZ_CUST_ACCOUNTS\".\"CustomerType\" = 'I'\n            THEN TRUE\n        ELSE FALSE \n    END                                                                  AS \"InternalFlag\",\n    \"HZ_PARTIES\".\"Country\"                                               AS \"Country\",\n    \"HZ_PARTIES\".\"County\"                                                AS \"Region\",\n    \"HZ_PARTIES\".\"City\"                                                  AS \"City\",\n    \"HZ_PARTIES\".\"PostalCode\"                                            AS \"PostalCode\",\n    \"HZ_PARTIES\".\"Address1\"                                              AS \"Address\",\n    <%=sourceSystem%>                                                    AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_PartiesAnalyticsAM_CustomerAccount\" AS \"HZ_CUST_ACCOUNTS\"\n    LEFT JOIN \"FscmTopModelAM_PartiesAnalyticsAM_Customer\" AS \"HZ_PARTIES\" \n        ON \"HZ_CUST_ACCOUNTS\".\"PartyId\" = \"HZ_PARTIES\".\"PartyId\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758035495387.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1753903654323.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "Customer - SAP S4 HANA",
+        "draft": null,
+        "factory_id": "c63a0069-13b3-4e83-a556-156da39f4b7c",
+        "factory_validation_status": "VALID",
+        "has_user_template": true,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Address",
+                    "City",
+                    "Country",
+                    "ID",
+                    "InternalFlag",
+                    "Name",
+                    "Number",
+                    "PostalCode",
+                    "Region",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CustomerAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\nSELECT <%=sourceSystem%>  || '::' || \"KNA1\".\"MANDT\" || '::' || \"KNA1\".\"KUNNR\"   AS \"ID\",\n    \"KNA1\".\"NAME1\"                                                              AS \"Name\",\n    CASE WHEN \"KNA1\".\"VBUND\" IS NULL THEN FALSE ELSE TRUE END                   AS \"InternalFlag\",\n    \"KNA1\".\"LAND1\"                                                              AS \"Country\",\n    \"KNA1\".\"REGIO\"                                                              AS \"Region\",\n    \"KNA1\".\"ORT01\"                                                              AS \"City\",\n    \"KNA1\".\"PSTLZ\"                                                              AS \"PostalCode\",\n    \"KNA1\".\"STRAS\"                                                              AS \"Address\",\n    \"KNA1\".\"KUNNR\"                                                              AS \"Number\",\n\t<%=sourceSystem%> || '::' || \"KNA1\".\"MANDT\"                                 AS \"SourceSystemInstance\"\nFROM \"KNA1\" AS \"KNA1\"\nWHERE \"KNA1\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758031906841.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630755426.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "Customer transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "d1df929a-d4b6-4659-8979-4c808ebee49c",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Address",
+                    "City",
+                    "Country",
+                    "ID",
+                    "InternalFlag",
+                    "Name",
+                    "Number",
+                    "PostalCode",
+                    "Region",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CustomerAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_InternalCustomers\" AS (\n    SELECT DISTINCT\n        \"FUN_CUSTOMER_MAPS\".\"CUST_ACCOUNT_ID\" AS \"CUST_ACCOUNT_ID\"\n    FROM \"FUN_CUSTOMER_MAPS\" AS \"FUN_CUSTOMER_MAPS\"\n)\nSELECT \n    <%=sourceSystem%>  || '::' || \"HZ_CUST_ACCOUNTS\".\"CUST_ACCOUNT_ID\"       AS \"ID\",\n    \"HZ_CUST_ACCOUNTS\".\"ACCOUNT_NUMBER\"                                      AS \"Number\",\n    \"HZ_PARTIES\".\"PARTY_NAME\"                                                AS \"Name\",\n    \"HZ_PARTIES\".\"COUNTRY\"                                                   AS \"Country\",\n    \"HZ_PARTIES\".\"COUNTY\"                                                    AS \"Region\",\n    \"HZ_PARTIES\".\"CITY\"                                                      AS \"City\",\n    \"HZ_PARTIES\".\"POSTAL_CODE\"                                               AS \"PostalCode\",\n    \"HZ_PARTIES\".\"ADDRESS1\"                                                  AS \"Address\",\n    CASE\n        WHEN \"HZ_CUST_ACCOUNTS\".\"CUSTOMER_TYPE\" = 'I'\n            THEN TRUE\n        WHEN \"InternalCustomers\".\"CUST_ACCOUNT_ID\" IS NOT NULL\n            THEN TRUE\n        ELSE FALSE \n    END                                                                      AS \"InternalFlag\",       \n    <%=sourceSystem%>                                                        AS \"SourceSystemInstance\"\nFROM \"HZ_CUST_ACCOUNTS\" AS \"HZ_CUST_ACCOUNTS\"\n    LEFT JOIN \"HZ_PARTIES\" AS \"HZ_PARTIES\"\n        ON \"HZ_CUST_ACCOUNTS\".\"PARTY_ID\" = \"HZ_PARTIES\".\"PARTY_ID\"\n    LEFT JOIN \"CTE_InternalCustomers\" AS \"InternalCustomers\" \n        ON \"HZ_CUST_ACCOUNTS\".\"CUST_ACCOUNT_ID\" = \"InternalCustomers\".\"CUST_ACCOUNT_ID\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758035495387.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1753903572559.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "Customer - SAP ECC",
+        "draft": null,
+        "factory_id": "4db73501-fc16-4b81-8b96-d3a715442554",
+        "factory_validation_status": "VALID",
+        "has_user_template": true,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Address",
+                    "City",
+                    "Country",
+                    "ID",
+                    "InternalFlag",
+                    "Name",
+                    "Number",
+                    "PostalCode",
+                    "Region",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CustomerAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\nSELECT <%=sourceSystem%>  || '::' || \"KNA1\".\"MANDT\" || '::' || \"KNA1\".\"KUNNR\"   AS \"ID\",\n    \"KNA1\".\"NAME1\"                                                              AS \"Name\",\n    CASE WHEN \"KNA1\".\"VBUND\" IS NULL THEN FALSE ELSE TRUE END                   AS \"InternalFlag\",\n    \"KNA1\".\"LAND1\"                                                              AS \"Country\",\n    \"KNA1\".\"REGIO\"                                                              AS \"Region\",\n    \"KNA1\".\"ORT01\"                                                              AS \"City\",\n    \"KNA1\".\"PSTLZ\"                                                              AS \"PostalCode\",\n    \"KNA1\".\"STRAS\"                                                              AS \"Address\",\n    \"KNA1\".\"KUNNR\"                                                              AS \"Number\",\n\t<%=sourceSystem%> || '::' || \"KNA1\".\"MANDT\"                                 AS \"SourceSystemInstance\"\nFROM \"KNA1\" AS \"KNA1\"\nWHERE \"KNA1\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

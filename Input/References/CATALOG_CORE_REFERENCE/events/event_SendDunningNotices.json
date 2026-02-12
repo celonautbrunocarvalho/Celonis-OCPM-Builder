@@ -1,0 +1,77 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1749630745896.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630745896.0,
+    "description": "This event signals when the dunning notices are sent to the customers",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "Level",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "7bde209a-ba28-4917-a77d-3399d5f97aee",
+    "name": "SendDunningNotices",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "ReceivableItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ReceivableItem",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsReceivable"
+    ]
+}

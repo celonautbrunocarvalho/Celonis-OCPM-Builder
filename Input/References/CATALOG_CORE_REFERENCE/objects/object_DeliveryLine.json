@@ -1,0 +1,239 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1761317030753.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630698853.0,
+    "description": "A line item level document detailing a specific material, item, or good associated with a delivery.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "LineNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "MaterialAvailabilityDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "Volume",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "NetWeight",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "StorageLocation",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CreationExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "VolumeUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "WeightUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "QuantityUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "Quantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DeliveryNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "2633c537-a6d6-44c7-8def-93d936f472ec",
+    "managed": true,
+    "multi_link": false,
+    "name": "DeliveryLine",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Material",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Material",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Plant",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Plant",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CreatedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "User",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Delivery",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Delivery",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialMovement",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "DeliveryLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "MaterialMovement",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "GoodsIssue",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "DeliveryLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "GoodsIssue",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipOrderToInvoice",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "DeliveryLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipOrderToInvoice",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerInvoiceLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "DeliveryLines",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "CustomerInvoiceLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderScheduleLines",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsReceivable",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

@@ -1,0 +1,266 @@
+[
+    {
+        "change_date": 1761820089790.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630767237.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "MaterialRequirement transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "430bec07-5638-4d5e-9e62-729a2f656196",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialRequirement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DeliveryDate",
+                    "DemandType",
+                    "ID",
+                    "MaterialRequirementNumber",
+                    "PlannedQuantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialRequirementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n   <%=sourceSystem%> || '::' || CAST(\"MRP_GROSS_REQUIREMENTS\".\"DEMAND_ID\" AS VARCHAR(255)) \n   || '::' || \"MRP_GROSS_REQUIREMENTS\".\"USING_ASSEMBLY_DEMAND_DATE\"                        AS \"ID\",\n   <%=sourceSystem%> || '::' || \"MRP_GROSS_REQUIREMENTS\".\"ORGANIZATION_ID\" \n   || '::' || \"MRP_GROSS_REQUIREMENTS\".\"INVENTORY_ITEM_ID\"                                 AS \"MaterialMasterPlant\",\n   CAST(\"MRP_GROSS_REQUIREMENTS\".\"DEMAND_ID\" AS VARCHAR(255))                              AS \"MaterialRequirementNumber\",\n   CAST(\"MRP_GROSS_REQUIREMENTS\".\"ORIGINATION_TYPE\" AS VARCHAR(255))                       AS \"DemandType\",\n   \"MRP_GROSS_REQUIREMENTS\".\"USING_ASSEMBLY_DEMAND_DATE\"                                   AS \"DeliveryDate\",\n   \"MRP_GROSS_REQUIREMENTS\".\"USING_REQUIREMENTS_QUANTITY\"                                  AS \"PlannedQuantity\",\n   \"MTL_SYSTEM_ITEMS_B\".\"PRIMARY_UOM_CODE\"                                                 AS \"QuantityUnit\",\n   <%=sourceSystem%>                                                                       AS \"SourceSystemInstance\" \nFROM \"MRP_GROSS_REQUIREMENTS\" AS \"MRP_GROSS_REQUIREMENTS\" \n   INNER JOIN \"MTL_SYSTEM_ITEMS_B\" AS \"MTL_SYSTEM_ITEMS_B\" \n      ON \"MRP_GROSS_REQUIREMENTS\".\"ORGANIZATION_ID\" = \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\" \n      AND \"MRP_GROSS_REQUIREMENTS\".\"INVENTORY_ITEM_ID\" = \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\"\nWHERE NULLIF(CAST(\"MRP_GROSS_REQUIREMENTS\".\"USING_ASSEMBLY_DEMAND_DATE\" AS VARCHAR), '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763481323467.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633615356.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialRequirement - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "cddcc31a-debc-4994-bdfe-366542d39eef",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialRequirement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DeliveryDate",
+                    "DemandType",
+                    "ID",
+                    "MaterialRequirementNumber",
+                    "PlannedQuantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialRequirementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"PBIM\".\"MANDT\" || '::' || \"PBIM\".\"MATNR\" || '::' || \n        \"PBIM\".\"WERKS\" || '::' || \"PBIM\".\"BEDAE\" || '::' || \"PBIM\".\"VERSB\" || '::' || \n        COALESCE(\"PBIM\".\"PBDNR\",'') || '::' || \"PBED\".\"BDZEI\" || '::' || \"PBED\".\"PDATU\"                    AS \"ID\",\n    <%=sourceSystem%> || '::' || \"PBIM\".\"MANDT\"                                                            AS \"SourceSystemInstance\",\n    CAST(\"PBIM\".\"BDZEI\" AS VARCHAR(255))                                                                   AS \"MaterialRequirementNumber\",\n    CAST(\"PBED\".\"PDATU\" AS TIMESTAMP)                                                                      AS \"DeliveryDate\",\n    \"PBED\".\"PLNMG\"                                                                                         AS \"PlannedQuantity\",\n    \"PBED\".\"MEINS\"                                                                                         AS \"QuantityUnit\",\n    \"PBIM\".\"BEDAE\"                                                                                         AS \"DemandType\",\n    <%=sourceSystem%> || '::' || \"PBIM\".\"MANDT\" || '::' || \"PBIM\".\"MATNR\" || '::' || \"PBIM\".\"WERKS\"        AS \"MaterialMasterPlant\"\nFROM \"PBIM\" AS \"PBIM\"\n    INNER JOIN \"PBED\" AS \"PBED\"\n        ON \"PBIM\".\"MANDT\" = \"PBED\".\"MANDT\"\n            AND \"PBIM\".\"BDZEI\" = \"PBED\".\"BDZEI\"\nWHERE NULLIF(\"PBIM\".\"MANDT\", '') IS NOT NULL\n  AND NULLIF(\"PBED\".\"MANDT\", '') IS NOT NULL\n  AND \"PBIM\".\"VERVS\" = 'X'"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763481452504.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649006771.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialRequirement - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "9dc94020-db41-4fd1-8559-11ddf2480c09",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialRequirement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DeliveryDate",
+                    "DemandType",
+                    "ID",
+                    "MaterialRequirementNumber",
+                    "PlannedQuantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialRequirementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"PBIM\".\"MANDT\" || '::' || \"PBIM\".\"MATNR\" || '::' || \n        \"PBIM\".\"WERKS\" || '::' || \"PBIM\".\"BEDAE\" || '::' || \"PBIM\".\"VERSB\" || '::' || \n        COALESCE(\"PBIM\".\"PBDNR\",'') || '::' || \"PBED\".\"BDZEI\" || '::' || \"PBED\".\"PDATU\"                    AS \"ID\",\n    <%=sourceSystem%> || '::' || \"PBIM\".\"MANDT\"                                                            AS \"SourceSystemInstance\",\n    CAST(\"PBIM\".\"BDZEI\" AS VARCHAR(255))                                                                   AS \"MaterialRequirementNumber\",\n    CAST(\"PBED\".\"PDATU\" AS TIMESTAMP)                                                                      AS \"DeliveryDate\",\n    \"PBED\".\"PLNMG\"                                                                                         AS \"PlannedQuantity\",\n    \"PBED\".\"MEINS\"                                                                                         AS \"QuantityUnit\",\n    \"PBIM\".\"BEDAE\"                                                                                         AS \"DemandType\",\n    <%=sourceSystem%> || '::' || \"PBIM\".\"MANDT\" || '::' || \"PBIM\".\"MATNR\" || '::' || \"PBIM\".\"WERKS\"        AS \"MaterialMasterPlant\"\nFROM \"PBIM\" AS \"PBIM\"\n    INNER JOIN \"PBED\" AS \"PBED\"\n        ON \"PBIM\".\"MANDT\" = \"PBED\".\"MANDT\"\n            AND \"PBIM\".\"BDZEI\" = \"PBED\".\"BDZEI\"\nWHERE NULLIF(\"PBIM\".\"MANDT\", '') IS NOT NULL\n  AND NULLIF(\"PBED\".\"MANDT\", '') IS NOT NULL\n  AND \"PBIM\".\"VERVS\" = 'X'"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1761819983488.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1755180484490.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialRequirement - OracleFusion",
+        "draft": null,
+        "factory_id": "5f7602bd-dce5-4571-99e0-009c6800fd92",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialRequirement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DeliveryDate",
+                    "DemandType",
+                    "ID",
+                    "MaterialRequirementNumber",
+                    "PlannedQuantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialRequirementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT DISTINCT\n    <%=sourceSystem%> || '::' || \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"DemandId\" || '::' || \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEOUsingAssemblyDemandDate\"          AS \"ID\",\n    <%=sourceSystem%> || '::' || \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEOOrganizationId\" || '::' || \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEOInventoryItemId\"  AS \"MaterialMasterPlant\",\n    CAST(\"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"DemandId\" AS VARCHAR(255))                                                                                                                      AS \"MaterialRequirementNumber\",\n    CAST(\"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEODemandOrderType\" AS VARCHAR(255))                                                                                                     AS \"DemandType\",\n    CAST(\"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEOUsingAssemblyDemandDate\" AS TIMESTAMP)                                                                                                AS \"DeliveryDate\",\n    \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEODemandOrderQty\"                                                                                                                            AS \"PlannedQuantity\",\n    \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\".\"ItemCategoriesPEOUomCode\"                                                                                                                             AS \"QuantityUnit\",\n    <%=sourceSystem%>                                                                                                                                                                                           AS \"SourceSystemInstance\" \nFROM \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\" AS \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\" \n     INNER JOIN \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\" AS \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\" \n        ON \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\".\"ItemCategoriesPEOPlanId\" = \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PLANID\" \n            AND \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\".\"InventoryItemId\" = \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEOInventoryItemId\"\n            AND \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\".\"OrganizationId\" = \"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEOOrganizationId\"\nWHERE NULLIF(CAST(\"FscmTopModelAM_MscAnalyticsTopAM_PlanningPeggingPVO\".\"PeggingPEOUsingAssemblyDemandDate\" AS VARCHAR), '') IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

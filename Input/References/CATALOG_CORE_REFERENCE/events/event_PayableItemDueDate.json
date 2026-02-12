@@ -1,0 +1,67 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1757590877115.0,
+    "changed_by": {
+        "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+        "name": "j.vita-martinez",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630742619.0,
+    "description": "Represents the time in the process when a posted vendor document (invoice or credit memo) is due (final net due date)",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "c72ae30d-953a-4f2c-a0d7-9b0d20d9e530",
+    "name": "PayableItemDueDate",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "PayableItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PayableItem",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable",
+        "Procurement"
+    ]
+}

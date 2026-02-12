@@ -1,0 +1,62 @@
+[
+    {
+        "change_date": 1758103117287.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630873436.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CreatePurchaseDocument transformation - copy - 1",
+        "draft": null,
+        "factory_id": "f5debd68-cd9c-4116-b486-c6d38cb0e4f9",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreatePurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PurchaseDocument",
+                    "PurchaseOrder"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DocumentCategory",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CreatePurchaseDocumentAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'CreatePurchaseDocument' || '::' || \"PurchaseDocument\".\"ID\"   AS \"ID\",\n    \"PurchaseDocument\".\"ID\"                                       AS \"PurchaseDocument\",\n    \"PurchaseDocument\".\"ID\"                                       AS \"PurchaseOrder\",\n    \"PurchaseDocument\".\"DocumentCategory\"                         AS \"DocumentCategory\",\n    \"PurchaseDocument\".\"CreationTime\"                             AS \"Time\",\n    \"PurchaseDocument\".\"CreatedBy_ID\"                             AS \"ExecutedBy\",\n    \"PurchaseDocument\".\"CreationExecutionType\"                    AS \"ExecutionType\"\nFROM \"o_custom_PurchaseDocument\" AS \"PurchaseDocument\"\nWHERE \"PurchaseDocument\".\"CreationTime\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

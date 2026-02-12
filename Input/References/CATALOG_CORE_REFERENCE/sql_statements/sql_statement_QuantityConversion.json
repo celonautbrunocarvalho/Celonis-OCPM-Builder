@@ -1,0 +1,266 @@
+[
+    {
+        "change_date": 1757404208442.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649772689.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "QuantityConversion - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "2e8c0aa7-5c61-41a0-be53-3c25ff607d34",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "QuantityConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ConversionQualifier",
+                    "FromUnit",
+                    "ID",
+                    "MaterialNumber",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "ToUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "QuantityConversionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT DISTINCT \n    <%=sourceSystem%>  || '::' || \n        CASE\n            WHEN \"T006\".\"DIMID\" != 'AAAADL'\n            THEN \"MARA\".\"MANDT\" || '::' || \"MARA\".\"MATNR\" || '::' || \"MARA\".\"MEINS\" || '::' || \"T006D\".\"MSSIE\"\n            WHEN \"T006\".\"DIMID\" = 'AAAADL'\n            THEN \"MARA\".\"MANDT\" || '::' || \"MARA\".\"MATNR\" || '::' || \"MARA\".\"MEINS\" || '::' || \"MARM\".\"MEINH\"\n        END                                                    AS \"ID\",\n       \"MARA\".\"MATNR\"                                          AS \"MaterialNumber\",\n       \"MARA\".\"MATNR\"                                          AS \"ConversionQualifier\",\n       \"MARA\".\"MEINS\"                                          AS \"FromUnit\",\n       CASE\n           WHEN \"T006\".\"DIMID\" != 'AAAADL'\n               THEN \"T006D\".\"MSSIE\"\n           WHEN \"T006\".\"DIMID\" = 'AAAADL'\n               THEN \"MARM\".\"MEINH\"\n           END                                                 AS \"ToUnit\",\n       CASE\n           WHEN \"T006\".\"DIMID\" != 'AAAADL'\n               THEN \"T006\".\"ZAEHL\" / \"T006\".\"NENNR\" * POWER(10, \"T006\".\"EXP10\")\n           WHEN \"T006\".\"DIMID\" = 'AAAADL'\n               THEN \"MARM\".\"UMREN\" / \"MARM\".\"UMREZ\"\n           END                                                 AS \"Rate\",\n       <%=sourceSystem%> || '::' || \"MARA\".\"MANDT\"             AS \"SourceSystemInstance\"\nFROM \"MARA\" AS \"MARA\"\n    LEFT JOIN \"T006\" AS \"T006\"\n        ON \"MARA\".\"MANDT\" = \"T006\".\"MANDT\"\n            AND \"MARA\".\"MEINS\" = \"T006\".\"MSEHI\"\n    LEFT JOIN \"T006D\" AS \"T006D\"\n        ON \"T006\".\"MANDT\" = \"T006D\".\"MANDT\"\n            AND \"T006\".\"DIMID\" = \"T006D\".\"DIMID\"\n    LEFT JOIN \"MARM\" AS \"MARM\"\n        ON \"MARA\".\"MANDT\" = \"MARM\".\"MANDT\"\n            AND \"MARA\".\"MATNR\" = \"MARM\".\"MATNR\"\nWHERE NULLIF(\"T006\".\"MANDT\", '') IS NOT NULL\n  AND NULLIF(\"MARM\".\"MANDT\", '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760592826561.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752236788802.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "QuantityConversion-OracleFusion",
+        "draft": null,
+        "factory_id": "e0d96300-70ae-4ac2-8602-e494dabc8715",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "QuantityConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ConversionQualifier",
+                    "FromUnit",
+                    "ID",
+                    "MaterialNumber",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "ToUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "QuantityConversionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_CONVERSION\" AS (\n    SELECT DISTINCT\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOOrganizationId\"    AS \"ItemBasePEOOrganizationId\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOInventoryItemId\"   AS \"ItemBasePEOInventoryItemId\",\n        \"MTL_UOM_CLASS_CONVERSIONS\".\"ToUomCode\"             AS \"TO_UOM_CODE\",\n        \"MTL_UOM_CLASS_CONVERSIONS\".\"FromUomCode\"           AS \"FROM_UOM_CODE\",\n        \"ItemUOMConversionPVO\".\"ConversionRate\"             AS \"ConversionRate\"\n    FROM \"FscmTopModelAM_InvUomPublicViewAM_UOMIntraClassPVO\" AS \"MTL_UOM_CLASS_CONVERSIONS\"\n        LEFT JOIN \"FscmTopModelAM_ScmExtractAM_ScmRcsBiccExtractAM_ItemUOMConversionPVO\" AS \"ItemUOMConversionPVO\"\n            ON \"MTL_UOM_CLASS_CONVERSIONS\".\"InventoryItemId\" = \"ItemUOMConversionPVO\".\"InventoryItemId\"\n        LEFT JOIN \"FscmTopModelAM_ScmExtractAM_EgpBiccExtractAM_ItemExtractPVO\" AS \"MTL_SYSTEM_ITEMS_B\"\n            ON \"MTL_UOM_CLASS_CONVERSIONS\".\"InventoryItemId\" = \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOInventoryItemId\"\n)\nSELECT\n    <%=sourceSystem%> || '::' || \"CONVERSION\".\"ItemBasePEOOrganizationId\" \n    || '::' || \"CONVERSION\".\"ItemBasePEOInventoryItemId\" \n    || '::' || \"CONVERSION\".\"FROM_UOM_CODE\" \n    || '::' || \"CONVERSION\".\"TO_UOM_CODE\"  \n    || '::' || \"CONVERSION\".\"ConversionRate\"                             AS \"ID\",\n    \"CONVERSION\".\"ItemBasePEOOrganizationId\" \n    || '::' || \"CONVERSION\".\"ItemBasePEOInventoryItemId\"                 AS \"MaterialNumber\",\n    \"CONVERSION\".\"ItemBasePEOOrganizationId\" \n    || '::' || \"CONVERSION\".\"ItemBasePEOInventoryItemId\"                 AS \"ConversionQualifier\",\n    \"CONVERSION\".\"FROM_UOM_CODE\"                                         AS \"FromUnit\",\n    \"CONVERSION\".\"TO_UOM_CODE\"                                           AS \"ToUnit\",\n    \"CONVERSION\".\"ConversionRate\"                                        AS \"Rate\",\n    <%=sourceSystem%>                                                    AS \"SourceSystemInstance\"\nFROM \"CTE_CONVERSION\" AS \"CONVERSION\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1757404194214.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634503415.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "QuantityConversion - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "2d4fcdfe-494b-4fb5-92a2-9e70211ca3eb",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "QuantityConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ConversionQualifier",
+                    "FromUnit",
+                    "ID",
+                    "MaterialNumber",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "ToUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "QuantityConversionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT DISTINCT \n    <%=sourceSystem%>  || '::' || \n        CASE\n            WHEN \"T006\".\"DIMID\" != 'AAAADL'\n            THEN \"MARA\".\"MANDT\" || '::' || \"MARA\".\"MATNR\" || '::' || \"MARA\".\"MEINS\" || '::' || \"T006D\".\"MSSIE\"\n            WHEN \"T006\".\"DIMID\" = 'AAAADL'\n            THEN \"MARA\".\"MANDT\" || '::' || \"MARA\".\"MATNR\" || '::' || \"MARA\".\"MEINS\" || '::' || \"MARM\".\"MEINH\"\n        END                                                    AS \"ID\",\n       \"MARA\".\"MATNR\"                                          AS \"MaterialNumber\",\n       \"MARA\".\"MATNR\"                                          AS \"ConversionQualifier\",\n       \"MARA\".\"MEINS\"                                          AS \"FromUnit\",\n       CASE\n           WHEN \"T006\".\"DIMID\" != 'AAAADL'\n               THEN \"T006D\".\"MSSIE\"\n           WHEN \"T006\".\"DIMID\" = 'AAAADL'\n               THEN \"MARM\".\"MEINH\"\n           END                                                 AS \"ToUnit\",\n       CASE\n           WHEN \"T006\".\"DIMID\" != 'AAAADL'\n               THEN \"T006\".\"ZAEHL\" / \"T006\".\"NENNR\" * POWER(10, \"T006\".\"EXP10\")\n           WHEN \"T006\".\"DIMID\" = 'AAAADL'\n               THEN \"MARM\".\"UMREN\" / \"MARM\".\"UMREZ\"\n           END                                                 AS \"Rate\",\n       <%=sourceSystem%> || '::' || \"MARA\".\"MANDT\"             AS \"SourceSystemInstance\"\nFROM \"MARA\" AS \"MARA\"\n    LEFT JOIN \"T006\" AS \"T006\"\n        ON \"MARA\".\"MANDT\" = \"T006\".\"MANDT\"\n            AND \"MARA\".\"MEINS\" = \"T006\".\"MSEHI\"\n    LEFT JOIN \"T006D\" AS \"T006D\"\n        ON \"T006\".\"MANDT\" = \"T006D\".\"MANDT\"\n            AND \"T006\".\"DIMID\" = \"T006D\".\"DIMID\"\n    LEFT JOIN \"MARM\" AS \"MARM\"\n        ON \"MARA\".\"MANDT\" = \"MARM\".\"MANDT\"\n            AND \"MARA\".\"MATNR\" = \"MARM\".\"MATNR\"\nWHERE NULLIF(\"T006\".\"MANDT\", '') IS NOT NULL\n  AND NULLIF(\"MARM\".\"MANDT\", '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1756809323412.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630830208.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "QuantityConversion transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "f7d95817-b462-4ff6-a06b-5c03553fa4c5",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'ORACLE_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "QuantityConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ConversionQualifier",
+                    "FromUnit",
+                    "ID",
+                    "MaterialNumber",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "ToUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "QuantityConversionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_CONVERSION\" AS (\n    SELECT\n        \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\",\n        \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\",\n        \"MTL_UOM_CLASS_CONVERSIONS\".\"TO_UOM_CODE\"       AS \"FROM_UOM_CODE\",\n        \"MTL_UOM_CLASS_CONVERSIONS\".\"FROM_UOM_CODE\"     AS \"TO_UOM_CODE\",\n        \"MTL_UOM_CLASS_CONVERSIONS\".\"CONVERSION_RATE\"\n    FROM \"MTL_UOM_CLASS_CONVERSIONS\" AS \"MTL_UOM_CLASS_CONVERSIONS\",\n        \"MTL_SYSTEM_ITEMS_B\" AS \"MTL_SYSTEM_ITEMS_B\"\n    WHERE \"MTL_UOM_CLASS_CONVERSIONS\".\"INVENTORY_ITEM_ID\" = \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\"\n    UNION ALL\n    SELECT\n        \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\",\n        \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\",\n        \"MTL_UNITS_OF_MEASURE_TL\".\"UOM_CODE\"            AS \"FROM_UOM_CODE\",\n        \"MTL_SYSTEM_ITEMS_B\".\"PRIMARY_UOM_CODE\"         AS \"TO_UOM_CODE\",\n        1 / \"MTL_UOM_CONVERSIONS\".\"CONVERSION_RATE\"\n    FROM \"MTL_SYSTEM_ITEMS_B\" AS \"MTL_SYSTEM_ITEMS_B\",\n        \"MTL_UOM_CONVERSIONS\" AS \"MTL_UOM_CONVERSIONS\",\n        \"MTL_UNITS_OF_MEASURE_TL\" AS \"MTL_UNITS_OF_MEASURE_TL\"\n    WHERE \"MTL_SYSTEM_ITEMS_B\".\"PRIMARY_UOM_CODE\" = \"MTL_UOM_CONVERSIONS\".\"UOM_CODE\"\n        AND \"MTL_UOM_CONVERSIONS\".\"INVENTORY_ITEM_ID\" = 0\n        AND \"MTL_UOM_CONVERSIONS\".\"UOM_CLASS\" = \"MTL_UNITS_OF_MEASURE_TL\".\"UOM_CLASS\"\n        AND \"MTL_UNITS_OF_MEASURE_TL\".\"BASE_UOM_FLAG\" = 'Y'\n        AND \"MTL_UNITS_OF_MEASURE_TL\".\"LANGUAGE\" = <%=LanguageKey%>\n)\nSELECT\n    <%=sourceSystem%> || '::' || \"CONVERSION\".\"ORGANIZATION_ID\" \n    || '::' || \"CONVERSION\".\"INVENTORY_ITEM_ID\" \n    || '::' || \"CONVERSION\".\"FROM_UOM_CODE\" \n    || '::' || \"CONVERSION\".\"TO_UOM_CODE\"        AS \"ID\",\n    \"CONVERSION\".\"ORGANIZATION_ID\" \n    || '::' || \"CONVERSION\".\"INVENTORY_ITEM_ID\"  AS \"MaterialNumber\",\n    \"CONVERSION\".\"ORGANIZATION_ID\" \n    || '::' || \"CONVERSION\".\"INVENTORY_ITEM_ID\"  AS \"ConversionQualifier\",\n    \"CONVERSION\".\"FROM_UOM_CODE\"                 AS \"FromUnit\",\n    \"CONVERSION\".\"TO_UOM_CODE\"                   AS \"ToUnit\",\n    \"CONVERSION\".\"CONVERSION_RATE\"               AS \"Rate\",\n    <%=sourceSystem%>                            AS \"SourceSystemInstance\"\nFROM\n    \"CTE_CONVERSION\" AS \"CONVERSION\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,116 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1760519015362.0,
+    "changed_by": {
+        "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+        "name": "j.rosenbauer",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630696863.0,
+    "description": "BillOfMaterialsItem",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "QuantityUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Type",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ItemVersion",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "ComponentQuantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "BillOfMaterialsNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "04d5cb7e-8e6b-444f-a890-14e45d352f5d",
+    "managed": true,
+    "multi_link": false,
+    "name": "BillOfMaterialComponent",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "MaterialMasterPlant",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipBillOfMaterials",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "BillOfMaterialComponent",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "MasterData",
+        "InventoryManagement"
+    ]
+}

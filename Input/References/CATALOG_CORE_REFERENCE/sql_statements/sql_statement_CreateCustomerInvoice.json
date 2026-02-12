@@ -1,0 +1,90 @@
+[
+    {
+        "change_date": 1760433266498.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1752243905053.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CreateCustomerInvoice - 1",
+        "draft": null,
+        "factory_id": "9fbbc6ce-dfda-4ed4-9036-ac06aec1c4e8",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreateCustomerInvoice",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CustomerInvoice"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CustomerInvoiceType",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CreateCustomerDocumentAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'CreateCustomerInvoice' || '::' || \"CustomerInvoice\".\"ID\"       AS \"ID\",\n    \"CustomerInvoice\".\"ID\"                                          AS \"CustomerInvoice\",\n    \"CustomerInvoice\".\"CreationTime\"                                AS \"Time\",\n    \"CustomerInvoice\".\"CreatedBy_ID\"                                AS \"ExecutedBy\",\n    \"CustomerInvoice\".\"CreationExecutionType\"                       AS \"ExecutionType\",\n    \"CustomerInvoice\".\"CustomerInvoiceType\"                         AS \"CustomerInvoiceType\"\nFROM \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"\nWHERE \"CustomerInvoice\".\"CreationTime\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "DeliveryLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipDeliveryLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    'CreateCustomerInvoice' || '::' || \"CustomerInvoice\".\"ID\"      AS \"ID\",\n\t\"CustomerInvoiceLine__DeliveryLines\".\"DeliveryLines_ID\"        AS \"DeliveryLine\"\nFROM \"r_o_custom_CustomerInvoiceLine__DeliveryLines\" AS \"CustomerInvoiceLine__DeliveryLines\"\n    LEFT JOIN \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n        ON \"CustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine__DeliveryLines\".\"ID\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"\n        ON \"CustomerInvoiceLine\".\"CustomerInvoice_ID\" = \"CustomerInvoice\".\"ID\"\nWHERE \"CustomerInvoice\".\"CreationTime\" IS NOT NULL\n    AND \"CustomerInvoiceLine__DeliveryLines\".\"DeliveryLines_ID\" IS NOT NULL\n"
+                            }
+                        ]
+                    },
+                    {
+                        "relationship_name": "SalesOrderScheduleLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipSalesOrderScheduleLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    'CreateCustomerInvoice' || '::' || \"CustomerInvoice\".\"ID\"                          AS \"ID\",\n\t\"CustomerInvoiceLine__SalesOrderScheduleLines\".\"SalesOrderScheduleLines_ID\"        AS \"SalesOrderScheduleLine\"\nFROM \"r_o_custom_CustomerInvoiceLine__SalesOrderScheduleLines\" AS \"CustomerInvoiceLine__SalesOrderScheduleLines\"\n    LEFT JOIN \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n        ON \"CustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine__SalesOrderScheduleLines\".\"ID\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"\n        ON \"CustomerInvoiceLine\".\"CustomerInvoice_ID\" = \"CustomerInvoice\".\"ID\"\nWHERE \"CustomerInvoice\".\"CreationTime\" IS NOT NULL\n    AND \"CustomerInvoiceLine__SalesOrderScheduleLines\".\"SalesOrderScheduleLines_ID\" IS NOT NULL"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

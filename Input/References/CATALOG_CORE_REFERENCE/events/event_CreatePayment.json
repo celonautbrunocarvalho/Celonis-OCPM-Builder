@@ -1,0 +1,77 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1757608245590.0,
+    "changed_by": {
+        "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+        "name": "j.vita-martinez",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630741527.0,
+    "description": "Represents the event in the process when an outgoing vendor payment is created potentially containing multiple posted vendor documents (invoices and credit memos)",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "e96b565b-0f23-47bf-b03e-3290fec6cd4c",
+    "name": "CreatePayment",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PayableItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PayableItem",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable",
+        "Procurement"
+    ]
+}

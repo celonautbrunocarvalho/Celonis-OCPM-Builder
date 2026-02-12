@@ -1,0 +1,22 @@
+{
+    "change_date": 1758616778973.0,
+    "changed_by": {
+        "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+        "name": "Brave Gujral",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+        "name": "Brave Gujral",
+        "type_": "USER"
+    },
+    "creation_date": 1758616049893.0,
+    "data_source_connections": [],
+    "description": null,
+    "display_name": "Accounts Receivable",
+    "enable_date": 1758616778836.0,
+    "enabled": false,
+    "event_count": 38,
+    "name": "AccountsReceivable",
+    "object_count": 33
+}

@@ -1,0 +1,215 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "hierarchy",
+                "namespace": "custom"
+            },
+            "values": [
+                {
+                    "name": "parent",
+                    "namespace": "custom"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1761899005019.0,
+    "changed_by": {
+        "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+        "name": "Andi",
+        "type_": "USER"
+    },
+    "color": "#1832DE",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630698128.0,
+    "description": "Customer Invoice Line items include information about the specific products, their quantities and prices which were billed to customers.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PreviousCustomerInvoice",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PreviousCustomerInvoiceLine",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CustomerInvoiceLineNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CustomerInvoiceNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "NetAmount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "QuantityUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "Quantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "NetUnitPrice",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Currency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CreationExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "c09d4d58-795f-4127-90cd-9ad46d239c82",
+    "managed": true,
+    "multi_link": false,
+    "name": "CustomerInvoiceLine",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CustomerInvoice",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoice",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CreatedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "User",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Material",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Material",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Plant",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Plant",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderScheduleLines",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "DeliveryLines",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "DeliveryLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipOrderToInvoice",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CustomerInvoiceLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipOrderToInvoice",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsReceivable",
+        "OrderManagement"
+    ]
+}

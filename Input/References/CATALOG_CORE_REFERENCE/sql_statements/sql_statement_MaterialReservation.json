@@ -1,0 +1,266 @@
+[
+    {
+        "change_date": 1763481532599.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649059610.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialReservation - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "ae947ae4-f310-4cde-b978-8c4037ebdcb7",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialReservation",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialReservationNumber",
+                    "QuantityUnit",
+                    "RequirementDate",
+                    "RequirementQuantity",
+                    "ReservationType",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialReservationItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"RESB\".\"MANDT\" || '::' || \"RESB\".\"RSNUM\" || '::' || \"RESB\".\"RSPOS\" || '::' || COALESCE(\"RESB\".\"RSART\", '') AS \"ID\",\n    <%=sourceSystem%> || '::' || \"RESB\".\"MANDT\"                                                                                             AS \"SourceSystemInstance\",\n    CAST(\"RESB\".\"RSNUM\" AS VARCHAR(255))                                                                                                    AS \"MaterialReservationNumber\",\n    CASE WHEN NULLIF(\"RESB\".\"RSART\", '') IS NOT NULL THEN \"RESB\".\"RSART\" END                                                                AS \"ReservationType\",\n    CAST(\"RESB\".\"BDTER\" AS TIMESTAMP)                                                                                                       AS \"RequirementDate\",\n    \"RESB\".\"BDMNG\"                                                                                                                          AS \"RequirementQuantity\",\n    \"RESB\".\"MEINS\"                                                                                                                          AS \"QuantityUnit\",\n    <%=sourceSystem%> || '::' || \"RESB\".\"MANDT\" || '::' || \"RESB\".\"MATNR\" || '::' || \"RESB\".\"WERKS\"                                         AS \"MaterialMasterPlant\"\nFROM \"RESB\" AS \"RESB\"\nWHERE NULLIF(\"RESB\".\"DUMPS\", '') IS NULL\n    AND NULLIF(\"RESB\".\"SCHGT\", '') IS NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1759908251053.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630828651.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "MaterialReservation transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "2f98d140-6475-4f16-9736-33d34176f07a",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialReservation",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialReservationNumber",
+                    "QuantityUnit",
+                    "RequirementDate",
+                    "RequirementQuantity",
+                    "ReservationType",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialReservationItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || CAST(\"MTL_RESERVATIONS\".\"RESERVATION_ID\" AS VARCHAR(255))               AS \"ID\",\n    <%=sourceSystem%> || '::' || CAST(\"MTL_RESERVATIONS\".\"ORGANIZATION_ID\"\n    || '::' || \"MTL_RESERVATIONS\".\"INVENTORY_ITEM_ID\" AS VARCHAR(255))                                   AS \"MaterialMasterPlant\",\n    CAST(\"MTL_RESERVATIONS\".\"RESERVATION_ID\" AS VARCHAR(255))                                            AS \"MaterialReservationNumber\",\n    \"MTL_TXN_SOURCE_TYPES\".\"DESCRIPTION\"                                                                 AS \"ReservationType\",\n    \"MTL_RESERVATIONS\".\"REQUIREMENT_DATE\"                                                                AS \"RequirementDate\",\n    \"MTL_RESERVATIONS\".\"PRIMARY_RESERVATION_QUANTITY\"                                                    AS \"RequirementQuantity\",\n    \"MTL_RESERVATIONS\".\"PRIMARY_UOM_CODE\"                                                                AS \"QuantityUnit\",\n    <%=sourceSystem%>                                                                                    AS \"SourceSystemInstance\"\nFROM \"MTL_RESERVATIONS\" as \"MTL_RESERVATIONS\"\nLEFT JOIN \"MTL_TXN_SOURCE_TYPES\" as \"MTL_TXN_SOURCE_TYPES\" \n     ON \"MTL_RESERVATIONS\".\"DEMAND_SOURCE_TYPE_ID\" = \"MTL_TXN_SOURCE_TYPES\".\"TRANSACTION_SOURCE_TYPE_ID\" "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763481542268.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633662229.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialReservation - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "cc3a60ef-bded-4ed2-b33e-b6add9c9cc24",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialReservation",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialReservationNumber",
+                    "QuantityUnit",
+                    "RequirementDate",
+                    "RequirementQuantity",
+                    "ReservationType",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialReservationItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"RESB\".\"MANDT\" || '::' || \"RESB\".\"RSNUM\" || '::' || \"RESB\".\"RSPOS\" || '::' || COALESCE(\"RESB\".\"RSART\", '') AS \"ID\",\n    <%=sourceSystem%> || '::' || \"RESB\".\"MANDT\"                                                                                             AS \"SourceSystemInstance\",\n    CAST(\"RESB\".\"RSNUM\" AS VARCHAR(255))                                                                                                    AS \"MaterialReservationNumber\",\n    CASE WHEN NULLIF(\"RESB\".\"RSART\", '') IS NOT NULL THEN \"RESB\".\"RSART\" END                                                                AS \"ReservationType\",\n    CAST(\"RESB\".\"BDTER\" AS TIMESTAMP)                                                                                                       AS \"RequirementDate\",\n    \"RESB\".\"BDMNG\"                                                                                                                          AS \"RequirementQuantity\",\n    \"RESB\".\"MEINS\"                                                                                                                          AS \"QuantityUnit\",\n    <%=sourceSystem%> || '::' || \"RESB\".\"MANDT\" || '::' || \"RESB\".\"MATNR\" || '::' || \"RESB\".\"WERKS\"                                         AS \"MaterialMasterPlant\"\nFROM \"RESB\" AS \"RESB\"\nWHERE NULLIF(\"RESB\".\"DUMPS\", '') IS NULL\n    AND NULLIF(\"RESB\".\"SCHGT\", '') IS NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758869655912.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752012009455.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialReservation_OracleFusion",
+        "draft": null,
+        "factory_id": "f4641e09-b225-4782-827f-4d501156532b",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialReservation",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialReservationNumber",
+                    "QuantityUnit",
+                    "RequirementDate",
+                    "RequirementQuantity",
+                    "ReservationType",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialReservationItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || CAST(\"MTL_RESERVATIONS\".\"RESERVATIONID\" AS VARCHAR(255))            AS \"ID\",\n    <%=sourceSystem%> || '::' || CAST(\"MTL_RESERVATIONS\".\"ORGANIZATIONID\" \n    || '::' || \"MTL_RESERVATIONS\".\"INVENTORYITEMID\" AS VARCHAR(255))                                 AS \"MaterialMasterPlant\",\n    CAST(\"MTL_RESERVATIONS\".\"RESERVATIONID\" AS VARCHAR(255))                                         AS \"MaterialReservationNumber\",\n    \"MTL_TXN_SOURCE_TYPES\".\"InvTxnSourceTypesTLPEOTransactionSourceTypeName\"                         AS \"ReservationType\",\n    CAST(\"MTL_RESERVATIONS\".\"REQUIREMENTDATE\" AS TIMESTAMP)                                          AS \"RequirementDate\",\n    \"MTL_RESERVATIONS\".\"ReservationQuantity\"                                                         AS \"RequirementQuantity\",\n    \"MTL_RESERVATIONS\".\"PRIMARYUOMCODE\"                                                              AS \"QuantityUnit\",\n    <%=sourceSystem%>                                                                                AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_ScmExtractAM_InvBiccExtractAM_InventoryReservationsExtractPVO\" AS \"MTL_RESERVATIONS\"\n    LEFT JOIN \"FscmTopModelAM_ScmExtractAM_InvBiccExtractAM_InvTxnSourceTypeExtractPVO\" AS \"MTL_TXN_SOURCE_TYPES\" \n        ON \"MTL_RESERVATIONS\".\"DemandSourceTypeId\" = \"MTL_TXN_SOURCE_TYPES\".\"InvTxnSourceTypesTLPEOTransactionSourceTypeId\" \n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

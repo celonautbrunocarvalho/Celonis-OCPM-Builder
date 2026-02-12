@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1757592683408.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1750079310396.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "ExecutePicking - 1",
+        "factory_id": "b2f9aea3-86a7-43c8-9323-4f18e16dd122",
+        "has_overwrites": null,
+        "name": "ExecutePicking - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ExecutePicking",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

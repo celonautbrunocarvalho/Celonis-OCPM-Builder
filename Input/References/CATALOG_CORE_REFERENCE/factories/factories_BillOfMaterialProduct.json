@@ -1,0 +1,122 @@
+[
+    {
+        "change_date": 1758869308417.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749648572265.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "BillOfMaterialProduct - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "factory_id": "e405924b-18b0-434e-974b-3d63082a8925",
+        "has_overwrites": null,
+        "name": "BillOfMaterialProduct - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1760428741930.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630822343.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "BillOfMaterialProduct transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "79f8888b-b93b-420b-a266-159bf4612884",
+        "has_overwrites": null,
+        "name": "BillOfMaterialProduct transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1758869315172.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749632223771.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "BillOfMaterialProduct - 00. Central Extraction Pool_TS1",
+        "factory_id": "4e075441-0798-45ea-83b0-d4c0063fcead",
+        "has_overwrites": null,
+        "name": "BillOfMaterialProduct - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1760101805548.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752134135243.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "BillOfMaterialProduct_OracleFusion",
+        "factory_id": "c7df4648-77be-43b8-8adc-881543537997",
+        "has_overwrites": null,
+        "name": "BillOfMaterialProduct_OracleFusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

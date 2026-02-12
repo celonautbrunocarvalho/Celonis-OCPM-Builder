@@ -1,0 +1,76 @@
+[
+    {
+        "change_date": 1760428811570.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1750068915943.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "CreateDeliveryLine",
+        "draft": null,
+        "factory_id": "e2257272-8cf9-411a-8120-66cac965a700",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreateDeliveryLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Delivery",
+                    "DeliveryLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CreateDeliveryLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'CreateDeliveryLine' || '::' || \"DeliveryLine\".\"ID\"  AS \"ID\",\n       \"DeliveryLine\".\"ID\"                                  AS \"DeliveryLine\",\n       \"DeliveryLine\".\"CreationTime\"                        AS \"Time\",\n       \"DeliveryLine\".\"CreatedBy_ID\"                        AS \"ExecutedBy\",\n       \"DeliveryLine\".\"CreationExecutionType\"               AS \"ExecutionType\",\n       \"DeliveryLine\".\"Delivery_ID\"                         AS \"Delivery\"\nFROM (\n    SELECT\n        \"DeliveryLine\".\"ID\"                    AS \"ID\",\n        \"DeliveryLine\".\"CreationTime\"          AS \"CreationTime\",\n        \"DeliveryLine\".\"CreatedBy_ID\"          AS \"CreatedBy_ID\",\n        \"DeliveryLine\".\"CreationExecutionType\" AS \"CreationExecutionType\",\n        \"Delivery\".\"ID\"                        AS \"Delivery_ID\"\n    FROM (\n        SELECT\n            \"DeliveryLine\".\"ID\"                    AS \"ID\",\n            \"DeliveryLine\".\"CreationTime\"          AS \"CreationTime\",\n            \"DeliveryLine\".\"CreatedBy_ID\"          AS \"CreatedBy_ID\",\n            \"DeliveryLine\".\"CreationExecutionType\" AS \"CreationExecutionType\",\n            \"DeliveryLine\".\"Delivery_ID\"           AS \"Header_ID\"\n        FROM \"o_custom_DeliveryLine\" AS \"DeliveryLine\"\n        ORDER BY \"DeliveryLine\".\"Delivery_ID\"\n    ) AS \"DeliveryLine\"\n    LEFT JOIN \"o_custom_Delivery\" AS \"Delivery\"\n        ON \"DeliveryLine\".\"Header_ID\" = \"Delivery\".\"ID\"\n    ORDER BY \"DeliveryLine\".\"ID\"\n) AS \"DeliveryLine\"\nWHERE \"DeliveryLine\".\"CreationTime\" IS NOT NULL "
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "SalesOrderScheduleLines",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipSalesOrderScheduleLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n\t'CreateDeliveryLine' || '::' || \"DeliveryLine__SalesOrderScheduleLines\".\"ID\" AS \"ID\",\n\t\"DeliveryLine__SalesOrderScheduleLines\".\"SalesOrderScheduleLines_ID\" AS \"SalesOrderScheduleLines\"\nFROM \"r_o_custom_DeliveryLine__SalesOrderScheduleLines\" AS \"DeliveryLine__SalesOrderScheduleLines\""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

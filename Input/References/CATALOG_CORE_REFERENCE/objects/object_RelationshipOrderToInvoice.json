@@ -1,0 +1,112 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Helper",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1760545794954.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749739404044.0,
+    "description": "A relationship object that captures the possible links between sales order lines, delivery items, goods issue documents, and customer invoice items. ",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "44831983-6b09-4bcb-8adf-945dca6b47b3",
+    "managed": true,
+    "multi_link": true,
+    "name": "RelationshipOrderToInvoice",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "GoodsIssue",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "GoodsIssue",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "SalesOrderScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "DeliveryLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "DeliveryLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CustomerInvoiceLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoiceLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Helper",
+        "OrderManagement"
+    ]
+}

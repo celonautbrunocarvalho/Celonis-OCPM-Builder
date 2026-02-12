@@ -1,0 +1,77 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1760542597493.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+        "name": "Hema priya Sudhakar",
+        "type_": "USER"
+    },
+    "creation_date": 1749715957465.0,
+    "description": "Represents the events in the process when a Purchase Requisition item is approved in the system",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Level",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "83d12783-ef9a-456c-afe0-61d674667948",
+    "name": "ApprovePurchaseRequisitionLine",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "PurchaseRequisitionLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseRequisitionLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement"
+    ]
+}

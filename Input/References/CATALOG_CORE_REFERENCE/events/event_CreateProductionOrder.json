@@ -1,0 +1,66 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "production",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1758870316000.0,
+    "changed_by": {
+        "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+        "name": "j.rosenbauer",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+        "name": "j.rosenbauer",
+        "type_": "USER"
+    },
+    "creation_date": 1749720770350.0,
+    "description": "CreateProductionOrder",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "14f757ec-6128-4fe2-9da0-d73ce585bfa3",
+    "name": "CreateProductionOrder",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "ProductionOrder",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ProductionOrder",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "InventoryManagement"
+    ]
+}

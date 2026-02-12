@@ -1,0 +1,647 @@
+[
+    {
+        "change_date": 1766780934634.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "creation_date": 1765763397059.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "description": null,
+        "disabled": true,
+        "display_name": "VendorInvoice - Coupa",
+        "draft": null,
+        "factory_id": "52383b3f-50f3-4b55-9e94-9ce5208f484c",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Coupa'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "VendorDocumentApprovals",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n\tCAST(\"approvals\".\"id\" AS VARCHAR(255)) AS \"ID\",\n\tCAST(\"approvals\".\"approvable-id\" AS VARCHAR(255)) AS \"ObjectID\",\n\t\"approvals\".\"approval-date\" AS \"Time\",\n\t\"approvals\".\"approvable-type\" AS \"Attribute\",\n\tNULL AS \"OldValue\",\n\t\"approvals\".\"status\" AS \"NewValue\",\n\t\"approvals\".\"approver_name\" AS \"ChangedBy\",\n\tNULL AS \"OperationType\",\n\tNULL AS \"OperationID\",\n\tNULL AS \"ExecutionType\",\n\n--Extension Attributes\n\n\"approvals\".ID as \"ApprovalID\",\n\"approvals\".\"approver_name\" AS \"ApprovalName\",\n\"approvals\".\"approver-type\" AS \"ApproverType\",\n\"approvals\".\"approval-date\" AS \"ApprovalDate\"\nFROM \"approvals\"\nWHERE \"approvable-type\" = 'InvoiceHeader'\n"
+                    },
+                    {
+                        "id": "VendorDocumentChanges",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n\tCAST(\"invoice_revision_records\".\"id\" AS VARCHAR(255)) AS \"ID\",\n\t<%=sourceSystem%> || '::' || \"invoice_revision_records\".\"revision-record_id\" AS \"ObjectID\",\n\t\"invoice_revision_records\".\"revision-record_created-at\" AS \"Time\",\n\t'Status' AS \"Attribute\",\n\t\"invoice_revision_records\".\"status_from\" AS \"OldValue\",\n\t\"invoice_revision_records\".\"status_to\" AS \"NewValue\",\n\t\"invoice_revision_records\".\"revision-record_created-by\" AS \"ChangedBy\",\n\tNULL AS \"OperationType\",\n\tNULL AS \"OperationID\",\n\tNULL AS \"ExecutionType\"\nFROM \"invoice_revision_records\"\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "User",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "BaselineDate",
+                    "BusinessUnit",
+                    "CashDiscountMaximumEligibleAmount",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ID",
+                    "InvoiceCategory",
+                    "InvoiceDate",
+                    "PaymentMethodCode",
+                    "PaymentTerms",
+                    "ReceiptDate",
+                    "Reference",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT DISTINCT\n    -- Unique ID\n    <%=sourceSystem%> || '::' || CAST(\"Invoice\".\"id\" AS VARCHAR(255)) AS \"ID\",\n    -- User and Vendor\n    CAST(\"Invoice\".\"created-by_id\" AS VARCHAR(255))                                       AS \"User\",\n    \"Invoice\".\"supplier_name\" || '::' || \"Invoice\".\"supplier_id\"    AS \"Vendor\", -- Coupa uses Supplier and Supplier Site\n    \n    -- Dates\n    CAST(\"Invoice\".\"created-at\" AS TIMESTAMP)                       AS \"CreationTime\",\n    CAST(\"Invoice\".\"invoice-date\" AS TIMESTAMP)                     AS \"DocumentDate\",\n    CAST(\"Invoice\".\"date-received\" AS TIMESTAMP)                    AS \"ReceiptDate\", -- Nearest Coupa equivalent to a receipt date\n    \"Invoice\".\"net-due-date\"                                        AS \"BaselineDate\", -- Coupa's Terms Start Date\n    \n    -- Invoice Attributes\n    \"Invoice\".\"payment-term_code\"                                   AS \"PaymentTerms\",\n    \"Invoice\".\"invoice-number\"                                      AS \"Reference\",\n    \"Invoice\".\"gross-total\"                                         AS \"Amount\",\n    \"Invoice\".\"currency_code\"                                       AS \"Currency\", \n    NULL                                                            AS \"Description\", \n    \n    -- Organization and Payment\n    \"Invoice\".\"payment-method\"                                      AS \"PaymentMethodCode\", -- Coupa's payment method\n    NULL                                                            AS \"BusinessUnit\", -- Assuming Business Unit is a field on the Coupa Invoice header\n    \n    ROUND(\"Invoice\".\"gross-total\" * COALESCE(\"Invoice\".\"discount-percent\", 0) / 100, 2) AS \"CashDiscountMaximumEligibleAmount\",\n\n    -- Document Category (Based on Coupa's native Invoice Types)\n    CASE \n        WHEN \"Invoice\".\"type-of-document\" = 'invoice' THEN 'Invoice'\n        WHEN \"Invoice\".\"type-of-document\" = 'credit_note' THEN 'CreditMemo'\n        WHEN \"Invoice\".\"type-of-document\" = 'debit_memo' THEN 'DebitMemo'\n        ELSE 'Other' -- Coupa also has others like 'prepayment'\n    END                                                             AS \"DocumentCategory\",\n    \"Invoice\".\"type-of-document\" AS \"TypeofDocument\",\n    \n    <%=sourceSystem%>                                               AS \"SourceSystemInstance\",\n\n--Extension Attributes\n\n\"Invoice\".\"canceled\" AS \"Canceled\",\n\"Invoice\".\"clearance-document\" AS \"ClearanceDocument\",\n\"Invoice\".\"comments\" AS \"Comments\",\n\"Invoice\".\"discount-amount\" AS \"DiscountAmount\",\n\"Invoice\".\"paid\" AS \"Paid\",\n\"Invoice\".\"payment-date\" AS \"PaymentDate\",\n\"Invoice\".\"payment-method\" AS \"PaymentMethod\",\n\"Invoice\".\"payment-notes\" AS \"PaymentNotes\",\n\"Invoice\".\"status\" AS \"Status\"\n\nFROM \n    \"invoices\" AS \"Invoice\"     \n\n  -- Invoice table includes Invoices and Credit Memos\n\n/*\nWITH \"CTE_AP_TERMS\" AS (SELECT \"AP_TERMS_TL\".\"PaymentTermHeaderBPEOTermId\"              AS \"TERM_ID\",\n                               \"AP_TERMS_TL\".\"PaymentTermHeaderBPEOType\"                AS \"TERM_NAME\",\n                               MAX(\"AP_TERMS_LINES\".\"ApTermsLinesDiscountPercent\")      AS \"MAX_DISC_PERCENT\" \n                        FROM \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_PaymentTermHeaderExtractPVO\" AS \"AP_TERMS_TL\"\n                        LEFT JOIN \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_PaymentTermLineExtractPVO\" AS \"AP_TERMS_LINES\"\n                        ON \"AP_TERMS_TL\".\"PaymentTermHeaderBPEOTermId\" = \"AP_TERMS_LINES\".\"ApTermsLinesTermId\"\n                        --     AND \"AP_TERMS_TL\".\"LANGUAGE\" = <%=LanguageKey%> \n                        GROUP BY \"AP_TERMS_TL\".\"PaymentTermHeaderBPEOTermId\",\"AP_TERMS_TL\".\"PaymentTermHeaderBPEOType\"\n)\nSELECT \n    <%=sourceSystem%>  || '::' || \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceId\"                                   AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"AP_INVOICES_ALL\".\"ApInvoicesCreatedBy\"                                   AS \"User\",\n    <%=sourceSystem%>  || '::' || \"AP_INVOICES_ALL\".\"ApInvoicesVendorSiteId\"                                AS \"Vendor\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesCreationDate\" AS TIMESTAMP)                                           AS \"CreationTime\",\n    CASE\n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesSource\" = 'Manual Invoice Entry'\n            THEN 'Manual'\n        ELSE 'Automatic' \n    END                                                                                                     AS \"CreationExecutionType\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesInvoiceDate\" AS TIMESTAMP)                                            AS \"DocumentDate\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesTermsDate\" AS TIMESTAMP)                                              AS \"BaselineDate\",\n    \"TERMS\".\"TERM_NAME\"                                                                                     AS \"PaymentTerms\",\n    \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceNum\"                                                                AS \"Reference\",\n    \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceAmount\"                                                             AS \"Amount\",\n    \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceCurrencyCode\"                                                       AS \"Currency\", \n    LEFT(\"AP_INVOICES_ALL\".\"ApInvoicesDescription\", 170)                                                    AS \"Description\", \n    \"AP_INVOICES_ALL\".\"ApInvoicesPaymentMethodCode\"                                                         AS \"PaymentMethodCode\",\n    \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOName\"                                                          AS \"BusinessUnit\",\n    CASE\n        WHEN \"TERMS\".\"MAX_DISC_PERCENT\" IS NOT NULL\n        THEN ROUND(\"AP_INVOICES_ALL\".\"ApInvoicesAmountApplicableToDiscount\" * \"TERMS\".\"MAX_DISC_PERCENT\" / 100,2)\n        ELSE 0 \n    END                                                                                                     AS \"CashDiscountMaximumEligibleAmount\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesInvoiceDate\" AS TIMESTAMP)                                            AS \"ReceiptDate\",\n    CASE \n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" = 'STANDARD' THEN'Invoice'\n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" = 'CREDIT' THEN 'CreditMemo'\n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" = 'DEBIT' THEN 'DebitMemo'\n        ELSE 'Other'\n    END                                                                                                     AS \"DocumentCategory\",\n    NULL                                                                                                    AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_InvoiceHeaderExtractPVO\" AS \"AP_INVOICES_ALL\" \nLEFT JOIN \"CTE_AP_TERMS\" AS \"TERMS\"\n           ON \"AP_INVOICES_ALL\".\"ApInvoicesTermsId\" = \"TERMS\".\"TERM_ID\"\nLEFT JOIN \"FscmTopModelAM_FinExtractAM_FunBiccExtractAM_BusinessUnitExtractPVO\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n    ON \"AP_INVOICES_ALL\".\"ApInvoicesOrgId\" = \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOBusinessUnitId\"  \nWHERE \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" IN ('STANDARD', 'CREDIT','DEBIT')\n\n    CASE\n        WHEN \"Invoice\".\"source\" = 'csv_upload' THEN 'Automatic' -- Includes mass uploads, cXML, etc.\n        WHEN \"Invoice\".\"source\" = 'coupa_ui' THEN 'Manual'\n        ELSE 'Automatic' -- Defaulting most other integrated sources to Automatic\n    END                                                                             AS \"CreationExecutionType\",\n\n*/\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760355153982.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1757019830138.0,
+        "data_connection_id": "1b87451d-df3c-4f06-b5e6-622d18c93682",
+        "description": null,
+        "disabled": null,
+        "display_name": "VendorInvoice - 00. Central Extraction Pool_ARIBA",
+        "draft": null,
+        "factory_id": "f84d8f2c-9e41-482b-8f7e-e246000cfdad",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ARIBA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceChanges",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \n    CTE_Invoice AS (\n        SELECT\n            * ,\n            ROW_NUMBER() OVER (\n                PARTITION BY \"InitialUniqueName\"\n                ORDER BY\n                    CAST(\"VersionNumber\" AS integer) DESC\n            ) AS RN\n        FROM \"Invoice\"\n    ),\n\n    CTE_VERSIONS AS (\n        SELECT\n            \"New\".\"InitialUniqueName\",\n            \"New\".\"UniqueName\" AS \"UniqueName\",\n            \"New\".\"CreateDate\" AS \"Time\",\n            \"New\".\"StatusString\" AS \"NewValue\",\n            \"Old\".\"StatusString\" AS \"OldValue\",\n            'Cancellation' AS \"Attribute\"\n        FROM CTE_Invoice AS \"New\"\n        JOIN CTE_Invoice AS \"Old\"\n            ON \"New\".\"InitialUniqueName\" = \"Old\".\"InitialUniqueName\"\n            AND \"New\".\"RN\" = \"Old\".\"RN\"+1    \n        WHERE \n            COALESCE(\"New\".\"StatusString\",'') <> COALESCE(\"Old\".\"StatusString\",'')\n            AND \"New\".\"StatusString\" = 'Rejected'\n    )\nSELECT \n    <%=sourceSystem%> || '::' || \"InitialUniqueName\" AS \"ObjectID\",\n    <%=sourceSystem%> || '::' || \"UniqueName\"|| '::' || \"Attribute\"  AS \"ID\",\n    \"Time\",\n    \"Attribute\",\n    \"OldValue\",\n    \"NewValue\"\nFROM CTE_VERSIONS AS \"Versions\""
+                    }
+                ],
+                "foreign_key_names": [
+                    "User",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "BaselineDate",
+                    "BusinessUnit",
+                    "CashDiscountMaximumEligibleAmount",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ID",
+                    "InvoiceCategory",
+                    "InvoiceDate",
+                    "PaymentMethodCode",
+                    "PaymentTerms",
+                    "ReceiptDate",
+                    "Reference",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \n    CTE_Invoice AS (\n        SELECT\n            * ,\n            ROW_NUMBER() OVER (\n                PARTITION BY \"InitialUniqueName\"\n                ORDER BY\n                    CAST(\"VersionNumber\" AS integer) DESC\n            ) AS RN\n        FROM \"Invoice\"\n        WHERE 1=1\n            AND \"Active\" = 'true'\n    ),\n    CTE_CreateDate AS (\n        SELECT\n            \"InitialUniqueName\",\n            \"CreateDate\" ,\n            ROW_NUMBER() OVER (\n                PARTITION BY \"InitialUniqueName\"\n                ORDER BY\n                    \"CreateDate\" ASC\n            ) AS RN  -- Takes first creation date, as versioning will update creation date\n        FROM \"Invoice\"\n    )\nSELECT\n    <%=sourceSystem%> || '::' || \"Invoice\".\"InitialUniqueName\" AS \"ID\",\n\t\"PurchaseOrg_UniqueName\" AS \"BusinessUnit\",\n\t<%=sourceSystem%> AS \"SourceSystemInstance\",\n\t\"PaymentTerms_UniqueName\" AS \"PaymentTerms\",\n\tCASE \n        WHEN \"InvoiceSubmissionMethod\" = 'Online'\n        THEN 'Automatic'\n        ELSE 'Manual'\n    END AS \"CreationExecutionType\",\n\tCASE \n        WHEN InvoicePurpose IN ('lineLevelCreditMemo', 'creditMemo')\n        THEN 'CreditMemo'\n        ELSE 'Invoice'\n    END AS \"InvoiceCategory\",\n\t\"SubmitDate\" AS \"ReceiptDate\",\n\tCAST(\"MaxDiscountApplicable_Amount\" AS FLOAT) AS \"CashDiscountMaximumEligibleAmount\",\n\t--  AS \"PaymentMethodCode\",\n\t\"InvoiceNumber\" AS \"Description\",\n\t\"TotalCost_Currency_UniqueName\" AS \"Currency\",\n\tCAST(\"Invoice\".\"TotalCost_Amount\" AS FLOAT) AS \"Amount\",\n\t\"InvoiceNumber\"  AS \"Reference\",\n\t\"InvoiceDate\"  AS \"BaselineDate\",\n\t\"InvoiceDate\" AS \"InvoiceDate\",\n\t\"CreateDate\" AS \"CreationTime\",\n\t<%=sourceSystem%> || '::' || Preparer_UniqueName  AS \"User\",\n\t<%=sourceSystem%> || '::' || \"Invoice\".\"Supplier_UniqueName\" AS \"Vendor\"\nFROM CTE_Invoice AS \"Invoice\"\nWHERE \"Invoice\".\"RN\" = 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760355191802.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630778922.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "VendorInvoice transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "166a06ea-2427-4ea3-a4c7-90464343897a",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "languageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Cancellation",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' ||  \"AP_INVOICES_ALL\".\"INVOICE_ID\" \n        || '::' || 'CANCEL' || '::' || \"AP_INVOICES_ALL\".\"CANCELLED_DATE\"                    AS \"ID\",\n    <%=sourceSystem%>  || '::' ||  \"AP_INVOICES_ALL\".\"INVOICE_ID\"                            AS \"ObjectID\",\n    \"AP_INVOICES_ALL\".\"CANCELLED_DATE\" + INTERVAL '86399' SECOND                             AS \"Time\",\n    'Cancellation'                                                                           AS \"Attribute\",\n    NULL                                                                                     AS \"OldValue\",\n    CAST(\"AP_INVOICES_ALL\".\"CANCELLED_DATE\" AS  VARCHAR(255))                                AS \"NewValue\",\n    <%=sourceSystem%> || '::' || CAST(\"AP_INVOICES_ALL\".\"CANCELLED_BY\" AS  VARCHAR(255))     AS \"ChangedBy\",\n    NULL                                                                                     AS \"OperationType\",\n    NULL                                                                                     AS \"OperationID\",\n    NULL                                                                                     AS \"ExecutionType\"\nFROM \"AP_INVOICES_ALL\" AS \"AP_INVOICES_ALL\"\nWHERE \"AP_INVOICES_ALL\".\"CANCELLED_DATE\" IS NOT NULL\n  AND \"AP_INVOICES_ALL\".\"INVOICE_TYPE_LOOKUP_CODE\" IN ('STANDARD', 'CREDIT','DEBIT')"
+                    },
+                    {
+                        "id": "Changes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::'|| \"AP_INVOICES_ALL\".\"INVOICE_ID\" \n        || '::' || \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" \n        || '::' || \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"DATE\"                 AS \"ID\",\n    <%=sourceSystem%>  || '::'|| \"AP_INVOICES_ALL\".\"INVOICE_ID\"               AS \"ObjectID\",\n    \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"DATE\"                                AS \"Time\",\n    CASE\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'TERMS_ID' THEN 'PaymentTerms'\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'TERMS_DATE' THEN 'BaselineDate'\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'INVOICE_NUM' THEN 'Reference'\n    END                                                                       AS \"Attribute\",\n    CASE\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'TERMS_ID' THEN \"AP_TERMS_TL_O\".\"NAME\"\n        ELSE \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\" \n    END                                                                       AS \"OldValue\",\n    CASE\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'TERMS_ID' THEN \"AP_TERMS_TL_N\".\"NAME\"\n        ELSE \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\" \n    END                                                                       AS \"NewValue\",\n    <%=sourceSystem%> || '::'|| \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"USER\"    AS \"ChangedBy\",\n    \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"TYPE\"                                AS \"OperationType\",\n    NULL                                                                      AS \"OperationID\",\n    CASE\n        WHEN \"AP_INVOICES_ALL\".\"SOURCE\" = 'Manual Invoice Entry'\n            THEN 'Manual'\n        ELSE 'Automatic' \n    END                                                                       AS \"ExecutionType\"\nFROM \"AP_INVOICES_ALL_CELONIS_CHANGELOG\" AS \"AP_INVOICES_ALL_CELONIS_CHANGELOG\"\n    LEFT JOIN \"AP_INVOICES_ALL\" AS \"AP_INVOICES_ALL\"\n        ON \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"ID\" = \"AP_INVOICES_ALL\".\"INVOICE_ID\"\n    LEFT JOIN \"AP_TERMS_TL\" AS \"AP_TERMS_TL_O\"\n        ON \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\" = \"AP_TERMS_TL_O\".\"TERM_ID\"    \n            AND \"AP_TERMS_TL_O\".\"LANGUAGE\" = <%=languageKey%> \n    LEFT JOIN \"AP_TERMS_TL\" AS \"AP_TERMS_TL_N\"\n        ON \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\" = \"AP_TERMS_TL_N\".\"TERM_ID\"   \n            AND \"AP_TERMS_TL_N\".\"LANGUAGE\" = <%=languageKey%>              \nWHERE \"AP_INVOICES_ALL\".\"INVOICE_ID\" IS NOT NULL\n    AND \"AP_INVOICES_ALL\".\"INVOICE_TYPE_LOOKUP_CODE\" IN ('STANDARD', 'CREDIT','DEBIT')\n    AND \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" IN ('TERMS_ID','TERMS_DATE','INVOICE_NUM') \n    AND \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"TYPE\" = 'update'"
+                    }
+                ],
+                "foreign_key_names": [
+                    "User",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "BaselineDate",
+                    "BusinessUnit",
+                    "CashDiscountMaximumEligibleAmount",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ID",
+                    "InvoiceCategory",
+                    "InvoiceDate",
+                    "PaymentMethodCode",
+                    "PaymentTerms",
+                    "ReceiptDate",
+                    "Reference",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_AP_TERMS\" AS (\n    SELECT \n        \"AP_TERMS_TL\".\"TERM_ID\"                  AS \"TERM_ID\",\n        \"AP_TERMS_TL\".\"NAME\"                     AS \"TERM_NAME\",\n        MAX(\"AP_TERMS_LINES\".\"DISCOUNT_PERCENT\") AS \"MAX_DISC_PERCENT\" \n    FROM \"AP_TERMS_TL\" AS \"AP_TERMS_TL\"\n        LEFT JOIN \"AP_TERMS_LINES\" AS \"AP_TERMS_LINES\"\n            ON \"AP_TERMS_TL\".\"TERM_ID\" = \"AP_TERMS_LINES\".\"TERM_ID\"\n    WHERE \"AP_TERMS_TL\".\"LANGUAGE\" = <%=languageKey%> \n    GROUP BY \"AP_TERMS_TL\".\"TERM_ID\",\"AP_TERMS_TL\".\"NAME\")\nSELECT \n    <%=sourceSystem%> || '::' || \"AP_INVOICES_ALL\".\"INVOICE_ID\"                      AS \"ID\",\n    <%=sourceSystem%> || '::' || \"AP_INVOICES_ALL\".\"CREATED_BY\"                      AS \"User\",\n    <%=sourceSystem%> || '::' || \"AP_INVOICES_ALL\".\"VENDOR_ID\"                       AS \"Vendor\",\n    CAST(\"AP_INVOICES_ALL\".\"CREATION_DATE\" AS TIMESTAMP)                             AS \"CreationTime\",\n    CASE\n        WHEN \"AP_INVOICES_ALL\".\"SOURCE\" = 'Manual Invoice Entry'\n            THEN 'Manual'\n        ELSE 'Automatic' \n    END                                                                              AS \"CreationExecutionType\",\n    \"AP_INVOICES_ALL\".\"INVOICE_DATE\"                                                 AS \"InvoiceDate\",\n    \"AP_INVOICES_ALL\".\"TERMS_DATE\"                                                   AS \"BaseLineDate\",\n    \"TERMS\".\"TERM_NAME\"                                                              AS \"PaymentTerms\",\n    CAST(\"AP_INVOICES_ALL\".\"INVOICE_NUM\" AS VARCHAR(255))                            AS \"Reference\",\n    \"AP_INVOICES_ALL\".\"INVOICE_AMOUNT\"                                               AS \"Amount\",\n    \"AP_INVOICES_ALL\".\"INVOICE_CURRENCY_CODE\"                                        AS \"Currency\",\n    \"AP_INVOICES_ALL\".\"DESCRIPTION\"                                                  AS \"Description\",\n    \"AP_INVOICES_ALL\".\"PAYMENT_METHOD_CODE\"                                          AS \"PaymentMethodCode\",\n    CASE\n        WHEN \"TERMS\".\"MAX_DISC_PERCENT\" IS NOT NULL\n            THEN ROUND(\"AP_INVOICES_ALL\".\"AMOUNT_APPLICABLE_TO_DISCOUNT\" * \"TERMS\".\"MAX_DISC_PERCENT\" / 100,2)\n        ELSE 0 \n    END                                                                              AS \"CashDiscountMaximumEligibleAmount\",\n    \"AP_INVOICES_ALL\".\"INVOICE_RECEIVED_DATE\"                                        AS \"ReceiptDate\",\n    CASE \n        WHEN \"AP_INVOICES_ALL\".\"INVOICE_TYPE_LOOKUP_CODE\" = 'STANDARD' \n            THEN'Invoice'\n        WHEN \"AP_INVOICES_ALL\".\"INVOICE_TYPE_LOOKUP_CODE\" = 'CREDIT' \n            THEN 'CreditMemo'\n        WHEN \"AP_INVOICES_ALL\".\"INVOICE_TYPE_LOOKUP_CODE\" = 'DEBIT' \n            THEN 'DebitMemo'\n        ELSE 'Other'\n    END                                                                             AS \"InvoiceCategory\",\n    \"HR_ALL_ORGANIZATION_UNITS\".\"NAME\"                                              AS \"BusinessUnit\",\n    <%=sourceSystem%>                                                               AS \"SourceSystemInstance\"\nFROM \"AP_INVOICES_ALL\" AS \"AP_INVOICES_ALL\"\n    LEFT JOIN \"CTE_AP_TERMS\" AS \"TERMS\"\n        ON \"AP_INVOICES_ALL\".\"TERMS_ID\" = \"TERMS\".\"TERM_ID\"\n    LEFT JOIN \"HR_ALL_ORGANIZATION_UNITS\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n        ON \"AP_INVOICES_ALL\".\"ORG_ID\" = \"HR_ALL_ORGANIZATION_UNITS\".\"ORGANIZATION_ID\"\nWHERE \"AP_INVOICES_ALL\".\"INVOICE_TYPE_LOOKUP_CODE\" IN ('STANDARD', 'CREDIT','DEBIT')\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760355252475.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2589b288-6fa5-4412-b75b-180b8acb07d0",
+            "name": "Carolina Ventura",
+            "type_": "USER"
+        },
+        "creation_date": 1749932466978.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "VendorInvoice - 00. Central Extraction Pool_Oracle Fusion",
+        "draft": null,
+        "factory_id": "b29cea2c-5bee-4d2d-a058-a022ea651401",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "languageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Cancellation",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' ||  \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceId\" \n        || '::' || 'CANCEL' || '::' || \"AP_INVOICES_ALL\".\"ApInvoicesCancelledDate\"                   AS \"ID\",\n    <%=sourceSystem%>  || '::' ||  \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceId\"                           AS \"ObjectID\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesCancelledDate\" AS TIMESTAMP) + INTERVAL '86399' SECOND         AS \"Time\",\n    'Cancellation'                                                                                   AS \"Attribute\",\n    NULL                                                                                             AS \"OldValue\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesCancelledDate\" AS  VARCHAR(255))                               AS \"NewValue\",\n    <%=sourceSystem%> || '::' || CAST(\"AP_INVOICES_ALL\".\"ApInvoicesCancelledBy\" AS VARCHAR(255))     AS \"ChangedBy\",\n    NULL                                                                                             AS \"OperationType\",\n    NULL                                                                                             AS \"OperationID\",\n    NULL                                                                                             AS \"ExecutionType\"\nFROM \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_InvoiceHeaderExtractPVO\" AS \"AP_INVOICES_ALL\"\nWHERE \"AP_INVOICES_ALL\".\"ApInvoicesCancelledDate\" IS NOT NULL\n    AND \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" IN ('STANDARD', 'CREDIT','DEBIT')"
+                    },
+                    {
+                        "id": "Changes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT  \n    <%=sourceSystem%>  || '::'|| \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceId\" \n        || '::' || \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" \n        || '::' || \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"DATE\"                         AS \"ID\",\n    <%=sourceSystem%>  || '::'|| \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceId\"              AS \"ObjectID\",\n    \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"DATE\"                                        AS \"Time\",\n    CASE\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'ApInvoicesTermsId' \n           THEN 'PaymentTerms'\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'ApInvoicesTermsDate' \n           THEN 'BaselineDate'\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'ApInvoicesInvoiceNum' \n           THEN 'Reference'\n    END                                                                              AS \"Attribute\",\n    CASE\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'ApInvoicesTermsId' \n           THEN \"AP_TERMS_TL_O\".\"PaymentTermHeaderTranslationName\"\n        ELSE \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\" \n    END                                                                              AS \"OldValue\",\n    CASE\n        WHEN \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'ApInvoicesTermsId' \n           THEN \"AP_TERMS_TL_N\".\"PaymentTermHeaderTranslationName\"\n        ELSE \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\" \n    END                                                                              AS \"NewValue\",\n    <%=sourceSystem%> || '::'|| \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"USER\"           AS \"ChangedBy\",\n    \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"TYPE\"                                       AS \"OperationType\",\n    NULL                                                                             AS \"OperationID\",\n    CASE\n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesSource\" = 'Manual Invoice Entry' \n           THEN 'Manual'\n        ELSE 'Automatic'\n    END                                                                              AS \"ExecutionType\"\nFROM \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_InvoiceHeaderExtractPVO_CELONIS_CHANGELOG\" AS \"AP_INVOICES_ALL_CELONIS_CHANGELOG\"\n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_InvoiceHeaderExtractPVO\" AS \"AP_INVOICES_ALL\"\n        ON \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"ID\" = \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceId\"\n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_PaymentTermHeaderTranslationExtractPVO\" AS \"AP_TERMS_TL_O\"\n        ON \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\" = \"AP_TERMS_TL_O\".\"PaymentTermHeaderTranslationTermId\"    \n            AND \"AP_TERMS_TL_O\".\"PaymentTermHeaderTranslationLanguage\" = <%=languageKey%> \n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_PaymentTermHeaderTranslationExtractPVO\" AS \"AP_TERMS_TL_N\"\n        ON \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\" = \"AP_TERMS_TL_N\".\"PaymentTermHeaderTranslationTermId\"   \n            AND \"AP_TERMS_TL_N\".\"PaymentTermHeaderTranslationLanguage\" = <%=languageKey%>            \nWHERE \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceId\" IS NOT NULL\n    AND \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceAmount\" > 0\n    AND \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" IN ('STANDARD', 'CREDIT','DEBIT')\n    AND \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" IN ('ApInvoicesTermsId','ApInvoicesTermsDate','ApInvoicesInvoiceNum') \n    AND \"AP_INVOICES_ALL_CELONIS_CHANGELOG\".\"TYPE\" = 'update'      \n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "User",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "BaselineDate",
+                    "BusinessUnit",
+                    "CashDiscountMaximumEligibleAmount",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ID",
+                    "InvoiceCategory",
+                    "InvoiceDate",
+                    "PaymentMethodCode",
+                    "PaymentTerms",
+                    "ReceiptDate",
+                    "Reference",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_AP_TERMS\" AS (\n    SELECT \n        \"AP_TERMS_TL\".\"PaymentTermHeaderTranslationTermId\"              AS \"TERM_ID\",\n        \"AP_TERMS_TL\".\"PaymentTermHeaderTranslationName\"                AS \"TERM_NAME\",\n        MAX(\"AP_TERMS_LINES\".\"ApTermsLinesDiscountPercent\")             AS \"MAX_DISC_PERCENT\" \n    FROM \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_PaymentTermHeaderTranslationExtractPVO\" AS \"AP_TERMS_TL\"\n        LEFT JOIN \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_PaymentTermLineExtractPVO\" AS \"AP_TERMS_LINES\"\n            ON \"AP_TERMS_TL\".\"PaymentTermHeaderTranslationTermId\" = \"AP_TERMS_LINES\".\"ApTermsLinesTermId\"\n     WHERE \"AP_TERMS_TL\".\"PaymentTermHeaderTranslationLanguage\" = <%=languageKey%>  \nGROUP BY \"AP_TERMS_TL\".\"PaymentTermHeaderTranslationTermId\",\"AP_TERMS_TL\".\"PaymentTermHeaderTranslationName\"\n)\nSELECT \n    <%=sourceSystem%>  || '::' || \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceId\"                                   AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"AP_INVOICES_ALL\".\"ApInvoicesCreatedBy\"                                   AS \"User\",\n    <%=sourceSystem%>  || '::' || \"AP_INVOICES_ALL\".\"ApInvoicesVendorId\"                                    AS \"Vendor\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesCreationDate\" AS TIMESTAMP)                                           AS \"CreationTime\",\n    CASE\n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesSource\" = 'Manual Invoice Entry'\n            THEN 'Manual'\n        ELSE 'Automatic' \n    END                                                                                                     AS \"CreationExecutionType\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesInvoiceDate\" AS TIMESTAMP)                                            AS \"InvoiceDate\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesTermsDate\" AS TIMESTAMP)                                              AS \"BaselineDate\",\n    \"TERMS\".\"TERM_NAME\"                                                                                     AS \"PaymentTerms\",\n    \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceNum\"                                                                AS \"Reference\",\n    \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceAmount\"                                                             AS \"Amount\",\n    \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceCurrencyCode\"                                                       AS \"Currency\", \n    LEFT(\"AP_INVOICES_ALL\".\"ApInvoicesDescription\", 170)                                                    AS \"Description\", \n    \"AP_INVOICES_ALL\".\"ApInvoicesPaymentMethodCode\"                                                         AS \"PaymentMethodCode\",\n    CASE\n        WHEN \"TERMS\".\"MAX_DISC_PERCENT\" IS NOT NULL\n            THEN ROUND(\"AP_INVOICES_ALL\".\"ApInvoicesAmountApplicableToDiscount\" * \"TERMS\".\"MAX_DISC_PERCENT\" / 100,2)\n        ELSE 0 \n    END                                                                                                     AS \"CashDiscountMaximumEligibleAmount\",\n    CAST(\"AP_INVOICES_ALL\".\"ApInvoicesInvoiceReceivedDate\" AS TIMESTAMP)                                    AS \"ReceiptDate\",\n    CASE \n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" = 'STANDARD' \n            THEN'Invoice'\n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" = 'CREDIT' \n            THEN 'CreditMemo'\n        WHEN \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" = 'DEBIT' \n            THEN 'DebitMemo'\n        ELSE 'Other'\n    END                                                                                                     AS \"InvoiceCategory\",\n    \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOName\"                                                          AS \"BusinessUnit\",\n    <%=sourceSystem%>                                                                                       AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_FinExtractAM_ApBiccExtractAM_InvoiceHeaderExtractPVO\" AS \"AP_INVOICES_ALL\" \n    LEFT JOIN \"CTE_AP_TERMS\" AS \"TERMS\"\n        ON \"AP_INVOICES_ALL\".\"ApInvoicesTermsId\" = \"TERMS\".\"TERM_ID\"\n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_FunBiccExtractAM_BusinessUnitExtractPVO\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n        ON \"AP_INVOICES_ALL\".\"ApInvoicesOrgId\" = \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOBusinessUnitId\"  \nWHERE \"AP_INVOICES_ALL\".\"ApInvoicesInvoiceTypeLookupCode\" IN ('STANDARD', 'CREDIT','DEBIT')\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760355081114.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "creation_date": 1753884473645.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "VendorInvoice - SAP S/4",
+        "draft": null,
+        "factory_id": "ba4489ea-d792-4078-a8c9-5a3153b89ca2",
+        "factory_validation_status": "VALID",
+        "has_user_template": true,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Cancellation",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    'Cancellation' || \n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"BELNR\" \n        || '::' || \"RBKP\".\"GJAHR\"                                               AS \"ID\",\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"BELNR\" \n        || '::' || \"RBKP\".\"GJAHR\"                                               AS \"ObjectID\",\n    CAST(\"RBKP_Reversal\".\"CPUDT\" AS DATE) + \n    CAST(TIMESTAMPDIFF(SECOND, CAST(\"RBKP_Reversal\".\"CPUTM\" AS DATE), \n            \"RBKP_Reversal\".\"CPUTM\") AS INTERVAL SECOND)                        AS \"Time\",\n    'Cancellation'                                                              AS \"Attribute\",\n    NULL                                                                        AS \"OldValue\",\n    NULL                                                                        AS \"NewValue\",\n    <%=sourceSystem%> || '::' || \"RBKP_Reversal\".\"MANDT\" || '::' ||\n         \"RBKP_Reversal\".\"USNAM\"                                                AS \"ChangedBy\",\n    NULL                                                                        AS \"OperationType\",\n    NULL                                                                        AS \"OperationID\",\n    NULL                                                                        AS \"ExecutionType\"\nFROM \"RBKP\" AS \"RBKP\"\n    JOIN \"RBKP\" AS \"RBKP_Reversal\" \n        ON \"RBKP\".\"MANDT\" = \"RBKP_Reversal\".\"MANDT\"\n            AND \"RBKP\".\"BELNR\" = \"RBKP_Reversal\".\"STBLG\"\n            AND \"RBKP\".\"GJAHR\" = \"RBKP_Reversal\".\"STJAH\"\nWHERE \"RBKP\".\"VGART\" = 'RD' \n    AND \"RBKP_Reversal\".\"VGART\" = 'RS'\n    AND \"RBKP_Reversal\".\"CPUDT\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "Changes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n\t<%=sourceSystem%> || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" \n        ||  '::' || \"CDPOS\".\"FNAME\" || '::' || \"CDPOS\".\"CHANGENR\"\n        ||  '::' || \"CDPOS\".\"CHNGIND\"                                           AS \"ID\",\n\t<%=sourceSystem%> || '::' || \"CDPOS\".\"MANDANT\" || '::' || \n        SUBSTRING(\"CDPOS\".\"OBJECTID\", 1, 10) || '::' || \n        SUBSTRING(\"CDPOS\".\"OBJECTID\", 11, 4)                                    AS \"ObjectID\",\n\tCAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n            \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                                AS \"Time\",\n\tCASE\n        WHEN \"CDPOS\".\"FNAME\" = 'MWSKZ1' THEN 'TaxCode'\n        WHEN \"CDPOS\".\"FNAME\" = 'ZTERM' THEN 'PaymentTerms'\n        WHEN \"CDPOS\".\"FNAME\" = 'XBLNR' THEN 'Reference'\n        WHEN \"CDPOS\".\"FNAME\" = 'ZFBDT' THEN 'BaselineDate'\n     END                                                                        AS \"Attribute\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' \n            THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" END                                            AS \"OldValue\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' \n            THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\" END                                            AS \"NewValue\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"MANDANT\" \n        ||  '::' || \"CDHDR\".\"USERNAME\"                                          AS \"ChangedBy\",\n\t\"CDHDR\".\"TCODE\"                                                             AS \"OperationType\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"CHANGENR\"                             AS \"OperationID\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') \n            THEN 'Automatic'\n        ELSE 'Manual' END                                                       AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'INCOMINGINVOICE'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\n         LEFT JOIN \"RBKP\" AS \"RBKP\"\n                   ON \"CDPOS\".\"TABKEY\" = \"RBKP\".\"MANDT\" || \"RBKP\".\"BELNR\" || \"RBKP\".\"GJAHR\"\nWHERE \"CDPOS\".\"TABNAME\" = 'RBKP'\n  AND \"CDPOS\".\"CHNGIND\" = 'U'\n  AND NULLIF(\"CDPOS\".\"MANDANT\", '') IS NOT NULL\n  AND NULLIF(\"CDHDR\".\"MANDANT\", '') IS NOT NULL\n  AND \"CDPOS\".\"FNAME\" IN ('MWSKZ1', 'ZTERM', 'XBLNR', 'ZFBDT')\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "User",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "BaselineDate",
+                    "BusinessUnit",
+                    "CashDiscountMaximumEligibleAmount",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ID",
+                    "InvoiceCategory",
+                    "InvoiceDate",
+                    "PaymentMethodCode",
+                    "PaymentTerms",
+                    "ReceiptDate",
+                    "Reference",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"BELNR\" \n        || '::' || \"RBKP\".\"GJAHR\"                                                   AS \"ID\",\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"USNAM\"           AS \"User\",\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"LIFNR\"           AS \"Vendor\",\n\tCASE \n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RD' THEN 'Invoice' \n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RS' THEN 'InvoiceCancellation'\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RD' THEN 'CreditMemo'\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RS' THEN 'CreditMemoCancellation' \n        ELSE 'Other' \n     END                                                                            AS \"InvoiceCategory\",\n\tCAST(\"RBKP\".\"REINDAT\" AS TIMESTAMP)                                             AS \"ReceiptDate\",\n\t\"RBKP\".\"WSKTO\" *\n    CASE \n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RD' THEN 1.0\n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RS' THEN -1.0\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RD' THEN -1.0\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RS' THEN 1.0\n     END                                                                            AS \"CashDiscountMaximumEligibleAmount\",\n\t\"RBKP\".\"ZLSCH\"                                                                  AS \"PaymentMethodCode\",\n\t\"RBKP\".\"BKTXT\"                                                                  AS \"Description\",\n\t\"RBKP\".\"WAERS\"                                                                  AS \"Currency\",\n\t\"RBKP\".\"RMWWR\" *\n    CASE \n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RD' THEN 1.0\n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RS' THEN -1.0\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RD' THEN -1.0\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RS' THEN 1.0\n     END                                                                            AS \"Amount\",\n\t\"RBKP\".\"XBLNR\"                                                                  AS \"Reference\",\n\t\"RBKP\".\"ZTERM\"                                                                  AS \"PaymentTerms\",\n\tCAST(\"RBKP\".\"ZFBDT\" AS TIMESTAMP)                                               AS \"BaselineDate\",\n\tCAST(\"RBKP\".\"BLDAT\" AS TIMESTAMP)                                               AS \"InvoiceDate\",\n    CASE WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic' ELSE 'Manual' END      AS \"CreationExecutionType\",\n\tCAST(\"RBKP\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"RBKP\".\"CPUTM\" AS DATE), \n            \"RBKP\".\"CPUTM\") AS INTERVAL SECOND)                                     AS \"CreationTime\",\n    \"RBKP\".\"BUKRS\" || ' - ' || \"T001\".\"BUTXT\"                                       AS \"BusinessUnit\",\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\"                                     AS \"SourceSystemInstance\"\nFROM \"RBKP\" AS \"RBKP\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"RBKP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"RBKP\".\"USNAM\" = \"USR02\".\"BNAME\"\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"RBKP\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"RBKP\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE NULLIF(\"RBKP\".\"MANDT\", '') IS NOT NULL \n    AND \"RBKP\".\"VGART\" IN ('RD','RS') "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760355081114.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749635327439.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "VendorInvoice - SAP ECC",
+        "draft": null,
+        "factory_id": "e7eb467f-e1b5-40cc-a306-05ca04b53486",
+        "factory_validation_status": "VALID",
+        "has_user_template": true,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Cancellation",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    'Cancellation' || \n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"BELNR\" \n        || '::' || \"RBKP\".\"GJAHR\"                                               AS \"ID\",\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"BELNR\" \n        || '::' || \"RBKP\".\"GJAHR\"                                               AS \"ObjectID\",\n    CAST(\"RBKP_Reversal\".\"CPUDT\" AS DATE) + \n    CAST(TIMESTAMPDIFF(SECOND, CAST(\"RBKP_Reversal\".\"CPUTM\" AS DATE), \n            \"RBKP_Reversal\".\"CPUTM\") AS INTERVAL SECOND)                        AS \"Time\",\n    'Cancellation'                                                              AS \"Attribute\",\n    NULL                                                                        AS \"OldValue\",\n    NULL                                                                        AS \"NewValue\",\n    <%=sourceSystem%> || '::' || \"RBKP_Reversal\".\"MANDT\" || '::' ||\n         \"RBKP_Reversal\".\"USNAM\"                                                AS \"ChangedBy\",\n    NULL                                                                        AS \"OperationType\",\n    NULL                                                                        AS \"OperationID\",\n    NULL                                                                        AS \"ExecutionType\"\nFROM \"RBKP\" AS \"RBKP\"\n    JOIN \"RBKP\" AS \"RBKP_Reversal\" \n        ON \"RBKP\".\"MANDT\" = \"RBKP_Reversal\".\"MANDT\"\n            AND \"RBKP\".\"BELNR\" = \"RBKP_Reversal\".\"STBLG\"\n            AND \"RBKP\".\"GJAHR\" = \"RBKP_Reversal\".\"STJAH\"\nWHERE \"RBKP\".\"VGART\" = 'RD' \n    AND \"RBKP_Reversal\".\"VGART\" = 'RS'\n    AND \"RBKP_Reversal\".\"CPUDT\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "Changes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n\t<%=sourceSystem%> || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" \n        ||  '::' || \"CDPOS\".\"FNAME\" || '::' || \"CDPOS\".\"CHANGENR\"\n        ||  '::' || \"CDPOS\".\"CHNGIND\"                                           AS \"ID\",\n\t<%=sourceSystem%> || '::' || \"CDPOS\".\"MANDANT\" || '::' || \n        SUBSTRING(\"CDPOS\".\"OBJECTID\", 1, 10) || '::' || \n        SUBSTRING(\"CDPOS\".\"OBJECTID\", 11, 4)                                    AS \"ObjectID\",\n\tCAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n            \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                                AS \"Time\",\n\tCASE\n        WHEN \"CDPOS\".\"FNAME\" = 'MWSKZ1' THEN 'TaxCode'\n        WHEN \"CDPOS\".\"FNAME\" = 'ZTERM' THEN 'PaymentTerms'\n        WHEN \"CDPOS\".\"FNAME\" = 'XBLNR' THEN 'Reference'\n        WHEN \"CDPOS\".\"FNAME\" = 'ZFBDT' THEN 'BaselineDate'\n     END                                                                        AS \"Attribute\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' \n            THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" END                                            AS \"OldValue\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' \n            THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\" END                                            AS \"NewValue\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"MANDANT\" \n        ||  '::' || \"CDHDR\".\"USERNAME\"                                          AS \"ChangedBy\",\n\t\"CDHDR\".\"TCODE\"                                                             AS \"OperationType\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"CHANGENR\"                             AS \"OperationID\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') \n            THEN 'Automatic'\n        ELSE 'Manual' END                                                       AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'INCOMINGINVOICE'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\n         LEFT JOIN \"RBKP\" AS \"RBKP\"\n                   ON \"CDPOS\".\"TABKEY\" = \"RBKP\".\"MANDT\" || \"RBKP\".\"BELNR\" || \"RBKP\".\"GJAHR\"\nWHERE \"CDPOS\".\"TABNAME\" = 'RBKP'\n  AND \"CDPOS\".\"CHNGIND\" = 'U'\n  AND NULLIF(\"CDPOS\".\"MANDANT\", '') IS NOT NULL\n  AND NULLIF(\"CDHDR\".\"MANDANT\", '') IS NOT NULL\n  AND \"CDPOS\".\"FNAME\" IN ('MWSKZ1', 'ZTERM', 'XBLNR', 'ZFBDT')\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "User",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "BaselineDate",
+                    "BusinessUnit",
+                    "CashDiscountMaximumEligibleAmount",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ID",
+                    "InvoiceCategory",
+                    "InvoiceDate",
+                    "PaymentMethodCode",
+                    "PaymentTerms",
+                    "ReceiptDate",
+                    "Reference",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"BELNR\" \n        || '::' || \"RBKP\".\"GJAHR\"                                                   AS \"ID\",\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"USNAM\"           AS \"User\",\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\" || '::' || \"RBKP\".\"LIFNR\"           AS \"Vendor\",\n\tCASE \n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RD' THEN 'Invoice' \n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RS' THEN 'InvoiceCancellation'\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RD' THEN 'CreditMemo'\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RS' THEN 'CreditMemoCancellation' \n        ELSE 'Other' \n     END                                                                            AS \"InvoiceCategory\",\n\tCAST(\"RBKP\".\"REINDAT\" AS TIMESTAMP)                                             AS \"ReceiptDate\",\n\t\"RBKP\".\"WSKTO\" *\n    CASE \n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RD' THEN 1.0\n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RS' THEN -1.0\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RD' THEN -1.0\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RS' THEN 1.0\n     END                                                                            AS \"CashDiscountMaximumEligibleAmount\",\n\t\"RBKP\".\"ZLSCH\"                                                                  AS \"PaymentMethodCode\",\n\t\"RBKP\".\"BKTXT\"                                                                  AS \"Description\",\n\t\"RBKP\".\"WAERS\"                                                                  AS \"Currency\",\n\t\"RBKP\".\"RMWWR\" *\n    CASE \n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RD' THEN 1.0\n        WHEN \"RBKP\".\"XRECH\" = 'X' AND \"RBKP\".\"VGART\" = 'RS' THEN -1.0\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RD' THEN -1.0\n        WHEN (\"RBKP\".\"XRECH\" <> 'X' OR NULLIF(\"RBKP\".\"XRECH\", '') IS NULL) AND \"RBKP\".\"VGART\" = 'RS' THEN 1.0\n     END                                                                            AS \"Amount\",\n\t\"RBKP\".\"XBLNR\"                                                                  AS \"Reference\",\n\t\"RBKP\".\"ZTERM\"                                                                  AS \"PaymentTerms\",\n\tCAST(\"RBKP\".\"ZFBDT\" AS TIMESTAMP)                                               AS \"BaselineDate\",\n\tCAST(\"RBKP\".\"BLDAT\" AS TIMESTAMP)                                               AS \"InvoiceDate\",\n    CASE WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic' ELSE 'Manual' END      AS \"CreationExecutionType\",\n\tCAST(\"RBKP\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"RBKP\".\"CPUTM\" AS DATE), \n            \"RBKP\".\"CPUTM\") AS INTERVAL SECOND)                                     AS \"CreationTime\",\n    \"RBKP\".\"BUKRS\" || ' - ' || \"T001\".\"BUTXT\"                                       AS \"BusinessUnit\",\n    <%=sourceSystem%> || '::' || \"RBKP\".\"MANDT\"                                     AS \"SourceSystemInstance\"\nFROM \"RBKP\" AS \"RBKP\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"RBKP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"RBKP\".\"USNAM\" = \"USR02\".\"BNAME\"\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"RBKP\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"RBKP\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE NULLIF(\"RBKP\".\"MANDT\", '') IS NOT NULL \n    AND \"RBKP\".\"VGART\" IN ('RD','RS') "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1768300594450.0,
+        "changed_by": {
+            "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+            "name": "Modester Mwangi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764743269807.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": null,
+        "display_name": "VendorInvoice - MSDynamics_365",
+        "draft": null,
+        "factory_id": "fb570ff9-1cb7-47c6-816f-74ee9ac3018c",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "User",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "BaselineDate",
+                    "BusinessUnit",
+                    "CashDiscountMaximumEligibleAmount",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ID",
+                    "InvoiceCategory",
+                    "InvoiceDate",
+                    "PaymentMethodCode",
+                    "PaymentTerms",
+                    "ReceiptDate",
+                    "Reference",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH CTE_Deduplicated AS (\nSELECT DISTINCT \n    <%=sourceSystem%>||'::'||VendorInvoiceHeaders.InvoiceNumber                  AS ID,\n    CAST(VendorInvoiceHeaders.InvoiceDate AS TIMESTAMP)                 AS CreationTime,\n    VendorInvoiceHeaders.TermsOfPayment                  AS PaymentTerms,\n    <%=sourceSystem%>||'::'||VendorInvoiceHeaders.VendorAccount                  AS Vendor,\n    NULL AS InvoiceCategory,\n    NULL AS InvoiceDate,\n    NULL AS BusinessUnit,\n    NULL AS SourceSystemInstance,\n    NULL AS CreationExecutionType,\n    NULL AS ReceiptDate,\n    NULL AS CashDiscountMaximumEligibleAmount,\n    NULL AS PaymentMethodCode,\n    NULL AS Description,\n    NULL AS Currency,\n    NULL AS Amount,\n    NULL AS Reference,\n    NULL AS BaselineDate,\n     <%=sourceSystem%>||'::'||VendorInvoiceHeaders.ApproverPersonnelNumber AS User,\n     ROW_NUMBER () OVER(PARTITION BY VendorInvoiceHeaders.InvoiceNumber ORDER BY VendorInvoiceHeaders.InvoiceNumber) AS rn\nFROM VendorInvoiceHeaders\n\tLEFT JOIN VendorInvoiceLines\n        ON VendorInvoiceHeaders.HeaderReference = VendorInvoiceLines.HeaderReference\n        AND VendorInvoiceHeaders.dataAreaId = VendorInvoiceLines.dataAreaId\n        AND VendorInvoiceHeaders.VendorAccount = VendorInvoiceLines.VendorAccount\n    LEFT JOIN VendorsV2\n        ON VendorsV2.VendorAccountNumber = VendorInvoiceLines.VendorAccount\n        AND VendorsV2.dataAreaId = VendorInvoiceLines.dataAreaId\n    LEFT JOIN PurchaseOrderHeadersV2\n        ON PurchaseOrderHeadersV2.OrderVendorAccountNumber = VendorsV2.VendorAccountNumber\n        AND PurchaseOrderHeadersV2.dataAreaId = VendorsV2.dataAreaId\n    WHERE VendorInvoiceHeaders.InvoiceNumber IS NOT NULL\n) SELECT * FROM CTE_Deduplicated \nWHERE rn = 1\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

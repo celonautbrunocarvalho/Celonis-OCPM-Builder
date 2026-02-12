@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1760111408100.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1749740901450.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "PostGoodsIssue - 1",
+        "factory_id": "5265e3af-0ee6-433a-8e30-23f417d4112c",
+        "has_overwrites": null,
+        "name": "PostGoodsIssue - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PostGoodsIssue",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

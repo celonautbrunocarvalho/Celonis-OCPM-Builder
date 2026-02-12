@@ -1,0 +1,182 @@
+[
+    {
+        "change_date": 1765530804359.0,
+        "changed_by": {
+            "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+            "name": "Gokul",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764742443872.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "disabled": null,
+        "display_name": "User - MSDynamics_365",
+        "factory_id": "7da631c5-51e7-4e92-8405-207fa115c3c3",
+        "has_overwrites": null,
+        "name": "User - MSDynamics_365",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1758028242326.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630753025.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "User transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "8448c06b-7825-40a4-8bda-32688afae543",
+        "has_overwrites": null,
+        "name": "User transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1766781023191.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "creation_date": 1766771108043.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "disabled": true,
+        "display_name": "User - Coupa",
+        "factory_id": "d13b9c28-fba3-4b49-8445-94de2e73ceef",
+        "has_overwrites": null,
+        "name": "User - Coupa",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1757415162562.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "e0b7f865-f903-468b-90aa-b16e00839354",
+            "name": "h.kumarsharma",
+            "type_": "USER"
+        },
+        "creation_date": 1750819876531.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "User - S/4 HANA",
+        "factory_id": "c97acbf0-575a-488c-a66a-53a69e244c15",
+        "has_overwrites": null,
+        "name": "User - S/4 HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1755854029699.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749635183029.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "User - 00. Central Extraction Pool_TS1",
+        "factory_id": "09ab741f-f70a-4530-a610-5491f9a29708",
+        "has_overwrites": null,
+        "name": "User - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1758114464012.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752242765199.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "User - OracleFusion",
+        "factory_id": "5246b5be-fa58-4387-9837-81def55f84b2",
+        "has_overwrites": null,
+        "name": "User - OracleFusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

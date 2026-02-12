@@ -1,0 +1,60 @@
+[
+    {
+        "change_date": 1760542690880.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "creation_date": 1753773992444.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CancelPurchaseRequisitionLine",
+        "draft": null,
+        "factory_id": "2efd6bae-3d0c-4c10-ba9f-01933a20ded8",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CancelPurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PurchaseRequisitionLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "DeletePurchaseRequisitionLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT DISTINCT \n    'CancelPurchaseRequisitionLine' || '::' || \"PurchaseRequisitionLine_Changes\".\"ID\"                AS \"ID\",\n    \"PurchaseRequisitionLine\".\"ID\"                                                                   AS \"PurchaseRequisitionLine\",\n    \"PurchaseRequisitionLine_Changes\".\"Time\"                                                         AS \"Time\",\n    \"PurchaseRequisitionLine_Changes\".\"ChangedBy\"                                                    AS \"ExecutedBy\",\n    \"PurchaseRequisitionLine_Changes\".\"ExecutionType\"                                                AS \"ExecutionType\"\nFROM \"o_custom_PurchaseRequisitionLine\" AS \"PurchaseRequisitionLine\"\n    LEFT JOIN \"c_o_custom_PurchaseRequisitionLine\" AS \"PurchaseRequisitionLine_Changes\"\n        ON \"PurchaseRequisitionLine\".\"ID\" = \"PurchaseRequisitionLine_Changes\".\"ObjectID\"\nWHERE \"PurchaseRequisitionLine_Changes\".\"Attribute\" = 'DeletionIndicator'\n    AND \"PurchaseRequisitionLine_Changes\".\"NewValue\" = 'Y'\n    AND \"PurchaseRequisitionLine_Changes\".\"Time\" IS NOT NULL\n    "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

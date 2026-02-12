@@ -1,0 +1,294 @@
+[
+    {
+        "change_date": 1762864286578.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752236405899.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "ProductionOrder-OracleFusion",
+        "draft": null,
+        "factory_id": "7c51399c-52f7-41c9-9713-cc4c33823b98",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ProductionOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "FinishTime",
+                    "GoodsReceiptQuantity",
+                    "ID",
+                    "IsDeleted",
+                    "IsDeliveryCompleted",
+                    "ProductionOrderNumber",
+                    "ProductionQuantity",
+                    "QuantityUnit",
+                    "ScheduledFinishTime",
+                    "ScheduledStartTime",
+                    "ScrapQuantity",
+                    "SourceSystemInstance",
+                    "StartTime"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ProductionOrderItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOWorkOrderId\"     AS \"ID\",\n    CAST(\"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOCreationDate\" AS TIMESTAMP)              AS \"CreationTime\",\n    \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOActualStartDate\"                              AS \"StartTime\",\n    \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOActualCompletionDate\"                         AS \"FinishTime\",\n    \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOPlannedStartDate\"                             AS \"ScheduledStartTime\",\n    \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOPlannedCompletionDate\"                        AS \"ScheduledFinishTime\",\n    \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOPlannedStartQuantity\"                         AS \"OrderItemQuantity\",\n    \"DistinctItem\".\"ItemBasePEOPrimaryUomCode\"                                                           AS \"QuantityUnit\",\n    \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOScrappedQuantity\"                             AS \"ScrapQuantity\",\n    \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOCompletedQuantity\"                            AS \"ProductionQuantity\",\n    \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOCompletedQuantity\"                            AS \"GoodsReceiptQuantity\",\n    <%=sourceSystem%> || '::' ||\"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOOrganizationId\" \n    || '::'  || COALESCE(\"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOInventoryItemId\", '')    AS \"MaterialMasterPlant\",\n    CAST(\"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOWorkOrderNumber\" AS VARCHAR(255))        AS \"ProductionOrderNumber\",\n    CASE\n        WHEN \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOWorkOrderStatusId\" = '10000' THEN\n            TRUE  -- 10000 CANCELED\n        ELSE\n            FALSE\n    END                                                                                                  AS \"IsDeleted\",\n    CASE\n        WHEN \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOWorkOrderStatusId\" = '10002' THEN\n            TRUE   --10002 COMPLETED\n        ELSE\n           FALSE\n    END                                                                                                  AS \"IsDeliveryCompleted\",\n    <%=sourceSystem%>                                                                                    AS \"SourceSystemInstance\" \nFROM \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\" AS \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\"\n    LEFT JOIN \"FscmTopModelAM_ScmExtractAM_EgpBiccExtractAM_ItemExtractPVO\" AS \"DistinctItem\"\n           ON \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOInventoryItemId\" = \"DistinctItem\".\"ItemBasePEOInventoryItemId\"\n           AND  \"FscmTopModelAM_WorkOrderAM_WorkOrderPVO\".\"WorkOrderPEOOrganizationId\" = \"DistinctItem\".\"ItemBasePEOInventoryOrganizationId\"\nWHERE \"DistinctItem\".\"ItemBasePEOInventoryItemId\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1759908279739.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630770978.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "ProductionOrder transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "ac002b30-c1a3-453c-a3bd-7e392f741af0",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ProductionOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "FinishTime",
+                    "GoodsReceiptQuantity",
+                    "ID",
+                    "IsDeleted",
+                    "IsDeliveryCompleted",
+                    "ProductionOrderNumber",
+                    "ProductionQuantity",
+                    "QuantityUnit",
+                    "ScheduledFinishTime",
+                    "ScheduledStartTime",
+                    "ScrapQuantity",
+                    "SourceSystemInstance",
+                    "StartTime"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ProductionOrderItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || CAST(\"WIP_DISCRETE_JOBS\".\"WIP_ENTITY_ID\" AS VARCHAR(255))    AS \"ID\",\n       CAST(\"WIP_DISCRETE_JOBS\".\"CREATION_DATE\" AS TIMESTAMP)                                    AS \"CreationTime\",\n       \"WIP_DISCRETE_JOBS\".\"NET_QUANTITY\"                                                        AS \"ProductionQuantity\",\n       \"MTL_SYSTEM_ITEMS_B\".\"PRIMARY_UOM_CODE\"                                                   AS \"QuantityUnit\",\n       \"WIP_DISCRETE_JOBS\".\"QUANTITY_COMPLETED\"                                                  AS \"GoodsReceiptQuantity\",\n        <%=sourceSystem%> || '::' || \"WIP_DISCRETE_JOBS\".\"ORGANIZATION_ID\" \n        || '::' || COALESCE(\"WIP_DISCRETE_JOBS\".\"PRIMARY_ITEM_ID\",'')                            AS \"MaterialMasterPlant\",\n       CAST(\"WIP_DISCRETE_JOBS\".\"QUANTITY_SCRAPPED\" AS FLOAT)                                    AS \"ScrapQuantity\",\n       \"WIP_DISCRETE_JOBS\".\"SCHEDULED_START_DATE\"                                                AS \"ScheduledStartTime\",\n       \"WIP_DISCRETE_JOBS\".\"SCHEDULED_COMPLETION_DATE\"                                           AS \"ScheduledFinishTime\",\n       \"WIP_DISCRETE_JOBS\".\"ACTUAL_START_DATE\"                                                   AS \"StartTime\",\n       \"WIP_DISCRETE_JOBS\".\"DATE_COMPLETED\"                                                      AS \"FinishTime\",\n       CAST(\"WIP_ENTITIES\".\"WIP_ENTITY_NAME\" AS VARCHAR(255))                                    AS \"ProductionOrderNumber\",\n       CASE\n           WHEN \"WIP_DISCRETE_JOBS\".\"STATUS_TYPE\" = '7' THEN TRUE\n           ELSE FALSE\n           END                                                                                   AS \"IsDeleted\",\n       CASE\n           WHEN \"WIP_DISCRETE_JOBS\".\"STATUS_TYPE\" = '4' THEN TRUE\n           ELSE FALSE\n           END                                                                                   AS \"IsDeliveryCompleted\",\n           <%=sourceSystem%>                                                                     AS \"SourceSystemInstance\"\nFROM \"WIP_DISCRETE_JOBS\" AS \"WIP_DISCRETE_JOBS\"\n   INNER JOIN \"MTL_SYSTEM_ITEMS_B\" AS \"MTL_SYSTEM_ITEMS_B\"\n      ON \"WIP_DISCRETE_JOBS\".\"PRIMARY_ITEM_ID\" = \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\"\n         AND \"WIP_DISCRETE_JOBS\".\"ORGANIZATION_ID\" = \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\"\n   LEFT JOIN \"WIP_ENTITIES\" AS \"WIP_ENTITIES\"\n      ON \"WIP_DISCRETE_JOBS\".\"WIP_ENTITY_ID\" = \"WIP_ENTITIES\".\"WIP_ENTITY_ID\"\nWHERE NULLIF(CAST(\"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\" AS VARCHAR(255)), '') IS NOT NULL\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1764704370521.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633935164.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "ProductionOrder - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "ac66b33f-97db-4ed1-a8e8-d95ed9063070",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ProductionOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "FinishTime",
+                    "GoodsReceiptQuantity",
+                    "ID",
+                    "IsDeleted",
+                    "IsDeliveryCompleted",
+                    "ProductionOrderNumber",
+                    "ProductionQuantity",
+                    "QuantityUnit",
+                    "ScheduledFinishTime",
+                    "ScheduledStartTime",
+                    "ScrapQuantity",
+                    "SourceSystemInstance",
+                    "StartTime"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ProductionOrderItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || \"AFPO\".\"MANDT\" || '::' || \"AFPO\".\"AUFNR\" || '::' || \"AFPO\".\"POSNR\"                  AS \"ID\",\n    CAST(\"AFPO\".\"ETRMP\" AS TIMESTAMP)                                                                                   AS \"CreationTime\",\n    \"AFPO\".\"PSMNG\"                                                                                                      AS \"ProductionQuantity\",\n    \"AFPO\".\"MEINS\"                                                                                                      AS \"QuantityUnit\",\n    \"AFPO\".\"WEMNG\"                                                                                                      AS \"GoodsReceiptQuantity\",\n\t<%=sourceSystem%> || '::' || \"AFPO\".\"MANDT\" || '::' || \"AFPO\".\"MATNR\" || '::' || \"AFPO\".\"DWERK\"                     AS \"MaterialMasterPlant\",\n    <%=sourceSystem%> || '::' || \"AFPO\".\"MANDT\"                                                                         AS \"SourceSystemInstance\",\n    CAST(\"AFPO\".\"AUFNR\" AS VARCHAR(255))                                                                                AS \"ProductionOrderNumber\",\n    CASE WHEN NULLIF(\"AFPO\".\"XLOEK\", '') IS NULL THEN FALSE ELSE TRUE END                                               AS \"IsDeleted\",\n    CASE WHEN NULLIF(\"AFPO\".\"ELIKZ\", '') IS NULL THEN FALSE ELSE TRUE END                                               AS \"IsDeliveryCompleted\",\n    CAST(\"AFPO\".\"PSAMG\" AS FLOAT)                                                                                       AS \"ScrapQuantity\",\n    CAST(\"AFKO\".\"GSTRS\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"AFKO\".\"GSUZS\" AS DATE),\n                    \"AFKO\".\"GSUZS\") AS INTERVAL SECOND)                                                                 AS \"ScheduledStartTime\",\n    CAST(\"AFKO\".\"GLTRS\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"AFKO\".\"GLUZS\" AS DATE),\n                    \"AFKO\".\"GLUZS\") AS INTERVAL SECOND)                                                                 AS \"ScheduledFinishTime\",\n    CAST(\"AFKO\".\"GSTRI\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"AFKO\".\"GSUZI\" AS DATE),\n                    \"AFKO\".\"GSUZI\") AS INTERVAL SECOND)                                                                 AS \"StartTime\",\n    CAST(\"AFKO\".\"GLTRI\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"AFKO\".\"GEUZI\" AS DATE),\n                    \"AFKO\".\"GEUZI\") AS INTERVAL SECOND)                                                                 AS \"FinishTime\"\nFROM \"AFPO\" AS \"AFPO\"\n    LEFT JOIN \"AFKO\" AS \"AFKO\"\n        ON \"AFKO\".\"MANDT\" = \"AFPO\".\"MANDT\"\n            AND \"AFKO\".\"AUFNR\" = \"AFPO\".\"AUFNR\"\n    LEFT JOIN \"AUFK\" AS \"AUFK\"\n        ON \"AFPO\".\"MANDT\" = \"AUFK\".\"MANDT\"\n            AND \"AFPO\".\"AUFNR\" = \"AUFK\".\"AUFNR\"\nWHERE NULLIF(\"AFPO\".\"MANDT\", '') IS NOT NULL\n  AND \"AUFK\".\"AUTYP\" IN ('10')"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758869821877.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649280783.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "ProductionOrder - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "58a964a6-3909-431a-afac-42d836653c22",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ProductionOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "FinishTime",
+                    "GoodsReceiptQuantity",
+                    "ID",
+                    "IsDeleted",
+                    "IsDeliveryCompleted",
+                    "ProductionOrderNumber",
+                    "ProductionQuantity",
+                    "QuantityUnit",
+                    "ScheduledFinishTime",
+                    "ScheduledStartTime",
+                    "ScrapQuantity",
+                    "SourceSystemInstance",
+                    "StartTime"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ProductionOrderItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || \"AFPO\".\"MANDT\" || '::' || \"AFPO\".\"AUFNR\" || '::' || \"AFPO\".\"POSNR\"                  AS \"ID\",\n    CAST(\"AFPO\".\"ETRMP\" AS TIMESTAMP)                                                                                   AS \"CreationTime\",\n    \"AFPO\".\"PSMNG\"                                                                                                      AS \"ProductionQuantity\",\n    \"AFPO\".\"MEINS\"                                                                                                      AS \"QuantityUnit\",\n    \"AFPO\".\"WEMNG\"                                                                                                      AS \"GoodsReceiptQuantity\",\n\t<%=sourceSystem%> || '::' || \"AFPO\".\"MANDT\" || '::' || \"AFPO\".\"MATNR\" || '::' || \"AFPO\".\"DWERK\"                     AS \"MaterialMasterPlant\",\n    <%=sourceSystem%> || '::' || \"AFPO\".\"MANDT\"                                                                         AS \"SourceSystemInstance\",\n    CAST(\"AFPO\".\"AUFNR\" AS VARCHAR(255))                                                                                AS \"ProductionOrderNumber\",\n    CASE WHEN NULLIF(\"AFPO\".\"XLOEK\", '') IS NULL THEN FALSE ELSE TRUE END                                               AS \"IsDeleted\",\n    CASE WHEN NULLIF(\"AFPO\".\"ELIKZ\", '') IS NULL THEN FALSE ELSE TRUE END                                               AS \"IsDeliveryCompleted\",\n    CAST(\"AFPO\".\"PSAMG\" AS FLOAT)                                                                                       AS \"ScrapQuantity\",\n    CAST(\"AFKO\".\"GSTRS\" AS DATE) + CAST(\"AFKO\".\"GSUZS\" AS TIME)                                                         AS \"ScheduledStartTime\",\n    CAST(\"AFKO\".\"GLTRS\" AS DATE) + CAST(\"AFKO\".\"GLUZS\" AS TIME)                                                         AS \"ScheduledFinishTime\",\n    CAST(\"AFKO\".\"GSTRI\" AS DATE) + CAST(\"AFKO\".\"GSUZI\" AS TIME)                                                         AS \"StartTime\",\n    CAST(\"AFKO\".\"GLTRI\" AS DATE) + CAST(\"AFKO\".\"GEUZI\" AS TIME)                                                         AS \"FinishTime\"\nFROM \"AFPO\" AS \"AFPO\"\n    LEFT JOIN \"AFKO\" AS \"AFKO\"\n        ON \"AFKO\".\"MANDT\" = \"AFPO\".\"MANDT\"\n            AND \"AFKO\".\"AUFNR\" = \"AFPO\".\"AUFNR\"\n    LEFT JOIN \"AUFK\" AS \"AUFK\"\n        ON \"AFPO\".\"MANDT\" = \"AUFK\".\"MANDT\"\n            AND \"AFPO\".\"AUFNR\" = \"AUFK\".\"AUFNR\"\nWHERE NULLIF(\"AFPO\".\"MANDT\", '') IS NOT NULL\n  AND \"AUFK\".\"AUTYP\" IN ('10')"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,680 @@
+{
+    "base_ref": null,
+    "categories": [],
+    "change_date": 1764139917088.0,
+    "changed_by": {
+        "id": "af10323b-7030-4dbe-af1b-cbf71f532c06",
+        "name": "l.lutz",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+        "name": "Johannes Muhr",
+        "type_": "USER"
+    },
+    "creation_date": 1749718287953.0,
+    "default_projection": "PayableItem",
+    "description": null,
+    "events": [
+        {
+            "custom_alias": null,
+            "default_alias": "Set Payment Block",
+            "entity_metadata": {
+                "name": "SetPaymentBlock",
+                "namespace": "custom"
+            },
+            "name": "SetPaymentBlock",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Vendor Invoice",
+            "entity_metadata": {
+                "name": "CancelVendorInvoice",
+                "namespace": "custom"
+            },
+            "name": "CancelVendorInvoice",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Payable Item",
+            "entity_metadata": {
+                "name": "ChangePayableItem",
+                "namespace": "custom"
+            },
+            "name": "ChangePayableItem",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Purchase Document",
+            "entity_metadata": {
+                "name": "ChangePurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "ChangePurchaseDocument",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Purchase Document Line",
+            "entity_metadata": {
+                "name": "ChangePurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "ChangePurchaseDocumentLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Purchase Schedule Line",
+            "entity_metadata": {
+                "name": "ChangePurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "ChangePurchaseScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Vendor Invoice",
+            "entity_metadata": {
+                "name": "ChangeVendorInvoice",
+                "namespace": "custom"
+            },
+            "name": "ChangeVendorInvoice",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Clear Payable Item",
+            "entity_metadata": {
+                "name": "ClearPayableItem",
+                "namespace": "custom"
+            },
+            "name": "ClearPayableItem",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Purchase Document",
+            "entity_metadata": {
+                "name": "CreatePurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "CreatePurchaseDocument",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Purchase Document Line",
+            "entity_metadata": {
+                "name": "CreatePurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "CreatePurchaseDocumentLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Purchase Requisition Line",
+            "entity_metadata": {
+                "name": "CreatePurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "name": "CreatePurchaseRequisitionLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Purchase Schedule Line",
+            "entity_metadata": {
+                "name": "CreatePurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "CreatePurchaseScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Enter Vendor Invoice",
+            "entity_metadata": {
+                "name": "EnterVendorInvoice",
+                "namespace": "custom"
+            },
+            "name": "EnterVendorInvoice",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Payment",
+            "entity_metadata": {
+                "name": "CreatePayment",
+                "namespace": "custom"
+            },
+            "name": "CreatePayment",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Payable Item Cash Discount Due Date",
+            "entity_metadata": {
+                "name": "PayableItemCashDiscountDueDate",
+                "namespace": "custom"
+            },
+            "name": "PayableItemCashDiscountDueDate",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Payable Item Due Date",
+            "entity_metadata": {
+                "name": "PayableItemDueDate",
+                "namespace": "custom"
+            },
+            "name": "PayableItemDueDate",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Post Goods Receipt",
+            "entity_metadata": {
+                "name": "PostGoodsReceipt",
+                "namespace": "custom"
+            },
+            "name": "PostGoodsReceipt",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Post Payable Item",
+            "entity_metadata": {
+                "name": "PostPayableItem",
+                "namespace": "custom"
+            },
+            "name": "PostPayableItem",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Release Payment Block",
+            "entity_metadata": {
+                "name": "ReleasePaymentBlock",
+                "namespace": "custom"
+            },
+            "name": "ReleasePaymentBlock",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Approve Purchase Document",
+            "entity_metadata": {
+                "name": "ApprovePurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "ApprovePurchaseDocument",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Purchase Document",
+            "entity_metadata": {
+                "name": "CancelPurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "CancelPurchaseDocument",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Purchase Document Line",
+            "entity_metadata": {
+                "name": "CancelPurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "CancelPurchaseDocumentLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Purchase Schedule Line",
+            "entity_metadata": {
+                "name": "CancelPurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "CancelPurchaseScheduleLine",
+            "namespace": "custom"
+        }
+    ],
+    "id": "78038199-e48b-4cc6-b42c-eaae98071a03",
+    "name": "AccountsPayable",
+    "namespace": "custom",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": "Checked Invoice",
+            "entity_metadata": {
+                "name": "CheckedInvoice",
+                "namespace": "custom"
+            },
+            "name": "CheckedInvoice",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "DuplicateGroup",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorAccountItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Currency Conversion",
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Duplicate Group",
+            "entity_metadata": {
+                "name": "DuplicateGroup",
+                "namespace": "custom"
+            },
+            "name": "DuplicateGroup",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "CheckedInvoice",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Goods Receipt",
+            "entity_metadata": {
+                "name": "GoodsReceipt",
+                "namespace": "custom"
+            },
+            "name": "GoodsReceipt",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "RelationshipThreeWayMatch",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Payable Item",
+            "entity_metadata": {
+                "name": "PayableItem",
+                "namespace": "custom"
+            },
+            "name": "PayableItem",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "Vendor",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorAccountItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Purchase Document",
+            "entity_metadata": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "PurchaseDocument",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Purchase Document Line",
+            "entity_metadata": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "PurchaseDocumentLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "RelationshipThreeWayMatch",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Relationship Three Way Match",
+            "entity_metadata": {
+                "name": "RelationshipThreeWayMatch",
+                "namespace": "custom"
+            },
+            "name": "RelationshipThreeWayMatch",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "GoodsReceipt",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "PurchaseDocumentLine",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorInvoiceLine",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "User",
+            "entity_metadata": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "name": "User",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Vendor",
+            "entity_metadata": {
+                "name": "Vendor",
+                "namespace": "custom"
+            },
+            "name": "Vendor",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "VendorPayableItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Vendor Account Item",
+            "entity_metadata": {
+                "name": "VendorAccountItem",
+                "namespace": "custom"
+            },
+            "name": "VendorAccountItem",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "CheckedInvoice",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "PayableItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Vendor",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Vendor Invoice",
+            "entity_metadata": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "name": "VendorInvoice",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "PayableItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Vendor",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Vendor Invoice Line",
+            "entity_metadata": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "name": "VendorInvoiceLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "ThreeWayMatchMultiLinks",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "VendorInvoice",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsPayable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "ChangePayableItem",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ClearPayableItem",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "CreatePayment",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "PayableItemCashDiscountDueDate",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "PayableItemDueDate",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "PostPayableItem",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReleasePaymentBlock",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "SetPaymentBlock",
+                    "namespace": "custom"
+                }
+            ],
+            "lead_object": {
+                "name": "PayableItem",
+                "namespace": "custom"
+            },
+            "name": "PayableItem",
+            "origin_ref": {
+                "name": "AccountsPayable",
+                "namespace": "custom"
+            }
+        }
+    ],
+    "tags": []
+}

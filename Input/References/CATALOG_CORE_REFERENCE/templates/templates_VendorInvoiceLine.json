@@ -1,0 +1,135 @@
+[
+    {
+        "change_date": 1763480930660.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "creation_date": 1753884640196.0,
+        "description": "",
+        "draft": null,
+        "id": "8aa1e8dc-c03b-4a3d-91d0-2a964b5de11c",
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "name": "VendorInvoiceLine - SAP ECC - 1",
+        "sql_factory_transports": [
+            {
+                "change_date": 1763480930660.0,
+                "changed_by": {
+                    "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+                    "name": "Robert Connolly",
+                    "type_": "USER"
+                },
+                "created_by": {
+                    "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+                    "name": "l.pigozzi",
+                    "type_": "USER"
+                },
+                "creation_date": 1749635392302.0,
+                "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+                "description": null,
+                "disabled": null,
+                "display_name": "VendorInvoiceLine - SAP ECC",
+                "draft": null,
+                "factory_id": "3fcfed4f-c0ef-4be9-b310-f511bb18580c",
+                "factory_validation_status": "VALID",
+                "has_user_template": true,
+                "local_parameters": [
+                    {
+                        "name": "sourceSystem",
+                        "value": "'SAP_ECC'"
+                    }
+                ],
+                "namespace": "custom",
+                "target": {
+                    "entity_ref": {
+                        "name": "VendorInvoiceLine",
+                        "namespace": "custom"
+                    },
+                    "kind": "OBJECT"
+                },
+                "transformations": [
+                    {
+                        "change_sql_factory_datasets": [],
+                        "foreign_key_names": [
+                            "GoodsReceipt",
+                            "PurchaseDocumentLine",
+                            "VendorInvoice"
+                        ],
+                        "namespace": "custom",
+                        "property_names": [
+                            "Amount",
+                            "Description",
+                            "ID",
+                            "LineNumber",
+                            "Quantity",
+                            "QuantityUnit",
+                            "SourceSystemInstance"
+                        ],
+                        "property_sql_factory_datasets": [
+                            {
+                                "id": "VendorInvoiceLineAttributes",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::'|| \"RSEG\".\"MANDT\" || '::'|| \"RSEG\".\"BELNR\" \n        || '::'|| \"RSEG\".\"GJAHR\" ||'::'|| \"RSEG\".\"BUZEI\"                            AS \"ID\",\n    <%=sourceSystem%> || '::' || \"RSEG\".\"MANDT\" || '::'|| \"RSEG\".\"BELNR\"\n        || '::'|| \"RSEG\".\"GJAHR\"                                                    AS \"VendorInvoice\",\n    <%=sourceSystem%> || '::' || \"RSEG\".\"MANDT\" || '::'|| \"RSEG\".\"LFBNR\" \n        || '::'|| \"RSEG\".\"LFGJA\" || '::'|| \"RSEG\".\"LFPOS\"                           AS \"GoodsReceipt\",\n    <%=sourceSystem%> || '::' || \"RSEG\".\"MANDT\" || '::'|| \"RSEG\".\"EBELN\" \n        || '::'|| \"RSEG\".\"EBELP\"                                                    AS \"PurchaseDocumentLine\",\n    \"RSEG\".\"SGTXT\"                                                                  AS \"Description\",\n\t\"RSEG\".\"WRBTR\" *\n    CASE\n       WHEN \"RSEG\".\"SHKZG\" = 'H' THEN -1.0\n       WHEN \"RSEG\".\"SHKZG\" = 'S' THEN 1.0 \n     END                                                                            AS \"Amount\",\n\t\"RSEG\".\"MEINS\"                                                                  AS \"QuantityUnit\",\n\t\"RSEG\".\"MENGE\" *\n    CASE\n        WHEN \"RSEG\".\"SHKZG\" = 'H' THEN -1.0\n        WHEN \"RSEG\".\"SHKZG\" = 'S' THEN 1.0 \n     END                                                                            AS \"Quantity\",\n\tCAST(\"RSEG\".\"BUZEI\" AS VARCHAR(255))                                            AS \"LineNumber\",\n    <%=sourceSystem%> || '::' || \"RSEG\".\"MANDT\"                                     AS \"SourceSystemInstance\"\nFROM \"RSEG\" AS \"RSEG\"\n    JOIN \"RBKP\" AS \"RBKP\" \n        ON \"RSEG\".\"MANDT\" = \"RBKP\".\"MANDT\"\n            AND \"RSEG\".\"BELNR\" = \"RBKP\".\"BELNR\"\n            AND \"RSEG\".\"GJAHR\" = \"RBKP\".\"GJAHR\"\nWHERE NULLIF(\"RSEG\".\"MANDT\", '') IS NOT NULL\n    AND \"RBKP\".\"VGART\" IN ('RD','RS')\n\n\n"
+                            }
+                        ],
+                        "relationship_transformations": []
+                    }
+                ]
+            }
+        ],
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "GoodsReceipt",
+                    "PurchaseDocumentLine",
+                    "VendorInvoice"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "Description",
+                    "ID",
+                    "LineNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorInvoiceLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::'|| \"RSEG\".\"MANDT\" || '::'|| \"RSEG\".\"BELNR\" \n        || '::'|| \"RSEG\".\"GJAHR\" ||'::'|| \"RSEG\".\"BUZEI\"                            AS \"ID\",\n    <%=sourceSystem%> || '::' || \"RSEG\".\"MANDT\" || '::'|| \"RSEG\".\"BELNR\"\n        || '::'|| \"RSEG\".\"GJAHR\"                                                    AS \"VendorInvoice\",\n    <%=sourceSystem%> || '::' || \"RSEG\".\"MANDT\" || '::'|| \"RSEG\".\"LFBNR\" \n        || '::'|| \"RSEG\".\"LFGJA\" || '::'|| \"RSEG\".\"LFPOS\"                           AS \"GoodsReceipt\",\n    <%=sourceSystem%> || '::' || \"RSEG\".\"MANDT\" || '::'|| \"RSEG\".\"EBELN\" \n        || '::'|| \"RSEG\".\"EBELP\"                                                    AS \"PurchaseDocumentLine\",\n    \"RSEG\".\"SGTXT\"                                                                  AS \"Description\",\n\t\"RSEG\".\"WRBTR\" *\n    CASE\n       WHEN \"RSEG\".\"SHKZG\" = 'H' THEN -1.0\n       WHEN \"RSEG\".\"SHKZG\" = 'S' THEN 1.0 \n     END                                                                            AS \"Amount\",\n\t\"RSEG\".\"MEINS\"                                                                  AS \"QuantityUnit\",\n\t\"RSEG\".\"MENGE\" *\n    CASE\n        WHEN \"RSEG\".\"SHKZG\" = 'H' THEN -1.0\n        WHEN \"RSEG\".\"SHKZG\" = 'S' THEN 1.0 \n     END                                                                            AS \"Quantity\",\n\tCAST(\"RSEG\".\"BUZEI\" AS VARCHAR(255))                                            AS \"LineNumber\",\n    <%=sourceSystem%> || '::' || \"RSEG\".\"MANDT\"                                     AS \"SourceSystemInstance\"\nFROM \"RSEG\" AS \"RSEG\"\n    JOIN \"RBKP\" AS \"RBKP\" \n        ON \"RSEG\".\"MANDT\" = \"RBKP\".\"MANDT\"\n            AND \"RSEG\".\"BELNR\" = \"RBKP\".\"BELNR\"\n            AND \"RSEG\".\"GJAHR\" = \"RBKP\".\"GJAHR\"\nWHERE NULLIF(\"RSEG\".\"MANDT\", '') IS NOT NULL\n    AND \"RBKP\".\"VGART\" IN ('RD','RS')\n\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

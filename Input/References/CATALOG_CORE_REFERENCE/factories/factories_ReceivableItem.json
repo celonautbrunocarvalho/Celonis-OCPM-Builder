@@ -1,0 +1,128 @@
+[
+    {
+        "change_date": 1763396111724.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634583036.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "ReceivableItem - 00. Central Extraction Pool_TS1",
+        "factory_id": "91a2f2b5-ac62-4aaf-aef7-f92805f88e5d",
+        "has_overwrites": null,
+        "name": "ReceivableItem - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReceivableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": {
+            "name": "ReceivableItem - SAP ECC - 1",
+            "namespace": "custom"
+        },
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1763396111724.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1752508725024.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "ReceivableItem - SAP S4",
+        "factory_id": "90214f75-264f-4671-a113-6f921bc57b21",
+        "has_overwrites": null,
+        "name": "ReceivableItem - SAP S4",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReceivableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": {
+            "name": "ReceivableItem - SAP ECC - 1",
+            "namespace": "custom"
+        },
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1760347288913.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630800214.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "ReceivableItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "c1de0c42-eb46-4aae-b383-741bfa9d089b",
+        "has_overwrites": null,
+        "name": "ReceivableItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReceivableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1760356194849.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "creation_date": 1752512585383.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "ReceivableItem - OracleFusion",
+        "factory_id": "5c8244e1-086c-49e5-859e-bd8f17801d4a",
+        "has_overwrites": null,
+        "name": "ReceivableItem - OracleFusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReceivableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

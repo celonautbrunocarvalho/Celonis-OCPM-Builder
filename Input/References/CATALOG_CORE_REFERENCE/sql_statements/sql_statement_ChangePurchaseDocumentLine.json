@@ -1,0 +1,65 @@
+[
+    {
+        "change_date": 1760437385299.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630880851.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "ChangePurchaseDocumentLine",
+        "draft": null,
+        "factory_id": "b17ac574-e576-4a42-af29-3bfe70be728a",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ChangePurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PurchaseDocumentLine",
+                    "PurchaseOrderLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ChangedAttribute",
+                    "DocumentCategory",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "NewValue",
+                    "OldValue",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ChangePurchaseDocumentItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n   'ChangePurchaseDocumentLine' || '::' || \"PurchaseDocumentLine_Changes\".\"ID\"    AS \"ID\",\n    \"PurchaseDocumentLine\".\"ID\"                                                   AS \"PurchaseDocumentLine\",\n    \"PurchaseDocumentLine\".\"ID\"                                                   AS \"PurchaseOrderLine\",\n    \"PurchaseDocumentLine\".\"DocumentCategory\"                                     AS \"DocumentCategory\",\n    \"PurchaseDocumentLine_Changes\".\"Time\"                                         AS \"Time\",\n    \"PurchaseDocumentLine_Changes\".\"ChangedBy\"                                    AS \"ExecutedBy\",\n    \"PurchaseDocumentLine_Changes\".\"Attribute\"                                    AS \"ChangedAttribute\",\n    \"PurchaseDocumentLine_Changes\".\"ExecutionType\"                                AS \"ExecutionType\",\n    \"PurchaseDocumentLine_Changes\".\"OldValue\"                                     AS \"OldValue\",\n    \"PurchaseDocumentLine_Changes\".\"NewValue\"                                     AS \"NewValue\"\nFROM \"o_custom_PurchaseDocumentLine\" AS \"PurchaseDocumentLine\"\n    LEFT JOIN \"c_o_custom_PurchaseDocumentLine\" AS \"PurchaseDocumentLine_Changes\"\n        ON \"PurchaseDocumentLine\".\"ID\" = \"PurchaseDocumentLine_Changes\".\"ObjectID\"\nWHERE \"PurchaseDocumentLine_Changes\".\"Attribute\" IN (\n        'MaterialGroup',\n        'MaterialNumber',\n        'ShortText',\n        'Quantity', \n        'NetUnitPrice', \n        'Description', \n        'IsGoodsReceiptRequired', \n        'QuantityUnit', \n        'NetAmount', \n        'Currency', \n        'ContractNumber',\n        'StorageLocation', \n        'DeliveryIndicator', \n        'FinalInvoiceIndicator', \n        'OutwardDeliveryIndicator',\n        'RejectionIndicator', \n        'SystemContractNumber',\n        'SystemContractItemNumber'\n        )\n    AND \"PurchaseDocumentLine_Changes\".\"Time\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1760437445074.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630860283.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "ChangePurchaseScheduleLine transformation - copy - 1",
+        "factory_id": "a915ec85-e382-45a3-b62f-c10704b45efa",
+        "has_overwrites": null,
+        "name": "ChangePurchaseScheduleLine transformation - copy - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ChangePurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

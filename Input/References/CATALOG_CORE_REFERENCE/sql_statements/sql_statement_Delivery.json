@@ -1,0 +1,342 @@
+[
+    {
+        "change_date": 1768294105659.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633089039.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "Delivery - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "426b1bb8-b6be-45e1-8486-cb29792688cd",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Delivery",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "ChangeLog",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> \n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)                                AS \"ObjectID\",\n    <%=sourceSystem%>  || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" || '::' || \"CDPOS\".\"FNAME\"\n        || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"                AS \"ID\",\n    CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE),\n                    \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                          AS \"Time\",\n    CASE\n        WHEN \"CDPOS\".\"FNAME\" = 'BTGEW' THEN 'TotalWeight'\n        WHEN \"CDPOS\".\"FNAME\" = 'BZIRK' THEN 'SalesDistrict'\n        WHEN \"CDPOS\".\"FNAME\" = 'GEWEI' THEN 'WeightUnit'\n        WHEN \"CDPOS\".\"FNAME\" = 'KODAT' THEN 'PlannedPickingDate'\n        WHEN \"CDPOS\".\"FNAME\" = 'LFART' THEN 'DeliveryType'\n        WHEN \"CDPOS\".\"FNAME\" = 'LFDAT' THEN 'DeliveryDate'\n        WHEN \"CDPOS\".\"FNAME\" = 'NTGEW' THEN 'NetWeight'\n        WHEN \"CDPOS\".\"FNAME\" = 'PODAT' AND \"CDPOS\".\"VALUE_OLD\" <> '00000000' THEN 'ProofOfDeliveryDate'\n        WHEN \"CDPOS\".\"FNAME\" = 'ROUTE' THEN 'Route'\n        WHEN \"CDPOS\".\"FNAME\" = 'VKORG' THEN 'SalesOrganization'\n        WHEN \"CDPOS\".\"FNAME\" = 'VOLEH' THEN 'VolumeUnit'\n        WHEN \"CDPOS\".\"FNAME\" = 'VOLUM' THEN 'Volume'\n        WHEN \"CDPOS\".\"FNAME\" = 'PKSTK' THEN 'PackingStatus'\n        WHEN \"CDPOS\".\"FNAME\" = 'KOSTK' THEN 'IsPicked'            \n    END                                                           AS \"Attribute\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        WHEN \"CDPOS\".\"FNAME\" = 'KOSTK' AND \"CDPOS\".\"VALUE_OLD\" != 'C' THEN CAST(FALSE AS VARCHAR(255))\n        ELSE \"CDPOS\".\"VALUE_OLD\"\n    END                                                           AS \"OldValue\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n        WHEN \"CDPOS\".\"FNAME\" = 'KOSTK' AND \"CDPOS\".\"VALUE_NEW\" = 'C' THEN CAST(TRUE AS VARCHAR(255))\n        ELSE \"CDPOS\".\"VALUE_NEW\"\n    END                              AS \"NewValue\",\n    <%=sourceSystem%> || '::' || \"CDHDR\".\"MANDANT\" || '::' || \"CDHDR\".\"USERNAME\"  AS \"ChangedBy\",\n    \"CDHDR\".\"TCODE\"                                               AS \"OperationType\",\n    \"CDHDR\".\"CHANGENR\"                                            AS \"OperationID\",\n    CASE\n    WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n    ELSE 'Manual' END                                         AS \"ExecutionType\"\n    FROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n            ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                AND \"CDPOS\".\"OBJECTCLAS\" = 'LIEFERUNG'\n    LEFT JOIN \"LIKP\" AS \"LIKP\"\n            ON \"CDPOS\".\"TABKEY\" = \"LIKP\".\"MANDT\" || \"LIKP\".\"VBELN\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n            ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE ((\"CDPOS\".\"TABNAME\" = 'LIKP'\n    AND \"CDPOS\".\"FNAME\" IN ('BTGEW', 'BZIRK', 'GEWEI', 'KODAT', 'LFART', 'LFDAT', 'NTGEW', 'PODAT', 'ROUTE', 'VKORG',\n                            'VOLEH', 'VOLUM'))\n    OR (\"CDPOS\".\"TABNAME\" = 'VBUK'\n        AND \"CDPOS\".\"FNAME\" IN ('PKSTK', 'KOSTK')))\n  AND \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"LIKP\".\"VBTYP\" = 'J'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n  AND \"LIKP\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "DeliveryDate",
+                    "DeliveryNumber",
+                    "DeliveryType",
+                    "GrossWeight",
+                    "ID",
+                    "IsPicked",
+                    "NetWeight",
+                    "PlannedGoodsIssueDate",
+                    "PlannedPickingDate",
+                    "ProofOfDeliveryDate",
+                    "SourceSystemInstance",
+                    "Volume",
+                    "VolumeUnit",
+                    "WeightUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "DeliveryAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || '::' || \"LIKP\".\"MANDT\" || '::' || \"LIKP\".\"VBELN\"                AS \"ID\",\n    CAST(\"LIKP\".\"ERDAT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"LIKP\".\"ERZET\" AS DATE),\n                    \"LIKP\".\"ERZET\") AS INTERVAL SECOND)                      AS \"CreationTime\",\n\t<%=sourceSystem%>  || '::' || \"LIKP\".\"MANDT\" || '::' || \"LIKP\".\"ERNAM\"   AS \"CreatedBy\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                    AS \"CreationExecutionType\",\n    \"LIKP\".\"LFART\"                                                           AS \"DeliveryType\",\n    CAST(\"LIKP\".\"KODAT\" AS DATE) + COALESCE(CAST(TIMESTAMPDIFF(SECOND, CAST(\"LIKP\".\"KOUHR\" AS DATE),\n        \"LIKP\".\"KOUHR\") AS INTERVAL SECOND), INTERVAL '1' SECOND)            AS \"PlannedPickingDate\",                      \n    CAST(\"LIKP\".\"PODAT\" AS DATE) + COALESCE(CAST(TIMESTAMPDIFF(SECOND, CAST(\"LIKP\".\"POTIM\" AS DATE),\n        \"LIKP\".\"POTIM\") AS INTERVAL SECOND), INTERVAL '1' SECOND)            AS \"ProofOfDeliveryDate\",\n    CAST(\"LIKP\".\"LFDAT\" AS TIMESTAMP)                                        AS \"DeliveryDate\",\n    \"LIKP\".\"NTGEW\"                                                           AS \"NetWeight\",\n    \"LIKP\".\"BTGEW\"                                                           AS \"GrossWeight\",\n    \"LIKP\".\"GEWEI\"                                                           AS \"WeightUnit\",\n    \"LIKP\".\"VOLUM\"                                                           AS \"Volume\",\n    \"LIKP\".\"VOLEH\"                                                           AS \"VolumeUnit\",\n\t<%=sourceSystem%>  || '::' || \"LIKP\".\"MANDT\"                             AS \"SourceSystemInstance\",\n    \"LIKP\".\"VBELN\"                                                           AS \"DeliveryNumber\",\n    CAST(\"LIKP\".\"WADAT\" AS TIMESTAMP)                                        AS \"PlannedGoodsIssueDate\",\n    CASE WHEN \"VBUK\".\"KOSTK\" = 'C' THEN TRUE ELSE FALSE END                  AS \"IsPicked\"\nFROM \"LIKP\" AS \"LIKP\"\nLEFT JOIN \"USR02\" AS \"USR02\"\n    ON \"LIKP\".\"MANDT\" = \"USR02\".\"MANDT\"\n        AND \"LIKP\".\"ERNAM\" = \"USR02\".\"BNAME\"\nLEFT JOIN \"VBUK\" AS \"VBUK\"\n    ON \"LIKP\".\"MANDT\" = \"VBUK\".\"MANDT\"\n        AND \"LIKP\".\"VBELN\" = \"VBUK\".\"VBELN\"\nWHERE \"LIKP\".\"MANDT\" IS NOT NULL\n  AND \"LIKP\".\"VBTYP\" = 'J'\n  "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763979822892.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752239300658.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "Delivery - OracleFusion",
+        "draft": null,
+        "factory_id": "6d722757-0607-409f-b10c-4b1cb95e66db",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Delivery",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Picking",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Delivery\" AS (\n    SELECT \n        \"WSH_NEW_DELIVERIES\".\"DeliveryId\"                                                AS \"DELIVERY_ID\",\n        \"WSH_DELIVERY_DETAILS\".\"DeliveryLinePEODeliveryDetailId\"                         AS \"DELIVERY_DETAIL_ID\",\n        \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionId\"               AS \"TRANSACTION_ID\",\n        \"WSH_DELIVERY_DETAILS\".\"DeliveryLinePEORequestedQuantity\"                        AS \"REQUESTED_QUANTITY\",\n        ABS(\"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionQuantity\")    AS \"TRANSACTION_QUANTITY\"\n    FROM \"FscmTopModelAM_WshDeliveriesAM_DeliveryPVO\" AS \"WSH_NEW_DELIVERIES\"\n        LEFT JOIN \"FscmTopModelAM_ScmExtractAM_WshBiccExtractAM_DeliveryLineAssignmentExtractPVO\" AS \"WSH_DELIVERY_ASSIGNMENTS\"\n            ON \"WSH_NEW_DELIVERIES\".\"DeliveryId\" = \"WSH_DELIVERY_ASSIGNMENTS\".\"DeliveryLineAssignmentPEODeliveryId\"\n        LEFT JOIN \"FscmTopModelAM_ScmExtractAM_WshBiccExtractAM_DeliveryLineExtractPVO\" AS \"WSH_DELIVERY_DETAILS\"\n            ON \"WSH_DELIVERY_ASSIGNMENTS\".\"DeliveryLineAssignmentPEODeliveryDetailId\" = \"WSH_DELIVERY_DETAILS\".\"DeliveryLinePEODeliveryDetailId\"\n        LEFT JOIN \"FscmTopModelAM_ScmExtractAM_InvBiccExtractAM_InventoryTransactionDetailExtractPVO\" AS \"MTL_MATERIAL_TRANSACTIONS\"\n            ON \"WSH_DELIVERY_DETAILS\".\"DeliveryLinePEOTransactionId\" = \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionId\"\n    WHERE \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionId\" IS NOT NULL\n        AND \"WSH_DELIVERY_DETAILS\".\"DeliveryLinePEOSourceLineType\" = 'SALES_ORDER'\n),\n\"CTE_AGG_Delivery\" AS (\n    SELECT \n        \"Delivery\".\"DELIVERY_ID\"         AS \"DELIVERY_ID\",\n        MAX(\"Delivery\".\"TRANSACTION_ID\") AS \"TRANSACTION_ID\",\n        'RELEASED_STATUS'                AS \"FNAME\",\n        'Y'                              AS \"RELEASED_STATUS\"\n    FROM \"CTE_Delivery\" AS \"Delivery\"\n    GROUP BY \"Delivery\".\"DELIVERY_ID\"\n    HAVING SUM(\"Delivery\".\"REQUESTED_QUANTITY\") = SUM(\"Delivery\".\"TRANSACTION_QUANTITY\")\n),\n\"CTE_Picked_Confirm\" AS (\n    SELECT \n        \"AGG_Delivery\".\"DELIVERY_ID\" || \"AGG_Delivery\".\"FNAME\"\n        || \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOCreationDate\"\n        || \"AGG_Delivery\".\"RELEASED_STATUS\"                                                  AS \"ID\",\n        \"AGG_Delivery\".\"DELIVERY_ID\"                                                         AS \"ObjectID\",\n        \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOCreationDate\"                    AS \"Time\",\n        CASE\n            WHEN \"AGG_Delivery\".\"FNAME\" = 'RELEASED_STATUS' \n                THEN 'PickingStatus'\n        END                                                                                  AS \"Attribute\",\n        'Unknown'                                                                            AS \"OldValue\",\n        CAST(\"AGG_Delivery\".\"RELEASED_STATUS\" AS VARCHAR(255))                               AS \"NewValue\",\n        CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOCreatedBy\" AS VARCHAR(255)) AS \"ChangedBy\",\n        NULL                                                                                 AS \"OperationType\",\n        NULL                                                                                 AS \"OperationID\",\n        CASE\n            WHEN \"WSH_NEW_DELIVERIES\".\"DeliveryPEORequestId\" IS NOT NULL THEN 'Automatic'\n                ELSE 'Manual'\n        END                                                                                  AS \"ExecutionType\"\n    FROM \"CTE_AGG_Delivery\" AS \"AGG_Delivery\"\n        LEFT JOIN \"FscmTopModelAM_WshDeliveriesAM_DeliveryPVO\" AS \"WSH_NEW_DELIVERIES\"\n            ON \"AGG_Delivery\".\"DELIVERY_ID\" = \"WSH_NEW_DELIVERIES\".\"DeliveryId\"\n        LEFT JOIN \"FscmTopModelAM_ScmExtractAM_InvBiccExtractAM_InventoryTransactionDetailExtractPVO\" AS \"MTL_MATERIAL_TRANSACTIONS\"\n            ON \"AGG_Delivery\".\"TRANSACTION_ID\" = \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionId\"\n    WHERE \"WSH_NEW_DELIVERIES\".\"DeliveryId\" IS NOT NULL\n)\nSELECT \n    <%=sourceSystem%>  || '::'|| \"Picked_Confirm\".\"ObjectID\"             AS \"ObjectID\",\n    <%=sourceSystem%>  || '::'||  \"Picked_Confirm\".\"ID\"                  AS \"ID\",\n    \"Picked_Confirm\".\"Time\"                                              AS \"Time\",\n    \"Picked_Confirm\".\"Attribute\"                                         AS \"Attribute\",\n    \"Picked_Confirm\".\"OldValue\"                                          AS \"OldValue\",\n    \"Picked_Confirm\".\"NewValue\"                                          AS \"NewValue\",\n    <%=sourceSystem%>  || '::'|| \"Picked_Confirm\".\"ChangedBy\"            AS \"ChangedBy\",\n    \"Picked_Confirm\".\"OperationType\"                                     AS \"OperationType\",\n    \"Picked_Confirm\".\"OperationID\"                                       AS \"OperationID\",\n    \"Picked_Confirm\".\"ExecutionType\"                                     AS \"ExecutionType\"\nFROM \"CTE_Picked_Confirm\" AS \"Picked_Confirm\""
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "DeliveryDate",
+                    "DeliveryNumber",
+                    "DeliveryType",
+                    "GrossWeight",
+                    "ID",
+                    "IsPicked",
+                    "NetWeight",
+                    "PlannedGoodsIssueDate",
+                    "PlannedPickingDate",
+                    "ProofOfDeliveryDate",
+                    "SourceSystemInstance",
+                    "Volume",
+                    "VolumeUnit",
+                    "WeightUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "DeliveryAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT  \n    <%=sourceSystem%> || '::' || \"WSH_NEW_DELIVERIES\".\"DeliveryId\"                  AS \"ID\",\n    \"WSH_NEW_DELIVERIES\".\"DeliveryPEOCreationDate\"                                  AS \"CreationTime\",\n    <%=sourceSystem%> || '::' || \"WSH_NEW_DELIVERIES\".\"DeliveryPEOCreatedBy\"        AS \"CreatedBy\",\n    CASE\n        WHEN \"WSH_NEW_DELIVERIES\".\"DeliveryPEOBatchId\" IS NOT NULL \n            THEN 'Automatic'\n        ELSE 'Manual'\n    END                                                                             AS \"CreationExecutionType\",\n    \"WSH_NEW_DELIVERIES\".\"DeliveryPEODeliveryType\"                                  AS \"DeliveryType\",\n    CAST(\"WSH_NEW_DELIVERIES\".\"DeliveryPEOInitialPickupDate\" AS TIMESTAMP)          AS \"PlannedPickingDate\",\n    CASE\n        WHEN \"WSH_NEW_DELIVERIES\".\"DeliveryId\" IS NOT NULL \n            THEN TRUE\n        ELSE FALSE\n    END                                                                             AS \"IsPicked\",\n    CAST(\"WSH_NEW_DELIVERIES\".\"DeliveryPEOUltimateDropoffDate\" AS TIMESTAMP)        AS \"ProofOfDeliveryDate\",\n    CAST(\"WSH_NEW_DELIVERIES\".\"DeliveryPEODeliveredDate\" AS TIMESTAMP)              AS \"DeliveryDate\",\n    \"WSH_NEW_DELIVERIES\".\"DeliveryPEONetWeight\"                                     AS \"NetWeight\",\n    \"WSH_NEW_DELIVERIES\".\"DeliveryPEOGrossWeight\"                                   AS \"GrossWeight\",\n    \"WSH_NEW_DELIVERIES\".\"DeliveryPEOWeightUomCode\"                                 AS \"WeightUnit\",\n    \"WSH_NEW_DELIVERIES\".\"DeliveryPEOVolume\"                                        AS \"Volume\",\n    \"WSH_NEW_DELIVERIES\".\"DeliveryPEOVolumeUomCode\"                                 AS \"VolumeUnit\",\n    CAST(\"WSH_NEW_DELIVERIES\".\"DeliveryPEODeliveryName\" AS VARCHAR(255))            AS \"DeliveryNumber\",\n    CAST(\"WSH_NEW_DELIVERIES\".\"DeliveryPEOLatestPickupDate\" AS TIMESTAMP)           AS \"PlannedGoodsIssueDate\",\n    <%=sourceSystem%>                                                               AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_WshDeliveriesAM_DeliveryPVO\" AS \"WSH_NEW_DELIVERIES\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763581132258.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "d94aa797-47b6-48e1-9b0f-9627812b5866",
+            "name": "Lea Hanna",
+            "type_": "USER"
+        },
+        "creation_date": 1750230938256.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "Delivery - S4 Hana",
+        "draft": null,
+        "factory_id": "50bffce8-b719-4f7c-8a35-5bd980b15d5a",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Delivery",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "ChangeLog",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT  <%=sourceSystem%>  || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)           AS \"ObjectID\",\n\t<%=sourceSystem%>  || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" || '::' || \"CDPOS\".\"FNAME\"\n           || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"                                       AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME)                                        AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'BTGEW' THEN 'TotalWeight'\n           WHEN \"CDPOS\".\"FNAME\" = 'BZIRK' THEN 'SalesDistrict'\n           WHEN \"CDPOS\".\"FNAME\" = 'GEWEI' THEN 'WeightUnit'\n           WHEN \"CDPOS\".\"FNAME\" = 'KODAT' THEN 'PickingDate'\n           WHEN \"CDPOS\".\"FNAME\" = 'LFART' THEN 'DeliveryType'\n           WHEN \"CDPOS\".\"FNAME\" = 'LFDAT' THEN 'DeliveryDate'\n           WHEN \"CDPOS\".\"FNAME\" = 'NTGEW' THEN 'NetWeight'\n           WHEN \"CDPOS\".\"FNAME\" = 'PODAT' AND \"CDPOS\".\"VALUE_OLD\" <> '00000000' THEN 'ProofOfDeliveryDate'\n           WHEN \"CDPOS\".\"FNAME\" = 'ROUTE' THEN 'Route'\n           WHEN \"CDPOS\".\"FNAME\" = 'VKORG' THEN 'SalesOrganization'\n           WHEN \"CDPOS\".\"FNAME\" = 'VOLEH' THEN 'VolumeUnit'\n           WHEN \"CDPOS\".\"FNAME\" = 'VOLUM' THEN 'Volume'\n           WHEN \"CDPOS\".\"FNAME\" = 'PKSTK' THEN 'PackingStatus'\n           WHEN \"CDPOS\".\"FNAME\" = 'KOSTK' THEN 'IsPicked'\n           END                                                                                              AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           WHEN \"CDPOS\".\"FNAME\" = 'KOSTK' AND \"CDPOS\".\"VALUE_OLD\" != 'C' THEN CAST(FALSE AS VARCHAR(255))\n           ELSE \"CDPOS\".\"VALUE_OLD\" END                                                                     AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           WHEN \"CDPOS\".\"FNAME\" = 'KOSTK' AND \"CDPOS\".\"VALUE_NEW\" = 'C' THEN CAST(TRUE AS VARCHAR(255))\n           ELSE \"CDPOS\".\"VALUE_NEW\" END                                                                     AS \"NewValue\",\n       <%=sourceSystem%> || '::' || \"CDHDR\".\"MANDANT\" || '::' ||  \"CDHDR\".\"USERNAME\"                        AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                                                      AS \"OperationType\",\n       <%=sourceSystem%> || '::' || \"CDHDR\".\"CHANGENR\"                                                      AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                         AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'LIEFERUNG'\n         LEFT JOIN \"LIKP\" AS \"LIKP\"\n                   ON \"CDPOS\".\"TABKEY\" = \"LIKP\".\"MANDT\" || \"LIKP\".\"VBELN\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE (\"CDPOS\".\"TABNAME\" = 'LIKP'\n    AND \"CDPOS\".\"FNAME\" IN ('BTGEW', 'BZIRK', 'GEWEI', 'KODAT', 'LFART', 'LFDAT', 'NTGEW', 'PODAT', 'ROUTE', 'VKORG',\n                            'VOLEH', 'VOLUM','KOSTK', 'PKSTK'))\n  AND \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"LIKP\".\"VBTYP\" = 'J'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n  AND \"LIKP\".\"MANDT\" IS NOT NULL"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "DeliveryDate",
+                    "DeliveryNumber",
+                    "DeliveryType",
+                    "GrossWeight",
+                    "ID",
+                    "IsPicked",
+                    "NetWeight",
+                    "PlannedGoodsIssueDate",
+                    "PlannedPickingDate",
+                    "ProofOfDeliveryDate",
+                    "SourceSystemInstance",
+                    "Volume",
+                    "VolumeUnit",
+                    "WeightUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "DeliveryAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || '::' || \"LIKP\".\"MANDT\" || '::' || \"LIKP\".\"VBELN\"   AS \"ID\",\n    CAST(CONCAT(CAST(\"LIKP\".\"ERDAT\" AS VARCHAR),\n        SUBSTRING(CAST(\"LIKP\".\"ERZET\" AS VARCHAR), 11, 19))\n        AS TIMESTAMP)                                                        AS \"CreationTime\",\n\t<%=sourceSystem%>  || '::' || \"LIKP\".\"MANDT\" || '::' || \"LIKP\".\"ERNAM\"   AS \"CreatedBy\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                    AS \"CreationExecutionType\",\n    \"LIKP\".\"LFART\"                                                           AS \"DeliveryType\",\n    CAST(CONCAT(CAST(\"LIKP\".\"KODAT\" AS VARCHAR),\n        SUBSTRING(CAST(\"LIKP\".\"KOUHR\" AS VARCHAR), 11, 19))\n        AS TIMESTAMP)                                                        AS \"PlannedPickingDate\",\n    CAST(CONCAT(CAST(\"LIKP\".\"PODAT\" AS VARCHAR),\n        SUBSTRING(CAST(\"LIKP\".\"POTIM\" AS VARCHAR), 11, 19))\n        AS TIMESTAMP)                                                        AS \"ProofOfDeliveryDate\",\n    CAST(\"LIKP\".\"LFDAT\" AS TIMESTAMP)                                        AS \"DeliveryDate\",\n    \"LIKP\".\"NTGEW\"                                                           AS \"NetWeight\",\n    \"LIKP\".\"BTGEW\"                                                           AS \"GrossWeight\",\n    \"LIKP\".\"GEWEI\"                                                           AS \"WeightUnit\",\n    \"LIKP\".\"VOLUM\"                                                           AS \"Volume\",\n    \"LIKP\".\"VOLEH\"                                                           AS \"VolumeUnit\",\n\t<%=sourceSystem%>  || '::' || \"LIKP\".\"MANDT\"                             AS \"SourceSystemInstance\",\n    \"LIKP\".\"VBELN\"                                                           AS \"DeliveryNumber\",\n    CAST(\"LIKP\".\"WADAT\" AS TIMESTAMP)                                        AS \"PlannedGoodsIssueDate\",\n    CASE WHEN \"LIKP\".\"KOSTK\" = 'C' THEN TRUE ELSE FALSE END                  AS \"IsPicked\"\nFROM \"LIKP\" AS \"LIKP\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"LIKP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"LIKP\".\"ERNAM\" = \"USR02\".\"BNAME\"\nWHERE \"LIKP\".\"MANDT\" IS NOT NULL\n  AND \"LIKP\".\"VBTYP\" = 'J'\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763977595072.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1749636437243.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": null,
+        "disabled": null,
+        "display_name": "Delivery - 00. Central Extraction Pool_Oracle-ebs",
+        "draft": null,
+        "factory_id": "693a907a-62c5-43c7-92e8-07dfadd729bf",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Delivery",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Picking",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Delivery\" AS (\n    SELECT\n        \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\"                      AS \"DELIVERY_ID\",\n        \"WSH_DELIVERY_DETAILS\".\"DELIVERY_DETAIL_ID\"             AS \"DELIVERY_DETAIL_ID\",\n        \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\"            AS \"TRANSACTION_ID\",\n        \"WSH_DELIVERY_DETAILS\".\"REQUESTED_QUANTITY\"             AS \"REQUESTED_QUANTITY\",\n        ABS(\"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_QUANTITY\") AS \"TRANSACTION_QUANTITY\"\n    FROM \"WSH_NEW_DELIVERIES\" AS \"WSH_NEW_DELIVERIES\"\n        LEFT JOIN \"WSH_DELIVERY_ASSIGNMENTS\" AS \"WSH_DELIVERY_ASSIGNMENTS\"\n                ON \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\"\n                    = \"WSH_DELIVERY_ASSIGNMENTS\".\"DELIVERY_ID\"\n        LEFT JOIN \"WSH_DELIVERY_DETAILS\" AS \"WSH_DELIVERY_DETAILS\"\n                ON \"WSH_DELIVERY_ASSIGNMENTS\".\"DELIVERY_DETAIL_ID\"\n                    = \"WSH_DELIVERY_DETAILS\".\"DELIVERY_DETAIL_ID\"\n        LEFT JOIN \"MTL_MATERIAL_TRANSACTIONS\" AS \"MTL_MATERIAL_TRANSACTIONS\"\n                ON \"WSH_DELIVERY_DETAILS\".\"TRANSACTION_ID\"\n                    = \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\"\n    WHERE \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\" IS NOT NULL\n        AND \"WSH_DELIVERY_DETAILS\".\"SOURCE_CODE\" = 'OE'\n),\n\"CTE_AGG_Delivery\" AS (\n    SELECT\n        \"Delivery\".\"DELIVERY_ID\"         AS \"DELIVERY_ID\",\n        MAX(\"Delivery\".\"TRANSACTION_ID\") AS \"TRANSACTION_ID\",\n        'RELEASED_STATUS'                AS \"FNAME\",\n        'Y'                              AS \"RELEASED_STATUS\"\n    FROM \"CTE_Delivery\" AS \"Delivery\"\n    GROUP BY \"Delivery\".\"DELIVERY_ID\"\n    HAVING SUM(\"Delivery\".\"REQUESTED_QUANTITY\") = SUM(\"Delivery\".\"TRANSACTION_QUANTITY\")\n),\n\"CTE_Picked_Confirm\" AS (\n    SELECT\n        \"AGG_Delivery\".\"DELIVERY_ID\" || \"AGG_Delivery\".\"FNAME\"\n            || \"MTL_MATERIAL_TRANSACTIONS\".\"CREATION_DATE\"\n            || \"AGG_Delivery\".\"RELEASED_STATUS\"                        AS \"ID\",\n        \"AGG_Delivery\".\"DELIVERY_ID\"                                   AS \"ObjectID\",\n        \"MTL_MATERIAL_TRANSACTIONS\".\"CREATION_DATE\"                    AS \"Time\",\n        CASE\n            WHEN \"AGG_Delivery\".\"FNAME\" = 'RELEASED_STATUS'\n            THEN 'IsPicked'\n        END                                                            AS \"Attribute\",\n        CAST(FALSE AS VARCHAR(255))                                    AS \"OldValue\",\n        CAST(TRUE AS VARCHAR(255))                                     AS \"NewValue\",\n        CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"CREATED_BY\" AS VARCHAR(255)) AS \"ChangedBy\",\n        NULL                                                           AS \"OperationType\",\n        NULL                                                           AS \"OperationID\",\n        CASE\n            WHEN \"WSH_NEW_DELIVERIES\".\"REQUEST_ID\" IS NOT NULL THEN 'Automatic'\n            ELSE 'Manual'\n        END                                                            AS \"ExecutionType\"\n    FROM \"CTE_AGG_Delivery\" AS \"AGG_Delivery\"\n    LEFT JOIN \"WSH_NEW_DELIVERIES\" AS \"WSH_NEW_DELIVERIES\"\n        ON \"AGG_Delivery\".\"DELIVERY_ID\" = \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\"\n    LEFT JOIN \"MTL_MATERIAL_TRANSACTIONS\" AS \"MTL_MATERIAL_TRANSACTIONS\"\n        ON \"AGG_Delivery\".\"TRANSACTION_ID\" = \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\"\n    WHERE \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\" IS NOT NULL\n)\nSELECT\n    <%=sourceSystem%> || '::'|| \"Picked_Confirm\".\"ObjectID\"     AS \"ObjectID\",\n\t<%=sourceSystem%> || '::'|| \"Picked_Confirm\".\"ID\"           AS \"ID\",\n    \"Picked_Confirm\".\"Time\"                                      AS \"Time\",\n    \"Picked_Confirm\".\"Attribute\"                                 AS \"Attribute\",\n    \"Picked_Confirm\".\"OldValue\"                                  AS \"OldValue\",\n    \"Picked_Confirm\".\"NewValue\"                                  AS \"NewValue\",\n    <%=sourceSystem%> || '::'|| \"Picked_Confirm\".\"ChangedBy\"    AS \"ChangedBy\",\n    \"Picked_Confirm\".\"OperationType\"                             AS \"OperationType\",\n    \"Picked_Confirm\".\"OperationID\"                               AS \"OperationID\",\n    \"Picked_Confirm\".\"ExecutionType\"                             AS \"ExecutionType\"\nFROM \"CTE_Picked_Confirm\" AS \"Picked_Confirm\""
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "DeliveryDate",
+                    "DeliveryNumber",
+                    "DeliveryType",
+                    "GrossWeight",
+                    "ID",
+                    "IsPicked",
+                    "NetWeight",
+                    "PlannedGoodsIssueDate",
+                    "PlannedPickingDate",
+                    "ProofOfDeliveryDate",
+                    "SourceSystemInstance",
+                    "Volume",
+                    "VolumeUnit",
+                    "WeightUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "DeliveryAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Delivery\" AS (\n    SELECT\n        \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\"                      AS \"DELIVERY_ID\",\n        \"WSH_DELIVERY_DETAILS\".\"DELIVERY_DETAIL_ID\"             AS \"DELIVERY_DETAIL_ID\",\n        \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\"            AS \"TRANSACTION_ID\",\n        \"WSH_DELIVERY_DETAILS\".\"REQUESTED_QUANTITY\"             AS \"REQUESTED_QUANTITY\",\n        ABS(\"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_QUANTITY\") AS \"TRANSACTION_QUANTITY\"\n    FROM \"WSH_NEW_DELIVERIES\" AS \"WSH_NEW_DELIVERIES\"\n        LEFT JOIN \"WSH_DELIVERY_ASSIGNMENTS\" AS \"WSH_DELIVERY_ASSIGNMENTS\"\n                ON \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\" = \"WSH_DELIVERY_ASSIGNMENTS\".\"DELIVERY_ID\"\n        LEFT JOIN \"WSH_DELIVERY_DETAILS\" AS \"WSH_DELIVERY_DETAILS\"\n                ON \"WSH_DELIVERY_ASSIGNMENTS\".\"DELIVERY_DETAIL_ID\" = \"WSH_DELIVERY_DETAILS\".\"DELIVERY_DETAIL_ID\"\n        LEFT JOIN \"MTL_MATERIAL_TRANSACTIONS\" AS \"MTL_MATERIAL_TRANSACTIONS\"\n                ON \"WSH_DELIVERY_DETAILS\".\"TRANSACTION_ID\" = \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\"\n    WHERE \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\" IS NOT NULL\n        AND \"WSH_DELIVERY_DETAILS\".\"SOURCE_CODE\" = 'OE'\n),\n\"CTE_AGG_Delivery\" AS (\n    SELECT \n        \"Delivery\".\"DELIVERY_ID\" AS \"DELIVERY_ID\"\n    FROM \"CTE_Delivery\" AS \"Delivery\"\n    GROUP BY \"Delivery\".\"DELIVERY_ID\"\n    HAVING SUM(\"Delivery\".\"REQUESTED_QUANTITY\") = SUM(\"Delivery\".\"TRANSACTION_QUANTITY\")\n)\nSELECT\n    <%=sourceSystem%> \n    || '::' || CAST( \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\" AS VARCHAR(255))   AS \"ID\",\n    \"WSH_NEW_DELIVERIES\".\"CREATION_DATE\"                                   AS \"CreationTime\",\n    <%=sourceSystem%> \n    || '::' || TRY_CAST(\"WSH_NEW_DELIVERIES\".\"CREATED_BY\" AS FLOAT)        AS \"CreatedBy\",\n    CASE\n        WHEN \"WSH_NEW_DELIVERIES\".\"BATCH_ID\" IS NOT NULL THEN 'Automatic'\n        ELSE 'Manual' -- https://docs.oracle.com/cd/E18727_01/doc.121/e13431/T414830T414837.htm#T414957 (autocreated)\n    END                                                                    AS \"CreationExecutionType\",\n    \"WSH_NEW_DELIVERIES\".\"DELIVERY_TYPE\"                                   AS \"DeliveryType\",\n    \"WSH_NEW_DELIVERIES\".\"INITIAL_PICKUP_DATE\"                             AS \"PlannedPickingDate\",\n    \"WSH_DELIVERY_LEGS\".\"POD_DATE\"                                         AS \"ProofOfDeliveryDate\",\n    \"WSH_NEW_DELIVERIES\".\"DELIVERED_DATE\"                                  AS \"DeliveryDate\",\n    CAST(\"WSH_NEW_DELIVERIES\".\"NET_WEIGHT\" AS FLOAT)                       AS \"NetWeight\",\n    CAST(\"WSH_NEW_DELIVERIES\".\"GROSS_WEIGHT\" AS FLOAT)                     AS \"GrossWeight\",\n    \"WSH_NEW_DELIVERIES\".\"WEIGHT_UOM_CODE\"                                 AS \"WeightUnit\",\n    CAST(\"WSH_DELIVERY_LEGS\".\"VOLUME\" AS FLOAT)                            AS \"Volume\",\n    \"WSH_NEW_DELIVERIES\".\"VOLUME_UOM_CODE\"                                 AS \"VolumeUnit\",\n    CAST(\"WSH_NEW_DELIVERIES\".\"NAME\" AS VARCHAR(255))                      AS \"DeliveryNumber\",\n    \"WSH_NEW_DELIVERIES\".\"LATEST_PICKUP_DATE\"                              AS \"PlannedGoodsIssueDate\",\n    CASE\n        WHEN \"AGG_Delivery\".\"DELIVERY_ID\" IS NOT NULL THEN TRUE\n        ELSE FALSE\n    END                                                                    AS \"IsPicked\",\n    <%=sourceSystem%>                                                      AS \"SourceSystemInstance\"\nFROM \"WSH_NEW_DELIVERIES\" AS \"WSH_NEW_DELIVERIES\"\nLEFT JOIN \"WSH_DELIVERY_LEGS\" AS \"WSH_DELIVERY_LEGS\"\n    ON \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\" = \"WSH_DELIVERY_LEGS\".\"DELIVERY_ID\"\n        -- In Oracle there could be a 1:n relationship from delivery to legs.\n        -- This means, that one delivery could have many POD\n        -- According to etrm received quantity indicates the last leg of a delivery, therefore we take only that POD\n        AND \"WSH_DELIVERY_LEGS\".\"RECEIVED_QUANTITY\" IS NOT NULL\nLEFT JOIN \"CTE_AGG_Delivery\" AS \"AGG_Delivery\"\n    ON \"WSH_NEW_DELIVERIES\".\"DELIVERY_ID\" = \"AGG_Delivery\".\"DELIVERY_ID\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

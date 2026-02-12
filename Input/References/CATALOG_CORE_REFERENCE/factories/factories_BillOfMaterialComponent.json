@@ -1,0 +1,122 @@
+[
+    {
+        "change_date": 1763480408063.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749648685878.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "BillOfMaterialComponent - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "factory_id": "9c937220-2504-41a9-9313-e5b241194ea0",
+        "has_overwrites": null,
+        "name": "BillOfMaterialComponent - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialComponent",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1760519182142.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630760519.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "BillOfMaterialComponent transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "7e93eab2-6bb4-437c-a70d-c78d8e4cac51",
+        "has_overwrites": null,
+        "name": "BillOfMaterialComponent transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialComponent",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1763480237460.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749632452039.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "BillOfMaterialComponent - 00. Central Extraction Pool_TS1",
+        "factory_id": "9fcc9e90-3cee-45d4-b9fe-9050bb80e726",
+        "has_overwrites": null,
+        "name": "BillOfMaterialComponent - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialComponent",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1761045981978.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1753366520496.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "BillOfMaterialComponent - OracleFusion",
+        "factory_id": "6e5ebf63-a572-4504-9cd7-ab2a10308356",
+        "has_overwrites": null,
+        "name": "BillOfMaterialComponent - OracleFusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialComponent",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

@@ -1,0 +1,78 @@
+[
+    {
+        "change_date": 1752776038431.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1749829205269.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "ReleaseBlockOnCustomer - 1",
+        "draft": null,
+        "factory_id": "f52a0841-400b-4499-8e43-91e85d662289",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReleaseBlockOnCustomer",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Customer",
+                    "CustomerBlock"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BlockReason",
+                    "BlockType",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ReleaseBlockOnSalesOrderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'ReleaseBlockOnCustomer' || '::' || \"CustomerBlock\".\"ID\" AS \"ID\",\n       \"CustomerBlock\".\"ID\"                                 AS \"CustomerBlock\",\n       \"Customer\".\"ID\"                                      AS \"Customer\",\n       \"CustomerBlock\".\"ReleaseTime\"                        AS \"Time\",\n       \"CustomerBlock\".\"ReleasedBy_ID\"                      AS \"ExecutedBy\",\n       \"CustomerBlock\".\"ReleaseExecutionType\"               AS \"ExecutionType\",\n       \"CustomerBlock\".\"BlockType\"                          AS \"BlockType\",\n       \"CustomerBlock\".\"ReleaseReason\"                      AS \"BlockReason\"\nFROM \"o_custom_Customer\" AS \"Customer\"\n         LEFT JOIN \"o_custom_CustomerBlock\" AS \"CustomerBlock\"\n                   ON \"Customer\".\"ID\" = \"CustomerBlock\".\"Customer_ID\"\nWHERE \"CustomerBlock\".\"ReleaseTime\" IS NOT NULL\n    "
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "SalesOrder",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipSalesOrder",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n\t'ReleaseBlockOnCustomer' || '::' || \"CustomerBlock\".\"ID\" AS \"ID\",\n\t\"SalesOrder\".\"ID\" AS \"SalesOrder\"\nFROM \"o_custom_CustomerBlock\" AS \"CustomerBlock\"\n\tLEFT JOIN \"o_custom_SalesOrder\" AS \"SalesOrder\"\n\t    ON \"CustomerBlock\".\"Customer_ID\" = \"SalesOrder\".\"Customer_ID\"\nWHERE \"CustomerBlock\".\"ReleaseTime\" IS NOT NULL\n    AND \"SalesOrder\".\"ID\" IS NOT NULL\n    AND \"CustomerBlock\".\"ReleaseTime\" > \"SalesOrder\".\"CreationTime\""
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

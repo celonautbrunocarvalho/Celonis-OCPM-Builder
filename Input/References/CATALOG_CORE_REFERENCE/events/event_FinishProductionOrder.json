@@ -1,0 +1,71 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "production",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1759868325625.0,
+    "changed_by": {
+        "id": "44ce8cdf-0fde-492e-825c-530c92bc1d7e",
+        "name": "k.shethia@celonis.com",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+        "name": "j.rosenbauer",
+        "type_": "USER"
+    },
+    "creation_date": 1749721228777.0,
+    "description": "",
+    "fields": [
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "IsLate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "54833d59-f953-467f-8635-542ca3cc03d7",
+    "name": "FinishProductionOrder",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "ProductionOrder",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "ProductionOrder",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "InventoryManagement"
+    ]
+}

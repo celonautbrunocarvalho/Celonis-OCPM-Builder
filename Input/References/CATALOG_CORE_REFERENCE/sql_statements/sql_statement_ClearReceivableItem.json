@@ -1,0 +1,73 @@
+[
+    {
+        "change_date": 1761548217311.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630856861.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "ClearReceivableItem transformation - copy - 1",
+        "draft": null,
+        "factory_id": "36b4064b-5ec2-4de7-8b38-0fc8bc2bed73",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ClearReceivableItem",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ClearReceivableItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Agg_CustDocClearing\" AS (\n    SELECT \n        \"ReceivableItem_Changes\".\"OperationID\"                                                 AS \"ID\",\n        \"ReceivableItem_Changes\".\"Time\"                                                        AS \"Time\",\n        \"ReceivableItem_Changes\".\"ChangedBy\"                                                   AS \"ExecutedBy\",\n        \"ReceivableItem_Changes\".\"ExecutionType\"                                               AS \"ExecutionType\",\n        ROW_NUMBER() OVER (PARTITION BY \"ReceivableItem_Changes\".\"OperationID\"     \n            ORDER BY \"ReceivableItem_Changes\".\"Time\" ASC)                                      AS \"rn\"\n    FROM \"o_custom_ReceivableItem\" AS \"ReceivableItem\"\n        LEFT JOIN \"c_o_custom_ReceivableItem\" AS \"ReceivableItem_Changes\"\n            ON \"ReceivableItem\".\"ID\" = \"ReceivableItem_Changes\".\"ObjectID\"            \n    WHERE \"ReceivableItem_Changes\".\"Attribute\" IN ('Clearing','Clearing-NonReceipts')\n        AND \"ReceivableItem_Changes\".\"Time\" IS NOT NULL \n        AND \"ReceivableItem_Changes\".\"OperationID\"  IS NOT NULL \n)\nSELECT  \n    'ClearReceivableItem' || '::' || \"Agg_CustDocClearing\".\"ID\"                         AS \"ID\",\n    \"Agg_CustDocClearing\".\"Time\"                                                        AS \"Time\",\n    \"Agg_CustDocClearing\".\"ExecutedBy\"                                                  AS \"ExecutedBy\",\n    \"Agg_CustDocClearing\".\"ExecutionType\"                                               AS \"ExecutionType\"\nFROM \"CTE_Agg_CustDocClearing\" AS \"Agg_CustDocClearing\"      \nWHERE \"Agg_CustDocClearing\".\"rn\" = 1 "
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "ReceivableItem",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "ClearRecItem",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    'ClearReceivableItem' || '::' || \"ReceivableItem_Changes\".\"OperationID\"                AS \"ID\",\n    \"ReceivableItem\".\"ID\"                                                                  AS \"ReceivableItem\"\nFROM \"o_custom_ReceivableItem\" AS \"ReceivableItem\"\n    LEFT JOIN \"c_o_custom_ReceivableItem\" AS \"ReceivableItem_Changes\"\n        ON \"ReceivableItem\".\"ID\" = \"ReceivableItem_Changes\".\"ObjectID\"\nWHERE \"ReceivableItem_Changes\".\"Attribute\" IN ('Clearing','Clearing-NonReceipts')\n    AND \"ReceivableItem_Changes\".\"Time\" IS NOT NULL\n    AND \"ReceivableItem_Changes\".\"OperationID\"  IS NOT NULL "
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

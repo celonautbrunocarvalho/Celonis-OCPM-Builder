@@ -1,0 +1,390 @@
+[
+    {
+        "change_date": 1766149443570.0,
+        "changed_by": {
+            "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+            "name": "Gokul",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764663316857.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMasterPlant - 1",
+        "draft": null,
+        "factory_id": "fd98ba91-20cd-4c15-a15c-45c761c8ff08",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMasterPlant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Material",
+                    "Plant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BaseCurrency",
+                    "CurrentValuatedStockAmount",
+                    "CurrentValuatedStockQuantity",
+                    "ID",
+                    "IsDiscontinued",
+                    "MRPController",
+                    "MRPType",
+                    "MinimumLotSizeQuantity",
+                    "PlannedDeliveryTimeDays",
+                    "PlannedProductionLeadTimeDays",
+                    "ProcurementType",
+                    "SafetyStockQuantity",
+                    "SourceSystemInstance",
+                    "UnitPriceAmount",
+                    "ValidityPeriodEndDate",
+                    "ValidityPeriodStartDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMasterPlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\n\nSELECT\n    <%=sourceSystem%>||'::'||PurchaseOrderHeadersV2.PurchaseOrderNumber                                 AS ID,\n    PurchaseOrderHeadersV2.CurrencyCode                                                                 AS BaseCurrency,\n    InventTransCDSEntities.CostAmountPhysical                                                           AS CurrentValuatedStockAmount,\n    InventTransCDSEntities.QtySettled                                                                   AS CurrentValuatedStockQuantity,\n    PurchaseOrderLinesV2.PURCHASEPRICE                                                                  AS UnitPriceAmount,\n    PlannedOrders.RequirementPlanId                                                                     AS MRPController,\n    PlannedOrders.RequirementPlanId                                                                     AS MRPType,\n    <%=sourceSystem%>||'::'|| ReleasedProductsV2.ItemNumber                                             AS Material,\n    ItemCoverageSettingsV2.MinimumOnHandInventoryQuantity                                               AS MinimumLotSizeQuantity,\n    ItemCoverageSettingsV2.ProcurementLeadTimeDays                                                      AS PlannedDeliveryTimeDays,\n    ItemCoverageSettingsV2.ProductionLeadTimeDays                                                       AS PlannedProductionLeadTimeDays,\n    <%=sourceSystem%>||'::'|| InventItemPricesV3.PriceSiteId                                            AS Plant,\n    PlannedOrders.RequirementPlanType                                                                   AS ProcurementType,\n    NULL AS IsDiscontinued,\n    NULL AS ValidityPeriodStartDate,\n    NULL AS SourceSystemInstance,\n    NULL AS ValidityPeriodEndDate,\n    NULL AS SafetyStockQuantity\nFROM PurchaseOrderHeadersV2\n\tLEFT JOIN PurchaseOrderLinesV3 AS PurchaseOrderLinesV2\n        ON PurchaseOrderHeadersV2.PurchaseOrderNumber = PurchaseOrderLinesV2.PurchaseOrderNumber\n        AND PurchaseOrderHeadersV2.dataAreaId = PurchaseOrderLinesV2.dataAreaId\n    LEFT JOIN ReleasedProductsV2\n        ON  ReleasedProductsV2.ItemNumber = PurchaseOrderLinesV2.ItemNumber\n        AND ReleasedProductsV2.dataAreaId = PurchaseOrderLinesV2.dataAreaId\n    LEFT JOIN InventTransCDSEntities\n        ON InventTransCDSEntities.ItemID = ReleasedProductsV2.ItemNumber\n        AND InventTransCDSEntities.dataAreaId = ReleasedProductsV2.dataAreaId\n    LEFT JOIN ItemCoverageSettingsV2\n        ON ItemCoverageSettingsV2.ItemNumber = ReleasedProductsV2.ItemNumber\n        AND ItemCoverageSettingsV2.dataAreaId = ReleasedProductsV2.dataAreaId\n    LEFT JOIN PlannedOrders\n        ON PlannedOrders.ItemNumber = ReleasedProductsV2.ItemNumber\n        AND PlannedOrders.dataAreaId = ReleasedProductsV2.dataAreaId\n        AND PlannedOrders.ProductGroupId = ReleasedProductsV2.ProductGroupId \n    LEFT JOIN MasterPlanningProductCoverageGroups\n        ON MasterPlanningProductCoverageGroups.GroupId = ReleasedProductsV2.ProductCoverageGroupId\t\n        AND MasterPlanningProductCoverageGroups.dataAreaId = ReleasedProductsV2.dataAreaId\t\n    LEFT JOIN InventItemPricesV3\n        ON InventItemPricesV3.ItemNumber = ReleasedProductsV2.ItemNumber\n        AND InventItemPricesV3.dataAreaId = ReleasedProductsV2.dataAreaId\n\n\n\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763976399929.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1751993898576.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMasterPlant_OracleFusion",
+        "draft": null,
+        "factory_id": "adcd5b33-2c8e-4f68-9cfb-5a24478bb41b",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMasterPlant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Material",
+                    "Plant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BaseCurrency",
+                    "CurrentValuatedStockAmount",
+                    "CurrentValuatedStockQuantity",
+                    "ID",
+                    "IsDiscontinued",
+                    "MRPController",
+                    "MRPType",
+                    "MinimumLotSizeQuantity",
+                    "PlannedDeliveryTimeDays",
+                    "PlannedProductionLeadTimeDays",
+                    "ProcurementType",
+                    "SafetyStockQuantity",
+                    "SourceSystemInstance",
+                    "UnitPriceAmount",
+                    "ValidityPeriodEndDate",
+                    "ValidityPeriodStartDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMasterPlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Stock_Quantity\" AS ( \n    SELECT\n        \"InventoryOnhandExtractPVO\".\"InvOnhandQuantityPEOInventoryItemId\"                 AS \"INVENTORY_ITEM_ID\",\n        \"InventoryOnhandExtractPVO\".\"InvOnhandQuantityPEOOrganizationId\"                  AS \"ORGANIZATION_ID\",\n        SUM(\"InventoryOnhandExtractPVO\".\"InvOnhandQuantityPEOPrimaryTransactionQuantity\") AS \"TotalStockQuantity\"\n    FROM  \"FscmTopModelAM_ScmExtractAM_InvBiccExtractAM_InventoryOnhandExtractPVO\" AS \"InventoryOnhandExtractPVO\"\n        GROUP BY \"InvOnhandQuantityPEOInventoryItemId\", \"InvOnhandQuantityPEOOrganizationId\"\n)\n    SELECT  <%=sourceSystem%> || '::' ||\"ItemExtractPVO\".\"ItemBasePEOOrganizationId\" \n            || '::' || \"ItemExtractPVO\".\"ItemBasePEOInventoryItemId\"                                                       AS \"ID\",\n            \"ItemExtractPVO\".\"ItemBasePEOStartDateActive\"                                                                  AS \"ValidityPeriodStartDate\",\n            \"ItemExtractPVO\".\"ItemBasePEOEndDateActive\"                                                                    AS \"ValidityPeriodEndDate\",\n            \"ItemExtractPVO\".\"ItemBasePEOPlanningTimeFenceDays\"                                                            AS \"PlannedDeliveryTimeDays\", \n            \"Safety_Stock_PVO\".\"ItemCategoriesPEOSafetyStockQuantity\"                                                      AS \"SafetyStockQuantity\",\n            \"ItemExtractPVO\".\"ItemBasePEOMinimumOrderQuantity\"                                                             AS \"MinimumLotSizeQuantity\",\n            <%=sourceSystem%> \n            || '::' ||\"ItemExtractPVO\".\"ItemBasePEOInventoryItemId\"                                                        AS \"Material\",\n            <%=sourceSystem%> \n            || '::' ||\"ItemExtractPVO\".\"ItemBasePEOOrganizationId\"                                                         AS \"Plant\",\n            CASE\n                WHEN \"ItemExtractPVO\".\"ItemBasePEOPlanningMakeBuyCode\" = '1'\n                    THEN 'In-house Production'\n                WHEN \"ItemExtractPVO\".\"ItemBasePEOPlanningMakeBuyCode\" = '2'\n                    THEN 'External Procurement'\n            END                                                                                                             AS \"ProcurementType\",\n            \"ItemExtractPVO\".\"ItemBasePEOCumManufacturingLeadTime\"                                                          AS \"PlannedProductionLeadTimeDays\",\n            \"FND_LOOKUP_VALUES\".\"Meaning\"                                                                                   AS \"MRPType\",\n            \"ItemExtractPVO\".\"ItemBasePEOPlannerCode\"                                                                       AS \"MRPController\",          \n            \"Stock_Quantity\".\"TotalStockQuantity\"                                                                           AS \"CurrentValuatedStockQuantity\",\n            \"Stock_Quantity\".\"TotalStockQuantity\"\n            * \"ItemExtractPVO\".\"ItemBasePEOListPricePerUnit\"                                                                AS \"CurrentValuatedStockAmount\",\n            \"ItemExtractPVO\".\"ItemBasePEOListPricePerUnit\"                                                                  AS \"UnitPriceAmount\",\n            \"GL_SETS_OF_BOOKS\".\"LedgerCurrencyCode\"                                                                         AS \"BaseCurrency\",\n            CASE \n                WHEN UPPER(\"ItemExtractPVO\".\"ItemBasePEOInventoryItemStatusCode\") IN ('INACTIVE', 'OBSOLETE') THEN TRUE \n                ELSE FALSE \n            END                                                                                                             AS \"IsDiscontinued\",\n            <%=sourceSystem%>                                                                                               AS \"SourceSystemInstance\"\n    FROM \"FscmTopModelAM_ScmExtractAM_EgpBiccExtractAM_ItemExtractPVO\" AS \"ItemExtractPVO\"\n        LEFT JOIN \"CTE_Stock_Quantity\" AS \"Stock_Quantity\"\n            ON \"ItemExtractPVO\".\"ItemBasePEOInventoryItemId\" =  \"Stock_Quantity\".\"INVENTORY_ITEM_ID\"\n                AND \"ItemExtractPVO\".\"ItemBasePEOOrganizationId\" = \"Stock_Quantity\".\"ORGANIZATION_ID\"\n        LEFT JOIN \"FscmTopModelAM_InvOrgPublicViewAM_InventoryOrgParametersPVO\" AS \"ORG_ORGANIZATION_DEFINITIONS\"\n            ON \"ItemExtractPVO\".\"ItemBasePEOOrganizationId\" = \"ORG_ORGANIZATION_DEFINITIONS\".\"OrganizationId\"\n        LEFT JOIN \"FscmTopModelAM_FinExtractAM_FunBiccExtractAM_BusinessUnitExtractPVO\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n            ON \"ORG_ORGANIZATION_DEFINITIONS\".\"BusinessUnitPEOBusinessUnitId\" = \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOBusinessUnitId\"\n        LEFT JOIN \"FscmTopModelAM_FinExtractAM_GlBiccExtractAM_LedgerExtractPVO\" AS \"GL_SETS_OF_BOOKS\"\n            ON \"ORG_ORGANIZATION_DEFINITIONS\".\"OrgOrganizationDefinitionsPSetOfBooksId\" = \"GL_SETS_OF_BOOKS\".\"LedgerLedgerId\"\n        LEFT JOIN \"FscmTopModelAM_FinExtractAM_AnalyticsExtractServiceAM_LookupValuesTLExtractPVO\" AS \"FND_LOOKUP_VALUES\"\n            ON CAST(\"ItemExtractPVO\".\"ItemBasePEOMrpPlanningCode\" AS VARCHAR) = \"FND_LOOKUP_VALUES\".\"LookupCode\"\n                AND \"FND_LOOKUP_VALUES\".\"ViewApplicationId\" = '0'\n                AND \"FND_LOOKUP_VALUES\".\"LookupType\" = 'EGP_PLANNING_CODE'\n                AND \"FND_LOOKUP_VALUES\".\"Language\" = <%=LanguageKey%>\n        LEFT JOIN \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\" AS  \"Safety_Stock_PVO\"\n            ON \"ItemExtractPVO\".\"ItemBasePEOInventoryItemId\" =  \"Safety_Stock_PVO\".\"InventoryItemId\"\n                AND \"ItemExtractPVO\".\"ItemBasePEOOrganizationId\" = \"Safety_Stock_PVO\".\"OrganizationId\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763571562071.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633462571.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMasterPlant - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "dcf6054a-e9ed-4226-b307-3e10235d367c",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMasterPlant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Material",
+                    "Plant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BaseCurrency",
+                    "CurrentValuatedStockAmount",
+                    "CurrentValuatedStockQuantity",
+                    "ID",
+                    "IsDiscontinued",
+                    "MRPController",
+                    "MRPType",
+                    "MinimumLotSizeQuantity",
+                    "PlannedDeliveryTimeDays",
+                    "PlannedProductionLeadTimeDays",
+                    "ProcurementType",
+                    "SafetyStockQuantity",
+                    "SourceSystemInstance",
+                    "UnitPriceAmount",
+                    "ValidityPeriodEndDate",
+                    "ValidityPeriodStartDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMasterPlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || \"MARC\".\"MANDT\" || '::' || \"MARC\".\"MATNR\" || '::' || \"MARC\".\"WERKS\"    AS \"ID\",\n    CAST(\"MARC\".\"MMSTD\" AS TIMESTAMP)                                                                     AS \"ValidityPeriodStartDate\",\n    CAST(\"MARC\".\"AUSDT\" AS TIMESTAMP)                                                                     AS \"ValidityPeriodEndDate\",\n    \"MARC\".\"PLIFZ\"                                                                                        AS \"PlannedDeliveryTimeDays\",\n\t<%=sourceSystem%> || '::' || \"MARC\".\"MANDT\" || '::' || \"MARC\".\"MATNR\"                                 AS \"Material\",\n\t<%=sourceSystem%> || '::' || \"MARC\".\"MANDT\" || '::' || \"MARC\".\"WERKS\"                                 AS \"Plant\",\n    CAST(\"MARC\".\"EISBE\" AS BIGINT)                                                                        AS \"SafetyStockQuantity\",\n    CASE\n        WHEN \"MARC\".\"BESKZ\" = 'E' THEN 'In-house Production'\n        WHEN \"MARC\".\"BESKZ\" = 'F' THEN 'External Procurement'\n        WHEN \"MARC\".\"BESKZ\" = 'X' THEN 'Both Procurement Types'\n    END                                                                                                   AS \"ProcurementType\",\n    CAST(\"MARC\".\"DZEIT\" AS FLOAT)                                                                         AS \"PlannedProductionLeadTimeDays\",\n    \"MARC\".\"DISMM\"                                                                                        AS \"MRPType\",\n    \"MARC\".\"DISPO\"                                                                                        AS \"MRPController\",\n    \"MBEW\".\"LBKUM\"                                                                                        AS \"CurrentValuatedStockQuantity\",\n    \"MBEW\".\"SALK3\"                                                                                        AS \"CurrentValuatedStockAmount\",\n    CAST(\"MARC\".\"BSTMI\" AS FLOAT)                                                                         AS \"MinimumLotSizeQuantity\",\n    CASE\n        WHEN \"MBEW\".\"VPRSV\" = 'V'\n            THEN COALESCE(\"MBEW\".\"VERPR\" / NULLIF(\"MBEW\".\"PEINH\", 0), \"MBEW\".\"VERPR\")\n        WHEN \"MBEW\".\"VPRSV\" = 'S'\n            THEN COALESCE(\"MBEW\".\"STPRS\" / NULLIF(\"MBEW\".\"PEINH\", 0), \"MBEW\".\"STPRS\")\n        ELSE \"MBEW\".\"SALK3\" / NULLIF(\"MBEW\".\"LBKUM\", 0)\n        END                                                                                               AS \"UnitPriceAmount\",\n    \"T001\".\"WAERS\"                                                                                        AS \"BaseCurrency\",\n    CASE WHEN NULLIF(\"MARC\".\"KZAUS\", '') IS NOT NULL THEN TRUE ELSE FALSE END                             AS \"IsDiscontinued\",\n    <%=sourceSystem%> || '::' || \"MARC\".\"MANDT\"                                                           AS \"SourceSystemInstance\"\nFROM \"MARC\" AS \"MARC\"\n         LEFT JOIN \"T001W\" AS \"T001W\"\n                   ON \"MARC\".\"MANDT\" = \"T001W\".\"MANDT\"\n                       AND \"MARC\".\"WERKS\" = \"T001W\".\"WERKS\"\n         LEFT JOIN \"MBEW\" AS \"MBEW\"\n                   ON \"MARC\".\"MANDT\" = \"MBEW\".\"MANDT\"\n                       AND \"MARC\".\"MATNR\" = \"MBEW\".\"MATNR\"\n                       AND \"T001W\".\"BWKEY\" = \"MBEW\".\"BWKEY\"\n                       AND NULLIF(\"MBEW\".\"BWTAR\", '') IS NULL\n         LEFT JOIN \"T001K\" AS \"T001K\"\n                   ON \"T001W\".\"MANDT\" = \"T001K\".\"MANDT\"\n                       AND \"T001W\".\"BWKEY\" = \"T001K\".\"BWKEY\"\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"T001K\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"T001K\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE NULLIF(\"MARC\".\"MANDT\", '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763976356327.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630763360.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "MaterialMasterPlant transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "5b28949e-a04e-45ce-8fe4-8a38a531de48",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMasterPlant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Material",
+                    "Plant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BaseCurrency",
+                    "CurrentValuatedStockAmount",
+                    "CurrentValuatedStockQuantity",
+                    "ID",
+                    "IsDiscontinued",
+                    "MRPController",
+                    "MRPType",
+                    "MinimumLotSizeQuantity",
+                    "PlannedDeliveryTimeDays",
+                    "PlannedProductionLeadTimeDays",
+                    "ProcurementType",
+                    "SafetyStockQuantity",
+                    "SourceSystemInstance",
+                    "UnitPriceAmount",
+                    "ValidityPeriodEndDate",
+                    "ValidityPeriodStartDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMasterPlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Stock_Quantity\" AS (\n    SELECT\n        \"MTL_ONHAND_QUANTITIES_DETAIL\".\"ORGANIZATION_ID\",\n        \"MTL_ONHAND_QUANTITIES_DETAIL\".\"INVENTORY_ITEM_ID\",\n        SUM(\"MTL_ONHAND_QUANTITIES_DETAIL\".\"PRIMARY_TRANSACTION_QUANTITY\")                                          AS \"TotalStockQuantity\"\n    FROM \"MTL_ONHAND_QUANTITIES_DETAIL\" AS \"MTL_ONHAND_QUANTITIES_DETAIL\"\n    GROUP BY\n        \"ORGANIZATION_ID\",\n        \"INVENTORY_ITEM_ID\"\n),\n\"CTE_Material_Cost\" AS (\n    SELECT\n        \"CST_ITEM_COSTS\".\"ORGANIZATION_ID\",\n        \"CST_ITEM_COSTS\".\"INVENTORY_ITEM_ID\",\n        \"CST_ITEM_COSTS\".\"ITEM_COST\" AS \"UnitPriceAmount\"\n    FROM \"CST_ITEM_COSTS\" AS \"CST_ITEM_COSTS\"\n    INNER JOIN \"CST_COST_TYPES\" AS \"CST_COST_TYPES\"\n        ON \"CST_COST_TYPES\".\"COST_TYPE_ID\" = \"CST_ITEM_COSTS\".\"COST_TYPE_ID\"\n            AND \"CST_COST_TYPES\".\"COST_TYPE_ID\" = 1\n)\n    SELECT\n        <%=sourceSystem%> || '::' || \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\" \n        || '::' || \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\"                                                         AS \"ID\",\n        <%=sourceSystem%> || '::' || \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\"                                       AS \"Material\",\n        <%=sourceSystem%> || '::' || \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\"                                         AS \"Plant\",\n        \"MTL_SYSTEM_ITEMS_B\".\"START_DATE_ACTIVE\"                                                                    AS \"ValidityPeriodStartDate\",\n        \"MTL_SYSTEM_ITEMS_B\".\"END_DATE_ACTIVE\"                                                                      AS \"ValidityPeriodEndDate\",\n        CAST(\"MTL_SYSTEM_ITEMS_B\".\"FIXED_LEAD_TIME\" + \n            (\"MTL_SYSTEM_ITEMS_B\".\"FIXED_ORDER_QUANTITY\" \n            * \"MTL_SYSTEM_ITEMS_B\".\"VARIABLE_LEAD_TIME\") AS BIGINT)                                                 AS \"PlannedDeliveryTimeDays\",\n        \"MSS\".\"SafetyStockQuantity\"                                                                                 AS \"SafetyStockQuantity\",\n        CASE\n            WHEN \"MTL_SYSTEM_ITEMS_B\".\"PLANNING_MAKE_BUY_CODE\" = '1'\n            THEN 'In-house Production'\n            WHEN \"MTL_SYSTEM_ITEMS_B\".\"PLANNING_MAKE_BUY_CODE\" = '2'\n            THEN 'External Procurement'\n        END                                                                                                         AS \"ProcurementType\",\n        CAST(\"MTL_SYSTEM_ITEMS_B\".\"CUM_MANUFACTURING_LEAD_TIME\" AS BIGINT)                                          AS \"PlannedProductionLeadTimeDays\",\n        \"FND_LOOKUP_VALUES\".\"MEANING\"                                                                               AS \"MRPType\",\n        \"MTL_SYSTEM_ITEMS_B\".\"PLANNER_CODE\"                                                                         AS \"MRPController\",\n        \"Stock_Quantity\".\"TotalStockQuantity\"                                                                       AS \"CurrentValuatedStockQuantity\",\n        \"Stock_Quantity\".\"TotalStockQuantity\"\n        * \"Material_Cost\".\"UnitPriceAmount\"                                                                         AS \"CurrentValuatedStockAmount\",    -- Evaluation based on cost\n        -- \"Stock_Quantity\".\"TotalStockQuantity\"\n        -- * \"MTL_SYSTEM_ITEMS_B\".\"LIST_PRICE_PER_UNIT\"                                                                AS \"CurrentValuatedStockAmount\", -- Evaluation based on list price\n        \"MTL_SYSTEM_ITEMS_B\".\"MINIMUM_ORDER_QUANTITY\"                                                               AS \"MinimumLotSizeQuantity\",\n        \"Material_Cost\".\"UnitPriceAmount\"                                                                           AS \"UnitPriceAmount\",    -- Evaluation based on cost\n        -- \"MTL_SYSTEM_ITEMS_B\".\"LIST_PRICE_PER_UNIT\"                                                                  AS \"UnitPriceAmount\", -- Evaluation based on list price\n        \"GL_LEDGERS\".\"CURRENCY_CODE\"                                                                                AS \"BaseCurrency\",\n        CASE \n            WHEN UPPER(\"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_STATUS_CODE\") IN ('INACTIVE', 'OBSOLETE') THEN TRUE \n            ELSE FALSE \n        END                                                                                                         AS \"IsDiscontinued\",\n        <%=sourceSystem%>                                                                                           AS \"SourceSystemInstance\"\n    FROM \"MTL_SYSTEM_ITEMS_B\" AS \"MTL_SYSTEM_ITEMS_B\"\n        LEFT JOIN \"CTE_Stock_Quantity\" AS \"Stock_Quantity\"\n            ON \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\" = \"Stock_Quantity\".\"INVENTORY_ITEM_ID\"\n            AND \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\" = \"Stock_Quantity\".\"ORGANIZATION_ID\"\n        LEFT JOIN \"CTE_Material_Cost\" AS \"Material_Cost\"\n            ON \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\" = \"Material_Cost\".\"INVENTORY_ITEM_ID\"\n            AND \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\" = \"Material_Cost\".\"ORGANIZATION_ID\"\n        LEFT JOIN \"HR_ALL_ORGANIZATION_UNITS\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n            ON \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\" = \"HR_ALL_ORGANIZATION_UNITS\".\"ORGANIZATION_ID\"\n        LEFT JOIN \"ORG_ORGANIZATION_DEFINITIONS\" AS \"ORG_ORGANIZATION_DEFINITIONS\"\n            ON \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\" = \"ORG_ORGANIZATION_DEFINITIONS\".\"ORGANIZATION_ID\"\n        LEFT JOIN \"GL_LEDGERS\" AS \"GL_LEDGERS\"\n            ON \"ORG_ORGANIZATION_DEFINITIONS\".\"SET_OF_BOOKS_ID\" = \"GL_LEDGERS\".\"LEDGER_ID\"\n        LEFT JOIN \"FND_LOOKUP_VALUES\" AS \"FND_LOOKUP_VALUES\"\n            ON CAST(\"MTL_SYSTEM_ITEMS_B\".\"MRP_PLANNING_CODE\" AS VARCHAR) = \"FND_LOOKUP_VALUES\".\"LOOKUP_CODE\"\n            AND \"FND_LOOKUP_VALUES\".\"VIEW_APPLICATION_ID\" = '700'\n            AND \"FND_LOOKUP_VALUES\".\"LOOKUP_TYPE\" = 'MRP_PLANNING_CODE'\n            AND \"FND_LOOKUP_VALUES\".\"ZD_EDITION_NAME\" = 'SET1'\n            AND \"FND_LOOKUP_VALUES\".\"LANGUAGE\" = <%=LanguageKey%>\n        LEFT JOIN (SELECT\n                   \"MTL_SAFETY_STOCKS\".\"INVENTORY_ITEM_ID\",\n                   \"MTL_SAFETY_STOCKS\".\"ORGANIZATION_ID\",\n                   \"MTL_SAFETY_STOCKS\".\"EFFECTIVITY_DATE\",\n                   \"MTL_SAFETY_STOCKS\".\"SAFETY_STOCK_QUANTITY\" AS \"SafetyStockQuantity\",\n                ROW_NUMBER() OVER (\n                    PARTITION BY\n                        \"MTL_SAFETY_STOCKS\".\"INVENTORY_ITEM_ID\",\n                        \"MTL_SAFETY_STOCKS\".\"ORGANIZATION_ID\"\n                    ORDER BY\n                        \"MTL_SAFETY_STOCKS\".\"EFFECTIVITY_DATE\" DESC,\n                        \"MTL_SAFETY_STOCKS\".\"LAST_UPDATE_DATE\" DESC\n                  ) AS rn\n                   FROM \"MTL_SAFETY_STOCKS\" AS \"MTL_SAFETY_STOCKS\"\n                    WHERE \"MTL_SAFETY_STOCKS\".\"EFFECTIVITY_DATE\" <= CURRENT_DATE\n                ) AS \"MSS\"\n            ON \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\" = \"mss\".\"INVENTORY_ITEM_ID\"\n            AND \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\" = \"mss\".\"ORGANIZATION_ID\"\n            AND \"MSS\".rn = 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763571603203.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749648834113.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMasterPlant - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "eac58745-cfae-40d3-a5a1-ac3ddf17240a",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMasterPlant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Material",
+                    "Plant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BaseCurrency",
+                    "CurrentValuatedStockAmount",
+                    "CurrentValuatedStockQuantity",
+                    "ID",
+                    "IsDiscontinued",
+                    "MRPController",
+                    "MRPType",
+                    "MinimumLotSizeQuantity",
+                    "PlannedDeliveryTimeDays",
+                    "PlannedProductionLeadTimeDays",
+                    "ProcurementType",
+                    "SafetyStockQuantity",
+                    "SourceSystemInstance",
+                    "UnitPriceAmount",
+                    "ValidityPeriodEndDate",
+                    "ValidityPeriodStartDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMasterPlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || \"MARC\".\"MANDT\" || '::' || \"MARC\".\"MATNR\" || '::' || \"MARC\".\"WERKS\"    AS \"ID\",\n    CAST(\"MARC\".\"MMSTD\" AS TIMESTAMP)                                                                     AS \"ValidityPeriodStartDate\",\n    CAST(\"MARC\".\"AUSDT\" AS TIMESTAMP)                                                                     AS \"ValidityPeriodEndDate\",\n    \"MARC\".\"PLIFZ\"                                                                                        AS \"PlannedDeliveryTimeDays\",\n\t<%=sourceSystem%> || '::' || \"MARC\".\"MANDT\" || '::' || \"MARC\".\"MATNR\"                                 AS \"Material\",\n\t<%=sourceSystem%> || '::' || \"MARC\".\"MANDT\" || '::' || \"MARC\".\"WERKS\"                                 AS \"Plant\",\n    CAST(\"MARC\".\"EISBE\" AS BIGINT)                                                                        AS \"SafetyStockQuantity\",\n    CASE\n        WHEN \"MARC\".\"BESKZ\" = 'E' THEN 'In-house Production'\n        WHEN \"MARC\".\"BESKZ\" = 'F' THEN 'External Procurement'\n        WHEN \"MARC\".\"BESKZ\" = 'X' THEN 'Both Procurement Types'\n    END                                                                                                   AS \"ProcurementType\",\n    CAST(\"MARC\".\"DZEIT\" AS FLOAT)                                                                         AS \"PlannedProductionLeadTimeDays\",\n    \"MARC\".\"DISMM\"                                                                                        AS \"MRPType\",\n    \"MARC\".\"DISPO\"                                                                                        AS \"MRPController\",\n    \"MBVMBEWBASE\".\"LBKUM\"                                                                                 AS \"CurrentValuatedStockQuantity\",\n    \"MBVMBEWBASE\".\"SALK3\"                                                                                 AS \"CurrentValuatedStockAmount\",\n    CAST(\"MARC\".\"BSTMI\" AS FLOAT)                                                                         AS \"MinimumLotSizeQuantity\",\n    CASE\n        WHEN \"MBVMBEWBASE\".\"VPRSV\" = 'V'\n            THEN COALESCE(\"MBVMBEWBASE\".\"VERPR\" / NULLIF(\"MBVMBEWBASE\".\"PEINH\", 0), \"MBVMBEWBASE\".\"VERPR\")\n        WHEN \"MBVMBEWBASE\".\"VPRSV\" = 'S'\n            THEN COALESCE(\"MBVMBEWBASE\".\"STPRS\" / NULLIF(\"MBVMBEWBASE\".\"PEINH\", 0), \"MBVMBEWBASE\".\"STPRS\")\n        ELSE \"MBVMBEWBASE\".\"SALK3\" / NULLIF(\"MBVMBEWBASE\".\"LBKUM\", 0)\n        END                                                                                               AS \"UnitPriceAmount\",\n    \"T001\".\"WAERS\"                                                                                        AS \"BaseCurrency\",\n    CASE WHEN NULLIF(\"MARC\".\"KZAUS\", '') IS NOT NULL THEN TRUE ELSE FALSE END                             AS \"IsDiscontinued\",\n    <%=sourceSystem%> || '::' || \"MARC\".\"MANDT\"                                                           AS \"SourceSystemInstance\"\nFROM \"MARC\" AS \"MARC\"\n         LEFT JOIN \"T001W\" AS \"T001W\"\n                   ON \"MARC\".\"MANDT\" = \"T001W\".\"MANDT\"\n                       AND \"MARC\".\"WERKS\" = \"T001W\".\"WERKS\"\n         LEFT JOIN \"MBVMBEWBASE\" AS \"MBVMBEWBASE\"\n                   ON \"MARC\".\"MANDT\" = \"MBVMBEWBASE\".\"MANDT\"\n                       AND \"MARC\".\"MATNR\" = \"MBVMBEWBASE\".\"MATNR\"\n                       AND \"T001W\".\"BWKEY\" = \"MBVMBEWBASE\".\"BWKEY\"\n                       AND NULLIF(\"MBVMBEWBASE\".\"BWTAR\", '') IS NULL\n         LEFT JOIN \"T001K\" AS \"T001K\"\n                   ON \"T001W\".\"MANDT\" = \"T001K\".\"MANDT\"\n                       AND \"T001W\".\"BWKEY\" = \"T001K\".\"BWKEY\"\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"T001K\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"T001K\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE NULLIF(\"MARC\".\"MANDT\", '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

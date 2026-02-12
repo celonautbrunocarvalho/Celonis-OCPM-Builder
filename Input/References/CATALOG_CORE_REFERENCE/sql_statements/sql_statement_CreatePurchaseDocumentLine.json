@@ -1,0 +1,63 @@
+[
+    {
+        "change_date": 1760437459668.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630849903.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CreatePurchaseDocumentLine",
+        "draft": null,
+        "factory_id": "c256378b-00c3-4d8a-8931-8f9c12dfb67f",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreatePurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PurchaseDocument",
+                    "PurchaseDocumentLine",
+                    "PurchaseOrderLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DocumentCategory",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CreatePurchaseDocumentItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'CreatePurchaseDocumentLine' || '::' || \"PurchaseDocumentLine\".\"ID\"     AS \"ID\",\n    \"PurchaseDocumentLine\".\"ID\"                                             AS \"PurchaseDocumentLine\",\n    \"PurchaseDocumentLine\".\"ID\"                                             AS \"PurchaseOrderLine\",\n    \"PurchaseDocument\".\"ID\"                                                 AS \"PurchaseDocument\",\n    \"PurchaseDocumentLine\".\"DocumentCategory\"                               AS \"DocumentCategory\",\n    \"PurchaseDocumentLine\".\"CreationTime\"                                   AS \"Time\",\n    \"PurchaseDocumentLine\".\"CreatedBy_ID\"                                   AS \"ExecutedBy\",\n    \"PurchaseDocumentLine\".\"CreationExecutionType\"                          AS \"ExecutionType\"\nFROM \"o_custom_PurchaseDocumentLine\" AS \"PurchaseDocumentLine\"\n    LEFT JOIN \"o_custom_PurchaseDocument\" AS \"PurchaseDocument\"\n        ON \"PurchaseDocumentLine\".\"Header_ID\" = \"PurchaseDocument\".\"ID\"\nWHERE \"PurchaseDocumentLine\".\"CreationTime\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

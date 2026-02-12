@@ -1,0 +1,75 @@
+[
+    {
+        "change_date": 1761656241917.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1761084433705.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "ApplyCustomerInvoiceLine - 1",
+        "draft": null,
+        "factory_id": "5dc90442-799f-4837-8456-c8e47f64cbcb",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ApplyCustomerInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PreviousCustomerInvoice"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DocumentCategory",
+                    "ID",
+                    "Label",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ApplyCustomerInvoiceLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'ApplyCustomerInvoiceLine' || '::' || \"CustomerInvoiceLine\".\"ID\"   AS \"ID\",\n    \"PreviousCustomerInvoice\".\"ID\"                                     AS \"PreviousCustomerInvoice\",\n    \"CustomerInvoiceLine\".\"CreationTime\"                               AS \"Time\",\n    \"CustomerInvoice\".\"CustomerInvoiceType\"                            AS \"DocumentCategory\",\n    'Apply'                                                            AS \"Label\"\nFROM \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"\n        ON \"CustomerInvoice\".\"ID\" = \"CustomerInvoiceLine\".\"CustomerInvoice_ID\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"PreviousCustomerInvoice\"\n        ON \"PreviousCustomerInvoice\".\"ID\" = \"CustomerInvoiceLine\".\"PreviousCustomerInvoice\"\nWHERE \"CustomerInvoiceLine\".\"CreationTime\" IS NOT NULL\n    AND \"PreviousCustomerInvoice\".\"CustomerInvoiceType\" = 'CustomerInvoice'\n    AND \"CustomerInvoice\".\"CustomerInvoiceType\" IN ('CreditMemo', 'DebitMemo')\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PreviousCustomerInvoiceLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "PrevCustomerInvoiceLineRelationship",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "-- Invoice lines\nSELECT \n    'ApplyCustomerInvoiceLine' || '::' || \"CustomerInvoiceLine\".\"ID\"     AS \"ID\",\n    \"PreviousCustomerInvoiceLine\".\"ID\"                                   AS \"PreviousCustomerInvoiceLine\"\nFROM \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"\n        ON \"CustomerInvoice\".\"ID\" = \"CustomerInvoiceLine\".\"CustomerInvoice_ID\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"PreviousCustomerInvoice\"\n        ON \"PreviousCustomerInvoice\".\"ID\" = \"CustomerInvoiceLine\".\"PreviousCustomerInvoice\"\n    LEFT JOIN \"o_custom_CustomerInvoiceLine\" AS \"PreviousCustomerInvoiceLine\"\n        ON \"PreviousCustomerInvoiceLine\".\"CustomerInvoice_ID\" = \"PreviousCustomerInvoice\".\"ID\"\nWHERE \"CustomerInvoiceLine\".\"CreationTime\" IS NOT NULL\n    AND \"PreviousCustomerInvoice\".\"CustomerInvoiceType\" = 'CustomerInvoice'\n    AND \"CustomerInvoice\".\"CustomerInvoiceType\" IN ('CreditMemo', 'DebitMemo')\n"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

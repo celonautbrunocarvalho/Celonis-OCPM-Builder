@@ -1,0 +1,77 @@
+[
+    {
+        "change_date": 1761579017420.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1752243270077.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CreateCustomerInvoiceLine",
+        "draft": null,
+        "factory_id": "9aeb3cca-d922-4f01-97fb-2e9967a066ce",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreateCustomerInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CustomerInvoice",
+                    "CustomerInvoiceLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CustomerInvoiceType",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CreateCustomerDocumentItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'CreateCustomerInvoiceLine' || '::' || \"CustomerInvoiceLine\".\"ID\"  AS \"ID\",\n    \"CustomerInvoiceLine\".\"ID\"                                         AS \"CustomerInvoiceLine\",\n    \"CustomerInvoiceLine\".\"CustomerInvoice_ID\"                         AS \"CustomerInvoice\",\n    \"CustomerInvoiceLine\".\"CreationTime\"                               AS \"Time\",\n    \"CustomerInvoiceLine\".\"CreatedBy_ID\"                               AS \"ExecutedBy\",\n    \"CustomerInvoiceLine\".\"CreationExecutionType\"                      AS \"ExecutionType\",\n    \"CustomerInvoice\".\"CustomerInvoiceType\"                            AS \"CustomerInvoiceType\"\nFROM \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"\n        ON \"CustomerInvoice\".\"ID\" = \"CustomerInvoiceLine\".\"CustomerInvoice_ID\"\nWHERE \"CustomerInvoiceLine\".\"CreationTime\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "SalesOrderScheduleLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipSalesOrderScheduleLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    'CreateCustomerInvoiceLine' || '::' || \"CustomerInvoiceLine\".\"ID\"                              AS \"ID\",\n    \"CustomerInvoiceLine__SalesOrderScheduleLines\".\"SalesOrderScheduleLines_ID\"                    AS \"SalesOrderScheduleLine\"\nFROM \"r_o_custom_CustomerInvoiceLine__SalesOrderScheduleLines\" AS \"CustomerInvoiceLine__SalesOrderScheduleLines\"\n    LEFT JOIN \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n        ON \"CustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine__SalesOrderScheduleLines\".\"ID\"\nWHERE \"CustomerInvoiceLine\".\"CreationTime\" IS NOT NULL"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

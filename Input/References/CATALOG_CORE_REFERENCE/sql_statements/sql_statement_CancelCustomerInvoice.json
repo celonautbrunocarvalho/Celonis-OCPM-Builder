@@ -1,0 +1,105 @@
+[
+    {
+        "change_date": 1761571885855.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1752244052685.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CancelCustomerInvoice - 1",
+        "draft": null,
+        "factory_id": "8d183846-56d6-4299-841a-15fac6be002b",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CancelCustomerInvoice",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CustomerInvoice"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CancellationType",
+                    "CustomerInvoiceType",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CancelCustomerInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Sort_CustomerDocCancel\" AS (\n    SELECT \n        \"CustomerInvoiceLine_Changes\".\"OperationID\"                                                     AS \"ID\",\n        \"CustomerInvoiceLine\".\"CustomerInvoice_ID\"                                                      AS \"CustomerInvoice\",\n        \"CustomerInvoiceLine_Changes\".\"Time\"                                                            AS \"Time\",\n        \"CustomerInvoiceLine_Changes\".\"OperationType\"                                                   AS \"CancellationType\",\n        \"CustomerInvoiceLine_Changes\".\"ChangedBy\"                                                       AS \"ExecutedBy\",\n        \"CustomerInvoiceLine_Changes\".\"ExecutionType\"                                                   AS \"ExecutionType\",\n        \"CustomerInvoice\".\"CustomerInvoiceType\"                                                         AS \"CustomerInvoiceType\",\n        ROW_NUMBER() OVER (PARTITION BY \"CustomerInvoiceLine_Changes\".\"OperationID\"  \n             ORDER BY \"CustomerInvoiceLine_Changes\".\"Time\" ASC)                                         AS \"rn\"\n    FROM \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n        LEFT JOIN \"c_o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine_Changes\"  \n            ON \"CustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine_Changes\".\"ObjectID\" \n        LEFT JOIN \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"  \n            ON \"CustomerInvoice\".\"ID\" = \"CustomerInvoiceLine\".\"CustomerInvoice_ID\"          \n    WHERE \"CustomerInvoiceLine_Changes\".\"Attribute\" = 'Cancellation'\n        AND \"CustomerInvoiceLine_Changes\".\"Time\" IS NOT NULL\n)\nSELECT \n    'CancelCustomerInvoice' || '::' || \"Sort_CustomerDocCancel\".\"ID\"                          AS \"ID\",\n    \"Sort_CustomerDocCancel\".\"CustomerInvoice\"                                                AS \"CustomerInvoice\",\n    \"Sort_CustomerDocCancel\".\"Time\"                                                           AS \"Time\",\n    \"Sort_CustomerDocCancel\".\"CancellationType\"                                               AS \"CancellationType\",\n    \"Sort_CustomerDocCancel\".\"ExecutedBy\"                                                     AS \"ExecutedBy\",\n    \"Sort_CustomerDocCancel\".\"ExecutionType\"                                                  AS \"ExecutionType\",\n    \"Sort_CustomerDocCancel\".\"CustomerInvoiceType\"                                            AS \"CustomerInvoiceType\"\nFROM \"CTE_Sort_CustomerDocCancel\" AS \"Sort_CustomerDocCancel\"        \nWHERE \"Sort_CustomerDocCancel\".\"rn\" = 1"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "CustomerInvoiceLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipCustomerInvoiceLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    'CancelCustomerInvoice' || '::' || \"CustomerInvoiceLine_Changes\".\"OperationID\"                AS \"ID\",\n    \"CustomerInvoiceLine\".\"ID\"                                                                    AS \"CustomerInvoiceLine\"\nFROM \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n    LEFT JOIN \"c_o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine_Changes\"\n        ON \"CustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine_Changes\".\"ObjectID\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"  \n        ON \"CustomerInvoice\".\"ID\" = \"CustomerInvoiceLine\".\"CustomerInvoice_ID\"\nWHERE \"CustomerInvoiceLine_Changes\".\"Attribute\" = 'Cancellation'\n    AND \"CustomerInvoiceLine_Changes\".\"Time\" IS NOT NULL\n    AND \"CustomerInvoiceLine_Changes\".\"OperationID\"  IS NOT NULL"
+                            }
+                        ]
+                    },
+                    {
+                        "relationship_name": "PreviousCustomerInvoiceLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipPreviousCustomerInvoiceLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    'CancelCustomerInvoice' || '::' || \"CustomerInvoiceLine_Changes\".\"OperationID\"                AS \"ID\",\n    \"PreviousCustomerInvoiceLine\".\"ID\"                                                            AS \"PreviousCustomerInvoiceLine\"\nFROM \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n    LEFT JOIN \"c_o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine_Changes\"\n        ON \"CustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine_Changes\".\"ObjectID\"\n    LEFT JOIN \"o_custom_CustomerInvoiceLine\" AS \"PreviousCustomerInvoiceLine\"  \n        ON \"PreviousCustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine\".\"PreviousCustomerInvoiceLine\"\nWHERE \"CustomerInvoiceLine_Changes\".\"Attribute\" = 'Cancellation'\n    AND \"CustomerInvoiceLine_Changes\".\"Time\" IS NOT NULL\n    AND \"CustomerInvoiceLine_Changes\".\"OperationID\"  IS NOT NULL\n    AND \"CustomerInvoiceLine\".\"PreviousCustomerInvoiceLine\" IS NOT NULL\n    AND \"PreviousCustomerInvoiceLine\".\"ID\" IS NOT NULL"
+                            }
+                        ]
+                    },
+                    {
+                        "relationship_name": "SalesOrderScheduleLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipSalesOrderScheduleLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    'CancelCustomerInvoice' || '::' || \"CustomerInvoiceLine_Changes\".\"OperationID\"                AS \"ID\",\n    \"CustomerInvoiceLine__SalesOrderScheduleLines\".\"SalesOrderScheduleLines_ID\"                   AS \"SalesOrderScheduleLine\"\nFROM \"r_o_custom_CustomerInvoiceLine__SalesOrderScheduleLines\" AS \"CustomerInvoiceLine__SalesOrderScheduleLines\"\n    LEFT JOIN \"o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine\"\n        ON \"CustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine__SalesOrderScheduleLines\".\"ID\"\n    LEFT JOIN \"c_o_custom_CustomerInvoiceLine\" AS \"CustomerInvoiceLine_Changes\"\n        ON \"CustomerInvoiceLine\".\"ID\" = \"CustomerInvoiceLine_Changes\".\"ObjectID\"\n    LEFT JOIN \"o_custom_CustomerInvoice\" AS \"CustomerInvoice\"  \n        ON \"CustomerInvoice\".\"ID\" = \"CustomerInvoiceLine\".\"CustomerInvoice_ID\"\nWHERE \"CustomerInvoiceLine_Changes\".\"Attribute\" = 'Cancellation'\n    AND \"CustomerInvoiceLine_Changes\".\"Time\" IS NOT NULL\n    AND \"CustomerInvoiceLine_Changes\".\"OperationID\"  IS NOT NULL"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

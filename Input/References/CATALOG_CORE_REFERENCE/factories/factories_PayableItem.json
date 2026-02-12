@@ -1,0 +1,128 @@
+[
+    {
+        "change_date": 1764069002669.0,
+        "changed_by": {
+            "id": "af10323b-7030-4dbe-af1b-cbf71f532c06",
+            "name": "l.lutz",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633725549.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "PayableItem - SAP ECC",
+        "factory_id": "dba7c1a0-28d2-4cfb-b1ab-b69df91da25a",
+        "has_overwrites": null,
+        "name": "PayableItem - SAP ECC",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PayableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": {
+            "name": "PayableItem - SAP ECC - 1",
+            "namespace": "custom"
+        },
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1761757648978.0,
+        "changed_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630806997.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "PayableItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "cf08e422-17c0-4f98-80cf-30537c1ce752",
+        "has_overwrites": null,
+        "name": "PayableItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PayableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1764069002669.0,
+        "changed_by": {
+            "id": "af10323b-7030-4dbe-af1b-cbf71f532c06",
+            "name": "l.lutz",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "creation_date": 1753883436644.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "PayableItem - SAP S/4 HANA",
+        "factory_id": "ed649941-bc47-4ca2-9cc0-ce80b2bb96ba",
+        "has_overwrites": null,
+        "name": "PayableItem - SAP S/4 HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PayableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": {
+            "name": "PayableItem - SAP ECC - 1",
+            "namespace": "custom"
+        },
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1761757555975.0,
+        "changed_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2589b288-6fa5-4412-b75b-180b8acb07d0",
+            "name": "Carolina Ventura",
+            "type_": "USER"
+        },
+        "creation_date": 1750236231125.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "PayableItem - 00. Central Extraction Pool_Oracle Fusion",
+        "factory_id": "d103bc32-7816-44db-a51e-110de7cdd02a",
+        "has_overwrites": null,
+        "name": "PayableItem - 00. Central Extraction Pool_Oracle Fusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PayableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

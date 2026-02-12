@@ -1,0 +1,274 @@
+[
+    {
+        "change_date": 1758869308417.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749648572265.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "BillOfMaterialProduct - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "e405924b-18b0-434e-974b-3d63082a8925",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AlternativeBillOfMaterials",
+                    "BillOfMaterialsNumber",
+                    "ID",
+                    "ProductQuantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "BillOfMaterialsAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH\n  \"CTE_STKO_STKOZ_RANKED\" AS (\n    SELECT\n      \"STKO\".\"MANDT\",\n      \"STKO\".\"STLTY\",\n      \"STKO\".\"STLNR\",\n      \"STKO\".\"STLAL\",\n      \"STKO\".\"STKOZ\",\n      \"STKO\".\"WRKAN\",\n      \"STKO\".\"BMENG\",\n      \"STKO\".\"BMEIN\",\n      ROW_NUMBER() OVER (PARTITION BY \"STKO\".\"MANDT\", \"STKO\".\"STLTY\", \"STKO\".\"STLNR\", \"STKO\".\"STLAL\" ORDER BY \"STKO\".\"STKOZ\" DESC) AS \"STKOZ_RANK\"\n    FROM \"STKO\" AS \"STKO\"\n    WHERE\n      (NULLIF(\"STKO\".\"LKENZ\", '') IS NULL OR \"STKO\".\"LKENZ\" = '' OR \"STKO\".\"LKENZ\" = ' ')\n      AND (NULLIF(\"STKO\".\"LOEKZ\", '') IS NULL OR \"STKO\".\"LOEKZ\" = '' OR \"STKO\".\"LOEKZ\" = ' ')\n      AND NOW() > CAST(\"STKO\".\"DATUV\" AS DATE)\n      AND NULLIF(\"STKO\".\"WRKAN\", '') IS NOT NULL\n  )\nSELECT \n    <%=sourceSystem%> || '::' || \"MAST\".\"MANDT\" || '::' || \"MAST\".\"MATNR\" || '::' || \n        \"MAST\".\"WERKS\" || '::' || \"MAST\".\"STLAN\" || '::' || \"STKO\".\"STLTY\" || '::' || \n        \"STKO\".\"STLNR\" || '::' || \"STKO\".\"STLAL\" || '::' || \"STKO\".\"STKOZ\"                          AS \"ID\",\n    \"STKO\".\"STLNR\"                                                                                  AS \"BillOfMaterialsNumber\",\n    \"STKO\".\"STLAL\"                                                                                  AS \"AlternativeBillOfMaterials\",\n    CASE\n        WHEN \"STKO\".\"STLTY\" = 'D' THEN 'Document'\n        WHEN \"STKO\".\"STLTY\" = 'E' THEN 'Equipment'\n        WHEN \"STKO\".\"STLTY\" = 'K' THEN 'Order'\n        WHEN \"STKO\".\"STLTY\" = 'M' THEN 'Material'\n        WHEN \"STKO\".\"STLTY\" = 'S' THEN 'Standard'\n        WHEN \"STKO\".\"STLTY\" = 'T' THEN 'Functional Location'\n        WHEN \"STKO\".\"STLTY\" = 'P' THEN 'Work Breakdown Structure'\n    END                                                                                             AS \"Type\",\n    \"STKO\".\"BMENG\"                                                                                  AS \"ProductQuantity\",\n    \"STKO\".\"BMEIN\"                                                                                  AS \"QuantityUnit\",\n    <%=sourceSystem%> || '::' || \"STKO\".\"MANDT\"                                                     AS \"SourceSystemInstance\",\n    <%=sourceSystem%> || '::' || \"STKO\".\"MANDT\" || '::' || \"MAST\".\"MATNR\" || '::' || \"STKO\".\"WRKAN\" AS \"MaterialMasterPlant\"\nFROM \"MAST\" AS \"MAST\"\n    INNER JOIN \"CTE_STKO_STKOZ_RANKED\" AS \"STKO\" \n        ON  \"STKO\".\"MANDT\" = \"MAST\".\"MANDT\"\n            AND \"STKO\".\"STLNR\" = \"MAST\".\"STLNR\"\n            AND \"STKO\".\"STLAL\" = \"MAST\".\"STLAL\"\n            AND \"STKO\".\"WRKAN\" = \"MAST\".\"WERKS\"\n            AND \"STKO\".\"STKOZ_RANK\" = 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760428741930.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630822343.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "BillOfMaterialProduct transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "79f8888b-b93b-420b-a266-159bf4612884",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AlternativeBillOfMaterials",
+                    "BillOfMaterialsNumber",
+                    "ID",
+                    "ProductQuantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "BillOfMaterialsAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT DISTINCT\n    <%=sourceSystem%> || '::' || CAST(\"ASSEMBLY\".\"BILL_SEQUENCE_ID\" AS VARCHAR(255)) \n    || '::' || \"ITEM\".\"BOM_ITEM_TYPE\" \n    || '::' || \"ASSEMBLY\".\"ORGANIZATION_ID\" \n    || '::' || \"ASSEMBLY\".\"ASSEMBLY_ITEM_ID\" \n    || '::' || COALESCE(\"ASSEMBLY\".\"ALTERNATE_BOM_DESIGNATOR\", 'PRIMARY')    AS \"ID\",\n    <%=sourceSystem%> || '::' || \"ASSEMBLY\".\"ORGANIZATION_ID\" \n    || '::' || \"ASSEMBLY\".\"ASSEMBLY_ITEM_ID\"                                 AS \"MaterialMasterPlant\",\n    COALESCE(\"ASSEMBLY\".\"ALTERNATE_BOM_DESIGNATOR\", 'PRIMARY')               AS \"AlternativeBillOfMaterials\",\n    CAST(\"ASSEMBLY\".\"BILL_SEQUENCE_ID\" AS VARCHAR(255))                      AS \"BillOfMaterialsNumber\",\n    1.0                                                                      AS \"ProductQuantity\",\n    \"ITEM\".\"PRIMARY_UOM_CODE\"                                                AS \"QuantityUnit\",\n    \"FLV_ITEM_TYPE\".\"MEANING\"                                                AS \"Type\", -- Decodes the BOM_ITEM_TYPE\n   <%=sourceSystem%>                                                         AS \"SourceSystemInstance\" \nFROM \"BOM_STRUCTURES_B\" AS \"ASSEMBLY\" \n   INNER JOIN \"MTL_SYSTEM_ITEMS_B\" AS \"ITEM\" \n      ON \"ASSEMBLY\".\"ASSEMBLY_ITEM_ID\" = \"ITEM\".\"INVENTORY_ITEM_ID\" \n      AND \"ASSEMBLY\".\"ORGANIZATION_ID\" = \"ITEM\".\"ORGANIZATION_ID\" \n   LEFT JOIN \"ORG_ORGANIZATION_DEFINITIONS\" AS \"ORG\" \n      ON \"ASSEMBLY\".\"ORGANIZATION_ID\" = \"ORG\".\"ORGANIZATION_ID\" \n   LEFT JOIN \"FND_LOOKUP_VALUES\" AS \"FLV_ITEM_TYPE\" \n      ON \"FLV_ITEM_TYPE\".\"LOOKUP_CODE\" = \"ITEM\".\"BOM_ITEM_TYPE\" \n      AND \"FLV_ITEM_TYPE\".\"LOOKUP_TYPE\" = 'BOM_ITEM_TYPE' \t\t-- Lookup Type for BOM Item Type\n      AND \"FLV_ITEM_TYPE\".\"LANGUAGE\" = <%=LanguageKey%> \t\t-- Get meaning for current session language\n      AND \"FLV_ITEM_TYPE\".\"ENABLED_FLAG\" = 'Y' \t\t-- Ensure lookup is enabled\nWHERE\n   -- Exclude records where the disable date is already in the past\n   -- (i.e., disable_date is NULL or in the future/today)\n    (NULLIF(CAST(\"ASSEMBLY\".\"IMPLEMENTATION_DATE\" AS VARCHAR), '') IS NULL OR \"ASSEMBLY\".\"IMPLEMENTATION_DATE\" <= CURRENT_DATE)\n    AND NULLIF(CAST(\"ASSEMBLY\".\"BILL_SEQUENCE_ID\" AS VARCHAR(255)), '') IS NOT NULL\n    AND NULLIF(CAST(\"ASSEMBLY\".\"ASSEMBLY_ITEM_ID\" AS VARCHAR(255)), '') IS NOT NULL\n    AND \"ASSEMBLY\".\"ASSEMBLY_TYPE\" = 1\n    AND UPPER(\"ITEM\".\"INVENTORY_ITEM_STATUS_CODE\") = 'ACTIVE'\n    AND UPPER(\"ITEM\".\"ITEM_TYPE\") NOT IN ('SATO', 'SATOC', 'NPSATO')"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758869315172.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749632223771.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "BillOfMaterialProduct - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "4e075441-0798-45ea-83b0-d4c0063fcead",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AlternativeBillOfMaterials",
+                    "BillOfMaterialsNumber",
+                    "ID",
+                    "ProductQuantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "BillOfMaterialsAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH\n  \"CTE_STKO_STKOZ_RANKED\" AS (\n    SELECT\n      \"STKO\".\"MANDT\",\n      \"STKO\".\"STLTY\",\n      \"STKO\".\"STLNR\",\n      \"STKO\".\"STLAL\",\n      \"STKO\".\"STKOZ\",\n      \"STKO\".\"WRKAN\",\n      \"STKO\".\"BMENG\",\n      \"STKO\".\"BMEIN\",\n      ROW_NUMBER() OVER (PARTITION BY \"STKO\".\"MANDT\", \"STKO\".\"STLTY\", \"STKO\".\"STLNR\", \"STKO\".\"STLAL\" ORDER BY \"STKO\".\"STKOZ\" DESC) AS \"STKOZ_RANK\"\n    FROM \"STKO\" AS \"STKO\"\n    WHERE\n      (NULLIF(\"STKO\".\"LKENZ\", '') IS NULL OR \"STKO\".\"LKENZ\" = '' OR \"STKO\".\"LKENZ\" = ' ')\n      AND (NULLIF(\"STKO\".\"LOEKZ\", '') IS NULL OR \"STKO\".\"LOEKZ\" = '' OR \"STKO\".\"LOEKZ\" = ' ')\n      AND NOW() > CAST(\"STKO\".\"DATUV\" AS DATE)\n      AND NULLIF(\"STKO\".\"WRKAN\", '') IS NOT NULL\n  )\nSELECT \n    <%=sourceSystem%> || '::' || \"MAST\".\"MANDT\" || '::' || \"MAST\".\"MATNR\" || '::' || \n        \"MAST\".\"WERKS\" || '::' || \"MAST\".\"STLAN\" || '::' || \"STKO\".\"STLTY\" || '::' || \n        \"STKO\".\"STLNR\" || '::' || \"STKO\".\"STLAL\" || '::' || \"STKO\".\"STKOZ\"                          AS \"ID\",\n    \"STKO\".\"STLNR\"                                                                                  AS \"BillOfMaterialsNumber\",\n    \"STKO\".\"STLAL\"                                                                                  AS \"AlternativeBillOfMaterials\",\n    CASE\n        WHEN \"STKO\".\"STLTY\" = 'D' THEN 'Document'\n        WHEN \"STKO\".\"STLTY\" = 'E' THEN 'Equipment'\n        WHEN \"STKO\".\"STLTY\" = 'K' THEN 'Order'\n        WHEN \"STKO\".\"STLTY\" = 'M' THEN 'Material'\n        WHEN \"STKO\".\"STLTY\" = 'S' THEN 'Standard'\n        WHEN \"STKO\".\"STLTY\" = 'T' THEN 'Functional Location'\n        WHEN \"STKO\".\"STLTY\" = 'P' THEN 'Work Breakdown Structure'\n    END                                                                                             AS \"Type\",\n    \"STKO\".\"BMENG\"                                                                                  AS \"ProductQuantity\",\n    \"STKO\".\"BMEIN\"                                                                                  AS \"QuantityUnit\",\n    <%=sourceSystem%> || '::' || \"STKO\".\"MANDT\"                                                     AS \"SourceSystemInstance\",\n    <%=sourceSystem%> || '::' || \"STKO\".\"MANDT\" || '::' || \"MAST\".\"MATNR\" || '::' || \"STKO\".\"WRKAN\" AS \"MaterialMasterPlant\"\nFROM \"MAST\" AS \"MAST\"\n    INNER JOIN \"CTE_STKO_STKOZ_RANKED\" AS \"STKO\" \n        ON  \"STKO\".\"MANDT\" = \"MAST\".\"MANDT\"\n            AND \"STKO\".\"STLNR\" = \"MAST\".\"STLNR\"\n            AND \"STKO\".\"STLAL\" = \"MAST\".\"STLAL\"\n            AND \"STKO\".\"WRKAN\" = \"MAST\".\"WERKS\"\n            AND \"STKO\".\"STKOZ_RANK\" = 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760101805548.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752134135243.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "BillOfMaterialProduct_OracleFusion",
+        "draft": null,
+        "factory_id": "c7df4648-77be-43b8-8adc-881543537997",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AlternativeBillOfMaterials",
+                    "BillOfMaterialsNumber",
+                    "ID",
+                    "ProductQuantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "BillOfMaterialsAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || CAST(\"ASSEMBLY\".\"StructuresPEOBillSequenceId\" AS VARCHAR(255)) \n    || '::' || \"ITEM\".\"ItemBasePEOBomItemType\" \n    || '::' || \"ASSEMBLY\".\"StructuresPEOPk2Value\" \n    || '::' || \"ASSEMBLY\".\"StructuresPEOPk1Value\" \n    || '::' || COALESCE(\"ASSEMBLY\".\"StructuresPEOAlternateBomDesignator\", 'Primary') AS \"ID\",\n    <%=sourceSystem%> || '::' || \"ASSEMBLY\".\"StructuresPEOPk2Value\" \n    || '::' || \"ASSEMBLY\".\"StructuresPEOPk1Value\"                                    AS \"MaterialMasterPlant\",\n    COALESCE(\"ASSEMBLY\".\"StructuresPEOAlternateBomDesignator\", 'PRIMARY')            AS \"AlternativeBillOfMaterials\",\n    CAST(\"ASSEMBLY\".\"StructuresPEOBillSequenceId\" AS VARCHAR(255))                   AS \"BillOfMaterialsNumber\",\n    1.0                                                                              AS \"ProductQuantity\",\n    \"ITEM\".\"ItemBasePEOPrimaryUomCode\"                                               AS \"QuantityUnit\",\n    \"FLV_ITEM_TYPE\".\"MEANING\"                                                        AS \"Type\", -- Decodes the BOM_ITEM_TYPE\n    <%=sourceSystem%>                                                                AS \"SourceSystemInstance\" \nFROM \"FscmTopModelAM_ScmExtractAM_EgpBiccExtractAM_StructuresExtractPVO\" AS \"ASSEMBLY\" \n  INNER JOIN \"FscmTopModelAM_ScmExtractAM_EgpBiccExtractAM_ItemExtractPVO\" AS \"ITEM\" \n      ON \"ASSEMBLY\".\"StructuresPEOPk1Value\" = \"ITEM\".\"ItemBasePEOInventoryItemId\" \n      AND \"ASSEMBLY\".\"StructuresPEOPk2Value\" = \"ITEM\".\"ItemBasePEOOrganizationId\" \n  LEFT JOIN \"FscmTopModelAM_InvOrgPublicViewAM_InventoryOrgParametersPVO\" AS \"ORG\" \n      ON \"ASSEMBLY\".\"StructuresPEOPk2Value\" = \"ORG\".\"OrganizationId\" \n  LEFT JOIN \"FscmTopModelAM_FinExtractAM_AnalyticsExtractServiceAM_LookupValuesTLExtractPVO\" AS \"flv_item_type\" \n      ON \"flv_item_type\".\"lookupcode\" = \"ITEM\".\"ItemBasePEOBomItemType\" \n      AND \"flv_item_type\".\"LookupType\" = 'EGP_BOM_ITEM_TYPE' \n      AND \"flv_item_type\".\"language\" = <%=LanguageKey%> \nWHERE\n   -- Exclude records where the disable date is already in the past\n   -- (i.e., disable_date is NULL or in the future/today)\n    (NULLIF(CAST(\"ASSEMBLY\".\"StructuresPEOCreationDate\" AS VARCHAR), '') IS NULL OR \"ASSEMBLY\".\"StructuresPEOCreationDate\" <= CURRENT_DATE)\n    AND NULLIF(CAST(\"ASSEMBLY\".\"StructuresPEOBillSequenceId\" AS VARCHAR(255)), '') IS NOT NULL\n    AND NULLIF(CAST(\"ASSEMBLY\".\"StructuresPEOPk1Value\" AS VARCHAR(255)), '') IS NOT NULL\n    AND \"ASSEMBLY\".\"StructuresPEOStructureTypeId\" = 1\n    AND \"ITEM\".\"ItemBasePEOInventoryItemStatusCode\" = 'Active'\n   -- AND UPPER(\"ITEM\".\"ItemBasePEOItemType\") NOT IN ('SATO', 'SATOC', 'NPSATO')"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

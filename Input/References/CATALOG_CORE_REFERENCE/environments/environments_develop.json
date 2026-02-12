@@ -1,0 +1,21 @@
+{
+    "change_date": 1768306626736.0,
+    "changed_by": {
+        "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+        "name": "Modester Mwangi",
+        "type_": "USER"
+    },
+    "content_tag": "v2.0.4",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749563128209.0,
+    "display_name": "Development",
+    "id": "f862c6f0-c2d1-4cc8-9e0a-3d7910468b5f",
+    "name": "develop",
+    "package_key": "pig-ac74ac3d-ff0f-4f4b-ba8b-502543e98cb1",
+    "package_version": "STAGING",
+    "readonly": false
+}

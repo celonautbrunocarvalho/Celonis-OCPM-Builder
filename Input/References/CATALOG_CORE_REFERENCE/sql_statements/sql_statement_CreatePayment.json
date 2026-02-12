@@ -1,0 +1,73 @@
+[
+    {
+        "change_date": 1758103092994.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630866462.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CreatePayment transformation",
+        "draft": null,
+        "factory_id": "ff9f1521-7ecc-4195-8bb3-0ab2781cc050",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreatePayment",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CreatePaymentAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT DISTINCT \n    'CreatePayment' || '::' || \"PayableItem_Changes\".\"OperationID\"                   AS \"ID\",\n    \"PayableItem_Changes\".\"Time\"                                                     AS \"Time\",\n    \"PayableItem_Changes\".\"ChangedBy\"                                                AS \"ExecutedBy\",\n    \"PayableItem_Changes\".\"ExecutionType\"                                            AS \"ExecutionType\"\nFROM \"o_custom_PayableItem\" AS \"PayableItem\"\n    LEFT JOIN \"c_o_custom_PayableItem\" AS \"PayableItem_Changes\"\n        ON \"PayableItem\".\"ID\" = \"PayableItem_Changes\".\"ObjectID\"         \nWHERE \"PayableItem_Changes\".\"Attribute\" = 'Payment'\n    AND \"PayableItem_Changes\".\"Time\" IS NOT NULL\n    AND \"PayableItem_Changes\".\"OperationID\"  IS NOT NULL "
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PayableItem",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "VendorPay",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    'CreatePayment' || '::' || \"PayableItem_Changes\".\"OperationID\"                  AS \"ID\",\n    \"PayableItem\".\"ID\"                                                              AS \"PayableItem\"\nFROM \"o_custom_PayableItem\" AS \"PayableItem\"\n    LEFT JOIN \"c_o_custom_PayableItem\" AS \"PayableItem_Changes\"\n        ON \"PayableItem\".\"ID\" = \"PayableItem_Changes\".\"ObjectID\"\nWHERE \"PayableItem_Changes\".\"Attribute\" = 'Payment'\n    AND \"PayableItem_Changes\".\"Time\" IS NOT NULL\n    AND \"PayableItem_Changes\".\"OperationID\"  IS NOT NULL \n"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

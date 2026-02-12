@@ -1,0 +1,90 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1758869409519.0,
+    "changed_by": {
+        "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+        "name": "j.rosenbauer",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630700606.0,
+    "description": "MaterialReservationItem",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ReservationType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "RequirementQuantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "RequirementDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "QuantityUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MaterialReservationNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "e2b8c42b-27c7-4c9d-8fb9-de4843f56e7c",
+    "managed": true,
+    "multi_link": false,
+    "name": "MaterialReservation",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "MaterialMasterPlant",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "InventoryManagement"
+    ]
+}

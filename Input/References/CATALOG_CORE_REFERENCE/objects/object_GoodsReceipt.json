@@ -1,0 +1,171 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "hierarchy",
+                "namespace": "custom"
+            },
+            "values": [
+                {
+                    "name": "child",
+                    "namespace": "custom"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1764000303913.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630699085.0,
+    "description": "Trimmed version of the Material Movement object optimized for P2P, containing all debit and credit movements of Goods Receipt.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MovementDirection",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Currency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "Amount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MaterialMovementNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "StorageLocation",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MovementQuantityUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "MovementQuantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MaterialTransactionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "0b6a9d29-1cb3-406f-a88f-06c561a5b3ee",
+    "managed": true,
+    "multi_link": true,
+    "name": "GoodsReceipt",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipThreeWayMatch",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "GoodsReceipt",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipThreeWayMatch",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CreatedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "User",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorInvoiceLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "GoodsReceipt",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "VendorInvoiceLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "PurchaseDocumentLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseDocumentLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "AccountsPayable",
+        "InventoryManagement"
+    ]
+}

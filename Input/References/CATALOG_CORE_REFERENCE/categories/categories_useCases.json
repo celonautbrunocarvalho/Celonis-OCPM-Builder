@@ -1,0 +1,28 @@
+{
+    "change_date": 1758529215096.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1758529207448.0,
+    "description": null,
+    "display_name": "UseCases",
+    "id": "62bea38d-e043-40fd-911d-c7f2f64c6945",
+    "name": "useCases",
+    "namespace": "custom",
+    "selection_mode": "SINGLE_SELECT",
+    "values": [
+        {
+            "description": "",
+            "display_name": "DuplicateInvoiceChecker",
+            "name": "duplicateInvoiceChecker",
+            "namespace": "custom"
+        }
+    ]
+}

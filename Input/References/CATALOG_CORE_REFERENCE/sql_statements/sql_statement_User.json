@@ -1,0 +1,380 @@
+[
+    {
+        "change_date": 1765530804359.0,
+        "changed_by": {
+            "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+            "name": "Gokul",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764742443872.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": null,
+        "display_name": "User - MSDynamics_365",
+        "draft": null,
+        "factory_id": "7da631c5-51e7-4e92-8405-207fa115c3c3",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "DisplayName",
+                    "FirstName",
+                    "ID",
+                    "LastName",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "UserAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\n\nSELECT\n    <%=sourceSystem%>||'::'||SystemUsers.UserID                  AS ID,\n    SystemUsers.UserName                    AS DisplayName,\n    SystemUsers.UserName                    AS FirstName,\n    SystemUsers.UserName                    AS LastName,\n    NULL                                    AS SystemInstance,\n    <%=sourceSystem%>                       AS SourceSystem,\n    SystemUsers.UserID                      AS Type\nFROM SystemUsers\n\n\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758028242326.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630753025.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "User transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "8448c06b-7825-40a4-8bda-32688afae543",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "DisplayName",
+                    "FirstName",
+                    "ID",
+                    "LastName",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "UserAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> || '::'|| \"FND_USER\".\"USER_ID\"     AS \"ID\",\n    \"FND_USER\".\"USER_NAME\"                               AS \"DisplayName\",\n    NULL                                                 AS \"Type\",\n    \"PER_ALL_PEOPLE_F\".\"FIRST_NAME\"                      AS \"FirstName\",\n    \"PER_ALL_PEOPLE_F\".\"LAST_NAME\"                       AS \"LastName\",\n    <%=sourceSystem%>                                    AS \"SourceSystemInstance\"\nFROM \"FND_USER\" AS \"FND_USER\"\n    LEFT JOIN \"PER_ALL_PEOPLE_F\" AS \"PER_ALL_PEOPLE_F\"\n        ON \"FND_USER\".\"EMPLOYEE_ID\" = \"PER_ALL_PEOPLE_F\".\"PERSON_ID\"\n            AND \"PER_ALL_PEOPLE_F\".\"EFFECTIVE_END_DATE\" = '4712-12-31'"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1766781023191.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "creation_date": 1766771108043.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "description": null,
+        "disabled": true,
+        "display_name": "User - Coupa",
+        "draft": null,
+        "factory_id": "d13b9c28-fba3-4b49-8445-94de2e73ceef",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Coupa'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "DisplayName",
+                    "FirstName",
+                    "ID",
+                    "LastName",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "UserAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::'|| \"users\".\"id\"    AS \"ID\",\n       \"users\".\"login\"                               AS \"DisplayName\",\n       NULL                                          AS \"Type\",\n       \"users\".\"firstname\"                           AS \"FirstName\",\n       \"users\".\"lastname\"                            AS \"LastName\",\n       <%=sourceSystem%>            AS \"SourceSystemInstance\"\nFROM \"users\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1757415162562.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "e0b7f865-f903-468b-90aa-b16e00839354",
+            "name": "h.kumarsharma",
+            "type_": "USER"
+        },
+        "creation_date": 1750819876531.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "User - S/4 HANA",
+        "draft": null,
+        "factory_id": "c97acbf0-575a-488c-a66a-53a69e244c15",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "DisplayName",
+                    "FirstName",
+                    "ID",
+                    "LastName",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "UserAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_ADRP_Latest\" AS (SELECT \"ADRP\".\"CLIENT\",\n                              \"ADRP\".\"PERSNUMBER\",\n                              \"ADRP\".\"NAME_FIRST\",\n                              \"ADRP\".\"NAME_LAST\",\n                              ROW_NUMBER() OVER (PARTITION BY \"ADRP\".\"CLIENT\", \"ADRP\".\"PERSNUMBER\"\n                                  ORDER BY \"ADRP\".\"DATE_FROM\", \"ADRP\".\"NATION\") AS \"rn\"\n                       FROM \"ADRP\" AS \"ADRP\")\nSELECT <%=sourceSystem%>  || '::' || \"USR02\".\"MANDT\" || '::' || \"USR02\".\"BNAME\"   AS \"ID\", \n       \"USR02\".\"BNAME\"                                                            AS \"DisplayName\",\n       \"USR02\".\"USTYP\"                                                            AS \"Type\",\n       \"ADRP_Latest\".\"NAME_FIRST\"                                                 AS \"FirstName\",\n       \"ADRP_Latest\".\"NAME_LAST\"                                                  AS \"LastName\",\n       <%=sourceSystem%> || '::' || \"USR02\".\"MANDT\"                               AS \"SourceSystemInstance\"\nFROM \"USR02\" AS \"USR02\"\n         LEFT JOIN \"USR21\" AS \"USR21\"\n                   ON \"USR02\".\"MANDT\" = \"USR21\".\"MANDT\"\n                       AND \"USR02\".\"BNAME\" = \"USR21\".\"BNAME\"\n         LEFT JOIN \"CTE_ADRP_Latest\" AS \"ADRP_Latest\"\n                   ON \"USR21\".\"MANDT\" = \"ADRP_Latest\".\"CLIENT\"\n                       AND \"USR21\".\"PERSNUMBER\" = \"ADRP_Latest\".\"PERSNUMBER\"\n                       AND \"ADRP_Latest\".\"rn\" = '1'\nWHERE \"USR02\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1755854029699.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749635183029.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "User - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "09ab741f-f70a-4530-a610-5491f9a29708",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "DisplayName",
+                    "FirstName",
+                    "ID",
+                    "LastName",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "UserAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_ADRP_Latest\" AS (\n    SELECT \n        \"ADRP\".\"CLIENT\",\n        \"ADRP\".\"PERSNUMBER\",\n        \"ADRP\".\"NAME_FIRST\",\n        \"ADRP\".\"NAME_LAST\",\n        ROW_NUMBER() OVER (PARTITION BY \"ADRP\".\"CLIENT\", \"ADRP\".\"PERSNUMBER\"\n            ORDER BY \"ADRP\".\"DATE_FROM\", \"ADRP\".\"NATION\") AS \"rn\"\n    FROM \"ADRP\" AS \"ADRP\"\n)\nSELECT <%=sourceSystem%>  || '::' || \"USR02\".\"MANDT\" || '::' || \"USR02\".\"BNAME\"     AS \"ID\",\n       \"USR02\".\"BNAME\"                                                              AS \"DisplayName\",\n       \"USR02\".\"USTYP\"                                                              AS \"Type\",\n       \"ADRP_Latest\".\"NAME_FIRST\"                                                   AS \"FirstName\",\n       \"ADRP_Latest\".\"NAME_LAST\"                                                    AS \"LastName\",\n\t   <%=sourceSystem%>  || '::' || \"USR02\".\"MANDT\"                                AS \"SourceSystemInstance\"\nFROM \"USR02\" AS \"USR02\"\n    LEFT JOIN \"USR21\" AS \"USR21\"\n            ON \"USR02\".\"MANDT\" = \"USR21\".\"MANDT\"\n                AND \"USR02\".\"BNAME\" = \"USR21\".\"BNAME\"\n    LEFT JOIN \"CTE_ADRP_Latest\" AS \"ADRP_Latest\"\n            ON \"USR21\".\"MANDT\" = \"ADRP_Latest\".\"CLIENT\"\n                AND \"USR21\".\"PERSNUMBER\" = \"ADRP_Latest\".\"PERSNUMBER\"\n                AND \"ADRP_Latest\".\"rn\" = '1'\nWHERE NULLIF(\"USR02\".\"MANDT\", '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758114464012.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752242765199.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "User - OracleFusion",
+        "draft": null,
+        "factory_id": "5246b5be-fa58-4387-9837-81def55f84b2",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "DisplayName",
+                    "FirstName",
+                    "ID",
+                    "LastName",
+                    "SourceSystemInstance",
+                    "Type"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "UserAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> || '::'||  \"UserPVO\".\"UserPEOUsername\"      AS \"ID\",\n    \"UserPVO\".\"PersonNamePEODisplayName\"                          AS \"DisplayName\",\n    ''                                                            AS \"Type\",\n    \"UserPVO\".\"PersonNamePEOFirstName\"                            AS \"FirstName\",\n    \"UserPVO\".\"PersonNamePEOLastName\"                             AS \"LastName\",\n    <%=sourceSystem%>                                             AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_PersonAM_GlobalPersonPVOViewAll\" AS \"UserPVO\"\nWHERE \"UserPVO\".\"UserPEOUsername\" IS NOT NULL\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

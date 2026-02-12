@@ -1,0 +1,31 @@
+[
+    {
+        "change_date": 1764702807557.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1752509002734.0,
+        "description": "",
+        "id": "c1413c63-6ed7-479f-b6c2-17b4fb2c0ee5",
+        "instance_names": [
+            "CustomerInvoiceLine - 00. Central Extraction Pool_TS1",
+            "CustomerInvoiceLine -  SAP S4"
+        ],
+        "instances_count": 2,
+        "name": "CustomerInvoiceLine - SAP ECC - 1",
+        "target": {
+            "entity_ref": {
+                "name": "CustomerInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        }
+    }
+]

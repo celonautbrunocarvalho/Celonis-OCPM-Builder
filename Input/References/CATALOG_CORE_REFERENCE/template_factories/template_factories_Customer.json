@@ -1,0 +1,31 @@
+[
+    {
+        "change_date": 1758035495387.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1753903442890.0,
+        "description": null,
+        "id": "b42bd5b3-0eaf-48c5-8adc-e1710e6e7b2b",
+        "instance_names": [
+            "Customer - SAP ECC",
+            "Customer - SAP S4 HANA"
+        ],
+        "instances_count": 2,
+        "name": "Customer - SAP ECC - 1",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        }
+    }
+]

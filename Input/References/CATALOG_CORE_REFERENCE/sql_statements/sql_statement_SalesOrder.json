@@ -1,0 +1,484 @@
+[
+    {
+        "change_date": 1760104426190.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634753934.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "SalesOrder - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "ae1cfa22-b0c7-419e-8bfb-5fba9207985b",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%>  || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" || '::' || \"CDPOS\".\"FNAME\"\n       || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"                       AS \"ID\",\n    <%=sourceSystem%> \n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)                                   AS \"ObjectID\",\n    CAST(\"CDHDR\".\"UDATE\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n        \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                                            AS \"Time\",\n    CASE\n        WHEN \"CDPOS\".\"FNAME\" = 'VDATU' THEN 'RequestedDeliveryDate'\n        END                                                                             AS \"Attribute\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" END                                                    AS \"OldValue\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-'<%=sourceSystem%>, ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\" END                                                    AS \"NewValue\",\n    <%=sourceSystem%>  || '::' || \"CDHDR\".\"MANDANT\" || '::' || \"CDHDR\".\"USERNAME\"       AS \"ChangedBy\",\n    \"CDHDR\".\"TCODE\"                                                                     AS \"OperationType\",\n    \"CDHDR\".\"CHANGENR\"                                                                  AS \"OperationID\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                               AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\" \n        ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = 'VERKBELEG'\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n            AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"TABNAME\" = 'VBAK'\n  AND \"CDPOS\".\"FNAME\" IN ('VDATU')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL"
+                    },
+                    {
+                        "id": "CDPOS1",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%>  || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" ||'::' || \"CDPOS\".\"FNAME\"\n       || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"                                   AS \"ID\",\n    <%=sourceSystem%> \n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)                                               AS \"ObjectID\",\n    CAST(\"CDHDR\".\"UDATE\" AS DATE) +\n        COALESCE(\n            CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n            \"CDHDR\".\"UTIME\") AS INTERVAL SECOND), INTERVAL '86399' SECOND)                          AS \"Time\",\n    CASE\n        WHEN \"CDPOS\".\"FNAME\" = 'INCO1' OR \"CDPOS\".\"FNAME\" = 'INCO2' THEN 'FreightTerms'\n        WHEN \"CDPOS\".\"FNAME\" = 'ZTERM' THEN 'PaymentTerms'\n        END                                                                                         AS \"Attribute\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" END                                                                AS \"OldValue\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\" END                                                                AS \"NewValue\",\n    <%=sourceSystem%>  || '::' || \"CDHDR\".\"MANDANT\" || '::' || \"CDHDR\".\"USERNAME\"                   AS \"ChangedBy\",\n    \"CDHDR\".\"TCODE\"                                                                                 AS \"OperationType\",\n    \"CDHDR\".\"CHANGENR\"                                                                              AS \"OperationID\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                                           AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\" \n        ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n            AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"TABNAME\" = 'VBKD'\n  AND SUBSTRING(\"CDPOS\".\"TABKEY\", 14, 6) = '000000'\n  AND \"CDPOS\".\"FNAME\" IN ('INCO1', 'INCO2', 'ZTERM')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL"
+                    },
+                    {
+                        "id": "JCDS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n\t<%=sourceSystem%>  || '::' || \"VBAK\".\"VBELN\" || '::' || \"JCDS\".\"MANDT\" || '::' || \"JCDS\".\"OBJNR\"\n       || '::' || \"JCDS\".\"STAT\" || '::' || \"JCDS\".\"CHGNR\"                                       AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' || \"VBAK\".\"VBELN\"                      AS \"ObjectID\",\n    CAST(\"JCDS\".\"UDATE\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"JCDS\".\"UTIME\" AS DATE), \n        \"JCDS\".\"UTIME\") AS INTERVAL SECOND)                                                     AS \"Time\",\n    'DocumentStatus'                                                                            AS \"Attribute\",\n    LAG(\"JCDS\".\"STAT\", 1, NULL)\n    OVER (PARTITION BY \"JCDS\".\"OBJNR\", \"JCDS\".\"STAT\"\n        ORDER BY \"JCDS\".\"OBJNR\", \"JCDS\".\"STAT\", \"JCDS\".\"CHGNR\", \"JCDS\".\"UDATE\", \"JCDS\".\"UTIME\") AS \"OldValue\",\n    \"JCDS\".\"STAT\"                                                                               AS \"NewValue\",\n    <%=sourceSystem%>  || '::' || \"JCDS\".\"MANDT\" || '::' || \"JCDS\".\"USNAM\"                      AS \"ChangedBy\",\n    \"JCDS\".\"CDTCODE\"                                                                            AS \"OperationType\",\n    CAST(\"JCDS\".\"CHGNR\" AS VARCHAR)                                                             AS \"OperationID\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                                       AS \"ExecutionType\"\nFROM \"JCDS\" AS \"JCDS\"\n    LEFT JOIN \"VBAK\" AS \"VBAK\"\n            ON \"JCDS\".\"OBJNR\" = \"VBAK\".\"OBJNR\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n            ON \"JCDS\".\"USNAM\" = \"USR02\".\"BNAME\"\n                AND \"JCDS\".\"MANDT\" = \"USR02\".\"MANDT\"\nWHERE \"VBAK\".\"VBTYP\" IN ('C', 'I')\n  AND \"JCDS\".\"INACT\" IS NULL\n  AND \"JCDS\".\"UDATE\" IS NOT NULL\n  AND \"JCDS\".\"MANDT\" IS NOT NULL\n  AND \"VBAK\".\"MANDT\" IS NOT NULL"
+                    },
+                    {
+                        "id": "VBAK1",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n\t<%=sourceSystem%>  || '::' || \"NAST\".\"MANDT\" || '::' || \"NAST\".\"KAPPL\" || '::' || \"NAST\".\"OBJKY\"\n       || '::' || \"NAST\".\"KSCHL\" || '::' || \"NAST\".\"SPRAS\" || '::' || COALESCE(\"NAST\".\"PARNR\", '')\n       || '::' || COALESCE(\"NAST\".\"PARVW\", '') || '::' || \"NAST\".\"ERDAT\" || '::' || \"NAST\".\"ERUHR\"      AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' || \"VBAK\".\"VBELN\"                              AS \"ObjectID\",\n    CAST(\"NAST\".\"DATVR\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"NAST\".\"UHRVR\" AS DATE), \n        \"NAST\".\"UHRVR\") AS INTERVAL SECOND)                                                             AS \"Time\",\n    CASE\n        WHEN \"NAST\".\"KSCHL\" = 'BA00' THEN 'SendOrderConfirmation'\n        END                                                                                             AS \"Attribute\",\n    NULL                                                                                                AS \"OldValue\",\n    NULL                                                                                                AS \"NewValue\",\n    <%=sourceSystem%>  || '::' || \"NAST\".\"MANDT\" || '::' || \"NAST\".\"USNAM\"                              AS \"ChangedBy\",\n    \"NAST\".\"TCODE\"                                                                                      AS \"OperationType\",\n    NULL                                                                                                AS \"OperationID\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                                               AS \"ExecutionType\"\nFROM \"VBAK\" AS \"VBAK\"\n         LEFT JOIN \"NAST\" AS \"NAST\"\n                   ON \"VBAK\".\"VBELN\" = \"NAST\".\"OBJKY\"\n                       AND \"VBAK\".\"MANDT\" = \"NAST\".\"MANDT\"\n                       AND \"NAST\".\"DATVR\" IS NOT NULL\n                       AND \"NAST\".\"KAPPL\" = 'V1'\n                       AND \"NAST\".\"KSCHL\" IN ('BA00')\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"NAST\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"NAST\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"VBAK\".\"MANDT\" IS NOT NULL\n  AND \"NAST\".\"MANDT\" IS NOT NULL"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Customer"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DistributionChannel",
+                    "DistributionChannelName",
+                    "DocumentCategory",
+                    "DocumentCategoryName",
+                    "ExternalPurchaseOrderDate",
+                    "ExternalPurchaseOrderNumber",
+                    "FreightTerms",
+                    "ID",
+                    "NetAmount",
+                    "OrderType",
+                    "OrderTypeName",
+                    "PaymentTerms",
+                    "RequestedDeliveryDate",
+                    "SalesOrderNumber",
+                    "SalesOrganization",
+                    "SalesOrganizationName",
+                    "ShippingDetails",
+                    "ShippingDetailsName",
+                    "SourceSystemInstance",
+                    "SystemOrderConfirmationStatus",
+                    "SystemOverallProcessingStatus"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "SalesOrderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' || \"VBAK\".\"VBELN\"      AS \"ID\",\n    CAST(\"VBAK\".\"ERDAT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBAK\".\"ERZET\" AS DATE), \n        \"VBAK\".\"ERZET\") AS INTERVAL SECOND)                                     AS \"CreationTime\",\n\t<%=sourceSystem%> || '::' || \"VBAK\".\"MANDT\" || '::' || \"VBAK\".\"ERNAM\"       AS \"CreatedBy\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n    END                                                                         AS \"CreationExecutionType\",\n    \"VBAK\".\"AUART\"                                                              AS \"OrderType\",\n    \"TVAKT\".\"BEZEI\"                                                             AS \"OrderTypeName\",\n\t<%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' || \"VBAK\".\"KUNNR\"      AS \"Customer\",\n    \"VBUK\".\"GBSTK\"                                                              AS \"SystemOverallProcessingStatus\",\n    \"VBUK\".\"BESTK\"                                                              AS \"SystemOrderConfirmationStatus\",\n    \"VBAK\".\"VSBED\"                                                              AS \"ShippingDetails\",\n    \"TVSBT\".\"VTEXT\"                                                             AS \"ShippingDetailsName\",\n    CASE\n        WHEN \"VBKD\".\"INCO2\" IS NOT NULL\n            THEN \"VBKD\".\"INCO1\" || '_' || \"VBKD\".\"INCO2\"\n        ELSE \"VBKD\".\"INCO1\" \n    END                                                                         AS \"FreightTerms\",\n    \"VBKD\".\"ZTERM\"                                                              AS \"PaymentTerms\",\n    \"VBAK\".\"VKORG\"                                                              AS \"SalesOrganization\",\n    \"TVKOT\".\"VTEXT\"                                                             AS \"SalesOrganizationName\",\n    \"VBAK\".\"VTWEG\"                                                              AS \"DistributionChannel\",\n    \"TVTWT\".\"VTEXT\"                                                             AS \"DistributionChannelName\",\n    \"VBAK\".\"NETWR\"                                                              AS \"NetAmount\",\n    \"VBAK\".\"WAERK\"                                                              AS \"Currency\",\n    \"VBAK\".\"VBTYP\"                                                              AS \"DocumentCategory\",\n    \"DD07T_VBTYP\".\"DDTEXT\"                                                      AS \"DocumentCategoryName\",\n    \"VBAK\".\"VBELN\"                                                              AS \"SalesOrderNumber\",\n    CAST(\"VBAK\".\"VDATU\" AS TIMESTAMP)                                           AS \"RequestedDeliveryDate\",\n\t<%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\"                                AS \"SourceSystemInstance\",\n    \"VBAK\".\"BSTNK\"                                                              AS \"ExternalPurchaseOrderNumber\",\n    CAST(\"VBAK\".\"BSTDK\" AS TIMESTAMP)                                           AS \"ExternalPurchaseOrderDate\"\nFROM \"VBAK\" AS \"VBAK\" \n    LEFT JOIN \"VBUK\" AS \"VBUK\"\n            ON \"VBAK\".\"MANDT\" = \"VBUK\".\"MANDT\"\n                AND \"VBAK\".\"VBELN\" = \"VBUK\".\"VBELN\"\n    LEFT JOIN \"VBKD\" AS \"VBKD\"\n            ON \"VBAK\".\"MANDT\" = \"VBKD\".\"MANDT\"\n                AND \"VBAK\".\"VBELN\" = \"VBKD\".\"VBELN\"\n                AND \"VBKD\".\"POSNR\" = '000000'\n    LEFT JOIN \"TVAKT\" AS \"TVAKT\"\n            ON \"VBAK\".\"MANDT\" = \"TVAKT\".\"MANDT\"\n                AND \"VBAK\".\"AUART\" = \"TVAKT\".\"AUART\"\n                AND \"TVAKT\".\"SPRAS\" = <%=LanguageKey%> \n    LEFT JOIN \"TVKOT\" AS \"TVKOT\"\n            ON \"VBAK\".\"MANDT\" = \"TVKOT\".\"MANDT\"\n                AND \"VBAK\".\"VKORG\" = \"TVKOT\".\"VKORG\"\n                AND \"TVKOT\".\"SPRAS\" = <%=LanguageKey%> \n    LEFT JOIN \"TVTWT\" AS \"TVTWT\"\n            ON \"VBAK\".\"MANDT\" = \"TVTWT\".\"MANDT\"\n                AND \"VBAK\".\"VTWEG\" = \"TVTWT\".\"VTWEG\"\n                AND \"TVTWT\".\"SPRAS\" = <%=LanguageKey%> \n    LEFT JOIN \"TVAK\" AS \"TVAK\"\n            ON \"VBAK\".\"MANDT\" = \"TVAK\".\"MANDT\"\n                AND \"VBAK\".\"AUART\" = \"TVAK\".\"AUART\"\n    LEFT JOIN \"DD07T\" AS \"DD07T_KLIMP\"\n            ON \"TVAK\".\"KLIMP\" = \"DD07T_KLIMP\".\"DOMVALUE_L\"\n                AND \"DD07T_KLIMP\".\"DOMNAME\" = 'KLIMP'\n                AND \"DD07T_KLIMP\".\"DDLANGUAGE\" = <%=LanguageKey%> \n    LEFT JOIN \"USR02\" AS \"USR02\"\n            ON \"VBAK\".\"MANDT\" = \"USR02\".\"MANDT\"\n                AND \"VBAK\".\"ERNAM\" = \"USR02\".\"BNAME\"\n    LEFT JOIN \"DD07T\" AS \"DD07T_VBTYP\"\n            ON \"VBAK\".\"VBTYP\" = \"DD07T_VBTYP\".\"DOMVALUE_L\"\n                AND \"DD07T_VBTYP\".\"DOMNAME\" = 'VBTYP'\n                AND \"DD07T_VBTYP\".\"DDLANGUAGE\" = <%=LanguageKey%> \n    LEFT JOIN \"TVSBT\" AS \"TVSBT\"\n            ON \"VBAK\".\"MANDT\" = \"TVSBT\".\"MANDT\"\n                AND \"VBAK\".\"VSBED\" = \"TVSBT\".\"VSBED\"\n                AND \"TVSBT\".\"SPRAS\" = <%=LanguageKey%> \nWHERE \"VBAK\".\"MANDT\" IS NOT NULL\n  AND \"VBAK\".\"VBTYP\" IN ('C', 'I')"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763978557068.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752240375208.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "SalesOrder - OracleFusion",
+        "draft": null,
+        "factory_id": "e0968eef-757e-49c4-980c-766c34f4a4e9",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "DocumentStatus",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> || '::' || \"DOO_HEADERS_ALL\".\"HeaderId\"               AS \"ObjectID\",\n    \"DOO_HEADERS_ALL\".\"HeaderId\" || '_2_' ||\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" ||\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"DATE\"                              AS \"ID\",\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"DATE\"                              AS \"Time\",\n    CASE\n        WHEN \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'HeaderStatusCode' \n            THEN 'DocumentStatus'\n    END                                                                     AS \"Attribute\",\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\"                         AS \"OldValue\",\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\"                         AS \"NewValue\",\n    <%=sourceSystem%> || '::' || \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"USER\" AS \"ChangedBy\",\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"TYPE\"                              AS \"OperationType\",\n    NULL                                                                    AS \"OperationID\",\n    CASE\n        WHEN \"DOO_HEADERS_ALL\".\"HeaderSourceOrderId\" IS NOT NULL\n            AND \"DOO_HEADERS_ALL\".\"HeaderSourceOrderId\" != '0'\n            THEN 'Automatic'\n        ELSE 'Manual' \n    END                                                                     AS \"ExecutionType\"\nFROM \"FscmTopModelAM_ScmExtractAM_DooBiccExtractAM_HeaderExtractPVO_CELONIS_CHANGELOG\" AS \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\"\n    LEFT JOIN \"FscmTopModelAM_ScmExtractAM_DooBiccExtractAM_HeaderExtractPVO\" AS \"DOO_HEADERS_ALL\"\n        ON \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"ID\" =  \"DOO_HEADERS_ALL\".\"HeaderId\"\nWHERE \"DOO_HEADERS_ALL\".\"HeaderId\" IS NOT NULL\n    AND \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" IN ('HeaderStatusCode')\n    AND \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\" = 'DOO_APPROVAL_PENDING'\n    AND \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"TYPE\" = 'update'"
+                    },
+                    {
+                        "id": "FreightTermsReqDelPaymentTerms",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> || '::' || \"DOO_HEADERS_ALL\".\"HeaderId\"         AS \"ObjectID\",\n    <%=sourceSystem%> || '::' || \"DOO_HEADERS_ALL\".\"HeaderId\" || '_1_' ||\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" ||\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"DATE\"                        AS \"ID\",\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"DATE\"                        AS \"Time\",\n    CASE\n        WHEN \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'HeaderFreightTermsCode' \n            THEN 'FreightTerms'\n        WHEN \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'HeaderRequestArrivalDate' \n            THEN 'RequestedDeliveryDate'\n        WHEN \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'HeaderPaymentTermId' \n            THEN 'PaymentTerms'\n    END                                                               AS \"Attribute\",\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\"                   AS \"OldValue\",\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\"                   AS \"NewValue\",\n    'User_' || \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"USER\"             AS \"ChangedBy\",\n    \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"TYPE\"                        AS \"OperationType\",\n    NULL                                                              AS \"OperationID\",\n    CASE\n        WHEN \"DOO_HEADERS_ALL\".\"HeaderSourceOrderId\" IS NOT NULL\n            AND \"DOO_HEADERS_ALL\".\"HeaderSourceOrderId\" != '0'\n                THEN 'Automatic'\n        ELSE 'Manual' END                                             AS \"ExecutionType\"\nFROM \"FscmTopModelAM_ScmExtractAM_DooBiccExtractAM_HeaderExtractPVO_CELONIS_CHANGELOG\" AS \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\"\n    LEFT JOIN \"FscmTopModelAM_ScmExtractAM_DooBiccExtractAM_HeaderExtractPVO\" AS \"DOO_HEADERS_ALL\"\n        ON \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"ID\" = \"DOO_HEADERS_ALL\".\"HeaderId\"\nWHERE \"DOO_HEADERS_ALL\".\"HeaderId\" IS NOT NULL\n    AND \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" IN\n        ('HeaderFreightTermsCode', 'HeaderRequestArrivalDate', 'HeaderPaymentTermId')\n    AND \"DOO_HEADERS_ALL_CELONIS_CHANGELOG\".\"TYPE\" = 'update'"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Customer"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DistributionChannel",
+                    "DistributionChannelName",
+                    "DocumentCategory",
+                    "DocumentCategoryName",
+                    "ExternalPurchaseOrderDate",
+                    "ExternalPurchaseOrderNumber",
+                    "FreightTerms",
+                    "ID",
+                    "NetAmount",
+                    "OrderType",
+                    "OrderTypeName",
+                    "PaymentTerms",
+                    "RequestedDeliveryDate",
+                    "SalesOrderNumber",
+                    "SalesOrganization",
+                    "SalesOrganizationName",
+                    "ShippingDetails",
+                    "ShippingDetailsName",
+                    "SourceSystemInstance",
+                    "SystemOrderConfirmationStatus",
+                    "SystemOverallProcessingStatus"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "SalesOrderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Total_OrderAmount\" AS (\n    SELECT \n        \"DOO_LINES_ALL\".\"LineHeaderId\"                        AS \"LineHeaderId\",\n        SUM((\"DOO_LINES_ALL\".\"LineOrderedQty\"\n            * \"DOO_LINES_ALL\".\"LineUnitSellingPrice\"))        AS \"TotalOrderAmount\"\n    FROM \"FscmTopModelAM_ScmExtractAM_DooBiccExtractAM_LineExtractPVO\" AS \"DOO_LINES_ALL\"\n    GROUP BY \"LineHeaderId\"\n)\nSELECT\n    <%=sourceSystem%> || '::' || \"DOO_HEADERS_ALL\".\"HeaderId\"                                 AS \"ID\",\n    \"DOO_HEADERS_ALL\".\"HeaderCreationDate\"                                                    AS \"CreationTime\",\n    <%=sourceSystem%> || '::' || \"DOO_HEADERS_ALL\".\"HeaderCreatedBy\"                          AS \"CreatedBy\",\n    CASE\n        WHEN \"DOO_HEADERS_ALL\".\"HeaderSourceOrderId\" IS NOT NULL\n                AND \"DOO_HEADERS_ALL\".\"HeaderSourceOrderId\" != '0'\n            THEN 'Automatic'\n        ELSE 'Manual' \n    END                                                                                       AS \"CreationExecutionType\",\n    \"DOO_HEADERS_ALL\".\"HeaderStatusCode\"                                                      AS \"SystemOverallProcessingStatus\",\n    CASE\n        WHEN \"DOO_HEADERS_ALL\".\"HeaderCanceledFlag\" = 'Y'\n            THEN 'Cancelled'\n        WHEN \"DOO_HEADERS_ALL\".\"HeaderSubmittedFlag\" = 'Y'\n            THEN 'Submitted'\n        WHEN \"DOO_HEADERS_ALL\".\"HeaderSubmittedFlag\" = 'N'\n            THEN 'Not Submitted'\n    END                                                                                       AS \"SystemOrderConfirmationStatus\",\n    \"DOO_HEADERS_ALL\".\"HeaderShipModeOfTransport\"                                             AS \"ShippingDetails\",\n    COALESCE(\"FND_LOOKUP_VALUES_S\".\"Meaning\",\n        \"DOO_HEADERS_ALL\".\"HeaderShipModeOfTransport\")                                        AS \"ShippingDetailsName\",\n    \"DOO_HEADERS_ALL\".\"HeaderFreightTermsCode\"                                                AS \"FreightTerms\",\n    CAST(\"DOO_HEADERS_ALL\".\"HeaderPaymentTermId\" AS VARCHAR(255))                             AS \"PaymentTerms\",\n    CAST(\"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOEnterpriseId\" AS VARCHAR(255))              AS \"SalesOrganization\",\n    \"OrganizationUnitPVO\".\"OrganizationUnitTranslationPEOName\"                                AS \"SalesOrganizationName\",\n    \"DOO_HEADERS_ALL\".\"HeaderSalesChannelCode\"                                                AS \"DistributionChannel\",\n    \"FND_LOOKUP_VALUES_C\".\"Meaning\"                                                           AS \"DistributionChannelName\",\n    \"Total_OrderAmount\".\"TotalOrderAmount\"                                                    AS \"NetAmount\",\n    \"DOO_HEADERS_ALL\".\"HeaderTransactionalCurrencyCode\"                                       AS \"Currency\",\n    \"DOO_HEADERS_ALL\".\"HeaderOrderTypeCode\"                                                   AS \"OrderType\",   \n    \"FND_LOOKUP_VALUES\".\"Meaning\"                                                             AS \"OrderTypeName\",\n    \"DOO_HEADERS_ALL\".\"HeaderOrderTypeCode\"                                                   AS  \"DocumentCategory\",\n    \"FND_LOOKUP_VALUES\".\"Meaning\"                                                             AS \"DocumentCategoryName\",\n    CAST(\"DOO_HEADERS_ALL\".\"HeaderOrderNumber\" AS VARCHAR(255))                               AS \"SalesOrderNumber\",\n    CAST(\"DOO_HEADERS_ALL\".\"HeaderRequestArrivalDate\" AS TIMESTAMP)                           AS \"RequestedDeliveryDate\",\n    <%=sourceSystem%>                                                                         AS \"SourceSystemInstance\",\n    <%=sourceSystem%> || '::' || \"DOO_HEADERS_ALL\".\"HeaderSoldToCustomerId\"                   AS \"Customer\",\n    \"DOO_HEADERS_ALL\".\"HeaderCustomerPoNumber\"                                                AS \"ExternalPurchaseOrderNumber\",\n    \"DOO_HEADERS_ALL\".\"HeaderOrderedDate\"                                                     AS \"ExternalPurchaseOrderDate\"\nFROM \"FscmTopModelAM_ScmExtractAM_DooBiccExtractAM_HeaderExtractPVO\" AS \"DOO_HEADERS_ALL\"\n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_FunBiccExtractAM_BusinessUnitExtractPVO\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n        ON \"DOO_HEADERS_ALL\".\"HeaderOrgId\" = \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOBusinessUnitId\"\n    LEFT JOIN \"FscmTopModelAM_OrganizationAM_OrganizationUnitPVO\" AS \"OrganizationUnitPVO\"\n        ON \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOEnterpriseId\" = \"OrganizationUnitPVO\".\"OrganizationId\"\n    LEFT JOIN \"CTE_Total_OrderAmount\" AS \"Total_OrderAmount\"\n        ON \"DOO_HEADERS_ALL\".\"HeaderId\" = \"Total_OrderAmount\".\"LineHeaderId\"\n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_AnalyticsExtractServiceAM_LookupValuesTLExtractPVO\" AS \"FND_LOOKUP_VALUES\"\n        ON \"DOO_HEADERS_ALL\".\"HeaderOrderTypeCode\" = \"FND_LOOKUP_VALUES\".\"LookupCode\"\n            AND \"FND_LOOKUP_VALUES\".\"LookupType\" = 'ORA_DOO_ORDER_TYPES'\n            AND \"FND_LOOKUP_VALUES\".\"ViewApplicationId\" = '0'\n            AND \"FND_LOOKUP_VALUES\".\"Language\" = <%=LanguageKey%> \n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_AnalyticsExtractServiceAM_LookupValuesTLExtractPVO\" AS \"FND_LOOKUP_VALUES_D\"\n        ON \"DOO_HEADERS_ALL\".\"HeaderSourceDocumentTypeCode\" = \"FND_LOOKUP_VALUES_D\".\"LookupCode\"\n            AND \"FND_LOOKUP_VALUES_D\".\"LookupType\" = 'ORA_DOO_SOURCE_DOC_TYPE_CODE'\n            AND \"FND_LOOKUP_VALUES_D\".\"ViewApplicationId\" = '0'\n            AND \"FND_LOOKUP_VALUES_D\".\"Language\" = <%=LanguageKey%> \n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_AnalyticsExtractServiceAM_LookupValuesTLExtractPVO\" AS \"FND_LOOKUP_VALUES_C\"\n        ON \"DOO_HEADERS_ALL\".\"HeaderSalesChannelCode\" = \"FND_LOOKUP_VALUES_C\".\"LookupCode\"\n            AND \"FND_LOOKUP_VALUES_C\".\"LookupType\" = 'ORA_QP_CHANNEL_METHODS'\n            AND \"FND_LOOKUP_VALUES_C\".\"ViewApplicationId\" = '0'\n            AND \"FND_LOOKUP_VALUES_C\".\"Language\" = <%=LanguageKey%>\n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_AnalyticsExtractServiceAM_LookupValuesTLExtractPVO\" AS \"FND_LOOKUP_VALUES_S\"\n        ON \"DOO_HEADERS_ALL\".\"HeaderShipModeOfTransport\" = \"FND_LOOKUP_VALUES_S\".\"LookupCode\"\n            AND \"FND_LOOKUP_VALUES_S\".\"LookupType\" = 'WSH_MODE_OF_TRANSPORT'\n            AND \"FND_LOOKUP_VALUES_S\".\"ViewApplicationId\" = '0'\n            AND \"FND_LOOKUP_VALUES_S\".\"Language\" = <%=LanguageKey%> \n                      "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1769445756289.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "d94aa797-47b6-48e1-9b0f-9627812b5866",
+            "name": "Lea Hanna",
+            "type_": "USER"
+        },
+        "creation_date": 1750247846210.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "Sales Order - S4 Hana ",
+        "draft": null,
+        "factory_id": "3f9add92-b3be-4081-aa12-782c85c41337",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%>  || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" || '::' || \"CDPOS\".\"FNAME\"\n       || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"                       AS \"ID\",\n    <%=sourceSystem%> \n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)                                   AS \"ObjectID\",\n    CAST(\"CDHDR\".\"UDATE\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n        \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                                            AS \"Time\",\n    CASE\n        WHEN \"CDPOS\".\"FNAME\" = 'VDATU' THEN 'RequestedDeliveryDate'\n        END                                                                             AS \"Attribute\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" END                                                    AS \"OldValue\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-'<%=sourceSystem%>, ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\" END                                                    AS \"NewValue\",\n    <%=sourceSystem%>  || '::' || \"CDHDR\".\"MANDANT\" || \"CDHDR\".\"USERNAME\"               AS \"ChangedBy\",\n    \"CDHDR\".\"TCODE\"                                                                     AS \"OperationType\",\n    \"CDHDR\".\"CHANGENR\"                                                                  AS \"OperationID\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                               AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\" \n        ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = 'VERKBELEG'\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n            AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"TABNAME\" = 'VBAK'\n  AND \"CDPOS\".\"FNAME\" IN ('VDATU')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "CDPOS1",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%>  || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" ||'::' || \"CDPOS\".\"FNAME\"\n       || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"                                   AS \"ID\",\n    <%=sourceSystem%> \n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)                                               AS \"ObjectID\",\n    CAST(\"CDHDR\".\"UDATE\" AS DATE) +\n        COALESCE(\n            CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n            \"CDHDR\".\"UTIME\") AS INTERVAL SECOND), INTERVAL '86399' SECOND)                          AS \"Time\",\n    CASE\n        WHEN \"CDPOS\".\"FNAME\" = 'INCO1' OR \"CDPOS\".\"FNAME\" = 'INCO2' THEN 'FreightTerms'\n        WHEN \"CDPOS\".\"FNAME\" = 'ZTERM' THEN 'PaymentTerms'\n        END                                                                                         AS \"Attribute\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" END                                                                AS \"OldValue\",\n    CASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\" END                                                                AS \"NewValue\",\n    <%=sourceSystem%>  || '::' || \"CDHDR\".\"MANDANT\" || \"CDHDR\".\"USERNAME\"                           AS \"ChangedBy\",\n    \"CDHDR\".\"TCODE\"                                                                                 AS \"OperationType\",\n    \"CDHDR\".\"CHANGENR\"                                                                              AS \"OperationID\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                                           AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\" \n        ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n            AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"TABNAME\" = 'VBKD'\n  AND SUBSTRING(\"CDPOS\".\"TABKEY\", 14, 6) = '000000'\n  AND \"CDPOS\".\"FNAME\" IN ('INCO1', 'INCO2', 'ZTERM')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "JCDS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n\t<%=sourceSystem%>  || '::' || \"VBAK\".\"VBELN\" || '::' || \"JCDS\".\"MANDT\" || '::' || \"JCDS\".\"OBJNR\"\n       || '::' || \"JCDS\".\"STAT\" || '::' || \"JCDS\".\"CHGNR\"                                       AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' || \"VBAK\".\"VBELN\"                      AS \"ObjectID\",\n    CAST(\"JCDS\".\"UDATE\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"JCDS\".\"UTIME\" AS DATE), \n        \"JCDS\".\"UTIME\") AS INTERVAL SECOND)                                                     AS \"Time\",\n    'DocumentStatus'                                                                            AS \"Attribute\",\n    LAG(\"JCDS\".\"STAT\", 1, NULL)\n    OVER (PARTITION BY \"JCDS\".\"OBJNR\", \"JCDS\".\"STAT\"\n        ORDER BY \"JCDS\".\"OBJNR\", \"JCDS\".\"STAT\", \"JCDS\".\"CHGNR\", \"JCDS\".\"UDATE\", \"JCDS\".\"UTIME\") AS \"OldValue\",\n    \"JCDS\".\"STAT\"                                                                               AS \"NewValue\",\n    <%=sourceSystem%>  || '::' || \"JCDS\".\"MANDT\" || '::' || \"JCDS\".\"USNAM\"                      AS \"ChangedBy\",\n    \"JCDS\".\"CDTCODE\"                                                                            AS \"OperationType\",\n    CAST(\"JCDS\".\"CHGNR\" AS VARCHAR)                                                             AS \"OperationID\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                                       AS \"ExecutionType\"\nFROM \"JCDS\" AS \"JCDS\"\n         LEFT JOIN \"VBAK\" AS \"VBAK\"\n                   ON \"JCDS\".\"OBJNR\" = \"VBAK\".\"OBJNR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"JCDS\".\"USNAM\" = \"USR02\".\"BNAME\"\n                       AND \"JCDS\".\"MANDT\" = \"USR02\".\"MANDT\"\nWHERE \"VBAK\".\"VBTYP\" IN ('C', 'I')\n  AND \"JCDS\".\"INACT\" IS NULL\n  AND \"JCDS\".\"UDATE\" IS NOT NULL\n  AND \"JCDS\".\"MANDT\" IS NOT NULL\n  AND \"VBAK\".\"MANDT\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "VBAK1",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n\t<%=sourceSystem%>  || '::' || \"NAST\".\"MANDT\" || '::' || \"NAST\".\"KAPPL\" || '::' || \"NAST\".\"OBJKY\"\n       || '::' || \"NAST\".\"KSCHL\" || '::' || \"NAST\".\"SPRAS\" || '::' || COALESCE(\"NAST\".\"PARNR\", '')\n       || '::' || COALESCE(\"NAST\".\"PARVW\", '') || '::' || \"NAST\".\"ERDAT\" || '::' || \"NAST\".\"ERUHR\"      AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' || \"VBAK\".\"VBELN\"                              AS \"ObjectID\",\n    CAST(\"NAST\".\"DATVR\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"NAST\".\"UHRVR\" AS DATE), \n        \"NAST\".\"UHRVR\") AS INTERVAL SECOND)                                                             AS \"Time\",\n    CASE\n        WHEN \"NAST\".\"KSCHL\" = 'BA00' THEN 'SendOrderConfirmation'\n        END                                                                                             AS \"Attribute\",\n    NULL                                                                                                AS \"OldValue\",\n    NULL                                                                                                AS \"NewValue\",\n    <%=sourceSystem%>  || '::' || \"NAST\".\"MANDT\" || \"NAST\".\"USNAM\"                                      AS \"ChangedBy\",\n    \"NAST\".\"TCODE\"                                                                                      AS \"OperationType\",\n    NULL                                                                                                AS \"OperationID\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                                               AS \"ExecutionType\"\nFROM \"VBAK\" AS \"VBAK\"\n         LEFT JOIN \"NAST\" AS \"NAST\"\n                   ON \"VBAK\".\"VBELN\" = \"NAST\".\"OBJKY\"\n                       AND \"VBAK\".\"MANDT\" = \"NAST\".\"MANDT\"\n                       AND \"NAST\".\"DATVR\" IS NOT NULL\n                       AND \"NAST\".\"KAPPL\" = 'V1'\n                       AND \"NAST\".\"KSCHL\" IN ('BA00')\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"NAST\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"NAST\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"VBAK\".\"MANDT\" IS NOT NULL\n  AND \"NAST\".\"MANDT\" IS NOT NULL"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Customer"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DistributionChannel",
+                    "DistributionChannelName",
+                    "DocumentCategory",
+                    "DocumentCategoryName",
+                    "ExternalPurchaseOrderDate",
+                    "ExternalPurchaseOrderNumber",
+                    "FreightTerms",
+                    "ID",
+                    "NetAmount",
+                    "OrderType",
+                    "OrderTypeName",
+                    "PaymentTerms",
+                    "RequestedDeliveryDate",
+                    "SalesOrderNumber",
+                    "SalesOrganization",
+                    "SalesOrganizationName",
+                    "ShippingDetails",
+                    "ShippingDetailsName",
+                    "SourceSystemInstance",
+                    "SystemOrderConfirmationStatus",
+                    "SystemOverallProcessingStatus"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "SalesOrderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' ||  \"VBAK\".\"VBELN\" AS \"ID\",\n    CAST(CONCAT(CAST(\"VBAK\".\"ERDAT\" AS VARCHAR),\n        SUBSTRING(CAST(\"VBAK\".\"ERZET\" AS VARCHAR), 11, 19))\n        AS TIMESTAMP)                                                          AS \"CreationTime\",\n\t<%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' ||  \"VBAK\".\"ERNAM\"    AS \"CreatedBy\",\n    CASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' END                                                      AS \"CreationExecutionType\",\n    \"VBAK\".\"AUART\"                                                             AS \"OrderType\",\n    \"TVAKT\".\"BEZEI\"                                                            AS \"OrderTypeName\",\n    \"VBAK\".\"GBSTK\"                                                             AS \"SystemOverallProcessingStatus\",\n    \"VBAK\".\"BESTK\"                                                             AS \"SystemOrderConfirmationStatus\",\n    \"VBAK\".\"VSBED\"                                                             AS \"ShippingDetails\",\n    \"TVSBT\".\"VTEXT\"                                                            AS \"ShippingDetailsName\",\n    CASE\n        WHEN \"VBKD\".\"INCO2\" IS NOT NULL\n            THEN \"VBKD\".\"INCO1\" || '::' || \"VBKD\".\"INCO2\"\n        ELSE \"VBKD\".\"INCO1\" END                                                AS \"FreightTerms\",\n    \"VBKD\".\"ZTERM\"                                                             AS \"PaymentTerms\",\n    \"VBAK\".\"VKORG\"                                                             AS \"SalesOrganization\",\n    \"TVKOT\".\"VTEXT\"                                                            AS \"SalesOrganizationName\",\n    \"VBAK\".\"VTWEG\"                                                             AS \"DistributionChannel\",\n    \"TVTWT\".\"VTEXT\"                                                            AS \"DistributionChannelName\",\n    \"VBAK\".\"NETWR\"                                                             AS \"NetAmount\",\n    \"VBAK\".\"WAERK\"                                                             AS \"Currency\",\n    \"VBAK\".\"VBTYP\"                                                             AS \"DocumentCategory\",\n    \"DD07T_VBTYP\".\"DDTEXT\"                                                     AS \"DocumentCategoryName\",\n    \"VBAK\".\"VBELN\"                                                             AS \"SalesOrderNumber\",\n    CAST(\"VBAK\".\"VDATU\" AS TIMESTAMP)                                          AS \"RequestedDeliveryDate\",\n\t<%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\"                               AS \"SourceSystemInstance\",\n    \"VBAK\".\"BSTNK\"                                                             AS \"ExternalPurchaseOrderNumber\",\n    CAST(\"VBAK\".\"BSTDK\" AS TIMESTAMP)                                          AS \"ExternalPurchaseOrderDate\",\n    <%=sourceSystem%>  || '::' || \"VBAK\".\"MANDT\" || '::' || \"VBAK\".\"KUNNR\"     AS \"Customer\"\nFROM \"VBAK\" AS \"VBAK\"\n         LEFT JOIN \"VBKD\" AS \"VBKD\"\n                   ON \"VBAK\".\"MANDT\" = \"VBKD\".\"MANDT\"\n                       AND \"VBAK\".\"VBELN\" = \"VBKD\".\"VBELN\"\n                       AND \"VBKD\".\"POSNR\" = '000000'\n         LEFT JOIN \"TVAKT\" AS \"TVAKT\"\n                   ON \"VBAK\".\"MANDT\" = \"TVAKT\".\"MANDT\"\n                       AND \"VBAK\".\"AUART\" = \"TVAKT\".\"AUART\"\n                       AND \"TVAKT\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"TVKOT\" AS \"TVKOT\"\n                   ON \"VBAK\".\"MANDT\" = \"TVKOT\".\"MANDT\"\n                       AND \"VBAK\".\"VKORG\" = \"TVKOT\".\"VKORG\"\n                       AND \"TVKOT\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"TVTWT\" AS \"TVTWT\"\n                   ON \"VBAK\".\"MANDT\" = \"TVTWT\".\"MANDT\"\n                       AND \"VBAK\".\"VTWEG\" = \"TVTWT\".\"VTWEG\"\n                       AND \"TVTWT\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"TVAK\" AS \"TVAK\"\n                   ON \"VBAK\".\"MANDT\" = \"TVAK\".\"MANDT\"\n                       AND \"VBAK\".\"AUART\" = \"TVAK\".\"AUART\"\n         LEFT JOIN \"DD07T\" AS \"DD07T_KLIMP\"\n                   ON \"TVAK\".\"KLIMP\" = \"DD07T_KLIMP\".\"DOMVALUE_L\"\n                       AND \"DD07T_KLIMP\".\"DOMNAME\" = 'KLIMP'\n                       AND \"DD07T_KLIMP\".\"DDLANGUAGE\" = <%=LanguageKey%> \n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"VBAK\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"VBAK\".\"ERNAM\" = \"USR02\".\"BNAME\"\n         LEFT JOIN \"DD07T\" AS \"DD07T_VBTYP\"\n                   ON \"VBAK\".\"VBTYP\" = \"DD07T_VBTYP\".\"DOMVALUE_L\"\n                       AND \"DD07T_VBTYP\".\"DOMNAME\" = 'VBTYP'\n                       AND \"DD07T_VBTYP\".\"DDLANGUAGE\" = <%=LanguageKey%> \n         LEFT JOIN \"TVSBT\" AS \"TVSBT\"\n                   ON \"VBAK\".\"MANDT\" = \"TVSBT\".\"MANDT\"\n                       AND \"VBAK\".\"VSBED\" = \"TVSBT\".\"VSBED\"\n                       AND \"TVSBT\".\"SPRAS\" = <%=LanguageKey%> \nWHERE \"VBAK\".\"MANDT\" IS NOT NULL\n  AND \"VBAK\".\"VBTYP\" IN ('C', 'I')\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763976585135.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630810526.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "SalesOrder transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "84566c9d-4415-46b2-b3e7-2520e21ab961",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "DocumentStatus",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_BookedOrders\" AS (SELECT \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\" || '_4_'\n                                   || \"OE_ORDER_HEADERS_ALL\".\"BOOKED_DATE\" || '_'\n                                   || \"OE_ORDER_HEADERS_ALL\".\"BOOKED_FLAG\"                                AS \"ID\",\n                                   \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\"                                     AS \"ObjectID\",\n                                   \"OE_ORDER_HEADERS_ALL\".\"BOOKED_DATE\"                                   AS \"Time\",\n                                   'DocumentStatus'                                                       AS \"Attribute\",\n                                   'ENTERED'                                                              AS \"OldValue\",\n                                   CASE WHEN \"OE_ORDER_HEADERS_ALL\".\"BOOKED_FLAG\" = 'Y' THEN 'BOOKED' END AS \"NewValue\",\n                                   CAST(\"OE_ORDER_HEADERS_ALL\".\"CREATED_BY\" AS VARCHAR(255))              AS \"ChangedBy\",\n                                   NULL                                                                   AS \"OperationType\",\n                                   NULL                                                                   AS \"OperationID\",\n                                   CASE\n                                       WHEN \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" IS NOT NULL\n                                           AND \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" != '0'\n                                           THEN 'Automatic'\n                                       ELSE 'Manual' END                                                  AS \"ExecutionType\"\n                            FROM \"OE_ORDER_HEADERS_ALL\" AS \"OE_ORDER_HEADERS_ALL\"\n                            WHERE \"OE_ORDER_HEADERS_ALL\".\"BOOKED_FLAG\" = 'Y'\n                              AND \"OE_ORDER_HEADERS_ALL\".\"BOOKED_DATE\" IS NOT NULL)\nSELECT <%=sourceSystem%> || '::' || \"BookedOrders\".\"ID\"             AS \"ID\",\n       <%=sourceSystem%> || '::' ||  \"BookedOrders\".\"ObjectID\"      AS \"ObjectID\",\n       \"BookedOrders\".\"Time\"                                        AS \"Time\",\n       \"BookedOrders\".\"Attribute\"                                   AS \"Attribute\",\n       \"BookedOrders\".\"OldValue\"                                    AS \"OldValue\",\n       \"BookedOrders\".\"NewValue\"                                    AS \"NewValue\",\n       <%=sourceSystem%> || '::' || \"BookedOrders\".\"ChangedBy\"      AS \"ChangedBy\",\n       \"BookedOrders\".\"OperationType\"                               AS \"OperationType\",\n       \"BookedOrders\".\"OperationID\"                                 AS \"OperationID\",\n       \"BookedOrders\".\"ExecutionType\"                               AS \"ExecutionType\"\nFROM \"CTE_BookedOrders\" AS \"BookedOrders\""
+                    },
+                    {
+                        "id": "FreightTerms",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Union_History_and_Present\"\n        AS (SELECT DISTINCT \"OE_ORDER_HEADER_HISTORY\".\"HEADER_ID\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"HIST_CREATION_DATE\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"FREIGHT_TERMS_CODE\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"HIST_CREATED_BY\",\n                            CASE\n                                WHEN \"OE_ORDER_HEADER_HISTORY\".\"ORDER_SOURCE_ID\" IS NOT NULL\n                                    AND \"OE_ORDER_HEADER_HISTORY\".\"ORDER_SOURCE_ID\" != '0'\n                                    THEN 'Automatic'\n                                ELSE 'Manual' END AS \"ExecutionType\"\n            FROM \"OE_ORDER_HEADER_HISTORY\" AS \"OE_ORDER_HEADER_HISTORY\"\n            UNION\n            SELECT \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\",\n                   TIMESTAMPADD(SECOND, 2, \"OE_ORDER_HEADERS_ALL\".\"LAST_UPDATE_DATE\") AS \"HIST_CREATION_DATE\",\n                   \"OE_ORDER_HEADERS_ALL\".\"FREIGHT_TERMS_CODE\",\n                   \"OE_ORDER_HEADERS_ALL\".\"LAST_UPDATED_BY\"                           AS \"HIST_CREATED_BY\",\n                   CASE\n                       WHEN \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" IS NOT NULL\n                           AND \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" != '0'\n                           THEN 'Automatic'\n                       ELSE 'Manual' END                                              AS \"ExecutionType\"\n            FROM \"OE_ORDER_HEADERS_ALL\" AS \"OE_ORDER_HEADERS_ALL\"\n            WHERE EXISTS (SELECT 1\n                         FROM \"OE_ORDER_HEADER_HISTORY\"\n                         WHERE \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\"\n                               = \"OE_ORDER_HEADER_HISTORY\".\"HEADER_ID\")),\n    \"CTE_Identify_Changes\"\n        AS (SELECT \"CTE_Union_History_and_Present\".\"HEADER_ID\" || '::1::'\n                   || \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\" || '::'\n                   || \"CTE_Union_History_and_Present\".\"FREIGHT_TERMS_CODE\"                    AS \"ID\",\n                   \"CTE_Union_History_and_Present\".\"HEADER_ID\"                                AS \"ObjectID\",\n                   \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\"                       AS \"Time\",\n                   CASE\n                       WHEN LAG(\"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\") OVER \"w\" IS NOT NULL\n                            AND LAG(\"CTE_Union_History_and_Present\".\"FREIGHT_TERMS_CODE\") OVER \"w\"\n                            != \"CTE_Union_History_and_Present\".\"FREIGHT_TERMS_CODE\"\n                           THEN 'FreightTerms'\n                       END                                                                    AS \"Attribute\",\n                   LAG(\"CTE_Union_History_and_Present\".\"FREIGHT_TERMS_CODE\") OVER \"w\"         AS \"OldValue\",\n                   CAST(\"CTE_Union_History_and_Present\".\"FREIGHT_TERMS_CODE\" AS VARCHAR(255)) AS \"NewValue\",\n                   CAST(\"CTE_Union_History_and_Present\".\"HIST_CREATED_BY\" AS VARCHAR(255))    AS \"ChangedBy\",\n                   NULL                                                                       AS \"OperationType\",\n                   NULL                                                                       AS \"OperationID\",\n                   \"CTE_Union_History_and_Present\".\"ExecutionType\"                            AS \"ExecutionType\"\n            FROM \"CTE_Union_History_and_Present\" AS \"CTE_Union_History_and_Present\"\n            WINDOW \"w\" AS (PARTITION BY \"CTE_Union_History_and_Present\".\"HEADER_ID\"\n                    ORDER BY \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\",\n                        \"CTE_Union_History_and_Present\".\"FREIGHT_TERMS_CODE\"))\nSELECT <%=sourceSystem%> || '::' ||  \"Identify_Changes\".\"ID\"          AS \"ID\",\n\t   <%=sourceSystem%> || '::' ||  \"Identify_Changes\".\"ObjectID\"    AS \"ObjectID\",\n       \"Identify_Changes\".\"Time\"                                      AS \"Time\",\n       \"Identify_Changes\".\"Attribute\"                                 AS \"Attribute\",\n       CAST(\"Identify_Changes\".\"OldValue\" AS VARCHAR(255))            AS \"OldValue\",\n       \"Identify_Changes\".\"NewValue\"                                  AS \"NewValue\",\n       <%=sourceSystem%> || '::' ||  \"Identify_Changes\".\"ChangedBy\"   AS \"ChangedBy\",\n       \"Identify_Changes\".\"OperationType\"                             AS \"OperationType\",\n       \"Identify_Changes\".\"OperationID\"                               AS \"OperationID\",\n       \"Identify_Changes\".\"ExecutionType\"                             AS \"ExecutionType\"\nFROM \"CTE_Identify_Changes\" AS \"Identify_Changes\"\nWHERE \"Identify_Changes\".\"Attribute\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "PaymentTerms",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Union_History_and_Present\"\n        AS (SELECT DISTINCT \"OE_ORDER_HEADER_HISTORY\".\"HEADER_ID\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"HIST_CREATION_DATE\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"PAYMENT_TERM_ID\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"HIST_CREATED_BY\",\n                            CASE\n                                WHEN \"OE_ORDER_HEADER_HISTORY\".\"ORDER_SOURCE_ID\" IS NOT NULL\n                                    AND \"OE_ORDER_HEADER_HISTORY\".\"ORDER_SOURCE_ID\" != '0'\n                                    THEN 'Automatic'\n                                ELSE 'Manual' END AS \"ExecutionType\"\n            FROM \"OE_ORDER_HEADER_HISTORY\" AS \"OE_ORDER_HEADER_HISTORY\"\n            UNION\n            SELECT \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\",\n                   TIMESTAMPADD(SECOND, 2, \"OE_ORDER_HEADERS_ALL\".\"LAST_UPDATE_DATE\") AS \"HIST_CREATION_DATE\",\n                   \"OE_ORDER_HEADERS_ALL\".\"PAYMENT_TERM_ID\",\n                   \"OE_ORDER_HEADERS_ALL\".\"LAST_UPDATED_BY\"                           AS \"HIST_CREATED_BY\",\n                   CASE\n                       WHEN \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" IS NOT NULL\n                           AND \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" != '0'\n                           THEN 'Automatic'\n                       ELSE 'Manual' END                                              AS \"ExecutionType\"\n            FROM \"OE_ORDER_HEADERS_ALL\" AS \"OE_ORDER_HEADERS_ALL\"\n            WHERE EXISTS (SELECT 1\n                         FROM \"OE_ORDER_HEADER_HISTORY\"\n                         WHERE \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\"\n                               = \"OE_ORDER_HEADER_HISTORY\".\"HEADER_ID\")),\n    \"CTE_Identify_Changes\"\n        AS (SELECT \"CTE_Union_History_and_Present\".\"HEADER_ID\" || '::2::'\n                   || \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\" || '::'\n                   || \"CTE_Union_History_and_Present\".\"PAYMENT_TERM_ID\"                    AS \"ID\",\n                   \"CTE_Union_History_and_Present\".\"HEADER_ID\"                             AS \"ObjectID\",\n                   \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\"                    AS \"Time\",\n                   CASE\n                       WHEN LAG(\"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\") OVER \"w\" IS NOT NULL\n                            AND LAG(\"CTE_Union_History_and_Present\".\"PAYMENT_TERM_ID\") OVER \"w\"\n                            != \"CTE_Union_History_and_Present\".\"PAYMENT_TERM_ID\"\n                           THEN 'PaymentTerms'\n                       END                                                                 AS \"Attribute\",\n                   LAG(\"CTE_Union_History_and_Present\".\"PAYMENT_TERM_ID\") OVER \"w\"         AS \"OldValue\",\n                   CAST(\"CTE_Union_History_and_Present\".\"PAYMENT_TERM_ID\" AS VARCHAR(255)) AS \"NewValue\",\n                   CAST(\"CTE_Union_History_and_Present\".\"HIST_CREATED_BY\" AS VARCHAR(255)) AS \"ChangedBy\",\n                   NULL                                                                    AS \"OperationType\",\n                   NULL                                                                    AS \"OperationID\",\n                   \"CTE_Union_History_and_Present\".\"ExecutionType\"                         AS \"ExecutionType\"\n            FROM \"CTE_Union_History_and_Present\" AS \"CTE_Union_History_and_Present\"\n            WINDOW \"w\" AS (PARTITION BY \"CTE_Union_History_and_Present\".\"HEADER_ID\"\n                    ORDER BY \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\",\n                        \"CTE_Union_History_and_Present\".\"PAYMENT_TERM_ID\"))\nSELECT  <%=sourceSystem%> || '::' || \"Identify_Changes\".\"ID\"           AS \"ID\",\n\t    <%=sourceSystem%> || '::' || \"Identify_Changes\".\"ObjectID\"     AS \"ObjectID\",\n        \"Identify_Changes\".\"Time\"                                      AS \"Time\",\n        \"Identify_Changes\".\"Attribute\"                                 AS \"Attribute\",\n        CAST(\"Identify_Changes\".\"OldValue\" AS VARCHAR(255))            AS \"OldValue\",\n        \"Identify_Changes\".\"NewValue\"                                  AS \"NewValue\",\n       <%=sourceSystem%> || '::' || \"Identify_Changes\".\"ChangedBy\"     AS \"ChangedBy\",\n        \"Identify_Changes\".\"OperationType\"                             AS \"OperationType\",\n        \"Identify_Changes\".\"OperationID\"                               AS \"OperationID\",\n        \"Identify_Changes\".\"ExecutionType\"                             AS \"ExecutionType\"\nFROM \"CTE_Identify_Changes\" AS \"Identify_Changes\"\nWHERE \"Identify_Changes\".\"Attribute\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "RequestedDeliveryDate",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Union_History_and_Present\"\n        AS (SELECT DISTINCT \"OE_ORDER_HEADER_HISTORY\".\"HEADER_ID\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"HIST_CREATION_DATE\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"REQUEST_DATE\",\n                            \"OE_ORDER_HEADER_HISTORY\".\"HIST_CREATED_BY\",\n                            CASE\n                                WHEN \"OE_ORDER_HEADER_HISTORY\".\"ORDER_SOURCE_ID\" IS NOT NULL\n                                    AND \"OE_ORDER_HEADER_HISTORY\".\"ORDER_SOURCE_ID\" != '0'\n                                    THEN 'Automatic'\n                                ELSE 'Manual' END AS \"ExecutionType\"\n            FROM \"OE_ORDER_HEADER_HISTORY\" AS \"OE_ORDER_HEADER_HISTORY\"\n            UNION\n            SELECT \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\",\n                   TIMESTAMPADD(SECOND, 2, \"OE_ORDER_HEADERS_ALL\".\"LAST_UPDATE_DATE\") AS \"HIST_CREATION_DATE\",\n                   \"OE_ORDER_HEADERS_ALL\".\"REQUEST_DATE\",\n                   \"OE_ORDER_HEADERS_ALL\".\"LAST_UPDATED_BY\"                           AS \"HIST_CREATED_BY\",\n                   CASE\n                       WHEN \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" IS NOT NULL\n                           AND \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" != '0'\n                           THEN 'Automatic'\n                       ELSE 'Manual' END                                              AS \"ExecutionType\"\n            FROM \"OE_ORDER_HEADERS_ALL\" AS \"OE_ORDER_HEADERS_ALL\"\n            WHERE EXISTS (SELECT 1\n                         FROM \"OE_ORDER_HEADER_HISTORY\"\n                         WHERE \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\"\n                               = \"OE_ORDER_HEADER_HISTORY\".\"HEADER_ID\")),\n    \"CTE_Identify_Changes\"\n        AS (SELECT \"CTE_Union_History_and_Present\".\"HEADER_ID\" || '::3::'\n                   || \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\" || '::'\n                   || \"CTE_Union_History_and_Present\".\"REQUEST_DATE\"                       AS \"ID\",\n                   \"CTE_Union_History_and_Present\".\"HEADER_ID\"                             AS \"ObjectID\",\n                   \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\"                    AS \"Time\",\n                   CASE\n                       WHEN LAG(\"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\") OVER \"w\" IS NOT NULL\n                            AND LAG(\"CTE_Union_History_and_Present\".\"REQUEST_DATE\") OVER \"w\"\n                            != \"CTE_Union_History_and_Present\".\"REQUEST_DATE\"\n                           THEN 'RequestedDeliveryDate'\n                       END                                                                 AS \"Attribute\",\n                   LAG(\"CTE_Union_History_and_Present\".\"REQUEST_DATE\") OVER \"w\"            AS \"OldValue\",\n                   CAST(\"CTE_Union_History_and_Present\".\"REQUEST_DATE\" AS VARCHAR(255))    AS \"NewValue\",\n                   CAST(\"CTE_Union_History_and_Present\".\"HIST_CREATED_BY\" AS VARCHAR(255)) AS \"ChangedBy\",\n                   NULL                                                                    AS \"OperationType\",\n                   NULL                                                                    AS \"OperationID\",\n                   \"CTE_Union_History_and_Present\".\"ExecutionType\"                         AS \"ExecutionType\"\n            FROM \"CTE_Union_History_and_Present\" AS \"CTE_Union_History_and_Present\"\n            WINDOW \"w\" AS (PARTITION BY \"CTE_Union_History_and_Present\".\"HEADER_ID\"\n                    ORDER BY \"CTE_Union_History_and_Present\".\"HIST_CREATION_DATE\",\n                        \"CTE_Union_History_and_Present\".\"REQUEST_DATE\"))\nSELECT  <%=sourceSystem%> || '::' || \"Identify_Changes\".\"ID\"           AS \"ID\",\n\t    <%=sourceSystem%> || '::' || \"Identify_Changes\".\"ObjectID\"     AS \"ObjectID\",\n        \"Identify_Changes\".\"Time\"                                      AS \"Time\",\n        \"Identify_Changes\".\"Attribute\"                                 AS \"Attribute\",\n        CAST(\"Identify_Changes\".\"OldValue\" AS VARCHAR(255))            AS \"OldValue\",\n        \"Identify_Changes\".\"NewValue\"                                  AS \"NewValue\",\n        <%=sourceSystem%> || '::' || \"Identify_Changes\".\"ChangedBy\"    AS \"ChangedBy\",\n        \"Identify_Changes\".\"OperationType\"                             AS \"OperationType\",\n        \"Identify_Changes\".\"OperationID\"                               AS \"OperationID\",\n        \"Identify_Changes\".\"ExecutionType\"                             AS \"ExecutionType\"\nFROM \"CTE_Identify_Changes\" AS \"Identify_Changes\"\nWHERE \"Identify_Changes\".\"Attribute\" IS NOT NULL\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Customer"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DistributionChannel",
+                    "DistributionChannelName",
+                    "DocumentCategory",
+                    "DocumentCategoryName",
+                    "ExternalPurchaseOrderDate",
+                    "ExternalPurchaseOrderNumber",
+                    "FreightTerms",
+                    "ID",
+                    "NetAmount",
+                    "OrderType",
+                    "OrderTypeName",
+                    "PaymentTerms",
+                    "RequestedDeliveryDate",
+                    "SalesOrderNumber",
+                    "SalesOrganization",
+                    "SalesOrganizationName",
+                    "ShippingDetails",
+                    "ShippingDetailsName",
+                    "SourceSystemInstance",
+                    "SystemOrderConfirmationStatus",
+                    "SystemOverallProcessingStatus"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "SalesOrderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Total_OrderAmount\" AS (SELECT \"OE_ORDER_LINES_ALL\".\"HEADER_ID\",\n                                        SUM((\"OE_ORDER_LINES_ALL\".\"ORDERED_QUANTITY\"\n                                             * \"OE_ORDER_LINES_ALL\".\"UNIT_SELLING_PRICE\")) AS \"TotalOrderAmount\"\n                                 FROM \"OE_ORDER_LINES_ALL\" AS \"OE_ORDER_LINES_ALL\"\n                                 GROUP BY \"HEADER_ID\")\nSELECT\n    <%=sourceSystem%> || '::' || CAST(\"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\" AS VARCHAR(255))    AS \"ID\",\n    \"OE_ORDER_HEADERS_ALL\".\"CREATION_DATE\"                                                   AS \"CreationTime\",\n    <%=sourceSystem%> || '::' || \"OE_ORDER_HEADERS_ALL\".\"CREATED_BY\"                         AS \"CreatedBy\",\n    CASE\n        WHEN \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" IS NOT NULL\n            AND \"OE_ORDER_HEADERS_ALL\".\"ORDER_SOURCE_ID\" != '0'\n            THEN 'Automatic'\n        ELSE 'Manual' \n        END                                                                AS \"CreationExecutionType\",\n    CAST(\"OE_ORDER_HEADERS_ALL\".\"ORDER_TYPE_ID\" AS VARCHAR(255))           AS \"OrderType\",   \n    \"OE_TRANSACTION_TYPES_TL\".\"NAME\"                                       AS \"OrderTypeName\",\n    \"OE_ORDER_HEADERS_ALL\".\"FLOW_STATUS_CODE\"                              AS \"SystemOverallProcessingStatus\",\n    CASE\n        WHEN \"OE_ORDER_HEADERS_ALL\".\"CANCELLED_FLAG\" IS NOT NULL\n            THEN 'Cancelled'\n        WHEN \"OE_ORDER_HEADERS_ALL\".\"BOOKED_FLAG\" = 'Y'\n            THEN 'Booked'\n        WHEN \"OE_ORDER_HEADERS_ALL\".\"BOOKED_FLAG\" = 'N'\n            THEN 'Not Booked'\n        END                                                                AS \"SystemOrderConfirmationStatus\",\n    \"OE_ORDER_HEADERS_ALL\".\"SHIPPING_METHOD_CODE\"                          AS \"ShippingDetails\",\n    COALESCE(\"FND_LOOKUP_VALUES_S\".\"MEANING\",\n             \"OE_ORDER_HEADERS_ALL\".\"SHIPPING_METHOD_CODE\")                AS \"ShippingDetailsName\",\n    \"OE_ORDER_HEADERS_ALL\".\"FREIGHT_TERMS_CODE\"                            AS \"FreightTerms\",\n    CAST(\"OE_ORDER_HEADERS_ALL\".\"PAYMENT_TERM_ID\" AS VARCHAR(255))         AS \"PaymentTerms\",\n    CAST(\"JTF_RS_RESOURCE_EXTNS\".\"SOURCE_BUSINESS_GRP_ID\" AS VARCHAR(255)) AS \"SalesOrganization\",\n    \"JTF_RS_RESOURCE_EXTNS\".\"SOURCE_BUSINESS_GRP_NAME\"                     AS \"SalesOrganizationName\",\n    \"OE_ORDER_HEADERS_ALL\".\"SALES_CHANNEL_CODE\"                            AS \"DistributionChannel\", --- no values\n    \"FND_LOOKUP_VALUES_C\".\"MEANING\"                                        AS \"DistributionChannelName\",\n    \"Total_OrderAmount\".\"TotalOrderAmount\"                                 AS \"NetAmount\",\n    \"OE_ORDER_HEADERS_ALL\".\"TRANSACTIONAL_CURR_CODE\"                       AS \"Currency\",\n    \"OE_ORDER_HEADERS_ALL\".\"ORDER_CATEGORY_CODE\"                           AS \"DocumentCategory\",\n    \"FND_LOOKUP_VALUES\".\"MEANING\"                                          AS \"DocumentCategoryName\",\n    CAST(\"OE_ORDER_HEADERS_ALL\".\"ORDER_NUMBER\" AS VARCHAR(255))            AS \"SalesOrderNumber\",\n    CAST(\"OE_ORDER_HEADERS_ALL\".\"REQUEST_DATE\" AS TIMESTAMP)               AS \"RequestedDeliveryDate\",\n   <%=sourceSystem%>                                                       AS \"SourceSystemInstance\",\n   <%=sourceSystem%> || '::' || \"OE_ORDER_HEADERS_ALL\".\"SOLD_TO_ORG_ID\"    AS \"Customer\",\n    \"OE_ORDER_HEADERS_ALL\".\"CUST_PO_NUMBER\"                                AS \"ExternalPurchaseOrderNumber\",\n    \"OE_ORDER_HEADERS_ALL\".\"ORDERED_DATE\"                                  AS \"ExternalPurchaseOrderDate\"\nFROM \"OE_ORDER_HEADERS_ALL\" AS \"OE_ORDER_HEADERS_ALL\"\n         LEFT JOIN \"HR_ALL_ORGANIZATION_UNITS\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n                   ON \"OE_ORDER_HEADERS_ALL\".\"ORG_ID\" = \"HR_ALL_ORGANIZATION_UNITS\".\"ORGANIZATION_ID\"\n         LEFT JOIN \"CTE_Total_OrderAmount\" AS \"Total_OrderAmount\"\n                   ON \"OE_ORDER_HEADERS_ALL\".\"HEADER_ID\" = \"Total_OrderAmount\".\"HEADER_ID\"\n         LEFT JOIN \"OE_TRANSACTION_TYPES_TL\" AS \"OE_TRANSACTION_TYPES_TL\"\n                   ON \"OE_ORDER_HEADERS_ALL\".\"ORDER_TYPE_ID\" = \"OE_TRANSACTION_TYPES_TL\".\"TRANSACTION_TYPE_ID\"\n                       AND \"OE_TRANSACTION_TYPES_TL\".\"LANGUAGE\" = <%=LanguageKey%> \n         LEFT JOIN \"JTF_RS_SALESREPS\" AS \"JTF_RS_SALESREPS\"\n                   ON \"OE_ORDER_HEADERS_ALL\".\"SALESREP_ID\" = \"JTF_RS_SALESREPS\".\"SALESREP_ID\"\n                       AND \"OE_ORDER_HEADERS_ALL\".\"ORG_ID\" = \"JTF_RS_SALESREPS\".\"ORG_ID\"\n         LEFT JOIN \"JTF_RS_RESOURCE_EXTNS\" AS \"JTF_RS_RESOURCE_EXTNS\"\n                   ON \"JTF_RS_SALESREPS\".\"RESOURCE_ID\" = \"JTF_RS_RESOURCE_EXTNS\".\"RESOURCE_ID\"\n         LEFT JOIN \"FND_LOOKUP_VALUES\" AS \"FND_LOOKUP_VALUES\"\n                   ON \"OE_ORDER_HEADERS_ALL\".\"ORDER_CATEGORY_CODE\" = \"FND_LOOKUP_VALUES\".\"LOOKUP_CODE\"\n                       AND \"FND_LOOKUP_VALUES\".\"ZD_EDITION_NAME\" = 'SET1' \n                       AND \"FND_LOOKUP_VALUES\".\"LOOKUP_TYPE\" = 'ORDER_CATEGORY'\n                       AND \"FND_LOOKUP_VALUES\".\"VIEW_APPLICATION_ID\" = '660'\n                       AND \"FND_LOOKUP_VALUES\".\"LANGUAGE\" =  <%=LanguageKey%>\n         LEFT JOIN \"FND_LOOKUP_VALUES\" AS \"FND_LOOKUP_VALUES_C\"\n                   ON \"OE_ORDER_HEADERS_ALL\".\"SALES_CHANNEL_CODE\" = \"FND_LOOKUP_VALUES_C\".\"LOOKUP_CODE\"\n                       AND \"FND_LOOKUP_VALUES_C\".\"ZD_EDITION_NAME\" = 'SET1' \n                       AND \"FND_LOOKUP_VALUES_C\".\"LOOKUP_TYPE\" = 'SALES_CHANNEL'\n                       AND \"FND_LOOKUP_VALUES_C\".\"VIEW_APPLICATION_ID\" = '660'\n                       AND \"FND_LOOKUP_VALUES_C\".\"LANGUAGE\" =  <%=LanguageKey%> \n         LEFT JOIN \"FND_LOOKUP_VALUES\" AS \"FND_LOOKUP_VALUES_S\"\n                   ON \"OE_ORDER_HEADERS_ALL\".\"SHIPPING_METHOD_CODE\" = \"FND_LOOKUP_VALUES_S\".\"LOOKUP_CODE\"\n                       AND \"FND_LOOKUP_VALUES_S\".\"ZD_EDITION_NAME\" = 'SET1'\n                       AND \"FND_LOOKUP_VALUES_S\".\"LOOKUP_TYPE\" = 'SHIP_METHOD'\n                       AND \"FND_LOOKUP_VALUES_S\".\"VIEW_APPLICATION_ID\" = '3'\n                       AND \"FND_LOOKUP_VALUES_S\".\"LANGUAGE\" =  <%=LanguageKey%>"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

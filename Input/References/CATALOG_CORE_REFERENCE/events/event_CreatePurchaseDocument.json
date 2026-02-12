@@ -1,0 +1,95 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1758037462189.0,
+    "changed_by": {
+        "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+        "name": "j.vita-martinez",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630738853.0,
+    "description": "Represents the event in the process when a Purchase Document (Purchase Orders or Purchase Agreements) are entered in the system.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DocumentCategory",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "94fe0f63-acf6-493c-8383-6978e9d9bdec",
+    "name": "CreatePurchaseDocument",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "PurchaseDocument",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseDocument",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "PurchaseOrder",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseOrder",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable",
+        "Procurement"
+    ]
+}

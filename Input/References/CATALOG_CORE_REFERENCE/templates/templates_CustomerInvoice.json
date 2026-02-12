@@ -1,0 +1,239 @@
+[
+    {
+        "change_date": 1764702352295.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1752508813639.0,
+        "description": "",
+        "draft": null,
+        "id": "3a6241dc-9ea1-43d5-be9f-7721684e6595",
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "name": "CustomerInvoice - SAP ECC - 1",
+        "sql_factory_transports": [
+            {
+                "change_date": 1764702352295.0,
+                "changed_by": {
+                    "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+                    "name": "Robert Connolly",
+                    "type_": "USER"
+                },
+                "created_by": {
+                    "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+                    "name": "l.pigozzi",
+                    "type_": "USER"
+                },
+                "creation_date": 1749632898211.0,
+                "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+                "description": null,
+                "disabled": null,
+                "display_name": "CustomerInvoice - 00. Central Extraction Pool_TS1",
+                "draft": null,
+                "factory_id": "9aea4fd3-dda4-400b-ba73-ac0fbdc51efb",
+                "factory_validation_status": "VALID",
+                "has_user_template": true,
+                "local_parameters": [
+                    {
+                        "name": "sourceSystem",
+                        "value": "'SAP_ECC'"
+                    }
+                ],
+                "namespace": "custom",
+                "target": {
+                    "entity_ref": {
+                        "name": "CustomerInvoice",
+                        "namespace": "custom"
+                    },
+                    "kind": "OBJECT"
+                },
+                "transformations": [
+                    {
+                        "change_sql_factory_datasets": [
+                            {
+                                "id": "Cancellation",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"VBRP_CANCEL\".\"MANDT\" || '::' || \n        \"VBRP_CANCEL\".\"VBELN\" || '::' || \"VBRP_CANCEL\".\"POSNR\"                              AS \"ID\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"ObjectID\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE), \n        \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                                                 AS \"Time\",\n    'Cancellation'                                                                          AS \"Attribute\",\n    NULL                                                                                    AS \"OldValue\",\n    NULL                                                                                    AS \"NewValue\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                    AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"                   AS \"ChangedBy\",\n\tCASE \n        WHEN VBRK.VBTYP = 'N' THEN  'CustomerInvoice'\n        WHEN VBRK.VBTYP = 'S' THEN  'CreditMemo'\n     END                                                                                    AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"OperationID\"\nFROM \"VBRK\" AS \"VBRK\"\n         LEFT JOIN \"VBRP\" AS \"VBRP\"\n                   ON \"VBRP\".\"MANDT\" = \"VBRK\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBRK\".\"VBELN\"\n         LEFT JOIN \"VBFA\" AS \"VBFA\"\n                   ON \"VBRP\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP\".\"POSNR\" = \"VBFA\".\"POSNN\"\n                       AND \"VBFA\".\"VBTYP_V\" = 'M'\n                       AND \"VBFA\".\"VBTYP_N\" = 'N'\n         LEFT JOIN \"VBRP\" AS \"VBRP_CANCEL\"\n                   ON \"VBRP_CANCEL\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP_CANCEL\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP_CANCEL\".\"POSNR\" = \"VBFA\".\"POSNN\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"VBRP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"VBRP\".\"ERNAM\" = \"USR02\".\"BNAME\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('N' , 'S' ) \n    AND \"VBRP_CANCEL\".\"MANDT\" IS NOT NULL\n\nUNION\n\nSELECT\n    <%=sourceSystem%> || '::' || \"VBRP_CANCEL\".\"MANDT\" || '::' || \n        \"VBRP_CANCEL\".\"VBELN\" || '::' || \"VBRP_CANCEL\".\"POSNR\"                              AS \"ID\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"ObjectID\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE),\n                            \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                             AS \"Time\",\n    \n    'Cancellation'                                                                          AS \"Attribute\",\n    NULL                                                                                    AS \"OldValue\",\n    NULL                                                                                    AS \"NewValue\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                    AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"                   AS \"ChangedBy\",\n\tCASE \n        WHEN VBRK.VBTYP = 'N' THEN  'CustomerInvoice'\n        WHEN VBRK.VBTYP = 'S' THEN  'CreditMemo'\n     END                                                                                    AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"OperationID\"\nFROM \"VBRK\" AS \"VBRK\"\n         LEFT JOIN \"VBRP\" AS \"VBRP\"\n                   ON \"VBRP\".\"MANDT\" = \"VBRK\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBRK\".\"VBELN\"\n         LEFT JOIN \"VBFA\" AS \"VBFA\"\n                   ON \"VBRP\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP\".\"POSNR\" = \"VBFA\".\"POSNN\"\n                       AND \"VBFA\".\"VBTYP_V\" = 'S'\n                       AND \"VBFA\".\"VBTYP_N\" = 'O'\n         LEFT JOIN \"VBRP\" AS \"VBRP_CANCEL\"\n                   ON \"VBRP_CANCEL\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP_CANCEL\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP_CANCEL\".\"POSNR\" = \"VBFA\".\"POSNN\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"VBRP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"VBRP\".\"ERNAM\" = \"USR02\".\"BNAME\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('N' , 'S' ) \n    AND \"VBRP_CANCEL\".\"MANDT\" IS NOT NULL"
+                            }
+                        ],
+                        "foreign_key_names": [
+                            "CreatedBy",
+                            "Customer"
+                        ],
+                        "namespace": "custom",
+                        "property_names": [
+                            "BusinessUnit",
+                            "CreationExecutionType",
+                            "CreationTime",
+                            "Currency",
+                            "CustomerInvoiceNumber",
+                            "CustomerInvoiceType",
+                            "ID",
+                            "NetAmount",
+                            "PaymentTerms",
+                            "SourceSystemInstance"
+                        ],
+                        "property_sql_factory_datasets": [
+                            {
+                                "id": "CustomerInvoiceAttributes",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"               AS \"ID\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\"                                         AS \"SourceSystemInstance\",\n    \"T001\".\"BUTXT\"                                                                      AS \"BusinessUnit\",\n\t\"VBRK\".\"NETWR\"                                                                      AS \"NetAmount\",\n\t\"VBRK\".\"WAERK\"                                                                      AS \"Currency\",\n    \"VBRK\".\"ZTERM\"                                                                      AS \"PaymentTerms\",\n    CASE\n        WHEN \"VBRK\".\"VBTYP\" = 'M' THEN 'CustomerInvoice'\n        WHEN \"VBRK\".\"VBTYP\" = 'O' THEN 'CreditMemo'\n        WHEN \"VBRK\".\"VBTYP\" = 'P' THEN 'DebitMemo'\n      END                                                                               AS \"CustomerInvoiceType\",\n\t\"VBRK\".\"VBELN\"                                                                      AS \"CustomerInvoiceNumber\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) +\n            CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE), \n            \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                                         AS \"CreationTime\",\n\tCASE WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic' ELSE 'Manual' END          AS \"CreationExecutionType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"               AS \"CreatedBy\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"KUNAG\"               AS \"Customer\"\nFROM \"VBRK\" AS \"VBRK\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"VBRK\".\"MANDT\" = \"USR02\".\"MANDT\"\n            AND \"VBRK\".\"ERNAM\" = \"USR02\".\"BNAME\"\n    LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"VBRK\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"VBRK\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('M', 'O', 'P')\n"
+                            }
+                        ],
+                        "relationship_transformations": []
+                    }
+                ]
+            },
+            {
+                "change_date": 1764702352295.0,
+                "changed_by": {
+                    "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+                    "name": "Robert Connolly",
+                    "type_": "USER"
+                },
+                "created_by": {
+                    "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+                    "name": "l.pigozzi",
+                    "type_": "USER"
+                },
+                "creation_date": 1752508825413.0,
+                "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+                "description": null,
+                "disabled": null,
+                "display_name": "CustomerInvoice - SAP S4",
+                "draft": null,
+                "factory_id": "0eb27d1d-342b-4439-a875-987787b8b5f8",
+                "factory_validation_status": "VALID",
+                "has_user_template": true,
+                "local_parameters": [
+                    {
+                        "name": "sourceSystem",
+                        "value": "'SAP_S4_HANA'"
+                    }
+                ],
+                "namespace": "custom",
+                "target": {
+                    "entity_ref": {
+                        "name": "CustomerInvoice",
+                        "namespace": "custom"
+                    },
+                    "kind": "OBJECT"
+                },
+                "transformations": [
+                    {
+                        "change_sql_factory_datasets": [
+                            {
+                                "id": "Cancellation",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"VBRP_CANCEL\".\"MANDT\" || '::' || \n        \"VBRP_CANCEL\".\"VBELN\" || '::' || \"VBRP_CANCEL\".\"POSNR\"                              AS \"ID\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"ObjectID\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE), \n        \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                                                 AS \"Time\",\n    'Cancellation'                                                                          AS \"Attribute\",\n    NULL                                                                                    AS \"OldValue\",\n    NULL                                                                                    AS \"NewValue\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                    AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"                   AS \"ChangedBy\",\n\tCASE \n        WHEN VBRK.VBTYP = 'N' THEN  'CustomerInvoice'\n        WHEN VBRK.VBTYP = 'S' THEN  'CreditMemo'\n     END                                                                                    AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"OperationID\"\nFROM \"VBRK\" AS \"VBRK\"\n         LEFT JOIN \"VBRP\" AS \"VBRP\"\n                   ON \"VBRP\".\"MANDT\" = \"VBRK\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBRK\".\"VBELN\"\n         LEFT JOIN \"VBFA\" AS \"VBFA\"\n                   ON \"VBRP\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP\".\"POSNR\" = \"VBFA\".\"POSNN\"\n                       AND \"VBFA\".\"VBTYP_V\" = 'M'\n                       AND \"VBFA\".\"VBTYP_N\" = 'N'\n         LEFT JOIN \"VBRP\" AS \"VBRP_CANCEL\"\n                   ON \"VBRP_CANCEL\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP_CANCEL\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP_CANCEL\".\"POSNR\" = \"VBFA\".\"POSNN\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"VBRP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"VBRP\".\"ERNAM\" = \"USR02\".\"BNAME\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('N' , 'S' ) \n    AND \"VBRP_CANCEL\".\"MANDT\" IS NOT NULL\n\nUNION\n\nSELECT\n    <%=sourceSystem%> || '::' || \"VBRP_CANCEL\".\"MANDT\" || '::' || \n        \"VBRP_CANCEL\".\"VBELN\" || '::' || \"VBRP_CANCEL\".\"POSNR\"                              AS \"ID\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"ObjectID\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE),\n                            \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                             AS \"Time\",\n    \n    'Cancellation'                                                                          AS \"Attribute\",\n    NULL                                                                                    AS \"OldValue\",\n    NULL                                                                                    AS \"NewValue\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                    AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"                   AS \"ChangedBy\",\n\tCASE \n        WHEN VBRK.VBTYP = 'N' THEN  'CustomerInvoice'\n        WHEN VBRK.VBTYP = 'S' THEN  'CreditMemo'\n     END                                                                                    AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"OperationID\"\nFROM \"VBRK\" AS \"VBRK\"\n         LEFT JOIN \"VBRP\" AS \"VBRP\"\n                   ON \"VBRP\".\"MANDT\" = \"VBRK\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBRK\".\"VBELN\"\n         LEFT JOIN \"VBFA\" AS \"VBFA\"\n                   ON \"VBRP\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP\".\"POSNR\" = \"VBFA\".\"POSNN\"\n                       AND \"VBFA\".\"VBTYP_V\" = 'S'\n                       AND \"VBFA\".\"VBTYP_N\" = 'O'\n         LEFT JOIN \"VBRP\" AS \"VBRP_CANCEL\"\n                   ON \"VBRP_CANCEL\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP_CANCEL\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP_CANCEL\".\"POSNR\" = \"VBFA\".\"POSNN\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"VBRP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"VBRP\".\"ERNAM\" = \"USR02\".\"BNAME\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('N' , 'S' ) \n    AND \"VBRP_CANCEL\".\"MANDT\" IS NOT NULL"
+                            }
+                        ],
+                        "foreign_key_names": [
+                            "CreatedBy",
+                            "Customer"
+                        ],
+                        "namespace": "custom",
+                        "property_names": [
+                            "BusinessUnit",
+                            "CreationExecutionType",
+                            "CreationTime",
+                            "Currency",
+                            "CustomerInvoiceNumber",
+                            "CustomerInvoiceType",
+                            "ID",
+                            "NetAmount",
+                            "PaymentTerms",
+                            "SourceSystemInstance"
+                        ],
+                        "property_sql_factory_datasets": [
+                            {
+                                "id": "CustomerInvoiceAttributes",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"               AS \"ID\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\"                                         AS \"SourceSystemInstance\",\n    \"T001\".\"BUTXT\"                                                                      AS \"BusinessUnit\",\n\t\"VBRK\".\"NETWR\"                                                                      AS \"NetAmount\",\n\t\"VBRK\".\"WAERK\"                                                                      AS \"Currency\",\n    \"VBRK\".\"ZTERM\"                                                                      AS \"PaymentTerms\",\n    CASE\n        WHEN \"VBRK\".\"VBTYP\" = 'M' THEN 'CustomerInvoice'\n        WHEN \"VBRK\".\"VBTYP\" = 'O' THEN 'CreditMemo'\n        WHEN \"VBRK\".\"VBTYP\" = 'P' THEN 'DebitMemo'\n      END                                                                               AS \"CustomerInvoiceType\",\n\t\"VBRK\".\"VBELN\"                                                                      AS \"CustomerInvoiceNumber\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) +\n            CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE), \n            \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                                         AS \"CreationTime\",\n\tCASE WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic' ELSE 'Manual' END          AS \"CreationExecutionType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"               AS \"CreatedBy\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"KUNAG\"               AS \"Customer\"\nFROM \"VBRK\" AS \"VBRK\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"VBRK\".\"MANDT\" = \"USR02\".\"MANDT\"\n            AND \"VBRK\".\"ERNAM\" = \"USR02\".\"BNAME\"\n    LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"VBRK\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"VBRK\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('M', 'O', 'P')\n"
+                            }
+                        ],
+                        "relationship_transformations": []
+                    }
+                ]
+            }
+        ],
+        "target": {
+            "entity_ref": {
+                "name": "CustomerInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Cancellation",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"VBRP_CANCEL\".\"MANDT\" || '::' || \n        \"VBRP_CANCEL\".\"VBELN\" || '::' || \"VBRP_CANCEL\".\"POSNR\"                              AS \"ID\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"ObjectID\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) +\n        CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE), \n        \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                                                 AS \"Time\",\n    'Cancellation'                                                                          AS \"Attribute\",\n    NULL                                                                                    AS \"OldValue\",\n    NULL                                                                                    AS \"NewValue\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                    AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"                   AS \"ChangedBy\",\n\tCASE \n        WHEN VBRK.VBTYP = 'N' THEN  'CustomerInvoice'\n        WHEN VBRK.VBTYP = 'S' THEN  'CreditMemo'\n     END                                                                                    AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"OperationID\"\nFROM \"VBRK\" AS \"VBRK\"\n         LEFT JOIN \"VBRP\" AS \"VBRP\"\n                   ON \"VBRP\".\"MANDT\" = \"VBRK\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBRK\".\"VBELN\"\n         LEFT JOIN \"VBFA\" AS \"VBFA\"\n                   ON \"VBRP\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP\".\"POSNR\" = \"VBFA\".\"POSNN\"\n                       AND \"VBFA\".\"VBTYP_V\" = 'M'\n                       AND \"VBFA\".\"VBTYP_N\" = 'N'\n         LEFT JOIN \"VBRP\" AS \"VBRP_CANCEL\"\n                   ON \"VBRP_CANCEL\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP_CANCEL\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP_CANCEL\".\"POSNR\" = \"VBFA\".\"POSNN\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"VBRP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"VBRP\".\"ERNAM\" = \"USR02\".\"BNAME\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('N' , 'S' ) \n    AND \"VBRP_CANCEL\".\"MANDT\" IS NOT NULL\n\nUNION\n\nSELECT\n    <%=sourceSystem%> || '::' || \"VBRP_CANCEL\".\"MANDT\" || '::' || \n        \"VBRP_CANCEL\".\"VBELN\" || '::' || \"VBRP_CANCEL\".\"POSNR\"                              AS \"ID\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"ObjectID\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE),\n                            \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                             AS \"Time\",\n    \n    'Cancellation'                                                                          AS \"Attribute\",\n    NULL                                                                                    AS \"OldValue\",\n    NULL                                                                                    AS \"NewValue\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                    AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"                   AS \"ChangedBy\",\n\tCASE \n        WHEN VBRK.VBTYP = 'N' THEN  'CustomerInvoice'\n        WHEN VBRK.VBTYP = 'S' THEN  'CreditMemo'\n     END                                                                                    AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"                   AS \"OperationID\"\nFROM \"VBRK\" AS \"VBRK\"\n         LEFT JOIN \"VBRP\" AS \"VBRP\"\n                   ON \"VBRP\".\"MANDT\" = \"VBRK\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBRK\".\"VBELN\"\n         LEFT JOIN \"VBFA\" AS \"VBFA\"\n                   ON \"VBRP\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP\".\"POSNR\" = \"VBFA\".\"POSNN\"\n                       AND \"VBFA\".\"VBTYP_V\" = 'S'\n                       AND \"VBFA\".\"VBTYP_N\" = 'O'\n         LEFT JOIN \"VBRP\" AS \"VBRP_CANCEL\"\n                   ON \"VBRP_CANCEL\".\"MANDT\" = \"VBFA\".\"MANDT\"\n                       AND \"VBRP_CANCEL\".\"VBELN\" = \"VBFA\".\"VBELN\"\n                       AND \"VBRP_CANCEL\".\"POSNR\" = \"VBFA\".\"POSNN\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"VBRP\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"VBRP\".\"ERNAM\" = \"USR02\".\"BNAME\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('N' , 'S' ) \n    AND \"VBRP_CANCEL\".\"MANDT\" IS NOT NULL"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Customer"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BusinessUnit",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "CustomerInvoiceNumber",
+                    "CustomerInvoiceType",
+                    "ID",
+                    "NetAmount",
+                    "PaymentTerms",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CustomerInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"VBELN\"               AS \"ID\",\n\t<%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\"                                         AS \"SourceSystemInstance\",\n    \"T001\".\"BUTXT\"                                                                      AS \"BusinessUnit\",\n\t\"VBRK\".\"NETWR\"                                                                      AS \"NetAmount\",\n\t\"VBRK\".\"WAERK\"                                                                      AS \"Currency\",\n    \"VBRK\".\"ZTERM\"                                                                      AS \"PaymentTerms\",\n    CASE\n        WHEN \"VBRK\".\"VBTYP\" = 'M' THEN 'CustomerInvoice'\n        WHEN \"VBRK\".\"VBTYP\" = 'O' THEN 'CreditMemo'\n        WHEN \"VBRK\".\"VBTYP\" = 'P' THEN 'DebitMemo'\n      END                                                                               AS \"CustomerInvoiceType\",\n\t\"VBRK\".\"VBELN\"                                                                      AS \"CustomerInvoiceNumber\",\n\tCAST(\"VBRK\".\"ERDAT\" AS DATE) +\n            CAST(TIMESTAMPDIFF(SECOND, CAST(\"VBRK\".\"ERZET\" AS DATE), \n            \"VBRK\".\"ERZET\") AS INTERVAL SECOND)                                         AS \"CreationTime\",\n\tCASE WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic' ELSE 'Manual' END          AS \"CreationExecutionType\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"ERNAM\"               AS \"CreatedBy\",\n    <%=sourceSystem%> || '::' || \"VBRK\".\"MANDT\" || '::' || \"VBRK\".\"KUNAG\"               AS \"Customer\"\nFROM \"VBRK\" AS \"VBRK\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"VBRK\".\"MANDT\" = \"USR02\".\"MANDT\"\n            AND \"VBRK\".\"ERNAM\" = \"USR02\".\"BNAME\"\n    LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"VBRK\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"VBRK\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE \"VBRK\".\"MANDT\" IS NOT NULL\n    AND \"VBRK\".\"VBTYP\" IN ('M', 'O', 'P')\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

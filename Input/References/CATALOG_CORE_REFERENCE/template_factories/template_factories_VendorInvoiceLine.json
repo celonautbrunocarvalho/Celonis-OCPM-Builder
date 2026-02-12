@@ -1,0 +1,30 @@
+[
+    {
+        "change_date": 1763480930660.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "creation_date": 1753884640196.0,
+        "description": "",
+        "id": "8aa1e8dc-c03b-4a3d-91d0-2a964b5de11c",
+        "instance_names": [
+            "VendorInvoiceLine - SAP ECC"
+        ],
+        "instances_count": 1,
+        "name": "VendorInvoiceLine - SAP ECC - 1",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        }
+    }
+]

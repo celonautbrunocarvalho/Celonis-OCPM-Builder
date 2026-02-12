@@ -1,0 +1,122 @@
+[
+    {
+        "change_date": 1759915618860.0,
+        "changed_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "d94aa797-47b6-48e1-9b0f-9627812b5866",
+            "name": "Lea Hanna",
+            "type_": "USER"
+        },
+        "creation_date": 1753306108985.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "CurrencyConversion - S4 Hana",
+        "factory_id": "cc219237-054a-40fd-b5ba-2bf8999f7f3e",
+        "has_overwrites": null,
+        "name": "CurrencyConversion - S4 Hana",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1759915549051.0,
+        "changed_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749646060711.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "CurrencyConversion - 00. Central Extraction Pool_TS1",
+        "factory_id": "956f6941-990f-4e3b-997e-ae40b57d82d8",
+        "has_overwrites": null,
+        "name": "CurrencyConversion - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1764690895275.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630813986.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "CurrencyConversion transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "04e27724-3b37-4fac-87bf-8a78cf5ba3fb",
+        "has_overwrites": null,
+        "name": "CurrencyConversion transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1764690904064.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1751993694461.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "CurrencyConversion_OracleFusion",
+        "factory_id": "f962c055-06d6-44ea-b04d-8ea51452aafc",
+        "has_overwrites": null,
+        "name": "CurrencyConversion_OracleFusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

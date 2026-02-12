@@ -1,0 +1,86 @@
+[
+    {
+        "change_date": 1761317284027.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1751035700804.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseOrderLine - OCPM Schma",
+        "draft": null,
+        "factory_id": "7ad5f007-f714-4017-ab53-bd6c85beb3bb",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseOrderLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Changes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    \"PurchaseDocumentLine_Changes\".\"ID\"               AS \"ID\",\n    \"PurchaseDocumentLine_Changes\".\"ObjectID\"         AS \"ObjectID\",\n    \"PurchaseDocumentLine_Changes\".\"Time\"             AS \"Time\",\n    \"PurchaseDocumentLine_Changes\".\"Attribute\"        AS \"Attribute\",\n    \"PurchaseDocumentLine_Changes\".\"OldValue\"         AS \"OldValue\",\n    \"PurchaseDocumentLine_Changes\".\"NewValue\"         AS \"NewValue\",\n    \"PurchaseDocumentLine_Changes\".\"ChangedBy\"        AS \"ChangedBy\",\n    \"PurchaseDocumentLine_Changes\".\"OperationID\"      AS \"OperationID\",\n    \"PurchaseDocumentLine_Changes\".\"OperationType\"    AS \"OperationType\",\n    \"PurchaseDocumentLine_Changes\".\"ExecutionType\"    AS \"ExecutionType\"\nFROM \"c_o_custom_PurchaseDocumentLine\" AS \"PurchaseDocumentLine_Changes\"\n    LEFT JOIN \"o_custom_PurchaseDocumentLine\" AS \"PurchaseDocumentLine\"\n        ON \"PurchaseDocumentLine_Changes\".\"ObjectID\" = \"PurchaseDocumentLine\".\"ID\"\nWHERE \"PurchaseDocumentLine\".\"DocumentCategory\" IN ('Standard PO')"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Header",
+                    "Material",
+                    "RequestedBy"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ChangeDate",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "DocumentCategory",
+                    "DocumentType",
+                    "ID",
+                    "IsCanceled",
+                    "IsGoodsReceiptRequired",
+                    "LineNumber",
+                    "NetAmount",
+                    "NetUnitPrice",
+                    "PurchaseDocumentNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseOrderItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    \"PurchaseDocumentLine\".\"ID\"                                                           AS \"ID\",\n    \"PurchaseDocumentLine\".\"CreatedBy_ID\"                                                 AS \"CreatedBy\",\n    \"PurchaseDocumentLine\".\"Header_ID\"                                                    AS \"Header\",\n    \"PurchaseDocumentLine\".\"Material_ID\"                                                  AS \"Material\",\n    \"PurchaseDocumentLine\".\"RequestedBy_ID\"                                               AS \"RequestedBy\",\n\t\"PurchaseDocumentLine\".\"CreationExecutionType\"                                        AS \"CreationExecutionType\",\n    \"PurchaseDocumentLine\".\"CreationTime\"                                                 AS \"CreationTime\",\n    \"PurchaseDocumentLine\".\"ChangeDate\"                                                   AS \"ChangeDate\",\n    \"PurchaseDocumentLine\".\"Currency\"                                                     AS \"Currency\",\n\t\"PurchaseDocumentLine\".\"NetAmount\"                                                    AS \"NetAmount\",\n    \"PurchaseDocumentLine\".\"NetUnitPrice\"                                                 AS \"NetUnitPrice\",\n    \"PurchaseDocumentLine\".\"DocumentType\"                                                 AS \"DocumentType\",\n    \"PurchaseDocumentLine\".\"Quantity\"                                                     AS \"Quantity\",\n    \"PurchaseDocumentLine\".\"QuantityUnit\"                                                 AS \"QuantityUnit\",\n    \"PurchaseDocumentLine\".\"Description\"                                                  AS \"Description\",\n\t\"PurchaseDocumentLine\".\"LineNumber\"\t\t\t\t\t\t\t\t\t\t              AS \"LineNumber\",\n    \"PurchaseDocumentLine\".\"PurchaseDocumentNumber\"                                       AS \"PurchaseDocumentNumber\",\n    \"PurchaseDocumentLine\".\"IsCanceled\"                                                   AS \"IsCanceled\",\n\t\"PurchaseDocumentLine\".\"IsGoodsReceiptRequired\"\t\t\t\t\t\t\t\t\t\t  AS \"IsGoodsReceiptRequired\",\n    \"PurchaseDocumentLine\".\"DocumentCategory\"\t\t\t\t\t\t\t\t\t\t      AS \"DocumentCategory\",\n    \"PurchaseDocumentLine\".\"SourceSystemInstance\"\t                                      AS \"SourceSystemInstance\"\nFROM \"o_custom_PurchaseDocumentLine\"  AS \"PurchaseDocumentLine\"\nWHERE \"PurchaseDocumentLine\".\"DocumentCategory\" IN ('Standard PO')"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

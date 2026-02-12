@@ -1,0 +1,68 @@
+[
+    {
+        "change_date": 1764000303896.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1749692172456.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "GoodsReceipt - Child Object of MaterialMovements",
+        "draft": null,
+        "factory_id": "81734fb5-d4cf-4e15-a33c-77ab3b76be13",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "GoodsReceipt",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "CreationTime",
+                    "Currency",
+                    "ID",
+                    "MaterialMovementNumber",
+                    "MaterialTransactionType",
+                    "MovementDirection",
+                    "MovementQuantity",
+                    "MovementQuantityUnit",
+                    "SourceSystemInstance",
+                    "StorageLocation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "GoodsReceiptAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    \"MaterialMovement\".\"ID\"                         AS \"ID\",\n    \"MaterialMovement\".\"CreatedBy_ID\"               AS \"CreatedBy\",\n    \"MaterialMovement\".\"PurchaseDocumentLine_ID\"    AS \"PurchaseDocumentLine\",\n    \"MaterialMovement\".\"CreationTime\"               AS \"CreationTime\",\n    \"MaterialMovement\".\"MovementDirection\"          AS \"MovementDirection\",\n    \"MaterialMovement\".\"MaterialTransactionType\"    AS \"MaterialTransactionType\",\n    \"MaterialMovement\".\"MovementQuantity\"           AS \"MovementQuantity\",\n    \"MaterialMovement\".\"MovementQuantityUnit\"       AS \"MovementQuantityUnit\",\n    \"MaterialMovement\".\"StorageLocation\"            AS \"StorageLocation\",\n    \"MaterialMovement\".\"MaterialMovementNumber\"     AS \"MaterialMovementNumber\",\n    \"MaterialMovement\".\"Amount\"                     AS \"Amount\",\n    \"MaterialMovement\".\"Currency\"                   AS \"Currency\",\n    \"MaterialMovement\".\"SourceSystemInstance\"       AS \"SourceSystemInstance\"\nFROM \"o_custom_MaterialMovement\"                    AS \"MaterialMovement\"\nWHERE \"MaterialMovement\".\"MaterialTransactionType\" IN \n(\n    'GoodsReceipt',\n    'GoodsReceiptReversal',\n    'ReturnDeliveryToVendor',\n    'ReturnDeliveryToVendorReversal'\n)"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

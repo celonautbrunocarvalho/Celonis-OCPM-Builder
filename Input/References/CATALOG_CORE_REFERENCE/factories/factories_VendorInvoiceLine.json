@@ -1,0 +1,215 @@
+[
+    {
+        "change_date": 1760431802876.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2589b288-6fa5-4412-b75b-180b8acb07d0",
+            "name": "Carolina Ventura",
+            "type_": "USER"
+        },
+        "creation_date": 1749931118542.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "VendorInvoiceLine - 00. Central Extraction Pool_Oracle Fusion",
+        "factory_id": "606837c2-08da-408a-89b3-a22940be9f7f",
+        "has_overwrites": null,
+        "name": "VendorInvoiceLine - 00. Central Extraction Pool_Oracle Fusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1760431726181.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1757034382029.0,
+        "data_connection_id": "1b87451d-df3c-4f06-b5e6-622d18c93682",
+        "disabled": null,
+        "display_name": "VendorInvoiceLine - 00. Central Extraction Pool_ARIBA",
+        "factory_id": "36a46c67-af45-4e39-a2d3-56dd7ad73fa9",
+        "has_overwrites": null,
+        "name": "VendorInvoiceLine - 00. Central Extraction Pool_ARIBA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1766167236372.0,
+        "changed_by": {
+            "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+            "name": "Gokul",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764928087413.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "disabled": null,
+        "display_name": "VendorInvoiceLine - MSDynamics_365",
+        "factory_id": "a2d46ba0-5891-48c3-ac89-d3f9508c05b3",
+        "has_overwrites": null,
+        "name": "VendorInvoiceLine - MSDynamics_365",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1763480930660.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749635392302.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "VendorInvoiceLine - SAP ECC",
+        "factory_id": "3fcfed4f-c0ef-4be9-b310-f511bb18580c",
+        "has_overwrites": null,
+        "name": "VendorInvoiceLine - SAP ECC",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": {
+            "name": "VendorInvoiceLine - SAP ECC - 1",
+            "namespace": "custom"
+        },
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1760431663269.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630804948.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "VendorInvoiceLine transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "a5149341-cf89-46c0-9c08-a620d92b61ce",
+        "has_overwrites": null,
+        "name": "VendorInvoiceLine transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1761839576408.0,
+        "changed_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "creation_date": 1753884657252.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "VendorInvoiceLine - SAP S/4",
+        "factory_id": "e2d2b90f-d81e-4f24-a2bc-9b6c5baa6e56",
+        "has_overwrites": null,
+        "name": "VendorInvoiceLine - SAP S/4",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1766780937148.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "creation_date": 1765763469719.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "disabled": true,
+        "display_name": "VendorInvoiceLine - Coupa",
+        "factory_id": "8bdffcb2-6249-401b-bc0f-f889fe73e357",
+        "has_overwrites": null,
+        "name": "VendorInvoiceLine - Coupa",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoiceLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

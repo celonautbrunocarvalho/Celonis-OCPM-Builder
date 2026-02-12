@@ -1,0 +1,108 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1761242485957.0,
+    "changed_by": {
+        "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+        "name": "Robert Connolly",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+        "name": "Andi",
+        "type_": "USER"
+    },
+    "creation_date": 1752243270095.0,
+    "description": "Represents the event in the process when a customer document items (invoice or credit memo) are entered in the system.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CustomerInvoiceType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExecutedBy",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "Time",
+            "namespace": "custom"
+        }
+    ],
+    "id": "c026382c-b2f2-4244-a141-a8ea4f298265",
+    "name": "CreateCustomerInvoiceLine",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CustomerInvoiceLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoiceLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CustomerInvoice",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "CustomerInvoice",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsReceivable",
+        "OrderManagement"
+    ]
+}

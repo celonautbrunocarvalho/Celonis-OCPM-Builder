@@ -1,0 +1,122 @@
+[
+    {
+        "change_date": 1761921957653.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1751981289028.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "DeliveryLine_OracleFusion",
+        "factory_id": "35ace99e-2225-489e-9d47-d3d0c142b3fc",
+        "has_overwrites": null,
+        "name": "DeliveryLine_OracleFusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "DeliveryLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1762171631165.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630758039.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "DeliveryLine transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "c68d881d-ac2a-4da3-8cec-e678e0192b3c",
+        "has_overwrites": null,
+        "name": "DeliveryLine transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "DeliveryLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1768294226051.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633141324.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "DeliveryLine - 00. Central Extraction Pool_TS1",
+        "factory_id": "6223db98-07f9-4033-85f4-f75196ed0339",
+        "has_overwrites": null,
+        "name": "DeliveryLine - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "DeliveryLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1768294280024.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "d94aa797-47b6-48e1-9b0f-9627812b5866",
+            "name": "Lea Hanna",
+            "type_": "USER"
+        },
+        "creation_date": 1753305835488.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "DeliveryLine - S4 Hana",
+        "factory_id": "81faf07a-f9dc-4762-b2d4-db9a27973673",
+        "has_overwrites": null,
+        "name": "DeliveryLine - S4 Hana",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "DeliveryLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

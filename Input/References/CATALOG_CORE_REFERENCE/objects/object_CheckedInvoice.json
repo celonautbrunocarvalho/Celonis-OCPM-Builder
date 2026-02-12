@@ -1,0 +1,105 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "useCases",
+                "namespace": "custom"
+            },
+            "values": [
+                {
+                    "name": "duplicateInvoiceChecker",
+                    "namespace": "custom"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1763958187053.0,
+    "changed_by": {
+        "id": "af10323b-7030-4dbe-af1b-cbf71f532c06",
+        "name": "l.lutz",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1763725802356.0,
+    "description": "CheckedInvoice",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ReversalFlag",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "RunId",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CheckedTime",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "51808000-48b8-4b19-9d7a-c25fe8f925ee",
+    "managed": true,
+    "multi_link": false,
+    "name": "CheckedInvoice",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "VendorAccountItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "VendorAccountItem",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "DuplicateGroup",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "DuplicateGroup",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable"
+    ]
+}

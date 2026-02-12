@@ -1,0 +1,128 @@
+[
+    {
+        "change_date": 1758532946760.0,
+        "changed_by": {
+            "id": "9009518c-e25c-4997-b8d1-49ec38885680",
+            "name": "Pooja Singh Dohare",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752492320754.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "Customer-OracleFusion",
+        "factory_id": "b6f78752-fad4-48e4-9094-b09e477311f2",
+        "has_overwrites": null,
+        "name": "Customer-OracleFusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1758035495387.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1753903654323.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "Customer - SAP S4 HANA",
+        "factory_id": "c63a0069-13b3-4e83-a556-156da39f4b7c",
+        "has_overwrites": null,
+        "name": "Customer - SAP S4 HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": {
+            "name": "Customer - SAP ECC - 1",
+            "namespace": "custom"
+        },
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1758031906841.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630755426.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "Customer transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "d1df929a-d4b6-4659-8979-4c808ebee49c",
+        "has_overwrites": null,
+        "name": "Customer transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1758035495387.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1753903572559.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "Customer - SAP ECC",
+        "factory_id": "4db73501-fc16-4b81-8b96-d3a715442554",
+        "has_overwrites": null,
+        "name": "Customer - SAP ECC",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": {
+            "name": "Customer - SAP ECC - 1",
+            "namespace": "custom"
+        },
+        "validation_status": "VALID"
+    }
+]

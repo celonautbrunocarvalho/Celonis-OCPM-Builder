@@ -1,0 +1,62 @@
+[
+    {
+        "change_date": 1760437572579.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "creation_date": 1753773979941.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CancelPurchaseDocumentLine",
+        "draft": null,
+        "factory_id": "59079927-c9bf-4ee9-8576-44406654a8a8",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CancelPurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PurchaseDocumentLine",
+                    "PurchaseOrderLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DocumentCategory",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "DeletePurchaseDocumentItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'CancelPurchaseDocumentLine' || '::' || \"PurchaseDocumentLine_Changes\".\"ID\"     AS \"ID\",\n    \"PurchaseDocumentLine\".\"ID\"                                                     AS \"PurchaseDocumentLine\",\n    \"PurchaseDocumentLine\".\"ID\"                                                     AS \"PurchaseOrderLine\",\n    \"PurchaseDocumentLine\".\"DocumentCategory\"                                       AS \"DocumentCategory\",\n    \"PurchaseDocumentLine_Changes\".\"Time\"                                           AS \"Time\",\n    \"PurchaseDocumentLine_Changes\".\"ChangedBy\"                                      AS \"ExecutedBy\",\n    \"PurchaseDocumentLine_Changes\".\"ExecutionType\"                                  AS \"ExecutionType\"\nFROM \"o_custom_PurchaseDocumentLine\" AS \"PurchaseDocumentLine\"\n    LEFT JOIN \"c_o_custom_PurchaseDocumentLine\" AS \"PurchaseDocumentLine_Changes\"\n        ON \"PurchaseDocumentLine\".\"ID\" = \"PurchaseDocumentLine_Changes\".\"ObjectID\"\nWHERE \"PurchaseDocumentLine_Changes\".\"Attribute\" = 'DeletionIndicator'\n    AND \"PurchaseDocumentLine_Changes\".\"NewValue\" = 'Y'\n    AND \"PurchaseDocumentLine_Changes\".\"Time\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

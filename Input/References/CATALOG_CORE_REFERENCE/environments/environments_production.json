@@ -1,0 +1,21 @@
+{
+    "change_date": 1766133571801.0,
+    "changed_by": {
+        "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+        "name": "j.vita-martinez",
+        "type_": "USER"
+    },
+    "content_tag": "v2.0.4",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749563128213.0,
+    "display_name": "Production",
+    "id": "17267762-87e6-4486-8e40-ddd47207c503",
+    "name": "production",
+    "package_key": "pig-ac74ac3d-ff0f-4f4b-ba8b-502543e98cb1",
+    "package_version": "0.0.109",
+    "readonly": true
+}

@@ -1,0 +1,199 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1760518255781.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630701392.0,
+    "description": "Contains master data for plants which is the organizational unit within logistics, the plant subdivides an enterprise from the viewpoints of production, procurement, maintenance, and materials planning.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PlantName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PlantNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CountryName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Country",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "f1fd1e5b-7f03-4bdf-a6df-93ea49083689",
+    "managed": true,
+    "multi_link": false,
+    "name": "Plant",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialMasterPlant",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipBillOfMaterialsProduct",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "PlantProduct",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipBillOfMaterialsComponent",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "PlantComponent",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "DeliveryLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "DeliveryLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerInvoiceLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "CustomerInvoiceLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Plant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseRequisitionLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

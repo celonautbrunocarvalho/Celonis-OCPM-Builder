@@ -1,0 +1,152 @@
+[
+    {
+        "change_date": 1763978878928.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1751377169014.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "Material - Oracle Fusion",
+        "factory_id": "e7b10080-bb28-48f6-be96-9b4f52685d79",
+        "has_overwrites": null,
+        "name": "Material - Oracle Fusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1763037175825.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633360906.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "Material - 00. Central Extraction Pool_TS1",
+        "factory_id": "8991388c-9a85-4ce3-805e-dac8ce1dadb2",
+        "has_overwrites": null,
+        "name": "Material - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1766055496561.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764588589615.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "disabled": true,
+        "display_name": "Material - MSDynamics 365",
+        "factory_id": "ef4fd145-6688-49d4-8012-1d595b24377d",
+        "has_overwrites": null,
+        "name": "Material - MSDynamics 365",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "NOT_VALIDATED"
+    },
+    {
+        "change_date": 1763037128787.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749648750133.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "Material - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "factory_id": "36e07c86-5c01-45fb-ac43-901454b9f5c0",
+        "has_overwrites": null,
+        "name": "Material - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1763976788048.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630784425.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "Material transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "834c76af-779a-44d9-8384-c690b4fb379d",
+        "has_overwrites": null,
+        "name": "Material transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

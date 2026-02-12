@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1758031288145.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1751033494144.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "PurchaseOrder - OCPM Schema",
+        "factory_id": "df56de13-4d81-4cfa-b8b5-afe632c434a6",
+        "has_overwrites": null,
+        "name": "PurchaseOrder - OCPM Schema",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

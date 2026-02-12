@@ -1,0 +1,119 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Helper",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1763752846743.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630697099.0,
+    "description": "A helper table to convert currencies to other currencies. See also the \"CURRENCY_CONVERT\" PQL operator.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ConversionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "FromCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ToCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "FromDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ToDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "Rate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ExchangeRateType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "24a35bca-ec05-4920-8537-8c2bf65926f5",
+    "managed": true,
+    "multi_link": false,
+    "name": "CurrencyConversion",
+    "namespace": "custom",
+    "relationships": [],
+    "tags": [
+        "Helper",
+        "Procurement",
+        "AccountsPayable",
+        "AccountsReceivable",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1761571885855.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1752244052685.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "CancelCustomerInvoice - 1",
+        "factory_id": "8d183846-56d6-4299-841a-15fac6be002b",
+        "has_overwrites": null,
+        "name": "CancelCustomerInvoice - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CancelCustomerInvoice",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

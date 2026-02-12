@@ -1,0 +1,392 @@
+[
+    {
+        "change_date": 1758291235599.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749635273813.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "Vendor - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "6d62e90d-af50-423b-b1d2-19dedb58006c",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Vendor",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "City",
+                    "Country",
+                    "ID",
+                    "IsBlockedForPayment",
+                    "IsInternalVendor",
+                    "Name",
+                    "SourceSystemInstance",
+                    "VendorNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> \n        || '::' || \"LFA1\".\"MANDT\" \n        || '::' || \"LFA1\".\"LIFNR\"                                                        AS \"ID\",\n    \"LFA1\".\"LAND1\"                                                                       AS \"Country\",\n    \"LFA1\".\"NAME1\"                                                                       AS \"Name\",\n    \"LFA1\".\"ORT01\"                                                                       AS \"City\",\n    CASE WHEN NULLIF(\"LFA1\".\"VBUND\", '') IS NULL THEN FALSE ELSE TRUE END                AS \"IsInternalVendor\",\n    CASE WHEN NULLIF(\"LFA1\".\"SPERZ\", '') IS NULL THEN FALSE ELSE TRUE END                AS \"IsBlockedForPayment\",\n    \"LFA1\".\"LIFNR\"                                                                       AS \"VendorNumber\",\n    <%=sourceSystem%> || '::' || \"LFA1\".\"MANDT\"                                          AS \"SourceSystemInstance\"\nFROM \"LFA1\" AS \"LFA1\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1759245479620.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630794651.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "Vendor transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "cbfdff05-f916-4028-899f-ec9f39936935",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Vendor",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "City",
+                    "Country",
+                    "ID",
+                    "IsBlockedForPayment",
+                    "IsInternalVendor",
+                    "Name",
+                    "SourceSystemInstance",
+                    "VendorNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' || \"AP_SUPPLIERS\".\"VENDOR_ID\"    AS \"ID\",\n    \"AP_SUPPLIERS\".\"VENDOR_NAME\"                                AS \"Name\",\n\t\"AP_SUPPLIERS\".\"SEGMENT1\"                                   AS \"VendorNumber\",\n\tCASE \n\t\tWHEN COALESCE(\"AP_SUPPLIERS\".\"HOLD_ALL_PAYMENTS_FLAG\", \"AP_SUPPLIERS\".\"HOLD_FUTURE_PAYMENTS_FLAG\") IS NOT NULL THEN TRUE \n\t\tELSE FALSE \n\tEND                                                         AS \"IsBlockedForPayment\",\n\tCASE \n        WHEN \"AP_SUPPLIERS\".\"VENDOR_TYPE_LOOKUP_CODE\" = 'Internal' THEN TRUE \n        ELSE FALSE \n    END                                                         AS \"IsInternalVendor\",\n\t\"HZ_PARTIES\".\"CITY\"                                         AS \"City\",\n\t\"HZ_PARTIES\".\"Country\"                                      AS \"Country\",\n\t<%=sourceSystem%>                                           AS \"SourceSystemInstance\"\nFROM \"AP_SUPPLIERS\" AS \"AP_SUPPLIERS\"\n    LEFT JOIN \"HZ_PARTIES\" AS \"HZ_PARTIES\"\n        ON \"HZ_PARTIES\".\"PARTY_ID\" = \"AP_SUPPLIERS\".\"PARTY_ID\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758114193370.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749658938101.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "Vendor - 00. Central Extraction Pool_Oracle Fusion",
+        "draft": null,
+        "factory_id": "e7165ba8-8b7b-40e7-b7ac-5baf7cdb351c",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Vendor",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "City",
+                    "Country",
+                    "ID",
+                    "IsBlockedForPayment",
+                    "IsInternalVendor",
+                    "Name",
+                    "SourceSystemInstance",
+                    "VendorNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> ||'::'|| \"SupplierPVO\".\"VendorId\"          AS \"ID\",\n    \"SupplierPVO\".\"SupplierTaxPayerCountry\"                      AS \"Country\",\n    \"SupplierPVO\".\"PartyPartyName\"                               AS \"Name\",\n    NULL                                                         AS \"City\",\n    CASE \n        WHEN \"SupplierPVO\".\"SupplierVendorTypeLookupCode\" = 'Internal' \n            THEN TRUE \n       ELSE FALSE \n    END                                                          AS \"IsInternalVendor\",\n    NULL                                                         AS \"IsBlockedForPayment\",\n    CAST(\"SupplierPVO\".\"SupplierSegment1\" AS VARCHAR(255))       AS \"VendorNumber\",\n    <%=sourceSystem%>                                            AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_PrcPozPublicViewAM_SupplierPVO\" AS \"SupplierPVO\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1765530948480.0,
+        "changed_by": {
+            "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+            "name": "Gokul",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764742702354.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": null,
+        "display_name": "Vendor - MSDynamics_365",
+        "draft": null,
+        "factory_id": "cac479aa-401e-4710-839c-2b5e2021bbe7",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Vendor",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "City",
+                    "Country",
+                    "ID",
+                    "IsBlockedForPayment",
+                    "IsInternalVendor",
+                    "Name",
+                    "SourceSystemInstance",
+                    "VendorNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    ID,\n    COUNT(*) AS rc\nFROM (\n\nSELECT\n    <%=sourceSystem%>||'::'||VendorsV2.VendorAccountNumber                  AS ID,\n    CDSPostalAddressHistoryV2.City                                          AS City,\n    CDSPostalAddressHistoryV2.CountryRegionId                               AS Country,\n    CASE WHEN VendorsV2.OnHoldStatus IS NOT NULL THEN TRUE ELSE FALSE END                  AS IsBlockedForPayment,\n    CASE WHEN VendorsV2.VendorType  IS NOT NULL THEN TRUE ELSE FALSE END                 AS IsInternalVendor,\n    VendorsV2.VendorKnownAsName                                             AS Name,\n    NULL                                                                    AS SourceSystemInstance,\n    VendorsV2.VendorAccountNumber                                           AS VendorNumber\nFROM VendorsV2\n\tLEFT JOIN PartyContactsV3\n        ON VendorsV2.VendorPartyNumber = PartyContactsV3.PartyNumber\n        AND VendorsV2.AddressLocationId = PartyContactsV3.LocationId\n    LEFT JOIN CDSPostalAddressHistoryV2\n        ON PartyContactsV3.LocationId = CDSPostalAddressHistoryV2.LocationId\n\n\n) t\nGROUP BY ID\nHAVING COUNT(*) > 1\norder by COUNT(*) desc\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1766780929047.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "creation_date": 1765763321698.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "description": null,
+        "disabled": true,
+        "display_name": "Vendor - Coupa",
+        "draft": null,
+        "factory_id": "904df700-df02-4f07-acf5-a865378e6ab2",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Coupa'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Vendor",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "City",
+                    "Country",
+                    "ID",
+                    "IsBlockedForPayment",
+                    "IsInternalVendor",
+                    "Name",
+                    "SourceSystemInstance",
+                    "VendorNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    -- Unique ID\n    <%=sourceSystem%> || '::' || \"Supplier\".\"id\"                                      AS \"ID\",\n    \n    -- Basic Identification\n    \"Supplier\".\"name\"                                                                 AS \"Name\",\n    \"Supplier\".\"number\"                                                               AS \"VendorNumber\", -- Coupa Supplier Code is the common ERP Vendor Number equivalent\n    \n    -- Status/Blocking Flags\n    CASE \n        WHEN \"Supplier\".\"on-hold\" = TRUE THEN TRUE \n        ELSE FALSE \n    END                                                                               AS \"IsBlockedForPayment\",\n    \n    -- Internal/External Status\n    NULL                                                                              AS \"IsInternalVendor\",\n    \n    -- Address (Coupa stores address fields on the Supplier object or site object)\n    \"supplier\".\"primary-address_city\"                                                 AS \"City\",\n    \"Supplier\".\"primary-address_country\"                                              AS \"Country\",\n    \n    -- Source System\n    <%=sourceSystem%>                                                                 AS \"SourceSystemInstance\",\n\n--Extension Attributes\n\n   \"Supplier\".\"type\" AS \"Type\",\n   \"Supplier\".\"risk-level\" AS \"RiskLevel\",\n   \"Supplier\".\"business-entity-id\" AS \"BusinessEntityID\",\n   \"Supplier\".\"status\" AS \"Status\",\n   \"Supplier\".\"commodity_name\" AS \"CommodityName\",\n   \"Supplier\".\"enterprise_name\" AS \"EnterpriseName\"\n\nFROM \n    \"suppliers\" AS \"Supplier\"\n-- Note: Coupa typically includes primary contact/address fields directly on the supplier table \n-- (or a single join to the primary supplier address/site table would be needed). \n-- This simplifies the join that was required for Oracle's party model (HZ_PARTIES).\n\n\n/*SELECT <%=sourceSystem%>  || '::' || \"AP_SUPPLIERS\".\"VENDOR_ID\"    AS \"ID\",\n       \"AP_SUPPLIERS\".\"VENDOR_NAME\"                        AS \"Name\",\n\t   \"AP_SUPPLIERS\".\"SEGMENT1\"                           AS \"VendorNumber\",\n\t   CASE \n\t\t   WHEN COALESCE(AP_SUPPLIERS.HOLD_ALL_PAYMENTS_FLAG, AP_SUPPLIERS.HOLD_FUTURE_PAYMENTS_FLAG) IS NOT NULL THEN True \n\t\t   ELSE False \n\t   END                                                 AS \"IsBlockedForPayment\",\n\t   CASE \n       WHEN \"AP_SUPPLIERS\".\"VENDOR_TYPE_LOOKUP_CODE\" = 'Internal' THEN TRUE \n       ELSE FALSE END                                      AS \"IsInternalVendor\",\n\t  \"HZ_PARTIES\".\"CITY\"                                  AS \"City\",\n\t  \"HZ_PARTIES\".\"Country\"                               AS \"Country\",\n\t   <%=sourceSystem%>                                   AS \"SourceSystemInstance\"\nFROM \"AP_SUPPLIERS\" AS \"AP_SUPPLIERS\"\nLEFT JOIN \"HZ_PARTIES\" AS \"HZ_PARTIES\"\n           ON \"HZ_PARTIES\".\"PARTY_ID\" = \"AP_SUPPLIERS\".\"PARTY_ID\"*/"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1758291223981.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649943895.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "Vendor - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "5becacc0-32de-4f8a-9eb2-b3df4d238438",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Vendor",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "City",
+                    "Country",
+                    "ID",
+                    "IsBlockedForPayment",
+                    "IsInternalVendor",
+                    "Name",
+                    "SourceSystemInstance",
+                    "VendorNumber"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "VendorAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> \n        || '::' || \"LFA1\".\"MANDT\" \n        || '::' || \"LFA1\".\"LIFNR\"                                                        AS \"ID\",\n    \"LFA1\".\"LAND1\"                                                                       AS \"Country\",\n    \"LFA1\".\"NAME1\"                                                                       AS \"Name\",\n    \"LFA1\".\"ORT01\"                                                                       AS \"City\",\n    CASE WHEN NULLIF(\"LFA1\".\"VBUND\", '') IS NULL THEN FALSE ELSE TRUE END                AS \"IsInternalVendor\",\n    CASE WHEN NULLIF(\"LFA1\".\"SPERZ\", '') IS NULL THEN FALSE ELSE TRUE END                AS \"IsBlockedForPayment\",\n    \"LFA1\".\"LIFNR\"                                                                       AS \"VendorNumber\",\n    <%=sourceSystem%> || '::' || \"LFA1\".\"MANDT\"                                          AS \"SourceSystemInstance\"\nFROM \"LFA1\" AS \"LFA1\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

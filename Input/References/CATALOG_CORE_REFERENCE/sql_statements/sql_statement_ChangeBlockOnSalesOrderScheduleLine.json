@@ -1,0 +1,65 @@
+[
+    {
+        "change_date": 1760108733356.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1751364813735.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "ChangeBlockOnSalesOrderScheduleLine - 1",
+        "draft": null,
+        "factory_id": "1aab5b77-ad52-4982-bcf1-2b33f1ec976d",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ChangeBlockOnSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "SalesOrderScheduleLine",
+                    "SalesOrderScheduleLineBlock"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BlockType",
+                    "ChangedAttribute",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "NewValue",
+                    "OldValue",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ChangeBlockOnSalesOrderLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'ChangeBlockOnSalesOrderScheduleLine' || '::' || \"SalesOrderScheduleLineBlock_Changes\".\"ID\" AS \"ID\",\n       \"SalesOrderScheduleLineBlock\".\"ID\"                                           AS \"SalesOrderScheduleLineBlock\",\n       \"SalesOrderScheduleLine\".\"ID\"                                                AS \"SalesOrderScheduleLine\",\n       \"SalesOrderScheduleLineBlock_Changes\".\"Time\"                                 AS \"Time\",\n       \"SalesOrderScheduleLineBlock_Changes\".\"ChangedBy\"                            AS \"ExecutedBy\",\n       \"SalesOrderScheduleLineBlock_Changes\".\"Attribute\"                            AS \"ChangedAttribute\",\n       \"SalesOrderScheduleLineBlock_Changes\".\"ExecutionType\"                        AS \"ExecutionType\",\n       \"SalesOrderScheduleLineBlock\".\"BlockType\"                                    AS \"BlockType\",\n       \"SalesOrderScheduleLineBlock_Changes\".\"OldValue\"                             AS \"OldValue\",\n       \"SalesOrderScheduleLineBlock_Changes\".\"NewValue\"                             AS \"NewValue\"\nFROM \"o_custom_SalesOrderScheduleLine\" AS \"SalesOrderScheduleLine\"\n         LEFT JOIN \"o_custom_SalesOrderScheduleLineBlock\" AS \"SalesOrderScheduleLineBlock\"\n                   ON \"SalesOrderScheduleLine\".\"ID\" = \"SalesOrderScheduleLineBlock\".\"SalesOrderScheduleLine_ID\"\n         LEFT JOIN \"c_o_custom_SalesOrderScheduleLineBlock\" AS \"SalesOrderScheduleLineBlock_Changes\"\n                   ON \"SalesOrderScheduleLineBlock\".\"ID\" = \"SalesOrderScheduleLineBlock_Changes\".\"ObjectID\"\nWHERE \"SalesOrderScheduleLineBlock_Changes\".\"Attribute\" = 'LatestBlockReason'\n  AND \"SalesOrderScheduleLineBlock_Changes\".\"Time\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

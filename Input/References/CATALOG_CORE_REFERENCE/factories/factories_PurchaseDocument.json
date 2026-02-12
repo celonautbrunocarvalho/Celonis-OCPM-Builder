@@ -1,0 +1,212 @@
+[
+    {
+        "change_date": 1764176039238.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749658618110.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "PurchaseDocument - 00. Central Extraction Pool_Oracle Fusion",
+        "factory_id": "dd263ca5-a4dd-4c7c-bd7b-93ea33ba7550",
+        "has_overwrites": null,
+        "name": "PurchaseDocument - 00. Central Extraction Pool_Oracle Fusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1767596773346.0,
+        "changed_by": {
+            "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+            "name": "Gokul",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "creation_date": 1764585770038.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "disabled": null,
+        "display_name": "PurchaseDocument - MSDynamics_365",
+        "factory_id": "2aea5c5a-de8e-4018-9b37-a3442b6585fc",
+        "has_overwrites": null,
+        "name": "PurchaseDocument - MSDynamics_365",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1766781256358.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "creation_date": 1764165356855.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "disabled": true,
+        "display_name": "PurchaseDocument - Coupa",
+        "factory_id": "79df0fb9-d5e6-41b1-8080-746d963d1952",
+        "has_overwrites": null,
+        "name": "PurchaseDocument - Coupa",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1768489539705.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634002719.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "PurchaseDocument - 00. Central Extraction Pool_TS1",
+        "factory_id": "6c52702e-cc36-4860-b1b5-00954f01eb33",
+        "has_overwrites": null,
+        "name": "PurchaseDocument - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1768489673660.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649330364.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": true,
+        "display_name": "PurchaseDocument - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "factory_id": "d0effc16-de11-43f2-bc48-d4c848879f7d",
+        "has_overwrites": null,
+        "name": "PurchaseDocument - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1767105969268.0,
+        "changed_by": {
+            "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+            "name": "Modester Mwangi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1753724306891.0,
+        "data_connection_id": "1b87451d-df3c-4f06-b5e6-622d18c93682",
+        "disabled": true,
+        "display_name": "PurchaseDocument - 00. Central Extraction Pool_ARIBA",
+        "factory_id": "c87dce76-064c-40da-8ea4-ff9c29098aaf",
+        "has_overwrites": null,
+        "name": "PurchaseDocument - 00. Central Extraction Pool_ARIBA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1764175972588.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630772737.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "PurchaseDocument transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "56a274fe-3807-45b0-bc2a-a2a9042487e3",
+        "has_overwrites": null,
+        "name": "PurchaseDocument transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

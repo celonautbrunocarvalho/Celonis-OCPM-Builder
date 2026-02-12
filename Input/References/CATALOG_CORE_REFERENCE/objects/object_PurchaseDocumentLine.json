@@ -1,0 +1,284 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "hierarchy",
+                "namespace": "custom"
+            },
+            "values": [
+                {
+                    "name": "parent",
+                    "namespace": "custom"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1766480444012.0,
+    "changed_by": {
+        "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+        "name": "Gokul",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630702266.0,
+    "description": "Refers to the line items within both Scheduling Agreements and Purchase Orders which includes the specific materials or services being procured, along with details like quantity, price, and material group.",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "LineNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "IsCanceled",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DocumentCategory",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "IsGoodsReceiptRequired",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "CreationExecutionType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "PurchaseDocumentNumber",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Description",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "QuantityUnit",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "Quantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DocumentType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "NetUnitPrice",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "NetAmount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Currency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ChangeDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "2fc108c1-164a-4d55-aaa7-9f510283dab5",
+    "managed": true,
+    "multi_link": false,
+    "name": "PurchaseDocumentLine",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_ONE",
+            "name": "CreatedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "User",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "RequestedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "User",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Material",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Material",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Header",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "PurchaseDocument",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "GoodsReceipt",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "PurchaseDocumentLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "GoodsReceipt",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipThreeWayMatch",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "PurchaseDocumentLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipThreeWayMatch",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "PurchaseDocumentLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialMovement",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "PurchaseDocumentLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "MaterialMovement",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorInvoiceLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "PurchaseDocumentLine",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "VendorInvoiceLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "PurchaseDocumentLines",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseRequisitionLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "AccountsPayable",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

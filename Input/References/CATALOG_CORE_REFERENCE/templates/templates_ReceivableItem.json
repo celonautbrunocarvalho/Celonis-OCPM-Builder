@@ -1,0 +1,368 @@
+[
+    {
+        "change_date": 1763396111724.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1752508700419.0,
+        "description": "Testing template approach for S4 usage",
+        "draft": null,
+        "id": "2062e0c6-3537-4843-8291-308e0b80179c",
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC_'"
+            }
+        ],
+        "name": "ReceivableItem - SAP ECC - 1",
+        "sql_factory_transports": [
+            {
+                "change_date": 1763396111724.0,
+                "changed_by": {
+                    "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+                    "name": "Robert Connolly",
+                    "type_": "USER"
+                },
+                "created_by": {
+                    "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+                    "name": "l.pigozzi",
+                    "type_": "USER"
+                },
+                "creation_date": 1749634583036.0,
+                "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+                "description": null,
+                "disabled": null,
+                "display_name": "ReceivableItem - 00. Central Extraction Pool_TS1",
+                "draft": null,
+                "factory_id": "91a2f2b5-ac62-4aaf-aef7-f92805f88e5d",
+                "factory_validation_status": "VALID",
+                "has_user_template": true,
+                "local_parameters": [
+                    {
+                        "name": "sourceSystem",
+                        "value": "'SAP_ECC'"
+                    }
+                ],
+                "namespace": "custom",
+                "target": {
+                    "entity_ref": {
+                        "name": "ReceivableItem",
+                        "namespace": "custom"
+                    },
+                    "kind": "OBJECT"
+                },
+                "transformations": [
+                    {
+                        "change_sql_factory_datasets": [
+                            {
+                                "id": "Clearing",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    \n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN <%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"BUKRS\" || '::' || \"BKPF_PAY\".\"BELNR\" || '::' || \"BKPF_PAY\".\"GJAHR\" \n        ELSE <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"AUGBL\" || '::' || \"BSEG\".\"AUGGJ\" \n     END  \n     || <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \n     \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"\n                                                                                                                        AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"BELNR\" || '::' || \n        \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                                                                        AS \"ObjectID\", \n    CASE\n\t    WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND) + INTERVAL '2' SECOND\n        ELSE CAST(\"BSEG\".\"AUGDT\" AS DATE) + INTERVAL '86399' SECOND\n     END                                                                                                                AS \"Time\",\n    'Clearing'                                                                                                          AS \"Attribute\",\n    NULL                                                                                                                AS \"OldValue\",\n    NULL                                                                                                                AS \"NewValue\",\n    CASE\n\t    WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"USNAM\"\n        ELSE NULL \n     END                                                                                                                AS \"ChangedBy\",\n    NULL                                                                                                                AS \"OperationType\",\n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN <%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"BUKRS\" || '::' || \"BKPF_PAY\".\"BELNR\" || '::' || \"BKPF_PAY\".\"GJAHR\" \n        ELSE <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"AUGBL\" || '::' || \"BSEG\".\"AUGGJ\" \n     END                                                                                                                AS \"OperationID\",\n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL AND \"USR02\".\"USTYP\" IN ('B', 'C')\n\t        THEN 'Automatic'\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL AND \"USR02\".\"USTYP\" NOT IN ('B', 'C')\n            THEN 'Manual' \n        ELSE NULL\n     END                                                                                                                AS \"ExecutionType\"\nFROM \"BSEG\" AS \"BSEG\"\n         LEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n                   ON \"BSEG\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                       AND \"BSEG\".\"AUGBL\" = \"BKPF_PAY\".\"BELNR\"\n                       AND \"BSEG\".\"AUGGJ\" = \"BKPF_PAY\".\"GJAHR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG\".\"AUGBL\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" IN ('01', '11')\n\n"
+                            },
+                            {
+                                "id": "IncomingPayment",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\" || \n        <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ObjectID\",\n    CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND)                                         AS \"Time\",\n    'IncomingPayment'                                                                           AS \"Attribute\",\n    NULL                                                                                        AS \"OldValue\",\n    NULL                                                                                        AS \"NewValue\",\n\tCASE \n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                        AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::'  || \"BKPF_PAY\".\"USNAM\"              AS \"ChangedBy\",\n    NULL                                                                                        AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"OperationID\"\nFROM \"BSEG\" AS \"BSEG\"\n\tLEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n\t    ON \"BSEG\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                AND \"BSEG\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                AND \"BSEG\".\"AUGBL\" = \"BKPF_PAY\".\"BELNR\"\n                AND \"BSEG\".\"AUGGJ\" = \"BKPF_PAY\".\"GJAHR\"\n    LEFT JOIN \"BSEG\" AS \"BSEG_PAY\"\n                   ON \"BSEG_PAY\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                       AND \"BSEG_PAY\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                       AND \"BSEG_PAY\".\"BELNR\" = \"BKPF_PAY\".\"BELNR\"\n                       AND \"BSEG_PAY\".\"GJAHR\" = \"BKPF_PAY\".\"GJAHR\"\n                       AND \"BSEG_PAY\".\"BSCHL\" IN ('15', '16')\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG_PAY\".\"MANDT\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" = '01'\n"
+                            },
+                            {
+                                "id": "PartialPayment",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ObjectID\",\n    CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND)                                         AS \"Time\",\n    'IncomingPayment'                                                                           AS \"Attribute\",\n    NULL                                                                                        AS \"OldValue\",\n    NULL                                                                                        AS \"NewValue\",\n\tCASE \n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                        AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::'  || \"BKPF_PAY\".\"USNAM\"              AS \"ChangedBy\",\n    NULL                                                                                        AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"OperationID\"\nFROM \"BSEG\" AS \"BSEG\"\n    LEFT JOIN \"BSEG\" AS \"BSEG_PAY\"\n                   ON \"BSEG_PAY\".\"MANDT\" = \"BSEG\".\"MANDT\"\n                       AND \"BSEG_PAY\".\"BUKRS\" = \"BSEG\".\"BUKRS\"\n                       AND \"BSEG_PAY\".\"REBZG\" = \"BSEG\".\"BELNR\"\n                       AND \"BSEG_PAY\".\"REBZJ\" = \"BSEG\".\"GJAHR\"\n                       AND \"BSEG_PAY\".\"REBZZ\" = \"BSEG\".\"BUZEI\"\n                       AND \"BSEG_PAY\".\"BSCHL\" IN ('15', '16')\n    LEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n\t    ON \"BSEG_PAY\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                AND \"BSEG_PAY\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                AND \"BSEG_PAY\".\"BELNR\" = \"BKPF_PAY\".\"BELNR\"\n                AND \"BSEG_PAY\".\"GJAHR\" = \"BKPF_PAY\".\"GJAHR\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG\".\"BSCHL\" = '01'\n    AND \"BSEG_PAY\".\"MANDT\" IS NOT NULL\n"
+                            },
+                            {
+                                "id": "ReceivableItemChanges",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n\t<%=sourceSystem%> || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" || '::' || \"CDPOS\".\"FNAME\" \n        || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"              AS \"ID\",\n    <%=sourceSystem%> || '::' || \n        SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)  || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 4)  || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 8, 10) || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 18, 4) || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 22, 3)                                       AS \"ObjectID\",\n\tCAST(\"CDHDR\".\"UDATE\" AS DATE) +\n            CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n            \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                                AS \"Time\",\n\tCASE\n           WHEN \"CDPOS\".\"FNAME\" = 'MANST' THEN 'DunningLevel'\n           WHEN \"CDPOS\".\"FNAME\" = 'ZFBDT' THEN 'BaselineDate'\n           WHEN \"CDPOS\".\"FNAME\" = 'ZTERM' THEN 'PaymentTerms'\n           WHEN \"CDPOS\".\"FNAME\" = 'MANSP' THEN 'DunningBlock'\n     END                                                                        AS \"Attribute\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' \n            THEN CONCAT('-',REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" \n     END                                                                        AS \"OldValue\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' \n            THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\"\n     END                                                                        AS \"NewValue\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"MANDANT\" || '::' || \n        \"CDHDR\".\"USERNAME\"                                                      AS \"ChangedBy\",\n\t\"CDHDR\".\"TCODE\"                                                             AS \"OperationType\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"CHANGENR\"                             AS \"OperationID\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                        AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"ObjectID\" = \"CDHDR\".\"ObjectID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'BELEG'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"TABNAME\" = 'BSEG'\n  AND \"CDPOS\".\"FNAME\" IN ('MANST', 'ZFBDT', 'ZTERM', 'MANSP')\n  AND \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                            }
+                        ],
+                        "foreign_key_names": [
+                            "CreatedBy",
+                            "Customer",
+                            "CustomerInvoice"
+                        ],
+                        "namespace": "custom",
+                        "property_names": [
+                            "Amount",
+                            "BaselineDate",
+                            "BusinessUnit",
+                            "CashDiscountDueDate1",
+                            "CashDiscountDueDate2",
+                            "CashDiscountEligibleAmount",
+                            "CashDiscountPercentage1",
+                            "CashDiscountPercentage2",
+                            "CashDiscountTakenAmount",
+                            "ClearingDate",
+                            "CreationExecutionType",
+                            "CreationTime",
+                            "Currency",
+                            "DebitCreditIndicator",
+                            "DocumentCategory",
+                            "DocumentDate",
+                            "DocumentNumber",
+                            "DocumentType",
+                            "FiscalYear",
+                            "ID",
+                            "IsBlockedForDunning",
+                            "IsReversed",
+                            "NetDueDate",
+                            "PaymentTerm",
+                            "SourceSystemInstance"
+                        ],
+                        "property_sql_factory_datasets": [
+                            {
+                                "id": "ReceivableItemAttributes",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"       AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\"                                     AS \"SourceSystemInstance\",\n\tCASE\n        WHEN \"BSEG\".\"MANSP\" IS NOT NULL \n            THEN  TRUE \n        ELSE FALSE \n     END                                                                            AS \"IsBlockedForDunning\",\n\tCASE\n        WHEN \"BKPF\".\"XREVERSAL\" IS NOT NULL \n            THEN True\n        ELSE False\n     END                                                                            AS \"IsReversed\",\n\tCASE\n        WHEN \"BSEG\".\"SHKZG\" = 'S' THEN 'Debit'\n        WHEN \"BSEG\".\"SHKZG\" = 'H' THEN 'Credit'\n     END                                                                            AS \"DebitCreditIndicator\",\n\tCAST( CASE\n        WHEN \"BSEG\".\"ZBD3T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD3T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        WHEN \"BSEG\".\"ZBD3T\" = 0 AND \"BSEG\".\"ZBD2T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD2T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        WHEN \"BSEG\".\"ZBD3T\" = 0 AND \"BSEG\".\"ZBD2T\" = 0 AND \"BSEG\".\"ZBD1T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD1T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        ELSE \"BSEG\".\"ZFBDT\" + INTERVAL '86399' SECOND\n     END AS TIMESTAMP)                                                              AS \"NetDueDate\",\n    \"BKPF\".\"BLART\"                                                                  AS \"DocumentType\",\n\t\"BSEG\".\"ZTERM\"                                                                  AS \"PaymentTerm\",\n\t\"BKPF\".\"WAERS\"                                                                  AS \"Currency\",\n\t\"BSEG\".\"WSKTO\"                                                                  AS \"CashDiscountTakenAmount\",\n\t\"BSEG\".\"SKFBT\"                                                                  AS \"CashDiscountEligibleAmount\",\n    \"BSEG\".\"ZBD2P\"                                                                  AS \"CashDiscountPercentage2\",\n    \"BSEG\".\"ZBD1P\"                                                                  AS \"CashDiscountPercentage1\",\n    CASE \n        WHEN \"BSEG\".\"ZBD2P\" > 0 \n        THEN \n            CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD2T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n     END                                                                            AS \"CashDiscountDueDate2\",\n    CASE\n        WHEN \"BSEG\".\"ZBD1P\" > 0 \n        THEN \n            CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD1T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n     END                                                                            AS \"CashDiscountDueDate1\",\n\t\"BSEG\".\"WRBTR\" * \n    CASE \n        WHEN \"BSEG\".\"SHKZG\" = 'H' THEN -1.0 \n        ELSE 1.0 \n     END                                                                            AS \"Amount\",\n\tCAST(\"BSEG\".\"AUGDT\" AS TIMESTAMP)                                               AS \"ClearingDate\",\n\tCAST(\"BKPF\".\"BLDAT\" AS TIMESTAMP)                                               AS \"DocumentDate\",\n\tCAST(\"BSEG\".\"ZFBDT\" AS TIMESTAMP)                                               AS \"BaselineDate\",\n    CASE\n        WHEN \"BSEG\".\"BSCHL\" = '01' THEN 'CustomerInvoice'\n        WHEN \"BSEG\".\"BSCHL\" = '11' THEN 'CreditMemo'\n     END                                                                            AS \"DocumentCategory\",\n\tCAST(\"BSEG\".\"GJAHR\" AS BIGINT)                                                  AS \"FiscalYear\",\n\t\"BSEG\".\"BELNR\"                                                                  AS \"DocumentNumber\",\n    \"T001\".\"BUTXT\"                                                                  AS \"BusinessUnit\",\n\tCAST(\"BKPF\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF\".\"CPUTM\" AS DATE), \n            \"BKPF\".\"CPUTM\") AS INTERVAL SECOND)                                     AS \"CreationTime\",\n\tCASE WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic' ELSE 'Manual' END      AS \"CreationExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF\".\"MANDT\" || '::' || \"BKPF\".\"USNAM\"           AS \"CreatedBy\",\n    CASE \n        WHEN \"BKPF\".\"AWTYP\" = 'VBRK' AND \"BSEG\".\"BSCHL\" IN ('01', '11') \n            THEN <%=sourceSystem%> || '::' || \"BKPF\".\"MANDT\" || '::' || \"BKPF\".\"AWKEY\" \n     END                                                                            AS \"CustomerInvoice\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"KUNNR\"           AS \"Customer\"\nFROM \"BSEG\" AS \"BSEG\"\n         LEFT JOIN \"BKPF\" AS \"BKPF\"\n                   ON \"BSEG\".\"MANDT\" = \"BKPF\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"BKPF\".\"BUKRS\"\n                       AND \"BSEG\".\"BELNR\" = \"BKPF\".\"BELNR\"\n                       AND \"BSEG\".\"GJAHR\" = \"BKPF\".\"GJAHR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"BKPF\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"BKPF\".\"USNAM\" = \"USR02\".\"BNAME\"\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"BSEG\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE \"BSEG\".\"MANDT\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" IN ('01', '11')\n"
+                            }
+                        ],
+                        "relationship_transformations": []
+                    }
+                ]
+            },
+            {
+                "change_date": 1763396111724.0,
+                "changed_by": {
+                    "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+                    "name": "Robert Connolly",
+                    "type_": "USER"
+                },
+                "created_by": {
+                    "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+                    "name": "l.pigozzi",
+                    "type_": "USER"
+                },
+                "creation_date": 1752508725024.0,
+                "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+                "description": null,
+                "disabled": null,
+                "display_name": "ReceivableItem - SAP S4",
+                "draft": null,
+                "factory_id": "90214f75-264f-4671-a113-6f921bc57b21",
+                "factory_validation_status": "VALID",
+                "has_user_template": true,
+                "local_parameters": [
+                    {
+                        "name": "sourceSystem",
+                        "value": "'SAP_S4_HANA'"
+                    }
+                ],
+                "namespace": "custom",
+                "target": {
+                    "entity_ref": {
+                        "name": "ReceivableItem",
+                        "namespace": "custom"
+                    },
+                    "kind": "OBJECT"
+                },
+                "transformations": [
+                    {
+                        "change_sql_factory_datasets": [
+                            {
+                                "id": "Clearing",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    \n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN <%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"BUKRS\" || '::' || \"BKPF_PAY\".\"BELNR\" || '::' || \"BKPF_PAY\".\"GJAHR\" \n        ELSE <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"AUGBL\" || '::' || \"BSEG\".\"AUGGJ\" \n     END  \n     || <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \n     \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"\n                                                                                                                        AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"BELNR\" || '::' || \n        \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                                                                        AS \"ObjectID\", \n    CASE\n\t    WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND) + INTERVAL '2' SECOND\n        ELSE CAST(\"BSEG\".\"AUGDT\" AS DATE) + INTERVAL '86399' SECOND\n     END                                                                                                                AS \"Time\",\n    'Clearing'                                                                                                          AS \"Attribute\",\n    NULL                                                                                                                AS \"OldValue\",\n    NULL                                                                                                                AS \"NewValue\",\n    CASE\n\t    WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"USNAM\"\n        ELSE NULL \n     END                                                                                                                AS \"ChangedBy\",\n    NULL                                                                                                                AS \"OperationType\",\n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN <%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"BUKRS\" || '::' || \"BKPF_PAY\".\"BELNR\" || '::' || \"BKPF_PAY\".\"GJAHR\" \n        ELSE <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"AUGBL\" || '::' || \"BSEG\".\"AUGGJ\" \n     END                                                                                                                AS \"OperationID\",\n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL AND \"USR02\".\"USTYP\" IN ('B', 'C')\n\t        THEN 'Automatic'\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL AND \"USR02\".\"USTYP\" NOT IN ('B', 'C')\n            THEN 'Manual' \n        ELSE NULL\n     END                                                                                                                AS \"ExecutionType\"\nFROM \"BSEG\" AS \"BSEG\"\n         LEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n                   ON \"BSEG\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                       AND \"BSEG\".\"AUGBL\" = \"BKPF_PAY\".\"BELNR\"\n                       AND \"BSEG\".\"AUGGJ\" = \"BKPF_PAY\".\"GJAHR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG\".\"AUGBL\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" IN ('01', '11')\n\n"
+                            },
+                            {
+                                "id": "IncomingPayment",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\" || \n        <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ObjectID\",\n    CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND)                                         AS \"Time\",\n    'IncomingPayment'                                                                           AS \"Attribute\",\n    NULL                                                                                        AS \"OldValue\",\n    NULL                                                                                        AS \"NewValue\",\n\tCASE \n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                        AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::'  || \"BKPF_PAY\".\"USNAM\"              AS \"ChangedBy\",\n    NULL                                                                                        AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"OperationID\"\nFROM \"BSEG\" AS \"BSEG\"\n\tLEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n\t    ON \"BSEG\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                AND \"BSEG\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                AND \"BSEG\".\"AUGBL\" = \"BKPF_PAY\".\"BELNR\"\n                AND \"BSEG\".\"AUGGJ\" = \"BKPF_PAY\".\"GJAHR\"\n    LEFT JOIN \"BSEG\" AS \"BSEG_PAY\"\n                   ON \"BSEG_PAY\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                       AND \"BSEG_PAY\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                       AND \"BSEG_PAY\".\"BELNR\" = \"BKPF_PAY\".\"BELNR\"\n                       AND \"BSEG_PAY\".\"GJAHR\" = \"BKPF_PAY\".\"GJAHR\"\n                       AND \"BSEG_PAY\".\"BSCHL\" IN ('15', '16')\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG_PAY\".\"MANDT\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" = '01'\n"
+                            },
+                            {
+                                "id": "PartialPayment",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ObjectID\",\n    CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND)                                         AS \"Time\",\n    'IncomingPayment'                                                                           AS \"Attribute\",\n    NULL                                                                                        AS \"OldValue\",\n    NULL                                                                                        AS \"NewValue\",\n\tCASE \n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                        AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::'  || \"BKPF_PAY\".\"USNAM\"              AS \"ChangedBy\",\n    NULL                                                                                        AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"OperationID\"\nFROM \"BSEG\" AS \"BSEG\"\n    LEFT JOIN \"BSEG\" AS \"BSEG_PAY\"\n                   ON \"BSEG_PAY\".\"MANDT\" = \"BSEG\".\"MANDT\"\n                       AND \"BSEG_PAY\".\"BUKRS\" = \"BSEG\".\"BUKRS\"\n                       AND \"BSEG_PAY\".\"REBZG\" = \"BSEG\".\"BELNR\"\n                       AND \"BSEG_PAY\".\"REBZJ\" = \"BSEG\".\"GJAHR\"\n                       AND \"BSEG_PAY\".\"REBZZ\" = \"BSEG\".\"BUZEI\"\n                       AND \"BSEG_PAY\".\"BSCHL\" IN ('15', '16')\n    LEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n\t    ON \"BSEG_PAY\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                AND \"BSEG_PAY\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                AND \"BSEG_PAY\".\"BELNR\" = \"BKPF_PAY\".\"BELNR\"\n                AND \"BSEG_PAY\".\"GJAHR\" = \"BKPF_PAY\".\"GJAHR\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG\".\"BSCHL\" = '01'\n    AND \"BSEG_PAY\".\"MANDT\" IS NOT NULL\n"
+                            },
+                            {
+                                "id": "ReceivableItemChanges",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n\t<%=sourceSystem%> || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" || '::' || \"CDPOS\".\"FNAME\" \n        || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"              AS \"ID\",\n    <%=sourceSystem%> || '::' || \n        SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)  || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 4)  || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 8, 10) || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 18, 4) || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 22, 3)                                       AS \"ObjectID\",\n\tCAST(\"CDHDR\".\"UDATE\" AS DATE) +\n            CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n            \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                                AS \"Time\",\n\tCASE\n           WHEN \"CDPOS\".\"FNAME\" = 'MANST' THEN 'DunningLevel'\n           WHEN \"CDPOS\".\"FNAME\" = 'ZFBDT' THEN 'BaselineDate'\n           WHEN \"CDPOS\".\"FNAME\" = 'ZTERM' THEN 'PaymentTerms'\n           WHEN \"CDPOS\".\"FNAME\" = 'MANSP' THEN 'DunningBlock'\n     END                                                                        AS \"Attribute\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' \n            THEN CONCAT('-',REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" \n     END                                                                        AS \"OldValue\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' \n            THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\"\n     END                                                                        AS \"NewValue\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"MANDANT\" || '::' || \n        \"CDHDR\".\"USERNAME\"                                                      AS \"ChangedBy\",\n\t\"CDHDR\".\"TCODE\"                                                             AS \"OperationType\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"CHANGENR\"                             AS \"OperationID\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                        AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"ObjectID\" = \"CDHDR\".\"ObjectID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'BELEG'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"TABNAME\" = 'BSEG'\n  AND \"CDPOS\".\"FNAME\" IN ('MANST', 'ZFBDT', 'ZTERM', 'MANSP')\n  AND \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                            }
+                        ],
+                        "foreign_key_names": [
+                            "CreatedBy",
+                            "Customer",
+                            "CustomerInvoice"
+                        ],
+                        "namespace": "custom",
+                        "property_names": [
+                            "Amount",
+                            "BaselineDate",
+                            "BusinessUnit",
+                            "CashDiscountDueDate1",
+                            "CashDiscountDueDate2",
+                            "CashDiscountEligibleAmount",
+                            "CashDiscountPercentage1",
+                            "CashDiscountPercentage2",
+                            "CashDiscountTakenAmount",
+                            "ClearingDate",
+                            "CreationExecutionType",
+                            "CreationTime",
+                            "Currency",
+                            "DebitCreditIndicator",
+                            "DocumentCategory",
+                            "DocumentDate",
+                            "DocumentNumber",
+                            "DocumentType",
+                            "FiscalYear",
+                            "ID",
+                            "IsBlockedForDunning",
+                            "IsReversed",
+                            "NetDueDate",
+                            "PaymentTerm",
+                            "SourceSystemInstance"
+                        ],
+                        "property_sql_factory_datasets": [
+                            {
+                                "id": "ReceivableItemAttributes",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"       AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\"                                     AS \"SourceSystemInstance\",\n\tCASE\n        WHEN \"BSEG\".\"MANSP\" IS NOT NULL \n            THEN  TRUE \n        ELSE FALSE \n     END                                                                            AS \"IsBlockedForDunning\",\n\tCASE\n        WHEN \"BKPF\".\"XREVERSAL\" IS NOT NULL \n            THEN True\n        ELSE False\n     END                                                                            AS \"IsReversed\",\n\tCASE\n        WHEN \"BSEG\".\"SHKZG\" = 'S' THEN 'Debit'\n        WHEN \"BSEG\".\"SHKZG\" = 'H' THEN 'Credit'\n     END                                                                            AS \"DebitCreditIndicator\",\n\tCAST( CASE\n        WHEN \"BSEG\".\"ZBD3T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD3T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        WHEN \"BSEG\".\"ZBD3T\" = 0 AND \"BSEG\".\"ZBD2T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD2T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        WHEN \"BSEG\".\"ZBD3T\" = 0 AND \"BSEG\".\"ZBD2T\" = 0 AND \"BSEG\".\"ZBD1T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD1T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        ELSE \"BSEG\".\"ZFBDT\" + INTERVAL '86399' SECOND\n     END AS TIMESTAMP)                                                              AS \"NetDueDate\",\n    \"BKPF\".\"BLART\"                                                                  AS \"DocumentType\",\n\t\"BSEG\".\"ZTERM\"                                                                  AS \"PaymentTerm\",\n\t\"BKPF\".\"WAERS\"                                                                  AS \"Currency\",\n\t\"BSEG\".\"WSKTO\"                                                                  AS \"CashDiscountTakenAmount\",\n\t\"BSEG\".\"SKFBT\"                                                                  AS \"CashDiscountEligibleAmount\",\n    \"BSEG\".\"ZBD2P\"                                                                  AS \"CashDiscountPercentage2\",\n    \"BSEG\".\"ZBD1P\"                                                                  AS \"CashDiscountPercentage1\",\n    CASE \n        WHEN \"BSEG\".\"ZBD2P\" > 0 \n        THEN \n            CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD2T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n     END                                                                            AS \"CashDiscountDueDate2\",\n    CASE\n        WHEN \"BSEG\".\"ZBD1P\" > 0 \n        THEN \n            CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD1T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n     END                                                                            AS \"CashDiscountDueDate1\",\n\t\"BSEG\".\"WRBTR\" * \n    CASE \n        WHEN \"BSEG\".\"SHKZG\" = 'H' THEN -1.0 \n        ELSE 1.0 \n     END                                                                            AS \"Amount\",\n\tCAST(\"BSEG\".\"AUGDT\" AS TIMESTAMP)                                               AS \"ClearingDate\",\n\tCAST(\"BKPF\".\"BLDAT\" AS TIMESTAMP)                                               AS \"DocumentDate\",\n\tCAST(\"BSEG\".\"ZFBDT\" AS TIMESTAMP)                                               AS \"BaselineDate\",\n    CASE\n        WHEN \"BSEG\".\"BSCHL\" = '01' THEN 'CustomerInvoice'\n        WHEN \"BSEG\".\"BSCHL\" = '11' THEN 'CreditMemo'\n     END                                                                            AS \"DocumentCategory\",\n\tCAST(\"BSEG\".\"GJAHR\" AS BIGINT)                                                  AS \"FiscalYear\",\n\t\"BSEG\".\"BELNR\"                                                                  AS \"DocumentNumber\",\n    \"T001\".\"BUTXT\"                                                                  AS \"BusinessUnit\",\n\tCAST(\"BKPF\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF\".\"CPUTM\" AS DATE), \n            \"BKPF\".\"CPUTM\") AS INTERVAL SECOND)                                     AS \"CreationTime\",\n\tCASE WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic' ELSE 'Manual' END      AS \"CreationExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF\".\"MANDT\" || '::' || \"BKPF\".\"USNAM\"           AS \"CreatedBy\",\n    CASE \n        WHEN \"BKPF\".\"AWTYP\" = 'VBRK' AND \"BSEG\".\"BSCHL\" IN ('01', '11') \n            THEN <%=sourceSystem%> || '::' || \"BKPF\".\"MANDT\" || '::' || \"BKPF\".\"AWKEY\" \n     END                                                                            AS \"CustomerInvoice\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"KUNNR\"           AS \"Customer\"\nFROM \"BSEG\" AS \"BSEG\"\n         LEFT JOIN \"BKPF\" AS \"BKPF\"\n                   ON \"BSEG\".\"MANDT\" = \"BKPF\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"BKPF\".\"BUKRS\"\n                       AND \"BSEG\".\"BELNR\" = \"BKPF\".\"BELNR\"\n                       AND \"BSEG\".\"GJAHR\" = \"BKPF\".\"GJAHR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"BKPF\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"BKPF\".\"USNAM\" = \"USR02\".\"BNAME\"\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"BSEG\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE \"BSEG\".\"MANDT\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" IN ('01', '11')\n"
+                            }
+                        ],
+                        "relationship_transformations": []
+                    }
+                ]
+            }
+        ],
+        "target": {
+            "entity_ref": {
+                "name": "ReceivableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Clearing",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    \n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN <%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"BUKRS\" || '::' || \"BKPF_PAY\".\"BELNR\" || '::' || \"BKPF_PAY\".\"GJAHR\" \n        ELSE <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"AUGBL\" || '::' || \"BSEG\".\"AUGGJ\" \n     END  \n     || <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \n     \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"\n                                                                                                                        AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"BELNR\" || '::' || \n        \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                                                                        AS \"ObjectID\", \n    CASE\n\t    WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND) + INTERVAL '2' SECOND\n        ELSE CAST(\"BSEG\".\"AUGDT\" AS DATE) + INTERVAL '86399' SECOND\n     END                                                                                                                AS \"Time\",\n    'Clearing'                                                                                                          AS \"Attribute\",\n    NULL                                                                                                                AS \"OldValue\",\n    NULL                                                                                                                AS \"NewValue\",\n    CASE\n\t    WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"USNAM\"\n        ELSE NULL \n     END                                                                                                                AS \"ChangedBy\",\n    NULL                                                                                                                AS \"OperationType\",\n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL\n            THEN <%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::' || \"BKPF_PAY\".\"BUKRS\" || '::' || \"BKPF_PAY\".\"BELNR\" || '::' || \"BKPF_PAY\".\"GJAHR\" \n        ELSE <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' || \"BSEG\".\"AUGBL\" || '::' || \"BSEG\".\"AUGGJ\" \n     END                                                                                                                AS \"OperationID\",\n    CASE\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL AND \"USR02\".\"USTYP\" IN ('B', 'C')\n\t        THEN 'Automatic'\n        WHEN \"BKPF_PAY\".\"MANDT\" IS NOT NULL AND \"USR02\".\"USTYP\" NOT IN ('B', 'C')\n            THEN 'Manual' \n        ELSE NULL\n     END                                                                                                                AS \"ExecutionType\"\nFROM \"BSEG\" AS \"BSEG\"\n         LEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n                   ON \"BSEG\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                       AND \"BSEG\".\"AUGBL\" = \"BKPF_PAY\".\"BELNR\"\n                       AND \"BSEG\".\"AUGGJ\" = \"BKPF_PAY\".\"GJAHR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG\".\"AUGBL\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" IN ('01', '11')\n\n"
+                    },
+                    {
+                        "id": "IncomingPayment",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\" || \n        <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ObjectID\",\n    CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND)                                         AS \"Time\",\n    'IncomingPayment'                                                                           AS \"Attribute\",\n    NULL                                                                                        AS \"OldValue\",\n    NULL                                                                                        AS \"NewValue\",\n\tCASE \n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                        AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::'  || \"BKPF_PAY\".\"USNAM\"              AS \"ChangedBy\",\n    NULL                                                                                        AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"OperationID\"\nFROM \"BSEG\" AS \"BSEG\"\n\tLEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n\t    ON \"BSEG\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                AND \"BSEG\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                AND \"BSEG\".\"AUGBL\" = \"BKPF_PAY\".\"BELNR\"\n                AND \"BSEG\".\"AUGGJ\" = \"BKPF_PAY\".\"GJAHR\"\n    LEFT JOIN \"BSEG\" AS \"BSEG_PAY\"\n                   ON \"BSEG_PAY\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                       AND \"BSEG_PAY\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                       AND \"BSEG_PAY\".\"BELNR\" = \"BKPF_PAY\".\"BELNR\"\n                       AND \"BSEG_PAY\".\"GJAHR\" = \"BKPF_PAY\".\"GJAHR\"\n                       AND \"BSEG_PAY\".\"BSCHL\" IN ('15', '16')\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG_PAY\".\"MANDT\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" = '01'\n"
+                    },
+                    {
+                        "id": "PartialPayment",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"                   AS \"ObjectID\",\n    CAST(\"BKPF_PAY\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF_PAY\".\"CPUTM\" AS DATE), \n                \"BKPF_PAY\".\"CPUTM\") AS INTERVAL SECOND)                                         AS \"Time\",\n    'IncomingPayment'                                                                           AS \"Attribute\",\n    NULL                                                                                        AS \"OldValue\",\n    NULL                                                                                        AS \"NewValue\",\n\tCASE \n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                                        AS \"ExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF_PAY\".\"MANDT\" || '::'  || \"BKPF_PAY\".\"USNAM\"              AS \"ChangedBy\",\n    NULL                                                                                        AS \"OperationType\",\n    <%=sourceSystem%> || '::' || \"BSEG_PAY\".\"MANDT\" || '::' || \"BSEG_PAY\".\"BUKRS\" || '::' || \n        \"BSEG_PAY\".\"BELNR\" || '::' || \"BSEG_PAY\".\"GJAHR\" || '::' || \"BSEG_PAY\".\"BUZEI\"          AS \"OperationID\"\nFROM \"BSEG\" AS \"BSEG\"\n    LEFT JOIN \"BSEG\" AS \"BSEG_PAY\"\n                   ON \"BSEG_PAY\".\"MANDT\" = \"BSEG\".\"MANDT\"\n                       AND \"BSEG_PAY\".\"BUKRS\" = \"BSEG\".\"BUKRS\"\n                       AND \"BSEG_PAY\".\"REBZG\" = \"BSEG\".\"BELNR\"\n                       AND \"BSEG_PAY\".\"REBZJ\" = \"BSEG\".\"GJAHR\"\n                       AND \"BSEG_PAY\".\"REBZZ\" = \"BSEG\".\"BUZEI\"\n                       AND \"BSEG_PAY\".\"BSCHL\" IN ('15', '16')\n    LEFT JOIN \"BKPF\" AS \"BKPF_PAY\"\n\t    ON \"BSEG_PAY\".\"MANDT\" = \"BKPF_PAY\".\"MANDT\"\n                AND \"BSEG_PAY\".\"BUKRS\" = \"BKPF_PAY\".\"BUKRS\"\n                AND \"BSEG_PAY\".\"BELNR\" = \"BKPF_PAY\".\"BELNR\"\n                AND \"BSEG_PAY\".\"GJAHR\" = \"BKPF_PAY\".\"GJAHR\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"BKPF_PAY\".\"MANDT\" = \"USR02\".\"MANDT\"\n                AND \"BKPF_PAY\".\"USNAM\" = \"USR02\".\"BNAME\"\nWHERE \"BSEG\".\"BSCHL\" = '01'\n    AND \"BSEG_PAY\".\"MANDT\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "ReceivableItemChanges",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n\t<%=sourceSystem%> || '::' || \"CDPOS\".\"TABKEY\" || '::' || \"CDPOS\".\"TABNAME\" || '::' || \"CDPOS\".\"FNAME\" \n        || '::' || \"CDPOS\".\"CHANGENR\" || '::' || \"CDPOS\".\"CHNGIND\"              AS \"ID\",\n    <%=sourceSystem%> || '::' || \n        SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)  || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 4)  || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 8, 10) || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 18, 4) || '::' ||\n        SUBSTRING(\"CDPOS\".\"TABKEY\", 22, 3)                                       AS \"ObjectID\",\n\tCAST(\"CDHDR\".\"UDATE\" AS DATE) +\n            CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE), \n            \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                                AS \"Time\",\n\tCASE\n           WHEN \"CDPOS\".\"FNAME\" = 'MANST' THEN 'DunningLevel'\n           WHEN \"CDPOS\".\"FNAME\" = 'ZFBDT' THEN 'BaselineDate'\n           WHEN \"CDPOS\".\"FNAME\" = 'ZTERM' THEN 'PaymentTerms'\n           WHEN \"CDPOS\".\"FNAME\" = 'MANSP' THEN 'DunningBlock'\n     END                                                                        AS \"Attribute\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' \n            THEN CONCAT('-',REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_OLD\" \n     END                                                                        AS \"OldValue\",\n\tCASE\n        WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' \n            THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n        ELSE \"CDPOS\".\"VALUE_NEW\"\n     END                                                                        AS \"NewValue\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"MANDANT\" || '::' || \n        \"CDHDR\".\"USERNAME\"                                                      AS \"ChangedBy\",\n\t\"CDHDR\".\"TCODE\"                                                             AS \"OperationType\",\n\t<%=sourceSystem%> || '::' || \"CDHDR\".\"CHANGENR\"                             AS \"OperationID\",\n\tCASE\n        WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n        ELSE 'Manual' \n     END                                                                        AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"ObjectID\" = \"CDHDR\".\"ObjectID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'BELEG'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"TABNAME\" = 'BSEG'\n  AND \"CDPOS\".\"FNAME\" IN ('MANST', 'ZFBDT', 'ZTERM', 'MANSP')\n  AND \"CDPOS\".\"CHNGIND\" = 'U'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Customer",
+                    "CustomerInvoice"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "BaselineDate",
+                    "BusinessUnit",
+                    "CashDiscountDueDate1",
+                    "CashDiscountDueDate2",
+                    "CashDiscountEligibleAmount",
+                    "CashDiscountPercentage1",
+                    "CashDiscountPercentage2",
+                    "CashDiscountTakenAmount",
+                    "ClearingDate",
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DebitCreditIndicator",
+                    "DocumentCategory",
+                    "DocumentDate",
+                    "DocumentNumber",
+                    "DocumentType",
+                    "FiscalYear",
+                    "ID",
+                    "IsBlockedForDunning",
+                    "IsReversed",
+                    "NetDueDate",
+                    "PaymentTerm",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ReceivableItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"BUKRS\" || '::' \n        || \"BSEG\".\"BELNR\" || '::' || \"BSEG\".\"GJAHR\" || '::' || \"BSEG\".\"BUZEI\"       AS \"ID\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\"                                     AS \"SourceSystemInstance\",\n\tCASE\n        WHEN \"BSEG\".\"MANSP\" IS NOT NULL \n            THEN  TRUE \n        ELSE FALSE \n     END                                                                            AS \"IsBlockedForDunning\",\n\tCASE\n        WHEN \"BKPF\".\"XREVERSAL\" IS NOT NULL \n            THEN True\n        ELSE False\n     END                                                                            AS \"IsReversed\",\n\tCASE\n        WHEN \"BSEG\".\"SHKZG\" = 'S' THEN 'Debit'\n        WHEN \"BSEG\".\"SHKZG\" = 'H' THEN 'Credit'\n     END                                                                            AS \"DebitCreditIndicator\",\n\tCAST( CASE\n        WHEN \"BSEG\".\"ZBD3T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD3T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        WHEN \"BSEG\".\"ZBD3T\" = 0 AND \"BSEG\".\"ZBD2T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD2T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        WHEN \"BSEG\".\"ZBD3T\" = 0 AND \"BSEG\".\"ZBD2T\" = 0 AND \"BSEG\".\"ZBD1T\" > 0\n            THEN \n                CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD1T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n        ELSE \"BSEG\".\"ZFBDT\" + INTERVAL '86399' SECOND\n     END AS TIMESTAMP)                                                              AS \"NetDueDate\",\n    \"BKPF\".\"BLART\"                                                                  AS \"DocumentType\",\n\t\"BSEG\".\"ZTERM\"                                                                  AS \"PaymentTerm\",\n\t\"BKPF\".\"WAERS\"                                                                  AS \"Currency\",\n\t\"BSEG\".\"WSKTO\"                                                                  AS \"CashDiscountTakenAmount\",\n\t\"BSEG\".\"SKFBT\"                                                                  AS \"CashDiscountEligibleAmount\",\n    \"BSEG\".\"ZBD2P\"                                                                  AS \"CashDiscountPercentage2\",\n    \"BSEG\".\"ZBD1P\"                                                                  AS \"CashDiscountPercentage1\",\n    CASE \n        WHEN \"BSEG\".\"ZBD2P\" > 0 \n        THEN \n            CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD2T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n     END                                                                            AS \"CashDiscountDueDate2\",\n    CASE\n        WHEN \"BSEG\".\"ZBD1P\" > 0 \n        THEN \n            CAST((CAST(\"BSEG\".\"ZFBDT\" AS DATE)\n                         + \"BSEG\".\"ZBD1T\" * INTERVAL '1' DAY) AS DATE) + INTERVAL '86399' SECOND\n     END                                                                            AS \"CashDiscountDueDate1\",\n\t\"BSEG\".\"WRBTR\" * \n    CASE \n        WHEN \"BSEG\".\"SHKZG\" = 'H' THEN -1.0 \n        ELSE 1.0 \n     END                                                                            AS \"Amount\",\n\tCAST(\"BSEG\".\"AUGDT\" AS TIMESTAMP)                                               AS \"ClearingDate\",\n\tCAST(\"BKPF\".\"BLDAT\" AS TIMESTAMP)                                               AS \"DocumentDate\",\n\tCAST(\"BSEG\".\"ZFBDT\" AS TIMESTAMP)                                               AS \"BaselineDate\",\n    CASE\n        WHEN \"BSEG\".\"BSCHL\" = '01' THEN 'CustomerInvoice'\n        WHEN \"BSEG\".\"BSCHL\" = '11' THEN 'CreditMemo'\n     END                                                                            AS \"DocumentCategory\",\n\tCAST(\"BSEG\".\"GJAHR\" AS BIGINT)                                                  AS \"FiscalYear\",\n\t\"BSEG\".\"BELNR\"                                                                  AS \"DocumentNumber\",\n    \"T001\".\"BUTXT\"                                                                  AS \"BusinessUnit\",\n\tCAST(\"BKPF\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"BKPF\".\"CPUTM\" AS DATE), \n            \"BKPF\".\"CPUTM\") AS INTERVAL SECOND)                                     AS \"CreationTime\",\n\tCASE WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic' ELSE 'Manual' END      AS \"CreationExecutionType\",\n\t<%=sourceSystem%> || '::' || \"BKPF\".\"MANDT\" || '::' || \"BKPF\".\"USNAM\"           AS \"CreatedBy\",\n    CASE \n        WHEN \"BKPF\".\"AWTYP\" = 'VBRK' AND \"BSEG\".\"BSCHL\" IN ('01', '11') \n            THEN <%=sourceSystem%> || '::' || \"BKPF\".\"MANDT\" || '::' || \"BKPF\".\"AWKEY\" \n     END                                                                            AS \"CustomerInvoice\",\n    <%=sourceSystem%> || '::' || \"BSEG\".\"MANDT\" || '::' || \"BSEG\".\"KUNNR\"           AS \"Customer\"\nFROM \"BSEG\" AS \"BSEG\"\n         LEFT JOIN \"BKPF\" AS \"BKPF\"\n                   ON \"BSEG\".\"MANDT\" = \"BKPF\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"BKPF\".\"BUKRS\"\n                       AND \"BSEG\".\"BELNR\" = \"BKPF\".\"BELNR\"\n                       AND \"BSEG\".\"GJAHR\" = \"BKPF\".\"GJAHR\"\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"BKPF\".\"MANDT\" = \"USR02\".\"MANDT\"\n                       AND \"BKPF\".\"USNAM\" = \"USR02\".\"BNAME\"\n         LEFT JOIN \"T001\" AS \"T001\"\n                   ON \"BSEG\".\"MANDT\" = \"T001\".\"MANDT\"\n                       AND \"BSEG\".\"BUKRS\" = \"T001\".\"BUKRS\"\nWHERE \"BSEG\".\"MANDT\" IS NOT NULL\n    AND \"BSEG\".\"BSCHL\" IN ('01', '11')\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

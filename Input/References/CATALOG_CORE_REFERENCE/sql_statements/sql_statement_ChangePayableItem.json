@@ -1,0 +1,63 @@
+[
+    {
+        "change_date": 1758102842282.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630863965.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "ChangePayableItem transformation - copy - 1",
+        "draft": null,
+        "factory_id": "84a81a69-54b4-46e0-861b-7a6f21f23eee",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ChangePayableItem",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PayableItem"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ChangedAttribute",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "NewValue",
+                    "OldValue",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ChangePayableItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'ChangePayableItem' || '::' || \"PayableItem_Changes\".\"ID\"  AS \"ID\",\n    \"PayableItem\".\"ID\"                                         AS \"PayableItem\",\n    \"PayableItem_Changes\".\"Time\"                               AS \"Time\",\n    \"PayableItem_Changes\".\"ChangedBy\"                          AS \"ExecutedBy\",\n    \"PayableItem_Changes\".\"Attribute\"                          AS \"ChangedAttribute\",\n    \"PayableItem_Changes\".\"ExecutionType\"                      AS \"ExecutionType\",\n    \"PayableItem_Changes\".\"OldValue\"                           AS \"OldValue\",\n    \"PayableItem_Changes\".\"NewValue\"                           AS \"NewValue\"\nFROM \"o_custom_PayableItem\" AS \"PayableItem\"\n    LEFT JOIN \"c_o_custom_PayableItem\" AS \"PayableItem_Changes\"\n        ON \"PayableItem\".\"ID\" = \"PayableItem_Changes\".\"ObjectID\"\nWHERE \"PayableItem_Changes\".\"Attribute\" NOT IN ('Clearing','Payment', 'ReversalPayment', 'ReversedPayment',\n      'SetPaymentBlock', 'ReleasePaymentBlock')\n    AND \"PayableItem_Changes\".\"Time\" IS NOT NULL\n\n  \n\n  \n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

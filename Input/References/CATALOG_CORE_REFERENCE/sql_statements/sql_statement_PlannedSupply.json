@@ -1,0 +1,274 @@
+[
+    {
+        "change_date": 1761912312264.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1755597731411.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "PlannedSupply - OracleFusion",
+        "draft": null,
+        "factory_id": "461a247e-0bd7-4c22-98fa-2c3cdaa63d96",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PlannedSupply",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AdjustmentQuantity",
+                    "ID",
+                    "IsFirmOrder",
+                    "ObjectType",
+                    "OrderFinishDate",
+                    "OrderQuantity",
+                    "PlannedSupplyNumber",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlannedSupplyAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrderId\" \n    || '::' || CAST(\"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrderDate\" AS TIMESTAMP(6))          AS \"ID\",\n    <%=sourceSystem%> || '::' || \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrganizationId\" \n    || '::' || \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOInventoryItemId\"                          AS \"MaterialMasterPlant\",\n    CAST(\"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrderNumber\" AS VARCHAR(255))                   AS \"PlannedSupplyNumber\",\n    CASE \n        WHEN \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrderType\" = '1' THEN 'Planned Order'\n        WHEN \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrderType\" = '2' THEN 'Purchase Requisition'\n        WHEN \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrderType\" = '3' THEN 'Production Order'\n    END                                                                                                         AS \"ObjectType\",\n    NULL                                                                                                        AS \"IsFirmOrder\",\n    CAST(\"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOFirmDate\" AS TIMESTAMP(6))                      AS \"OrderFinishDate\",\n    \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrderQuantity\"                                       AS \"OrderQuantity\",\n    \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOImplementQuantity\"                                   AS \"AdjustmentQuantity\",\n    \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\".\"ItemCategoriesPEOUomCode\"                             AS \"QuantityUnit\",\n    <%=sourceSystem%>                                                                                           AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\" AS \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\"\n    INNER JOIN \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\" AS \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\"\n        ON \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOInventoryItemId\" = \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\".\"InventoryItemId\"\n        AND \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrganizationId\" = \"FscmTopModelAM_MscAnalyticsTopAM_ItemCategoriesPVO\".\"OrganizationId\"\nWHERE \"FscmTopModelAM_MscAnalyticsTopAM_OrdersPVO\".\"OrdersPEOOrderQuantity\"> 0"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1761203803018.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633799635.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "PlannedSupply - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "b6cd6913-ca0b-47bc-b880-7a3e4a7f2b42",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PlannedSupply",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AdjustmentQuantity",
+                    "ID",
+                    "IsFirmOrder",
+                    "ObjectType",
+                    "OrderFinishDate",
+                    "OrderQuantity",
+                    "PlannedSupplyNumber",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlannedSupplyAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"PLAF\".\"MANDT\" || '::' || \"PLAF\".\"PLNUM\"                            AS \"ID\",\n    <%=sourceSystem%> || '::' || \"PLAF\".\"MANDT\"                                                      AS \"SourceSystemInstance\",\n    \"PLAF\".\"PLNUM\"                                                                                   AS \"PlannedSupplyNumber\",\n    CASE \n        WHEN \"PLAF\".\"OBART\" = 1 THEN 'Planned Order'\n        WHEN \"PLAF\".\"OBART\" = 2 THEN 'Purchase Requisition'\n        WHEN \"PLAF\".\"OBART\" = 4 THEN 'Production Order'\n    END                                                                                              AS \"ObjectType\",\n    CASE \n        WHEN NULLIF(\"PLAF\".\"AUFFX\", '') IS NULL \n        THEN FALSE \n        ELSE TRUE \n    END                                                                                              AS \"IsFirmOrder\",\n    CAST(\"PLAF\".\"PEDTR\" AS TIMESTAMP)                                                                AS \"OrderFinishDate\",\n    \"PLAF\".\"GSMNG\"                                                                                   AS \"OrderQuantity\",\n    \"PLAF\".\"AVMNG\"                                                                                   AS \"AdjustmentQuantity\",\n    \"PLAF\".\"MEINS\"                                                                                   AS \"QuantityUnit\" ,\n    <%=sourceSystem%> || '::' || \"PLAF\".\"MANDT\" || '::' || \"PLAF\".\"MATNR\" || '::' || \"PLAF\".\"PLWRK\"  AS \"MaterialMasterPlant\"\nFROM \"PLAF\" AS \"PLAF\"\nWHERE NULLIF(\"PLAF\".\"MANDT\", '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1761203830461.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649109579.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "PlannedSupply - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "431ec08a-1170-45b5-906c-f1013617fc2f",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PlannedSupply",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AdjustmentQuantity",
+                    "ID",
+                    "IsFirmOrder",
+                    "ObjectType",
+                    "OrderFinishDate",
+                    "OrderQuantity",
+                    "PlannedSupplyNumber",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlannedSupplyAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"PLAF\".\"MANDT\" || '::' || \"PLAF\".\"PLNUM\"                            AS \"ID\",\n    <%=sourceSystem%> || '::' || \"PLAF\".\"MANDT\"                                                      AS \"SourceSystemInstance\",\n    \"PLAF\".\"PLNUM\"                                                                                   AS \"PlannedSupplyNumber\",\n    CASE \n        WHEN \"PLAF\".\"OBART\" = 1 THEN 'Planned Order'\n        WHEN \"PLAF\".\"OBART\" = 2 THEN 'Purchase Requisition'\n        WHEN \"PLAF\".\"OBART\" = 4 THEN 'Production Order'\n    END                                                                                              AS \"ObjectType\",\n    CASE \n        WHEN NULLIF(\"PLAF\".\"AUFFX\", '') IS NULL \n        THEN FALSE \n        ELSE TRUE \n    END                                                                                              AS \"IsFirmOrder\",\n    CAST(\"PLAF\".\"PEDTR\" AS TIMESTAMP)                                                                AS \"OrderFinishDate\",\n    \"PLAF\".\"GSMNG\"                                                                                   AS \"OrderQuantity\",\n    \"PLAF\".\"AVMNG\"                                                                                   AS \"AdjustmentQuantity\",\n    \"PLAF\".\"MEINS\"                                                                                   AS \"QuantityUnit\" ,\n    <%=sourceSystem%> || '::' || \"PLAF\".\"MANDT\" || '::' || \"PLAF\".\"MATNR\" || '::' || \"PLAF\".\"PLWRK\"  AS \"MaterialMasterPlant\"\nFROM \"PLAF\" AS \"PLAF\"\nWHERE NULLIF(\"PLAF\".\"MANDT\", '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1761728424427.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630774541.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "PlannedSupply transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "e88c1f75-892a-467a-9614-8b1e042507b3",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PlannedSupply",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "AdjustmentQuantity",
+                    "ID",
+                    "IsFirmOrder",
+                    "ObjectType",
+                    "OrderFinishDate",
+                    "OrderQuantity",
+                    "PlannedSupplyNumber",
+                    "QuantityUnit",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlannedOrderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n    <%=sourceSystem%> || '::' || \"MRP_RECOMMENDATIONS\".\"DISPOSITION_ID\" \n    || '::' || \"MRP_RECOMMENDATIONS\".\"TRANSACTION_ID\" \n    || '::' || COALESCE(CAST(\"MRP_RECOMMENDATIONS\".\"LINE_ID\" AS VARCHAR(255)), '')              AS \"ID\",\n    <%=sourceSystem%> || '::' || \"MRP_RECOMMENDATIONS\".\"ORGANIZATION_ID\" \n    || '::' || \"MRP_RECOMMENDATIONS\".\"INVENTORY_ITEM_ID\"                                        AS \"MaterialMasterPlant\",\n    CAST(\"MRP_RECOMMENDATIONS\".\"DISPOSITION_ID\" AS VARCHAR(255))                                AS \"PlannedSupplyNumber\",\n    CASE \n        WHEN \"MRP_RECOMMENDATIONS\".\"ORDER_TYPE\" = '5' THEN 'Planned Order'\n        WHEN \"MRP_RECOMMENDATIONS\".\"ORDER_TYPE\" = '2' THEN 'Purchase Requisition'\n        WHEN \"MRP_RECOMMENDATIONS\".\"ORDER_TYPE\" = '3' THEN 'Production Order'\n    END                                                                                         AS \"ObjectType\",\n     CASE\n        WHEN  \"MRP_RECOMMENDATIONS\".\"FIRM_PLANNED_TYPE\"='2' THEN TRUE\n        ELSE FALSE\n    END                                                                                         AS  \"IsFirmOrder\",  \n    COALESCE(\"MRP_RECOMMENDATIONS\".\"FIRM_DATE\", \"MRP_RECOMMENDATIONS\".\"NEW_SCHEDULE_DATE\")      AS \"OrderFinishDate\",\n    COALESCE(\"MRP_RECOMMENDATIONS\".\"FIRM_QUANTITY\", \"MRP_RECOMMENDATIONS\".\"NEW_ORDER_QUANTITY\") AS \"OrderQuantity\",\n    \"MRP_RECOMMENDATIONS\".\"IMPLEMENTED_QUANTITY\"                                                AS \"AdjustmentQuantity\",\n    \"MTL_SYSTEM_ITEMS_B\".\"PRIMARY_UOM_CODE\"                                                     AS \"QuantityUnit\",\n    <%=sourceSystem%>                                                                           AS \"SourceSystemInstance\"\nFROM \"MRP_RECOMMENDATIONS\" AS \"MRP_RECOMMENDATIONS\"\n    LEFT JOIN \"MTL_SYSTEM_ITEMS_B\" AS \"MTL_SYSTEM_ITEMS_B\"\n       ON \"MRP_RECOMMENDATIONS\".\"INVENTORY_ITEM_ID\" = \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\"\n       AND \"MRP_RECOMMENDATIONS\".\"ORGANIZATION_ID\" = \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\"\nWHERE (\"MRP_RECOMMENDATIONS\".\"DISPOSITION_STATUS_TYPE\" = 1 OR \"MRP_RECOMMENDATIONS\".\"DISPOSITION_STATUS_TYPE\" IS NULL) \n    AND COALESCE(\"MRP_RECOMMENDATIONS\".\"FIRM_QUANTITY\", \"MRP_RECOMMENDATIONS\".\"NEW_ORDER_QUANTITY\") > 0\n    AND \"NEW_SCHEDULE_DATE\" <= TIMESTAMPADD(MONTH, (4), NOW())  -- Recommendations further than four months in the future are out of scope"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

@@ -1,0 +1,59 @@
+[
+    {
+        "change_date": 1760545848912.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630792715.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "RelationshipThreeWayMatch transformation - OCPM Schema - 1",
+        "draft": null,
+        "factory_id": "72145ef9-25fd-42b8-8d1f-223703b2fa8a",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "RelationshipThreeWayMatch",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "GoodsReceipt",
+                    "PurchaseDocumentLine",
+                    "VendorInvoiceLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "RelationshipThreeWayMatchAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": true,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_RTWM\" AS (\n    SELECT \n        \"GoodsReceipt\".\"ID\"       AS \"GoodsReceipt_ID\",\n        \"PDItem\".\"ID\"             AS \"PurchaseDocumentLine_ID\",\n        \"VendInvLine\".\"ID\"        AS \"VendorInvoiceLine_ID\"\n    FROM \"o_custom_GoodsReceipt\" AS \"GoodsReceipt\"\n        INNER JOIN \"o_custom_VendorInvoiceLine\" AS \"VendInvLine\"\n            ON \"GoodsReceipt\".\"ID\" = \"VendInvLine\".\"GoodsReceipt_ID\"\n        INNER JOIN \"o_custom_PurchaseDocumentLine\" AS \"PDItem\"\n            ON \"VendInvLine\".\"PurchaseDocumentLine_ID\" = \"PDItem\".\"ID\"\n    UNION\n    SELECT \n        \"GoodsReceipt\".\"ID\"       AS \"GoodsReceipt_ID\",\n        \"PDItem\".\"ID\"             AS \"PurchaseDocumentLine_ID\",\n        \"VendInvLine\".\"ID\"        AS \"VendorInvoiceLine_ID\"\n    FROM \"o_custom_GoodsReceipt\" AS \"GoodsReceipt\"\n        INNER JOIN \"o_custom_PurchaseDocumentLine\" AS \"PDItem\"\n            ON \"GoodsReceipt\".\"PurchaseDocumentLine_ID\" = \"PDItem\".\"ID\"\n        INNER JOIN \"o_custom_VendorInvoiceLine\" AS \"VendInvLine\"\n            ON \"PDItem\".\"ID\" = \"VendInvLine\".\"PurchaseDocumentLine_ID\"\n),\n    \"CTE_RTWM_1\" AS (\n    SELECT \n        \"GoodsReceipt\".\"ID\"     AS \"GoodsReceipt_ID\",\n        NULL                    AS \"PurchaseDocumentLine_ID\",\n        \"VendInvLine\".\"ID\"      AS \"VendorInvoiceLine_ID\"\n    FROM \"o_custom_GoodsReceipt\" AS \"GoodsReceipt\"\n        INNER JOIN \"o_custom_VendorInvoiceLine\" AS \"VendInvLine\"\n            ON \"GoodsReceipt\".\"ID\" = \"VendInvLine\".\"GoodsReceipt_ID\"\n    EXCEPT\n    SELECT \n        \"CTE_RTWM\".\"GoodsReceipt_ID\"           AS \"GoodsReceipt_ID\",\n        NULL                                   AS \"PurchaseDocumentLine_ID\",\n        \"CTE_RTWM\".\"VendorInvoiceLine_ID\"      AS \"VendorInvoiceLine_ID\"\n    FROM \"CTE_RTWM\" AS \"CTE_RTWM\"\n),\n    \"CTE_RTWM_2\" AS (\n    SELECT \n        NULL               AS \"GoodsReceipt_ID\",\n        \"PDItem\".\"ID\"      AS \"PurchaseDocumentLine_ID\",\n        \"VendInvLine\".\"ID\" AS \"VendorInvoiceLine_ID\"\n    FROM \"o_custom_VendorInvoiceLine\" AS \"VendInvLine\"\n        INNER JOIN \"o_custom_PurchaseDocumentLine\" AS \"PDItem\"\n            ON \"VendInvLine\".\"PurchaseDocumentLine_ID\" = \"PDItem\".\"ID\"\n    EXCEPT\n    SELECT \n        NULL                                  AS \"GoodsReceipt_ID\",\n        \"CTE_RTWM\".\"PurchaseDocumentLine_ID\"  AS \"PurchaseDocumentLine_ID\",\n        \"CTE_RTWM\".\"VendorInvoiceLine_ID\"     AS \"VendorInvoiceLine_ID\"\n    FROM \"CTE_RTWM\" AS \"CTE_RTWM\"\n),\n    \"CTE_RTWM_3\" AS (\n    SELECT \n        \"GoodsReceipt\".\"ID\"     AS \"GoodsReceipt_ID\",\n        \"PDItem\".\"ID\"           AS \"PurchaseDocumentLine_ID\",\n        NULL                    AS \"VendorInvoiceLine_ID\"\n    FROM \"o_custom_GoodsReceipt\" AS \"GoodsReceipt\"\n        INNER JOIN \"o_custom_PurchaseDocumentLine\" AS \"PDItem\"\n            ON \"GoodsReceipt\".\"PurchaseDocumentLine_ID\" = \"PDItem\".\"ID\"\n    EXCEPT\n    SELECT \n        \"CTE_RTWM\".\"GoodsReceipt_ID\"          AS \"GoodsReceipt_ID\",\n        \"CTE_RTWM\".\"PurchaseDocumentLine_ID\"  AS \"PurchaseDocumentLine_ID\",\n        NULL                                  AS \"VendorInvoiceLine_ID\"\n    FROM \"CTE_RTWM\" AS \"CTE_RTWM\"\n),\n    \"CTE_UNION\" AS (\n    SELECT   \n        \"CTE_RTWM\".\"GoodsReceipt_ID\"            AS \"GoodsReceipt_ID\",\n        \"CTE_RTWM\".\"PurchaseDocumentLine_ID\"    AS \"PurchaseDocumentLine_ID\",\n        \"CTE_RTWM\".\"VendorInvoiceLine_ID\"      AS \"VendorInvoiceLine_ID\"\n    FROM \"CTE_RTWM\" AS \"CTE_RTWM\"\n    UNION ALL\n    SELECT \n        \"CTE_RTWM_1\".\"GoodsReceipt_ID\"                 AS \"GoodsReceipt_ID\",\n        \"CTE_RTWM_1\".\"PurchaseDocumentLine_ID\"         AS \"PurchaseDocumentLine_ID\",\n        \"CTE_RTWM_1\".\"VendorInvoiceLine_ID\"           AS \"VendorInvoiceLine_ID\"\n    FROM \"CTE_RTWM_1\" AS \"CTE_RTWM_1\"\n    UNION ALL\n    SELECT \n        \"CTE_RTWM_2\".\"GoodsReceipt_ID\"             AS \"GoodsReceipt_ID\",\n        \"CTE_RTWM_2\".\"PurchaseDocumentLine_ID\"     AS \"PurchaseDocumentLine_ID\",\n        \"CTE_RTWM_2\".\"VendorInvoiceLine_ID\"       AS \"VendorInvoiceLine_ID\"\n    FROM \"CTE_RTWM_2\" AS \"CTE_RTWM_2\"\n    UNION ALL\n    SELECT \n        \"CTE_RTWM_3\".\"GoodsReceipt_ID\"           AS \"GoodsReceipt_ID\",\n        \"CTE_RTWM_3\".\"PurchaseDocumentLine_ID\"   AS \"PurchaseDocumentLine_ID\",\n        \"CTE_RTWM_3\".\"VendorInvoiceLine_ID\"     AS \"VendorInvoiceLine_ID\"\n    FROM \"CTE_RTWM_3\" AS \"CTE_RTWM_3\"\n)\nSELECT \n    CASE WHEN \"UNION\".\"GoodsReceipt_ID\" IS NOT NULL THEN  \"UNION\".\"GoodsReceipt_ID\" ELSE '' END\n        || CASE WHEN \"UNION\".\"PurchaseDocumentLine_ID\" IS NOT NULL THEN CONCAT('::', \"UNION\".\"PurchaseDocumentLine_ID\") ELSE '' END\n        || CASE WHEN \"UNION\".\"VendorInvoiceLine_ID\" IS NOT NULL THEN CONCAT('::', \"UNION\".\"VendorInvoiceLine_ID\") ELSE '' END        AS \"ID\",\n    \"UNION\".\"GoodsReceipt_ID\"                                                                                                        AS \"GoodsReceipt\",\n    \"UNION\".\"PurchaseDocumentLine_ID\"                                                                                                AS \"PurchaseDocumentLine\",\n    \"UNION\".\"VendorInvoiceLine_ID\"                                                                                                   AS \"VendorInvoiceLine\"\nFROM \"CTE_UNION\" AS \"UNION\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

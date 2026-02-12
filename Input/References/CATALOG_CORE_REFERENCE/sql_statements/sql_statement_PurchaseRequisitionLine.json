@@ -1,0 +1,733 @@
+[
+    {
+        "change_date": 1764704684230.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634400303.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "20d4afd9-e397-4d77-9dec-a150a92407bc",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> \n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 14, 5)                       AS \"ObjectID\",\n\t<%=sourceSystem%>  \n        || '::' || \"CDPOS\".\"TABKEY\" \n        || '::' || \"CDPOS\".\"TABNAME\" \n        || '::' || \"CDPOS\".\"FNAME\"\n        || '::' || \"CDPOS\".\"CHANGENR\" \n        || '::' || \"CDPOS\".\"CHNGIND\"                                        AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE),\n                    \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                    AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'FRGKZ' THEN 'ReleaseIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'LOEKZ' THEN 'DeletionIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'FRGZU' THEN 'ApprovalLevel'\n           END                                                              AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\"\n        END                                                                 AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'FRGZU' THEN\n               CASE\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") IS NULL THEN NULL\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'X' THEN '1'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XX' THEN '2'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXX' THEN '3'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXX' THEN '4'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXXX' THEN '5'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXXXX' THEN '6'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXXXXX' THEN '7'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXXXXXX' THEN '8'\n                   END\n        END                                                                 AS \"NewValue\",\n       \t<%=sourceSystem%>\n           || '::' || \"CDHDR\".\"MANDANT\" \n           || '::' || \"CDHDR\".\"USERNAME\"                                    AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                      AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                                   AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' \n        END                                                                 AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n        ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n            AND \"CDPOS\".\"TABNAME\" = 'EBAN'\n            AND \"CDPOS\".\"CHNGIND\" = 'U'\n            AND \"CDPOS\".\"OBJECTCLAS\" = 'BANF'\n            AND (\"CDPOS\".\"FNAME\" IN ('FRGKZ', 'LOEKZ', 'FRGZU')\n                OR \"CDHDR\".\"TCODE\" IN ('ME59', 'ME55', 'ME59N'))\n    LEFT JOIN \"EBAN\" AS \"EBAN\"\n        ON \"CDPOS\".\"TABKEY\" = \"EBAN\".\"MANDT\" || \"EBAN\".\"BANFN\" || \"EBAN\".\"BNFPO\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n            AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"EBAN\".\"BSTYP\" = 'B'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n  AND \"EBAN\".\"MANDT\" IS NOT NULL"
+                    }
+                ],
+                "foreign_key_names": [
+                    "Createdby",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ExpectedDeliveryDate",
+                    "ID",
+                    "IsCanceled",
+                    "IsClosed",
+                    "LineNumber",
+                    "NetUnitPrice",
+                    "PurchaseOrganization",
+                    "PurchaseOrganizationName",
+                    "PurchaseRequisitionNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "Requester",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseRequisitionItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Changes\" AS (\n    SELECT \"CDPOS\".\"MANDANT\",\n            \"CDPOS\".\"TABKEY\",\n            \"CDHDR\".\"UDATE\",\n            \"CDHDR\".\"UTIME\",\n            \"CDHDR\".\"USERNAME\",\n            ROW_NUMBER()\n            OVER (PARTITION BY \"CDPOS\".\"TABKEY\" ORDER BY \"CDHDR\".\"UDATE\" ASC, \"CDHDR\".\"UTIME\" DESC) AS \"rn\"\n    FROM \"CDPOS\" AS \"CDPOS\"\n        LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n            ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n    WHERE \"CDPOS\".\"OBJECTCLAS\" = 'BANF'\n        AND \"CDPOS\".\"TABNAME\" = 'EBAN'\n        AND \"CDPOS\".\"FNAME\" = 'KEY'\n        AND \"CDPOS\".\"CHNGIND\" = 'I'\n)\nSELECT \n    <%=sourceSystem%>  \n        || '::' || \"EBAN\".\"MANDT\" \n        || '::' || \"EBAN\".\"BANFN\" \n        || '::' || \"EBAN\".\"BNFPO\"                                                                             AS \"ID\",\n       COALESCE(CAST(\"Changes\".\"UDATE\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"Changes\".\"UTIME\" AS DATE),\n                    \"Changes\".\"UTIME\") AS INTERVAL SECOND),\n                CAST(\"EBAN\".\"BADAT\" AS DATE) + INTERVAL '1' SECOND)                                           AS \"CreationTime\",\n        \n    <%=sourceSystem%> \n        || '::' || \"EBAN\".\"MANDT\"  \n        || '::' || \"EBAN\".\"ERNAM\"                                                                             AS \"CreatedBy\",\n       CASE\n           WHEN \"EBAN\".\"ESTKZ\" = 'B' AND \"USR02\".\"USTYP\" IS NULL THEN 'Automatic'\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'S', 'C') THEN 'Automatic'\n           WHEN \"USR02\".\"USTYP\" = 'A' THEN 'Manual'\n        END                                                                                                   AS \"CreationExecutionType\",\n    <%=sourceSystem%> \n        || '::' || \"EBAN\".\"MANDT\"  \n        || '::' || \"EBAN\".\"AFNAM\"                                                                               AS \"Requester\",\n    CASE \n        WHEN NULLIF(TRIM(\"EBAN\".\"LIFNR\"), '') IS NOT NULL \n            THEN <%=sourceSystem%> \n                    || '::' || \"EBAN\".\"MANDT\" \n                    || '::' || \"EBAN\".\"LIFNR\" \n    END                                                                                                       AS \"Vendor\",\n       \"EBAN\".\"WAERS\"                                                                                         AS \"Currency\",\n       \"EBAN\".\"PREIS\" / COALESCE(\"EBAN\".\"PEINH\", 1)                                                           AS \"NetUnitPrice\",\n       \"EBAN\".\"MENGE\"                                                                                         AS \"Quantity\",\n       \"EBAN\".\"MEINS\"                                                                                         AS \"QuantityUnit\",\n    <%=sourceSystem%> \n        || '::' || \"EBAN\".\"MANDT\"  \n        || '::' || \"EBAN\".\"MATNR\"\n        || '::' || \"EBAN\".\"WERKS\"                                                                               AS \"MaterialMasterPlant\",\n    CASE \n        WHEN NULLIF(TRIM(\"EBAN\".\"MATNR\"), '') IS NOT NULL \n            THEN <%=sourceSystem%> \n                        || '::' || \"EBAN\".\"MANDT\" \n                        || '::' || \"EBAN\".\"MATNR\" \n    END                                                                                                         AS \"Material\",\n\n\t<%=sourceSystem%>  \n        || '::' || \"EBAN\".\"MANDT\" \n        || '::' || \"EBAN\".\"WERKS\"                                                                             AS \"Plant\",\n       \"EBAN\".\"TXZ01\"                                                                                         AS \"Description\",\n       CAST(\"EBAN\".\"LFDAT\"  AS DATE) + INTERVAL '1' SECOND                                                    AS \"ExpectedDeliveryDate\",\n       CASE WHEN NULLIF(\"EBAN\".\"EBAKZ\", '') IS NOT NULL THEN TRUE ELSE FALSE END                              AS \"IsClosed\",\n       CASE WHEN NULLIF(\"EBAN\".\"LOEKZ\", '') IS NOT NULL THEN TRUE ELSE FALSE END                              AS \"IsCanceled\",\n\t<%=sourceSystem%>  \n        || '::' || \"EBAN\".\"MANDT\"                                                                             AS \"SourceSystemInstance\",\n       \"EBAN\".\"BANFN\"                                                                                         AS \"PurchaseRequisitionNumber\",\n       CAST(\"EBAN\".\"BNFPO\" AS VARCHAR(255))                                                                   AS \"LineNumber\",\n       \"EBAN\".\"EKORG\"                                                                                         AS \"PurchaseOrganization\",\n       \"T024E\".\"EKOTX\"                                                                                        AS \"PurchaseOrganizationName\"\nFROM \"EBAN\" AS \"EBAN\"\n    LEFT JOIN \"CTE_Changes\" AS \"Changes\"\n        ON \"EBAN\".\"MANDT\" = \"Changes\".\"MANDANT\"\n            AND \"EBAN\".\"MANDT\" || \"EBAN\".\"BANFN\" || \"EBAN\".\"BNFPO\" = \"Changes\".\"TABKEY\"\n            AND \"Changes\".\"rn\" = 1\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"EBAN\".\"MANDT\" = \"USR02\".\"MANDT\"\n            AND \"EBAN\".\"ERNAM\" = \"USR02\".\"BNAME\"\n    LEFT JOIN \"T024E\" AS \"T024E\"\n        ON \"EBAN\".\"MANDT\" = \"T024E\".\"MANDT\"\n            AND \"EBAN\".\"EKORG\" = \"T024E\".\"EKORG\"\nWHERE \"EBAN\".\"MANDT\" IS NOT NULL\n  AND \"EBAN\".\"BSTYP\" = 'B'"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseDocumentLines",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipPurchaseDocumentLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    <%=sourceSystem%> || '::' || \"EBAN\".\"MANDT\" || '::' || \"EBAN\".\"BANFN\" || '::' || \"EBAN\".\"BNFPO\"         AS \"ID\",\n\t<%=sourceSystem%> || '::' || \"EKPO\".\"MANDT\" || '::' || \"EKPO\".\"EBELN\" || '::' || \"EKPO\".\"EBELP\"         AS \"PurchaseDocumentLines\"\nFROM \"EBAN\" AS \"EBAN\"\n    LEFT JOIN \"EKPO\" AS \"EKPO\"\n        ON \"EBAN\".\"MANDT\" = \"EKPO\".\"MANDT\"\n            AND \"EBAN\".\"BANFN\" = \"EKPO\".\"BANFN\"\n            AND \"EBAN\".\"BNFPO\" = \"EKPO\".\"BNFPO\"\nWHERE \"EBAN\".\"BSTYP\" = 'B'\n  AND \"EKPO\".\"BSTYP\" IN ('F','L')"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "change_date": 1761733967476.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630790068.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "9d74abef-0f13-41c7-9aa7-713f12c5a8ab",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "APPROVAL",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Approvals\" AS (\n    SELECT \n        \"PO_ACTION_HISTORY\".\"OBJECT_ID\"                  AS \"OBJECT_ID\",\n        \"PO_ACTION_HISTORY\".\"OBJECT_TYPE_CODE\"           AS \"OBJECT_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"OBJECT_SUB_TYPE_CODE\"       AS \"OBJECT_SUB_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"SEQUENCE_NUM\"               AS \"SEQUENCE_NUM\",\n        \"PO_ACTION_HISTORY\".\"ACTION_DATE\"                AS \"ACTION_DATE\",\n        \"PO_ACTION_HISTORY\".\"ACTION_CODE\"                AS \"ACTION_CODE\",\n        \"PO_ACTION_HISTORY\".\"CREATED_BY\"                 AS \"USER_ID\",\n        ROW_NUMBER()\n        OVER (PARTITION BY \"PO_ACTION_HISTORY\".\"OBJECT_ID\", \"PO_ACTION_HISTORY\".\"OBJECT_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"OBJECT_SUB_TYPE_CODE\"\n        ORDER BY \"PO_ACTION_HISTORY\".\"SEQUENCE_NUM\")     AS \"rn\"\n    FROM \"PO_ACTION_HISTORY\" AS \"PO_ACTION_HISTORY\"\n    WHERE \"PO_ACTION_HISTORY\".\"OBJECT_TYPE_CODE\" = 'REQUISITION'\n        AND \"PO_ACTION_HISTORY\".\"OBJECT_SUB_TYPE_CODE\" = 'PURCHASE'\n        AND \"PO_ACTION_HISTORY\".\"ACTION_CODE\" = 'APPROVE'\n)\nSELECT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\" \n        || '::' || \"Approvals\".\"OBJECT_TYPE_CODE\"  || '::' || \"Approvals\".\"OBJECT_SUB_TYPE_CODE\" \n        || '::' || \"Approvals\".\"ACTION_CODE\" || '::' || \"Approvals\".\"rn\"                       AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\"             AS \"ObjectID\",\n    \"Approvals\".\"ACTION_DATE\"                                                                  AS \"Time\",\n    'ApprovalLevel'                                                                            AS \"Attribute\",\n    CAST((CASE\n            WHEN \"Approvals\".\"rn\" > 1 \n                THEN \"Approvals\".\"rn\" - 1\n            END) AS VARCHAR(255))                                                              AS \"OldValue\",\n    CAST(\"Approvals\".\"rn\" AS VARCHAR(255))                                                     AS \"NewValue\",\n    <%=sourceSystem%> || '::' || CAST(\"Approvals\".\"USER_ID\" AS VARCHAR(255))                   AS \"ChangedBy\",\n    NULL                                                                                       AS \"OperationType\",\n    NULL                                                                                       AS \"OperationID\",\n    NULL                                                                                       AS \"ExecutionType\"\nFROM \"CTE_Approvals\" AS \"Approvals\"\n    LEFT JOIN \"PO_REQUISITION_LINES_ALL\" AS \"PO_REQUISITION_LINES_ALL\"\n        ON \"Approvals\".\"OBJECT_ID\" = \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_HEADER_ID\"\nWHERE \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "CANCEL",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_PO_ACTION_HIST\" AS (\n    SELECT\n        \"PO_ACTION_HISTORY\".\"OBJECT_ID\"                        AS \"OBJECT_ID\",\n        \"PO_ACTION_HISTORY\".\"OBJECT_TYPE_CODE\"                 AS \"OBJECT_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"OBJECT_SUB_TYPE_CODE\"             AS \"OBJECT_SUB_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"SEQUENCE_NUM\"                     AS \"SEQUENCE_NUM\",\n        \"PO_ACTION_HISTORY\".\"ACTION_DATE\"                      AS \"ACTION_DATE\",\n        \"PO_ACTION_HISTORY\".\"ACTION_CODE\"                      AS \"ACTION_CODE\",\n        CAST(\"PO_ACTION_HISTORY\".\"CREATED_BY\" AS VARCHAR(255)) AS \"CANCELLED_BY\",\n        ROW_NUMBER()\n        OVER (PARTITION BY \"PO_ACTION_HISTORY\".\"OBJECT_ID\", \"PO_ACTION_HISTORY\".\"OBJECT_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"OBJECT_SUB_TYPE_CODE\"\n        ORDER BY \"PO_ACTION_HISTORY\".\"SEQUENCE_NUM\")           AS \"rn\"\n    FROM \"PO_ACTION_HISTORY\" AS \"PO_ACTION_HISTORY\"\n    WHERE \"PO_ACTION_HISTORY\".\"OBJECT_TYPE_CODE\" = 'REQUISITION'\n        AND \"PO_ACTION_HISTORY\".\"ACTION_CODE\" = 'CANCEL'\n)\nSELECT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\"  \n        || '::' || \"PO_ACTION_HIST\".\"OBJECT_TYPE_CODE\"  || '::' || \"PO_ACTION_HIST\".\"OBJECT_SUB_TYPE_CODE\" \n        || '::' || \"PO_ACTION_HIST\".\"ACTION_CODE\" || '::' || \"PO_ACTION_HIST\".\"rn\"                                                            AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\"                                                            AS \"ObjectID\",\n    \"PO_REQUISITION_LINES_ALL\".\"CANCEL_DATE\"                                                                                                  AS \"Time\",\n    'DeletionIndicator'                                                                                                                       AS \"Attribute\",\n    NULL                                                                                                                                      AS \"OldValue\",\n    \"PO_REQUISITION_LINES_ALL\".\"CANCEL_FLAG\"                                                                                                  AS \"NewValue\",\n    <%=sourceSystem%> || '::' || CAST(COALESCE(\"PO_ACTION_HIST\".\"CANCELLED_BY\", \n    \"PO_REQUISITION_LINES_ALL\".\"LAST_UPDATED_BY\") AS  VARCHAR(255))                                                                           AS \"ChangedBy\",\n    NULL                                                                                                                                      AS \"OperationType\",\n    NULL                                                                                                                                      AS \"OperationID\",\n    NULL                                                                                                                                      AS \"ExecutionType\"\nFROM \"PO_REQUISITION_LINES_ALL\" AS \"PO_REQUISITION_LINES_ALL\"\n    LEFT JOIN \"CTE_PO_ACTION_HIST\" AS \"PO_ACTION_HIST\"\n        ON \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_HEADER_ID\" = \"PO_ACTION_HIST\".\"OBJECT_ID\"\nWHERE \"PO_ACTION_HIST\".\"OBJECT_ID\" IS NOT NULL\n    AND \"PO_REQUISITION_LINES_ALL\".\"CANCEL_FLAG\" = 'Y'\n    AND \"PO_REQUISITION_LINES_ALL\".\"CANCEL_DATE\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "CHANGELOG",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\"  \n        || '::' || \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" \n        || '::' || \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"DATE\"                    AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\"        AS \"ObjectID\",\n    \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"DATE\"                                   AS \"Time\",\n    CASE\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'UNIT_PRICE' \n            THEN 'NetUnitPrice'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'QUANTITY' \n            THEN 'Quantity'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'ITEM_DESCRIPTION' \n            THEN 'Description'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'VENDOR_ID' \n            THEN 'Vendor'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'CURRENCY_CODE' \n            THEN 'Currency'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'CANCEL_FLAG' \n            THEN 'DeletionIndicator'\n    END                                                                                   AS \"Attribute\",\n    \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\"                              AS \"OldValue\",\n    \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\"                              AS \"NewValue\",\n    <%=sourceSystem%> || '::' || \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"USER\"      AS \"ChangedBy\",\n    \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"TYPE\"                                   AS \"OperationType\",\n    NULL                                                                                  AS \"OperationID\",\n    CASE\n        WHEN \"PO_REQUISITION_LINES_ALL\".\"REQUEST_ID\" = 0\n            THEN 'Manual'\n        ELSE 'Automatic'\n    END                                                                                   AS \"ExecutionType\"\nFROM \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\" AS \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\"\n    LEFT JOIN \"PO_REQUISITION_LINES_ALL\" AS \"PO_REQUISITION_LINES_ALL\"\n        ON \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"ID\" = \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\"\nWHERE \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\" IS NOT NULL\n    AND \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" IN ('CANCEL_FLAG','UNIT_PRICE','QUANTITY','ITEM_DESCRIPTION','VENDOR_ID','CURRENCY_CODE') \n    AND \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"TYPE\" = 'update'"
+                    }
+                ],
+                "foreign_key_names": [
+                    "Createdby",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ExpectedDeliveryDate",
+                    "ID",
+                    "IsCanceled",
+                    "IsClosed",
+                    "LineNumber",
+                    "NetUnitPrice",
+                    "PurchaseOrganization",
+                    "PurchaseOrganizationName",
+                    "PurchaseRequisitionNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "Requester",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseRequisitionItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\"                   AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"CREATED_BY\"                            AS \"CreatedBy\",\n    CASE \n        WHEN NULLIF(TRIM(\"PO_REQUISITION_LINES_ALL\".\"ITEM_ID\"), '') IS NOT NULL \n            THEN <%=sourceSystem%> \n                    || '::' || \"PO_REQUISITION_LINES_ALL\".\"ITEM_ID\" \n    END                                                                                              AS \"Material\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"DESTINATION_ORGANIZATION_ID\"\n        || '::' || \"PO_REQUISITION_LINES_ALL\".\"ITEM_ID\"                                              AS \"MaterialMasterPlant\",\n    CASE \n        WHEN NULLIF(TRIM(\"PO_REQUISITION_LINES_ALL\".\"VENDOR_ID\"), '') IS NOT NULL \n            THEN <%=sourceSystem%> \n                    || '::' || \"PO_REQUISITION_LINES_ALL\".\"VENDOR_ID\" \n    END                                                                                              AS \"Vendor\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"DESTINATION_ORGANIZATION_ID\"           AS \"Plant\",\n    \"PO_REQUISITION_LINES_ALL\".\"CREATION_DATE\"                                                       AS \"CreationTime\",\n    CASE\n        WHEN \"PO_REQUISITION_LINES_ALL\".\"REQUEST_ID\" = 0\n            THEN 'Manual'\n        ELSE 'Automatic'\n    END                                                                                              AS \"CreationExecutionType\",\n    \"PO_REQUISITION_LINES_ALL\".\"CURRENCY_CODE\"                                                       AS \"Currency\",\n    \"PO_REQUISITION_LINES_ALL\".\"UNIT_PRICE\"                                                          AS \"NetUnitPrice\",\n    \"PO_REQUISITION_LINES_ALL\".\"QUANTITY\"                                                            AS \"Quantity\",\n    \"PO_REQUISITION_LINES_ALL\".\"UNIT_MEAS_LOOKUP_CODE\"                                               AS \"QuantityUnit\",\n    CAST(\"PO_REQUISITION_LINES_ALL\".\"TO_PERSON_ID\" AS VARCHAR(255))                                  AS \"Requester\",\n    \"PO_REQUISITION_LINES_ALL\".\"ITEM_DESCRIPTION\"                                                    AS \"Description\",\n    CAST(\"PO_REQUISITION_LINES_ALL\".\"LINE_NUM\" AS VARCHAR(255))                                      AS \"LineNumber\",\n    CAST(\"PO_REQUISITION_LINES_ALL\".\"ORG_ID\" AS VARCHAR(255))                                        AS \"PurchaseOrganization\",\n    \"HR_ALL_ORGANIZATION_UNITS\".\"NAME\"                                                               AS \"PurchaseOrganizationName\",\n    CAST(\"PO_REQUISITION_HEADERS_ALL\".\"SEGMENT1\" AS VARCHAR(255))                                    AS \"PurchaseRequisitionNumber\",\n    \"PO_REQUISITION_LINES_ALL\".\"NEED_BY_DATE\"                                                        AS \"ExpectedDeliveryDate\",\n    CASE \n        WHEN \"PO_REQUISITION_LINES_ALL\".\"CLOSED_CODE\" = 'FINALLY CLOSED' \n        THEN TRUE \n        ELSE FALSE                                       \n    END                                                                                              AS \"IsClosed\",\n    CASE \n        WHEN \"PO_REQUISITION_LINES_ALL\".\"CANCEL_FLAG\" = 'Y' \n        THEN TRUE \n        ELSE FALSE \n    END                                                                                              AS \"IsCanceled\",\n    <%=sourceSystem%>                                                                                AS \"SourceSystemInstance\" \nFROM \"PO_REQUISITION_LINES_ALL\" AS \"PO_REQUISITION_LINES_ALL\"\n    LEFT JOIN \"PO_REQUISITION_HEADERS_ALL\" AS \"PO_REQUISITION_HEADERS_ALL\"\n        ON \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_HEADER_ID\" = \"PO_REQUISITION_HEADERS_ALL\".\"REQUISITION_HEADER_ID\"\n    LEFT JOIN \"HR_ALL_ORGANIZATION_UNITS\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n        ON \"PO_REQUISITION_LINES_ALL\".\"ORG_ID\" = \"HR_ALL_ORGANIZATION_UNITS\".\"ORGANIZATION_ID\" \n                   "
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseDocumentLines",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipPurchaseDocumentLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT DISTINCT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\" AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_LINES_ALL\".\"PO_LINE_ID\"                      AS \"PurchaseDocumentLines\"\nFROM \"PO_REQUISITION_LINES_ALL\" AS \"PO_REQUISITION_LINES_ALL\"\n    LEFT JOIN \"PO_REQ_DISTRIBUTIONS_ALL\" AS \"REQ_DIST\"\n        ON \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\" = \"REQ_DIST\".\"REQUISITION_LINE_ID\"\n    LEFT JOIN \"PO_DISTRIBUTIONS_ALL\" AS \"LINE_DIST\"\n        ON \"REQ_DIST\".\"DISTRIBUTION_ID\" = \"LINE_DIST\".\"REQ_DISTRIBUTION_ID\"\n    LEFT JOIN \"PO_LINES_ALL\" AS \"PO_LINES_ALL\"\n        ON \"LINE_DIST\".\"PO_LINE_ID\" = \"PO_LINES_ALL\".\"PO_LINE_ID\"\nWHERE \"PO_LINES_ALL\".\"PO_LINE_ID\" IS NOT NULL"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "change_date": 1763481717446.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649605230.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "020464f1-0678-46a5-8b7c-cf5291a2d5dc",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> \n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)\n        || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 14, 5)                       AS \"ObjectID\",\n\t<%=sourceSystem%>  \n        || '::' || \"CDPOS\".\"TABKEY\" \n        || '::' || \"CDPOS\".\"TABNAME\" \n        || '::' || \"CDPOS\".\"FNAME\"\n        || '::' || \"CDPOS\".\"CHANGENR\" \n        || '::' || \"CDPOS\".\"CHNGIND\"                                        AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME)        AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'FRGKZ' THEN 'ReleaseIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'LOEKZ' THEN 'DeletionIndicator'\n           WHEN \"CDPOS\".\"FNAME\" = 'FRGZU' THEN 'ApprovalLevel'\n           END                                                              AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\"\n        END                                                                 AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'FRGZU' THEN\n               CASE\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") IS NULL THEN NULL\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'X' THEN '1'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XX' THEN '2'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXX' THEN '3'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXX' THEN '4'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXXX' THEN '5'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXXXX' THEN '6'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXXXXX' THEN '7'\n                   WHEN TRIM(\"CDPOS\".\"VALUE_NEW\") = 'XXXXXXXX' THEN '8'\n                   END\n        END                                                                 AS \"NewValue\",\n       \t<%=sourceSystem%>\n           || '::' || \"CDHDR\".\"MANDANT\" \n           || '::' || \"CDHDR\".\"USERNAME\"                                    AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                      AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                                   AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' \n        END                                                                 AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n        ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n            AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n            AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n            AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n            AND \"CDPOS\".\"TABNAME\" = 'EBAN'\n            AND \"CDPOS\".\"CHNGIND\" = 'U'\n            AND \"CDPOS\".\"OBJECTCLAS\" = 'BANF'\n            AND (\"CDPOS\".\"FNAME\" IN ('FRGKZ', 'LOEKZ', 'FRGZU')\n                OR \"CDHDR\".\"TCODE\" IN ('ME59', 'ME55', 'ME59N'))\n    LEFT JOIN \"EBAN\" AS \"EBAN\"\n        ON \"CDPOS\".\"TABKEY\" = \"EBAN\".\"MANDT\" || \"EBAN\".\"BANFN\" || \"EBAN\".\"BNFPO\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n            AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"EBAN\".\"BSTYP\" = 'B'\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n  AND \"EBAN\".\"MANDT\" IS NOT NULL"
+                    }
+                ],
+                "foreign_key_names": [
+                    "Createdby",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ExpectedDeliveryDate",
+                    "ID",
+                    "IsCanceled",
+                    "IsClosed",
+                    "LineNumber",
+                    "NetUnitPrice",
+                    "PurchaseOrganization",
+                    "PurchaseOrganizationName",
+                    "PurchaseRequisitionNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "Requester",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseRequisitionItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Changes\" AS (\n    SELECT \"CDPOS\".\"MANDANT\",\n            \"CDPOS\".\"TABKEY\",\n            \"CDHDR\".\"UDATE\",\n            \"CDHDR\".\"UTIME\",\n            \"CDHDR\".\"USERNAME\",\n            ROW_NUMBER()\n            OVER (PARTITION BY \"CDPOS\".\"TABKEY\" ORDER BY \"CDHDR\".\"UDATE\" ASC, \"CDHDR\".\"UTIME\" DESC) AS \"rn\"\n    FROM \"CDPOS\" AS \"CDPOS\"\n        LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n            ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n    WHERE \"CDPOS\".\"OBJECTCLAS\" = 'BANF'\n        AND \"CDPOS\".\"TABNAME\" = 'EBAN'\n        AND \"CDPOS\".\"FNAME\" = 'KEY'\n        AND \"CDPOS\".\"CHNGIND\" = 'I'\n)\nSELECT \n    <%=sourceSystem%>  \n        || '::' || \"EBAN\".\"MANDT\" \n        || '::' || \"EBAN\".\"BANFN\" \n        || '::' || \"EBAN\".\"BNFPO\"                                                                             AS \"ID\",\n       COALESCE(CAST(\"Changes\".\"UDATE\" AS DATE) + CAST(\"Changes\".\"UTIME\" AS TIME),\n                CAST(\"EBAN\".\"BADAT\" AS DATE) + CAST('00:00:01' AS TIME))                                      AS \"CreationTime\",\n    <%=sourceSystem%> \n        || '::' || \"EBAN\".\"MANDT\"  \n        || '::' || \"EBAN\".\"ERNAM\"                                                                             AS \"CreatedBy\",\n       CASE\n           WHEN \"EBAN\".\"ESTKZ\" = 'B' AND \"USR02\".\"USTYP\" IS NULL THEN 'Automatic'\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'S', 'C') THEN 'Automatic'\n           WHEN \"USR02\".\"USTYP\" = 'A' THEN 'Manual'\n        END                                                                                                   AS \"CreationExecutionType\",\n    <%=sourceSystem%> \n        || '::' || \"EBAN\".\"MANDT\"  \n        || '::' || \"EBAN\".\"AFNAM\"                                                                               AS \"Requester\",\n    CASE \n        WHEN NULLIF(TRIM(\"EBAN\".\"LIFNR\"), '') IS NOT NULL \n            THEN <%=sourceSystem%> \n                    || '::' || \"EBAN\".\"MANDT\" \n                    || '::' || \"EBAN\".\"LIFNR\" \n    END                                                                                                         AS \"Vendor\",\n       \"EBAN\".\"WAERS\"                                                                                         AS \"Currency\",\n       \"EBAN\".\"PREIS\" / COALESCE(\"EBAN\".\"PEINH\", 1)                                                           AS \"NetUnitPrice\",\n       \"EBAN\".\"MENGE\"                                                                                         AS \"Quantity\",\n       \"EBAN\".\"MEINS\"                                                                                         AS \"QuantityUnit\",\n    <%=sourceSystem%> \n        || '::' || \"EBAN\".\"MANDT\"  \n        || '::' || \"EBAN\".\"MATNR\"\n        || '::' || \"EBAN\".\"WERKS\"                                                                               AS \"MaterialMasterPlant\",\n    CASE \n        WHEN NULLIF(TRIM(\"EBAN\".\"MATNR\"), '') IS NOT NULL \n            THEN <%=sourceSystem%> \n                        || '::' || \"EBAN\".\"MANDT\" \n                        || '::' || \"EBAN\".\"MATNR\" \n    END                                                                                                         AS \"Material\",\n\n\t<%=sourceSystem%>  \n        || '::' || \"EBAN\".\"MANDT\" \n        || '::' || \"EBAN\".\"WERKS\"                                                                             AS \"Plant\",\n       \"EBAN\".\"TXZ01\"                                                                                         AS \"Description\",\n       CAST(\"EBAN\".\"LFDAT\"  AS DATE) + CAST('00:00:01' AS TIME)                                               AS \"ExpectedDeliveryDate\",\n       CASE WHEN NULLIF(\"EBAN\".\"EBAKZ\", '') IS NOT NULL THEN TRUE ELSE FALSE END                              AS \"IsClosed\",\n       CASE WHEN NULLIF(\"EBAN\".\"LOEKZ\", '') IS NOT NULL THEN TRUE ELSE FALSE END                              AS \"IsCanceled\",\n\t<%=sourceSystem%>  \n        || '::' || \"EBAN\".\"MANDT\"                                                                             AS \"SourceSystemInstance\",\n       \"EBAN\".\"BANFN\"                                                                                         AS \"PurchaseRequisitionNumber\",\n       CAST(\"EBAN\".\"BNFPO\" AS VARCHAR(255))                                                                   AS \"LineNumber\",\n       \"EBAN\".\"EKORG\"                                                                                         AS \"PurchaseOrganization\",\n       \"T024E\".\"EKOTX\"                                                                                        AS \"PurchaseOrganizationName\"\nFROM \"EBAN\" AS \"EBAN\"\n    LEFT JOIN \"CTE_Changes\" AS \"Changes\"\n        ON \"EBAN\".\"MANDT\" = \"Changes\".\"MANDANT\"\n            AND \"EBAN\".\"MANDT\" || \"EBAN\".\"BANFN\" || \"EBAN\".\"BNFPO\" = \"Changes\".\"TABKEY\"\n            AND \"Changes\".\"rn\" = 1\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"EBAN\".\"MANDT\" = \"USR02\".\"MANDT\"\n            AND \"EBAN\".\"ERNAM\" = \"USR02\".\"BNAME\"\n    LEFT JOIN \"T024E\" AS \"T024E\"\n        ON \"EBAN\".\"MANDT\" = \"T024E\".\"MANDT\"\n            AND \"EBAN\".\"EKORG\" = \"T024E\".\"EKORG\"\nWHERE \"EBAN\".\"MANDT\" IS NOT NULL\n  AND \"EBAN\".\"BSTYP\" = 'B'"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseDocumentLines",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipPurchaseDocumentLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT \n    <%=sourceSystem%> || '::' || \"EBAN\".\"MANDT\" || '::' || \"EBAN\".\"BANFN\" || '::' || \"EBAN\".\"BNFPO\"         AS \"ID\",\n\t<%=sourceSystem%> || '::' || \"EKPO\".\"MANDT\" || '::' || \"EKPO\".\"EBELN\" || '::' || \"EKPO\".\"EBELP\"         AS \"PurchaseDocumentLines\"\nFROM \"EBAN\" AS \"EBAN\"\n    LEFT JOIN \"EKPO\" AS \"EKPO\"\n        ON \"EBAN\".\"MANDT\" = \"EKPO\".\"MANDT\"\n            AND \"EBAN\".\"BANFN\" = \"EKPO\".\"BANFN\"\n            AND \"EBAN\".\"BNFPO\" = \"EKPO\".\"BNFPO\"\nWHERE \"EBAN\".\"BSTYP\" = 'B'\n  AND \"EKPO\".\"BSTYP\" IN ('F','L')"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "change_date": 1768487470178.0,
+        "changed_by": {
+            "id": "ad8e74d9-353a-421d-88c1-3aae61ac7eb6",
+            "name": "Jayatheertha Ayachit",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "creation_date": 1764586023744.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseRequisitionLine - MS Dynamics 365",
+        "draft": null,
+        "factory_id": "14121c7a-cc1d-4cb0-9de6-2200a6e5d864",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Createdby",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ExpectedDeliveryDate",
+                    "ID",
+                    "IsCanceled",
+                    "IsClosed",
+                    "LineNumber",
+                    "NetUnitPrice",
+                    "PurchaseOrganization",
+                    "PurchaseOrganizationName",
+                    "PurchaseRequisitionNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "Requester",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseRequisitionLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\nSELECT\n    <%=sourceSystem%>||'::'||PurchaseRequisitionHeaders.RequisitionNumber || '::' || PurchaseRequisitionLinesV2.ITEMNUMBER                 AS ID,\n    <%=sourceSystem%>||'::'||PurchaseOrderHeadersV2.OrderVendorAccountNumber                                        AS Vendor,\n    <%=sourceSystem%>||'::'||PurchaseRequisitionHeaders.PreparerPersonnelNumber                                     AS CreatedBy,\n    PurchaseRequisitionHeaders.RequisitionPurpose                                          AS CreationExecutionType,\n    PurchaseRequisitionHeaders.DefaultRequestedDate                                        AS CreationTime,\n    CASE WHEN PurchaseRequisitionHeaders.RequisitionStatus = 'Cancelled' THEN TRUE ELSE FALSE END                  AS IsDeleted,\n    CASE WHEN PurchaseRequisitionHeaders.RequisitionStatus = 'Closed'      THEN TRUE ELSE FALSE END                AS IsClosed,\n    <%=sourceSystem%>||'::'||InventItemPricesV3.PriceSiteId                                                          AS MaterialMasterPlant,\n    <%=sourceSystem%>||'::'||PurchaseRequisitionLinesV2.ITEMNUMBER                                                   AS Material,\n    PurchaseRequisitionLinesV2.PURCHASEPRICE                                                AS NetUnitPrice,\n    PurchaseRequisitionLinesV2.RequestedPurchaseQuantity                                    AS Quantity,\n    PurchaseRequisitionLinesV2.PurchaseUnitSymbol                                           AS QuantityUnit,\n    <%=sourceSystem%>||'::'||PurchaseRequisitionHeaders.ProjectBuyingLegalEntityId                                   AS PurchaseOrganization,\n    PurchaseRequisitionHeaders.ProjectBuyingLegalEntityId                                   AS PurchaseOrganizationName,\n    PurchaseRequisitionLinesV2.RequestedDate                                                AS ExpectedDeliveryDate,\n    PurchaseRequisitionLinesV2.ITEMNUMBER                                                   AS LineNumber,\n    PurchaseRequisitionHeaders.RequisitionNumber                                            AS PurchaseRequisitionNumber,\n    \n    NULL AS IsCanceled,\n    NULL AS SourceSystemInstance,\n    NULL AS Description,\n    NULL AS Requester,\n    NULL AS Currency,\n    <%=sourceSystem%>||'::'|| InventItemPricesV3.PriceSiteId                                AS Plant\nFROM PurchaseRequisitionHeaders\n\tLEFT JOIN PurchaseRequisitionLinesV2 \n\t    ON PurchaseRequisitionHeaders.RequisitionNumber= PurchaseRequisitionLinesV2.RequisitionNumber\n\tLEFT JOIN PurchaseOrderLinesV3 AS PurchaseOrderLinesV2\n        ON PurchaseOrderLinesV2.PurchaseRequisitionId = PurchaseRequisitionLinesV2.RequisitionNumber\n    LEFT JOIN PurchaseOrderHeadersV2\n        ON PurchaseOrderHeadersV2.PurchaseOrderNumber = PurchaseOrderLinesV2.PurchaseOrderNumber\n        AND PurchaseOrderHeadersV2.dataAreaId = PurchaseOrderLinesV2.dataAreaId\n    LEFT JOIN ReleasedProductsV2\n        ON ReleasedProductsV2.ItemNumber = PurchaseOrderLinesV2.ItemNumber\n         AND ReleasedProductsV2.dataAreaId = PurchaseOrderLinesV2.dataAreaId\n    LEFT JOIN InventItemPricesV3\n        ON ReleasedProductsV2.ItemNumber = InventItemPricesV3.ItemNumber\n        AND ReleasedProductsV2.dataAreaId = InventItemPricesV3.dataAreaId\n\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseDocumentLines",
+                        "sql_factory_datasets": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "change_date": 1761317351664.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1752585639287.0,
+        "data_connection_id": "1b87451d-df3c-4f06-b5e6-622d18c93682",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem - 00. Central Extraction Pool_ARIBA",
+        "draft": null,
+        "factory_id": "020f4a03-0a56-4cad-8c92-e755ec8be1c5",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ARIBA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseRequisitionItemChanges",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \n    CTE_REQUISITION_LINE_ITEMS AS (\n        SELECT\n            * ,\n            ROW_NUMBER() OVER (\n                PARTITION BY \"InitialUniqueName\", \"NumberInCollection\"\n                ORDER BY\n                    CAST(\"VersionNumber\" AS integer) DESC\n            ) AS RN\n        FROM \"RequisitionLineItems\"\n        JOIN \"Requisition\" ON 1=1\n            AND \"RequisitionLineItems\".\"Requisition_UniqueName\" = \"Requisition\".\"UniqueName\"\n        WHERE 1=1\n            AND \"Requisition\".\"StatusString\" NOT IN ('Composing') -- Ingnores draft changes\n    ), \n    CTE_VERSIONS AS (\n        SELECT\n            \"New\".\"InitialUniqueName\",\n            \"New\".\"NumberInCollection\",\n            \"New\".\"UniqueName\" AS \"UniqueName\",\n            \"New\".\"ApprovedDate\" AS \"Time\",\n            \"New\".\"ApprovalRequestsVersion\" AS \"NewValue\",\n            \"New\".\"PreviousApprovalRequestsVersion\" AS \"OldValue\",\n            'ApprovalLevel' AS \"Attribute\"\n        FROM CTE_REQUISITION_LINE_ITEMS AS \"New\"\n        JOIN CTE_REQUISITION_LINE_ITEMS AS \"Old\"\n            ON \"New\".\"InitialUniqueName\" = \"Old\".\"InitialUniqueName\"\n            AND \"New\".\"NumberInCollection\" = \"Old\".\"NumberInCollection\"\n            AND \"New\".\"RN\" = \"Old\".\"RN\"+1    \n        WHERE \n            COALESCE(\"New\".\"ApprovedDate\",'') <> COALESCE(\"Old\".\"ApprovedDate\",'')\n            AND \"New\".\"ApprovedDate\" IS NOT NULL\n        \n        UNION ALL\n        \n        SELECT\n            \"New\".\"InitialUniqueName\",\n            \"New\".\"NumberInCollection\",\n            \"New\".\"UniqueName\" AS \"UniqueName\",\n            \"New\".\"CreateDate\" AS \"Time\",\n            \"New\".\"StatusString\" AS \"NewValue\",\n            \"Old\".\"StatusString\" AS \"OldValue\",\n            'Status' AS \"Attribute\"\n        FROM CTE_REQUISITION_LINE_ITEMS AS \"New\"\n        JOIN CTE_REQUISITION_LINE_ITEMS AS \"Old\"\n            ON \"New\".\"InitialUniqueName\" = \"Old\".\"InitialUniqueName\"\n            AND \"New\".\"NumberInCollection\" = \"Old\".\"NumberInCollection\"\n            AND \"New\".\"RN\" = \"Old\".\"RN\"+1    \n        WHERE \n            COALESCE(\"New\".\"StatusString\",'') <> COALESCE(\"Old\".\"StatusString\",'')   \n    )\nSELECT \n    <%=sourceSystem%> || '::' || \"InitialUniqueName\" || '::' || \"NumberInCollection\"  AS \"ObjectID\",\n    <%=sourceSystem%> || '::' || \"UniqueName\" || '::' || \"NumberInCollection\" || '::' || \"Attribute\"  AS \"ID\",\n    \"Time\",\n    \"Attribute\",\n    \"OldValue\",\n    \"NewValue\"\nFROM CTE_VERSIONS AS \"Versions\""
+                    }
+                ],
+                "foreign_key_names": [
+                    "Createdby",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ExpectedDeliveryDate",
+                    "ID",
+                    "IsCanceled",
+                    "IsClosed",
+                    "LineNumber",
+                    "NetUnitPrice",
+                    "PurchaseOrganization",
+                    "PurchaseOrganizationName",
+                    "PurchaseRequisitionNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "Requester",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseRequisitionItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \n    CTE_Requisition AS (\n        SELECT\n            * ,\n            ROW_NUMBER() OVER (\n                PARTITION BY \"InitialUniqueName\"\n                ORDER BY\n                    CAST(\"VersionNumber\" AS integer) DESC\n            ) AS RN\n        FROM \"Requisition\"\n        WHERE 1=1\n            AND \"Requisition\".\"Active\" = 'true'\n            AND \"Requisition\".\"StatusString\" NOT IN ('Composing') -- Ingnores draft changes\n    ),\n    CTE_Requisition_CreateDate AS (\n        SELECT\n            \"InitialUniqueName\",\n            \"CreateDate\" ,\n            ROW_NUMBER() OVER (\n                PARTITION BY \"InitialUniqueName\"\n                ORDER BY\n                    \"CreateDate\" ASC\n            ) AS RN  -- Takes first creation date for the PR, as versioning will update creation date\n        FROM \"Requisition\"\n    )\nSELECT\n    <%=sourceSystem%> || '::' || \"Requisition\".\"InitialUniqueName\" || '::' || \"RequisitionLineItems\".\"NumberInCollection\"  AS \"ID\",\n    \"Requisition\".\"InitialUniqueName\" AS \"PurchaseRequisitionNumber\",\n    \"RequisitionLineItems\".\"NumberInCollection\" AS \"LineNumber\",\n    \"Requisition\".\"StatusString\" IN ('Canceled') AS \"IsDeleted\",\n    \"RequisitionLineItems\".\"Description_Description\" AS \"Description\",\n    CAST(\"RequisitionLineItems\".\"NeedBy\" AS timestamp) AS \"ExpectedDeliveryDate\",\n    \"Requisition\".\"StatusString\" IN ('Received', 'Canceled') AS IsClosed,\n    \"Requisition\".\"StatusString\" IN ('Canceled') AS IsCanceled,\n    \"RequisitionLineItems\".\"PurchaseOrg_UniqueName\" AS PurchaseOrganizationName, -- Name mapping needs to be found\n    \"RequisitionLineItems\".\"PurchaseOrg_UniqueName\" AS PurchaseOrganization,\n    CASE\n        WHEN Preparer_UniqueName NOT IN ('')\n        THEN 'Manual'\n        ELSE 'Automatic'\n    END AS CreationExecutionType,\n    Requester_UniqueName AS Requester,\n    \"Description_UnitOfMeasure_UniqueName\" AS QuantityUnit,\n    CAST(\"RequisitionLineItems\".\"Quantity\" AS float) AS Quantity,\n    CAST(\"OriginalPrice_AmountInReportingCurrency\" AS float) AS NetUnitPrice,\n    \"ReportingCurrency_UniqueName\" AS Currency,\n    \"RequisitionCreationDate\".\"CreateDate\" AS CreationTime,\n    <%=sourceSystem%> || '::' || \"RequisitionLineItems\".\"Description_SupplierPartNumber\" AS Material,\n    <%=sourceSystem%> || '::' || \"Requisition\".\"Preparer_UniqueName\" AS CreatedBy,\n    <%=sourceSystem%> || '::' || \"RequisitionLineItems\".\"Supplier_UniqueName\" AS Vendor,\n    <%=sourceSystem%> || '::' ||\"RequisitionLineItems\".\"Description_SupplierPartNumber\" || \"RequisitionLineItems\".\"PurchaseOrg_UniqueName\" AS MaterialMasterPlant,\n    <%=sourceSystem%> AS \"SourceSystemInstance\"\nFROM \"RequisitionLineItems\"\nJOIN CTE_Requisition AS \"Requisition\" ON 1=1\n    AND \"RequisitionLineItems\".\"Requisition_UniqueName\" = \"Requisition\".\"UniqueName\"\n    AND \"Requisition\".\"RN\" = 1\nJOIN CTE_Requisition_CreateDate AS \"RequisitionCreationDate\" ON 1=1\n    AND \"Requisition\".\"InitialUniqueName\" = \"RequisitionCreationDate\".\"InitialUniqueName\"\n    AND \"RequisitionCreationDate\".\"RN\" = 1"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseDocumentLines",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipPurchaseDocumentLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "WITH \n    CTE_ERPOrderLineItems AS (\n        SELECT \n            \"ERPOrderLineItems\".*\n            , \"ERPOrder\".\"InitialUniqueName\"\n            , \"ERPOrder\".\"Active\"\n            , ROW_NUMBER() OVER (PARTITION BY \"ERPOrder\".\"InitialUniqueName\", \"ERPOrderLineItems\".\"NumberInCollection\" ORDER BY CAST(\"ERPOrder\".\"VersionNumber\" AS INTEGER) DESC) AS RN\n        FROM \"ERPOrderLineItems\"\n        JOIN \"ERPOrder\" ON 1=1\n            AND \"ERPOrderLineItems\".\"ERPOrder_UniqueName\" = \"ERPOrder\".\"UniqueName\"\n    )\nSELECT\n\t<%=sourceSystem%>  ||'::'|| \"ERPOrderLineItems\".\"Requisition_UniqueName\" || '::' || \"ERPOrderLineItems\".\"NumberOnReq\" AS \"ID\",\n\t<%=sourceSystem%>  ||'::'|| \"ERPOrderLineItems\".\"InitialUniqueName\" || '::' || \"ERPOrderLineItems\".\"NumberInCollection\" AS \"PurchaseDocumentLines\"\nFROM \"CTE_ERPOrderLineItems\" AS \"ERPOrderLineItems\"\nWHERE 1=1\n    AND \"ERPOrderLineItems\".\"RN\" = 1\n    --AND  \"ERPOrderLineItems\".\"Active\" = 'true'"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "change_date": 1766781534273.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "creation_date": 1765763253039.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "description": null,
+        "disabled": true,
+        "display_name": "PurchaseRequisitionLine - Coupa",
+        "draft": null,
+        "factory_id": "09b1b2df-1ba5-4069-b9c3-8691b9c56b3d",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Coupa'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Createdby",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ExpectedDeliveryDate",
+                    "ID",
+                    "IsCanceled",
+                    "IsClosed",
+                    "LineNumber",
+                    "NetUnitPrice",
+                    "PurchaseOrganization",
+                    "PurchaseOrganizationName",
+                    "PurchaseRequisitionNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "Requester",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseRequisitionLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n  -- ID and Source System Fields\n  <%=sourceSystem%> || '::' || req.\"id\" AS \"ID\",\n  <%=sourceSystem%> AS \"SourceSystemInstance\",\n  -- User and Creator Fields (CreatedBy)\n  <%=sourceSystem%> || '::' || req.\"created-by\" AS \"CreatedBy\",\n  \n  -- Material/Item and Vendor Fields\n  NULL AS \"Material\",\n  -- Coupa doesn't typically have a combined 'MaterialMasterPlant' field; this is a best-effort mapping.\n  -- You might need to join to facilities/organizations for the 'Plant' equivalent.\n  NULL AS \"MaterialMasterPlant\",\n  <%=sourceSystem%> || '::' || req.\"supplier_id\" AS \"Vendor\",\n  req.contract AS \"Contract\",\n  \n  -- Date Fields\n  CAST(req.\"created-at\" AS TIMESTAMP) AS \"CreationTime\",\n  CAST(req.\"need-by-date\" AS TIMESTAMP) AS \"ExpectedDeliveryDate\",\n\n  -- Other Line Details\n  req.\"currency_code\" AS \"Currency\",\n  req.\"unit-price\" AS \"NetUnitPrice\",\n  req.\"quantity\" AS \"Quantity\",\n  req.\"uom_code\" AS \"QuantityUnit\",\n  req.\"description\" AS \"Description\",\n  CAST(req.\"line-num\" AS VARCHAR(255)) AS \"ItemNumber\",\n  \n  -- Requester and Organization Fields\n  CAST(req.\"created-by\" AS VARCHAR(255)) AS \"Requester\",\n  NULL AS \"PurchaseOrganization\",\n  NULL AS \"PurchaseOrganizationName\",\n  \n  -- Header Fields (Requisition Number)\n  -- The Coupa Requisition Line view often includes the header's 'requisition_number'\n  CAST(req.\"requisitions_id\" AS VARCHAR(255)) AS \"PurchaseRequisitionNumber\",\n  CAST(req.\"requisitions_id\" AS VARCHAR(255)) AS \"PurchaseRequisition\",\n\n  -- Status Flags\n  -- Coupa uses 'status' (e.g., 'fully_received', 'in_progress'). You'd need to map a set of statuses to TRUE/FALSE.\n  CASE WHEN req.\"status\" IN ('fully_received', 'ordered') THEN FALSE ELSE TRUE END AS \"IsClosed\",\n  -- 'Cancel_flag' is usually equivalent to 'deleted_at' or a specific status in Coupa\n  CASE WHEN (req.\"updated-at\" IS NOT NULL AND req.\"status\" = 'canceled') THEN TRUE ELSE FALSE END AS \"IsDeleted\",\n  \n  -- Execution Type\n  -- Coupa doesn't use the 'REQUEST_ID = 0' logic. You typically check the source or a custom field.\n  CASE\n    WHEN req.\"source-type\" = 'integration' THEN 'Automatic' -- Created via API\n    WHEN req.\"source-type\" = 'UI' THEN 'Manual'\n    ELSE 'Manual' -- Default assumption\n  END AS \"CreationExecutionType\"\n\nFROM\n  \"requisition_lines\" AS req\n                   \n\n\n/*SELECT <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_LINE_ID\" AS \"ID\",\n       <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"CREATED_BY\"          AS \"CreatedBy\",\n       <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"ITEM_ID\"             AS \"Material\",\n       <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"DESTINATION_ORGANIZATION_ID\"\n       || '::' || \"PO_REQUISITION_LINES_ALL\".\"ITEM_ID\"                                AS \"MaterialMasterPlant\",\n       <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"VENDOR_ID\"           AS \"Vendor\",\n       \"PO_REQUISITION_LINES_ALL\".\"CREATION_DATE\"                                     AS \"CreationTime\",\n       CASE\n           WHEN \"PO_REQUISITION_LINES_ALL\".\"REQUEST_ID\" = 0\n               THEN 'Manual' --working assumption based on EMS event creation that the Request_id 0 indicates automatic creation.\n           ELSE 'Automatic'\n           END                                                                        AS \"CreationExecutionType\",\n       \"PO_REQUISITION_LINES_ALL\".\"CURRENCY_CODE\"                                     AS \"Currency\",\n       \"PO_REQUISITION_LINES_ALL\".\"UNIT_PRICE\"                                        AS \"NetUnitPrice\",\n       \"PO_REQUISITION_LINES_ALL\".\"QUANTITY\"                                          AS \"Quantity\",\n       \"PO_REQUISITION_LINES_ALL\".\"UNIT_MEAS_LOOKUP_CODE\"                             AS \"QuantityUnit\",\n       CAST(\"PO_REQUISITION_LINES_ALL\".\"TO_PERSON_ID\" AS VARCHAR(255))                AS \"Requester\",\n       \"PO_REQUISITION_LINES_ALL\".\"ITEM_DESCRIPTION\"                                  AS \"Description\",\n       CAST(\"PO_REQUISITION_LINES_ALL\".\"LINE_NUM\" AS VARCHAR(255))                    AS \"ItemNumber\",\n       CAST(\"PO_REQUISITION_LINES_ALL\".\"ORG_ID\" AS VARCHAR(255))                      AS \"PurchaseOrganization\",\n       \"HR_ALL_ORGANIZATION_UNITS\".\"NAME\"                                             AS \"PurchaseOrganizationName\",\n       CAST(\"PO_REQUISITION_HEADERS_ALL\".\"SEGMENreq\" AS VARCHAR(255))                  AS \"PurchaseRequisitionNumber\",\n       \"PO_REQUISITION_LINES_ALL\".\"NEED_BY_DATE\"                                      AS \"ExpectedDeliveryDate\",\n       CASE WHEN \"PO_REQUISITION_LINES_ALL\".\"CLOSED_CODE\" = 'FINALLY CLOSED' THEN TRUE ELSE FALSE END           AS \"IsClosed\",\n       CASE WHEN \"PO_REQUISITION_LINES_ALL\".\"CANCEL_FLAG\" = 'Y' THEN TRUE ELSE FALSE END      AS \"IsDeleted\",\n       <%=sourceSystem%>                                                              AS \"SourceSystemInstance\" \nFROM \"PO_REQUISITION_LINES_ALL\" AS \"PO_REQUISITION_LINES_ALL\"\nLEFT JOIN \"PO_REQUISITION_HEADERS_ALL\" AS \"PO_REQUISITION_HEADERS_ALL\"\n                   ON \"PO_REQUISITION_LINES_ALL\".\"REQUISITION_HEADER_ID\" =\n                      \"PO_REQUISITION_HEADERS_ALL\".\"REQUISITION_HEADER_ID\"\nLEFT JOIN \"HR_ALL_ORGANIZATION_UNITS\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n                   ON \"PO_REQUISITION_LINES_ALL\".\"ORG_ID\" = \"HR_ALL_ORGANIZATION_UNITS\".\"ORGANIZATION_ID\"*/ \n                   "
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseDocumentLines",
+                        "sql_factory_datasets": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "change_date": 1768313467778.0,
+        "changed_by": {
+            "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+            "name": "Modester Mwangi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2589b288-6fa5-4412-b75b-180b8acb07d0",
+            "name": "Carolina Ventura",
+            "type_": "USER"
+        },
+        "creation_date": 1750689033262.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem - 00. Central Extraction Pool_Oracle Fusion",
+        "draft": null,
+        "factory_id": "18046981-fb08-47f8-bcfd-ea43615753f3",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Approvals",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Approvals\" AS (\n    SELECT \n        \"PO_ACTION_HISTORY\".\"ObjectId\"                  AS \"OBJECT_ID\",\n        \"PO_ACTION_HISTORY\".\"ObjectTypeCode\"            AS \"OBJECT_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"ObjectSubTypeCode\"         AS \"OBJECT_SUB_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"SequenceNum\"               AS \"SEQUENCE_NUM\",\n        \"PO_ACTION_HISTORY\".\"ActionDate\"                AS \"ACTION_DATE\",\n        \"PO_ACTION_HISTORY\".\"CreatedBy\"                 AS \"USER_ID\",\n        \"PO_ACTION_HISTORY\".\"ActionCode\"                AS \"ACTION_CODE\",\n        ROW_NUMBER()\n        OVER (PARTITION BY \"PO_ACTION_HISTORY\".\"ObjectId\", \"PO_ACTION_HISTORY\".\"ObjectTypeCode\",\n        \"PO_ACTION_HISTORY\".\"ObjectSubTypeCode\"\n        ORDER BY \"PO_ACTION_HISTORY\".\"SequenceNum\") AS \"rn\"\n    FROM \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentActionHistoryExtractPVO\" AS \"PO_ACTION_HISTORY\"\n    WHERE \"PO_ACTION_HISTORY\".\"ObjectTypeCode\" = 'REQ'\n        AND \"PO_ACTION_HISTORY\".\"ObjectSubTypeCode\" = 'PURCHASE'\n        AND \"PO_ACTION_HISTORY\".\"ActionCode\" = 'APPROVE'\n)\nSELECT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" || '::' || \"Approvals\".\"OBJECT_TYPE_CODE\"\n        || '::' || \"Approvals\".\"OBJECT_SUB_TYPE_CODE\" \n        || '::' || \"Approvals\".\"ACTION_CODE\" || '::' ||\"Approvals\".\"rn\"                    AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\"           AS \"ObjectID\",\n    \"Approvals\".\"ACTION_DATE\"                                                              AS \"Time\",\n    'ApprovalLevel'                                                                        AS \"Attribute\",\n    CAST((CASE\n            WHEN \"Approvals\".\"rn\" > 1 THEN \"Approvals\".\"rn\" - 1\n          END) AS VARCHAR(255))                                                            AS \"OldValue\",\n    CAST(\"Approvals\".\"rn\" AS VARCHAR(255))                                                 AS \"NewValue\",\n    <%=sourceSystem%> || '::' || CAST(\"Approvals\".\"USER_ID\" AS VARCHAR(255))               AS \"ChangedBy\",\n    NULL                                                                                   AS \"OperationType\",\n    NULL                                                                                   AS \"OperationID\",\n    NULL                                                                                   AS \"ExecutionType\"\nFROM \"CTE_Approvals\" AS \"Approvals\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PorBiccExtractAM_RequisitionLineExtractPVO\" AS \"PO_REQUISITION_LINES_ALL\"\n        ON \"Approvals\".\"OBJECT_ID\" = \"PO_REQUISITION_LINES_ALL\".\"RequisitionHeaderId\"\nWHERE \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" IS NOT NULL\n"
+                    },
+                    {
+                        "id": "Cancel",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_PO_ACTION_HIST\" AS (\n    SELECT \n        \"PO_ACTION_HISTORY\".\"ObjectId\"                        AS \"OBJECT_ID\",\n        \"PO_ACTION_HISTORY\".\"ObjectTypeCode\"                  AS \"OBJECT_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"ObjectSubTypeCode\"               AS \"OBJECT_SUB_TYPE_CODE\",\n        \"PO_ACTION_HISTORY\".\"SequenceNum\"                     AS \"SEQUENCE_NUM\",\n        \"PO_ACTION_HISTORY\".\"ActionDate\"                      AS \"ACTION_DATE\",\n        CAST(\"PO_ACTION_HISTORY\".\"CreatedBy\" AS VARCHAR(255)) AS \"CANCELLED_BY\",\n        \"PO_ACTION_HISTORY\".\"ActionCode\"                      AS \"ACTION_CODE\",\n        ROW_NUMBER()\n        OVER (PARTITION BY \"PO_ACTION_HISTORY\".\"ObjectId\", \"PO_ACTION_HISTORY\".\"ObjectTypeCode\",\n        \"PO_ACTION_HISTORY\".\"ObjectSubTypeCode\"\n        ORDER BY \"PO_ACTION_HISTORY\".\"SequenceNum\")           AS \"rn\"\n    FROM \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentActionHistoryExtractPVO\" AS \"PO_ACTION_HISTORY\"\n    WHERE \"PO_ACTION_HISTORY\".\"ObjectTypeCode\" = 'REQ'\n        AND \"PO_ACTION_HISTORY\".\"ObjectSubTypeCode\" = 'PURCHASE'\n        AND \"PO_ACTION_HISTORY\".\"ActionCode\" = 'CANCEL'\n)\nSELECT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" \n        || '::' || \"PO_ACTION_HIST\".\"OBJECT_TYPE_CODE\"  || '::' || \"PO_ACTION_HIST\".\"OBJECT_SUB_TYPE_CODE\" \n        || '::' || \"PO_ACTION_HIST\".\"ACTION_CODE\" || '::' || \"PO_ACTION_HIST\".\"rn\"                                                             AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\"                                                              AS \"ObjectID\",\n    CAST(\"PO_REQUISITION_LINES_ALL\".\"CancelDate\" AS TIMESTAMP)                                                                                AS \"Time\",\n    'DeletionIndicator'                                                                                                                       AS \"Attribute\",\n    NULL                                                                                                                                      AS \"OldValue\",\n    \"PO_REQUISITION_LINES_ALL\".\"CancelFlag\"                                                                                                   AS \"NewValue\",        \n    <%=sourceSystem%> || '::' || COALESCE(\"PO_ACTION_HIST\".\"CANCELLED_BY\", \n        CAST(\"PO_REQUISITION_LINES_ALL\".\"LastUpdatedBy\" AS VARCHAR(255)))                                                                     AS \"ChangedBy\",\n    NULL                                                                                                                                      AS \"OperationType\",\n    NULL                                                                                                                                      AS \"OperationID\",\n    NULL                                                                                                                                      AS \"ExecutionType\"\nFROM \"FscmTopModelAM_PrcExtractAM_PorBiccExtractAM_RequisitionLineExtractPVO\" AS \"PO_REQUISITION_LINES_ALL\"\n    LEFT JOIN \"CTE_PO_ACTION_HIST\" AS \"PO_ACTION_HIST\"\n        ON \"PO_REQUISITION_LINES_ALL\".\"RequisitionHeaderId\" = \"PO_ACTION_HIST\".\"OBJECT_ID\"\nWHERE \"PO_ACTION_HIST\".\"OBJECT_ID\" IS NOT NULL\n    AND \"PO_REQUISITION_LINES_ALL\".\"CancelFlag\" = 'Y'\n    AND \"PO_REQUISITION_LINES_ALL\".\"CancelDate\" IS NOT NULL"
+                    },
+                    {
+                        "id": "ChangeLog",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" \n        || '::' || \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" \n        || '::' || \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"DATE\"                     AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\"           AS \"ObjectID\",\n    \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"DATE\"                                    AS \"Time\",\n    CASE\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'UnitPrice' \n            THEN 'NetUnitPrice'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'Quantity' \n            THEN 'Quantity'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'ItemDescription' \n            THEN 'Description'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'VendorId' \n            THEN 'Vendor'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'CurrencyCode' \n            THEN 'Currency'\n        WHEN \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'CancelFlag' \n            THEN 'DeletionIndicator'\n    END                                                                                   AS \"Attribute\",\n    \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\"                              AS \"OldValue\",\n    \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\"                              AS \"NewValue\",\n    <%=sourceSystem%> || '::' || \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"USER\"      AS \"ChangedBy\",\n    \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"TYPE\"                                   AS \"OperationType\",\n    NULL                                                                                  AS \"OperationID\",\n    CASE\n        WHEN \"PO_REQUISITION_LINES_ALL\".\"RequestId\" = 0\n           THEN 'Manual'\n        ELSE 'Automatic'\n    END                                                                                   AS \"ExecutionType\"\nFROM \"FscmTopModelAM_PrcExtractAM_PorBiccExtractAM_RequisitionLineExtractPVO_CELONIS_CHANGELOG\" AS \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PorBiccExtractAM_RequisitionLineExtractPVO\" AS \"PO_REQUISITION_LINES_ALL\"\n        ON \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"ID\" = \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\"\nWHERE \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" IS NOT NULL\n    AND \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"COLUMN\" IN ('CancelFlag','UnitPrice','Quantity','ItemDescription','VendorId','CurrencyCode') \n    AND \"PO_REQUISITION_LINES_ALL_CELONIS_CHANGELOG\".\"TYPE\" = 'update'  \n"
+                    }
+                ],
+                "foreign_key_names": [
+                    "Createdby",
+                    "Material",
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "Description",
+                    "ExpectedDeliveryDate",
+                    "ID",
+                    "IsCanceled",
+                    "IsClosed",
+                    "LineNumber",
+                    "NetUnitPrice",
+                    "PurchaseOrganization",
+                    "PurchaseOrganizationName",
+                    "PurchaseRequisitionNumber",
+                    "Quantity",
+                    "QuantityUnit",
+                    "Requester",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseRequisitionItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH CTE_Deduplicate AS (SELECT \n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\"                       AS \"ID\",\n    -- CASE \n    --     WHEN \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" IS NOT NULL \n    --         AND <%=sourceSystem%> IS NOT NULL\n    --     THEN <%=sourceSystem%> || '::' || CAST(\"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" AS VARCHAR(255))\n    --     ELSE 'MISSING_ID' -- This prevents the NOT NULL error\n    -- END AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"CreatedBy\"                                    AS \"CreatedBy\",\n    CASE \n        WHEN NULLIF(TRIM(\"PO_REQUISITION_LINES_ALL\".\"ItemId\"), '') IS NOT NULL \n            THEN <%=sourceSystem%> \n                    || '::' || \"PO_REQUISITION_LINES_ALL\".\"ItemId\" \n    END                                                                                                     AS \"Material\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"OrganizationId\" \n        || '::' || \"PO_REQUISITION_LINES_ALL\".\"ItemId\"                                                      AS \"MaterialMasterPlant\",\n    CASE \n        WHEN NULLIF(TRIM(\"PO_REQUISITION_LINES_ALL\".\"VendorId\"), '') IS NOT NULL \n            THEN <%=sourceSystem%> \n                    || '::' || \"PO_REQUISITION_LINES_ALL\".\"VendorId\" \n    END                                                                                                     AS \"Vendor\",\n    <%=sourceSystem%>  || '::' || \"PO_REQUISITION_LINES_ALL\".\"OrganizationId\"                               AS \"Plant\",\n    \"PO_REQUISITION_LINES_ALL\".\"CreationDate\"                                                               AS \"CreationTime\",\n    CASE\n        WHEN \"PO_REQUISITION_LINES_ALL\".\"RequestId\" IS NULL \n            THEN 'Manual'\n        ELSE 'Automatic'\n    END                                                                                                     AS \"CreationExecutionType\",\n    \"PO_REQUISITION_LINES_ALL\".\"CurrencyCode\"                                                               AS \"Currency\",\n    \"PO_REQUISITION_LINES_ALL\".\"UnitPrice\"                                                                  AS \"NetUnitPrice\",\n    \"PO_REQUISITION_LINES_ALL\".\"Quantity\"                                                                   AS \"Quantity\",\n    \"PO_REQUISITION_LINES_ALL\".\"UomCode\"                                                                    AS \"QuantityUnit\",\n    CAST(\"PO_REQUISITION_LINES_ALL\".\"RequesterId\" AS VARCHAR(255))                                          AS \"Requester\",\n    LEFT(\"PO_REQUISITION_LINES_ALL\".\"ItemDescription\", 170)                                                 AS \"Description\",\n    CAST(\"PO_REQUISITION_LINES_ALL\".\"LineNumber\" AS VARCHAR(255))                                           AS \"LineNumber\",\n    CAST(\"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOEnterpriseId\" AS VARCHAR(255))                            AS \"PurchaseOrganization\",\n    \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOName\"                                                          AS \"PurchaseOrganizationName\",\n    CAST(\"PO_REQUISITION_HEADERS_ALL\".\"RequisitionNumber\" AS VARCHAR(255))                                  AS \"PurchaseRequisitionNumber\",\n    CAST(\"PO_REQUISITION_LINES_ALL\".\"NeedByDate\" AS TIMESTAMP)                                              AS \"ExpectedDeliveryDate\",\n    NULL                                                                                                    AS \"IsClosed\",\n    CASE \n        WHEN NULLIF(\"PO_REQUISITION_LINES_ALL\".\"CANCELFLAG\", '') IS NOT NULL \n            THEN TRUE \n        ELSE FALSE \n    END                                                                                                     AS \"IsCanceled\",\n    <%=sourceSystem%>                                                                                       AS \"SourceSystemInstance\",\n    ROW_NUMBER () OVER(PARTITION BY \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" ORDER BY \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\") AS RN\n\nFROM \"FscmTopModelAM_PrcExtractAM_PorBiccExtractAM_RequisitionLineExtractPVO\" AS \"PO_REQUISITION_LINES_ALL\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PorBiccExtractAM_RequisitionHeaderExtractPVO\" AS \"PO_REQUISITION_HEADERS_ALL\"\n        ON \"PO_REQUISITION_LINES_ALL\".\"RequisitionHeaderId\" = \"PO_REQUISITION_HEADERS_ALL\".\"RequisitionHeaderId\"\n    LEFT JOIN \"FscmTopModelAM_FinExtractAM_FunBiccExtractAM_BusinessUnitExtractPVO\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n        ON \"PO_REQUISITION_LINES_ALL\".\"PrcBuId\" = \"HR_ALL_ORGANIZATION_UNITS\".\"FunBuPerfPEOBusinessUnitId\"   \nWHERE \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" IS NOT NULL)\n\nSELECT * FROM CTE_Deduplicate\nWHERE RN = 1\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseDocumentLines",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipPurchaseDocumentLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT DISTINCT \n    COALESCE((<%=sourceSystem%> || '::' || \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\"), 'ERROR::NULL') AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_LINES_ALL\".\"PoLineId\"                      AS \"PurchaseDocumentLines\"\nFROM \"FscmTopModelAM_PrcExtractAM_PorBiccExtractAM_RequisitionLineExtractPVO\" AS \"PO_REQUISITION_LINES_ALL\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PorBiccExtractAM_RequisitionDistributionExtractPVO\" AS \"REQ_DIST\"\n        ON \"PO_REQUISITION_LINES_ALL\".\"RequisitionLineId\" = \"REQ_DIST\".\"RequisitionLineId\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentDistributionExtractPVO\" AS \"LINE_DIST\"\n        ON \"REQ_DIST\".\"DistributionId\" = \"LINE_DIST\".\"ReqDistributionId\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentLineExtractPVO\" AS \"PO_LINES_ALL\"\n        ON \"LINE_DIST\".\"PoLineId\" = \"PO_LINES_ALL\".\"PoLineId\"\nWHERE \"PO_LINES_ALL\".\"PoLineId\" IS NOT NULL"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

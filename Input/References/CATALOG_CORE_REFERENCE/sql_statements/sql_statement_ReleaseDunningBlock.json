@@ -1,0 +1,60 @@
+[
+    {
+        "change_date": 1758102456598.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630879571.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "ReleaseDunningBlock transformation - copy - 1",
+        "draft": null,
+        "factory_id": "e63fec5d-e001-4dbb-adba-1eeeeaeb121e",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReleaseDunningBlock",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "ReceivableItem"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ReleaseDunningBlockAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'ReleaseDunningBlock' || '::' || \"ReceivableItem_Changes\".\"ID\" AS \"ID\",\n    \"ReceivableItem\".\"ID\"                                          AS \"ReceivableItem\",\n    \"ReceivableItem_Changes\".\"Time\"                                AS \"Time\",\n    \"ReceivableItem_Changes\".\"ChangedBy\"                           AS \"ExecutedBy\",\n    \"ReceivableItem_Changes\".\"ExecutionType\"                       AS \"ExecutionType\"\nFROM \"o_custom_ReceivableItem\" AS \"ReceivableItem\"\n    LEFT JOIN \"c_o_custom_ReceivableItem\" AS \"ReceivableItem_Changes\"\n        ON \"ReceivableItem\".\"ID\" = \"ReceivableItem_Changes\".\"ObjectID\"\nWHERE \"ReceivableItem_Changes\".\"Attribute\" = 'DunningBlock'\n    AND \"ReceivableItem_Changes\".\"NewValue\" = 'N'\n    AND \"ReceivableItem_Changes\".\"Time\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

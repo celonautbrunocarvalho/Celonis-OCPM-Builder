@@ -1,0 +1,34 @@
+{
+    "change_date": 1749808227151.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749808213237.0,
+    "description": null,
+    "display_name": "Hierarchy",
+    "id": "33a9342e-07dd-4e94-a73b-5741e72e0a4c",
+    "name": "hierarchy",
+    "namespace": "custom",
+    "selection_mode": "SINGLE_SELECT",
+    "values": [
+        {
+            "description": "",
+            "display_name": "Parent",
+            "name": "parent",
+            "namespace": "custom"
+        },
+        {
+            "description": "",
+            "display_name": "Child",
+            "name": "child",
+            "namespace": "custom"
+        }
+    ]
+}

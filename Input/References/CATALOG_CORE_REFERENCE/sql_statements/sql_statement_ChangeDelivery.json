@@ -1,0 +1,63 @@
+[
+    {
+        "change_date": 1760093543271.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1752251066411.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "ChangeDelivery - 1",
+        "draft": null,
+        "factory_id": "5997ff5e-b478-40e2-a2dd-590729b5d96b",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ChangeDelivery",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Delivery"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ChangedAttribute",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "NewValue",
+                    "OldValue",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ChangeDeliveryAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'ChangeDelivery' || '::' || \"Delivery_Changes\".\"ID\"  AS \"ID\",\n       \"Delivery\".\"ID\"                                      AS \"Delivery\",\n       \"Delivery_Changes\".\"Time\"                            AS \"Time\",\n       \"Delivery_Changes\".\"ChangedBy\"                       AS \"ExecutedBy\",\n       \"Delivery_Changes\".\"Attribute\"                       AS \"ChangedAttribute\",\n       \"Delivery_Changes\".\"ExecutionType\"                   AS \"ExecutionType\",\n       \"Delivery_Changes\".\"OldValue\"                        AS \"OldValue\",\n       \"Delivery_Changes\".\"NewValue\"                        AS \"NewValue\"\nFROM \"o_custom_Delivery\" AS \"Delivery\"\n    LEFT JOIN \"c_o_custom_Delivery\" AS \"Delivery_Changes\"\n        ON \"Delivery\".\"ID\" = \"Delivery_Changes\".\"ObjectID\"\n            AND \"Delivery_Changes\".\"Attribute\" IN (\n                'TotalWeight',\n                'SalesDistrict',\n                'WeightUnit',\n                'PlannedPickingDate',\n                'DeliveryType',\n                'DeliveryDate',\n                'NetWeight',\n                'ProofOfDeliveryDate',\n                'Route',\n                'SalesOrganization',\n                'VolumeUnit',\n                'Volume'\n            )\nWHERE \"Delivery_Changes\".\"Time\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

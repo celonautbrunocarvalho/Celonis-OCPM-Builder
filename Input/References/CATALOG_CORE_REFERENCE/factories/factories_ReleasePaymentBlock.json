@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1758103582283.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1749685453555.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "ReleasePaymentBlock - 1",
+        "factory_id": "b882862f-70df-4155-b680-09e10003e74d",
+        "has_overwrites": null,
+        "name": "ReleasePaymentBlock - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReleasePaymentBlock",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

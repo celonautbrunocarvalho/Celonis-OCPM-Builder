@@ -1,0 +1,330 @@
+[
+    {
+        "change_date": 1759915618860.0,
+        "changed_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "d94aa797-47b6-48e1-9b0f-9627812b5866",
+            "name": "Lea Hanna",
+            "type_": "USER"
+        },
+        "creation_date": 1753306108985.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "CurrencyConversion - S4 Hana",
+        "draft": null,
+        "factory_id": "cc219237-054a-40fd-b5ba-2bf8999f7f3e",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "CurrencyKey",
+                "value": "'EUR'"
+            },
+            {
+                "name": "CurrencyKey_2",
+                "value": "'USD'"
+            },
+            {
+                "name": "ExchangeRateType",
+                "value": "'EURX'"
+            },
+            {
+                "name": "ExchangeRateType_2",
+                "value": "'M'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ConversionType",
+                    "ExchangeRateType",
+                    "FromCurrency",
+                    "FromDate",
+                    "ID",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "ToCurrency",
+                    "ToDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CurrencyConversionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_TCURF_TMP\" AS (SELECT \"TCURF\".\"MANDT\",\n                                \"TCURF\".\"KURST\",\n                                \"TCURF\".\"FCURR\",\n                                \"TCURF\".\"TCURR\",\n                                \"TCURF\".\"GDATU\",\n                                \"TCURF\".\"FFACT\",\n                                \"TCURF\".\"TFACT\",\n                                DENSE_RANK()\n                                    OVER (ORDER BY \"TCURF\".\"MANDT\", \"TCURF\".\"KURST\", \"TCURF\".\"FCURR\", \"TCURF\".\"TCURR\") AS \"TCURF_KEY\",\n                                 ROW_NUMBER() OVER (PARTITION BY \"TCURF\".\"MANDT\", \"TCURF\".\"KURST\", \"TCURF\".\"FCURR\", \"TCURF\".\"TCURR\" ORDER BY CAST(\"TCURF\".\"GDATU\" AS INTEGER) DESC) AS \"TCURF_ROWNR\"\n                         FROM \"TCURF\" AS \"TCURF\"\n                         WHERE 99999999 - CAST(\"TCURF\".\"GDATU\" AS INTEGER) >= 18000000 AND\n                             99999999 - CAST(\"TCURF\".\"GDATU\" AS INTEGER) <= 20990000),\n     \"CTE_TCURF_CC\" AS (SELECT *,\n                               CAST(\"LPAD\"(CAST(99999999 - CAST(\"TCURF_TMP\".\"GDATU\" AS INTEGER) AS VARCHAR(10)), 8, '0') || ' ' || '00:00:00' AS TIMESTAMP) AS \"VALID_START\"\n                        FROM \"CTE_TCURF_TMP\" AS \"TCURF_TMP\"),\n     \"CTE_TCURF_CC_2\" AS (SELECT \"TCURF_CC\".*,\n                                 CASE\n                                     WHEN \"TCURF_CC_Offset\".\"TCURF_ROWNR\" IS NOT NULL\n                                         THEN \"TCURF_CC_Offset\".\"VALID_START\"\n                                     ELSE CAST('2099-01-01' AS TIMESTAMP)\n                                     END AS \"VALID_END\"\n                          FROM \"CTE_TCURF_CC\" AS \"TCURF_CC\"\n                                   LEFT JOIN \"CTE_TCURF_CC\" AS \"TCURF_CC_Offset\" ON \"TCURF_CC\".\"TCURF_KEY\" = \"TCURF_CC_Offset\".\"TCURF_KEY\" AND \"TCURF_CC\".\"TCURF_ROWNR\" + 1 = \"TCURF_CC_Offset\".\"TCURF_ROWNR\"),\n     \"CTE_TCURR_TMP\" AS (SELECT \"TCURR\".\"MANDT\",\n                                \"TCURR\".\"KURST\",\n                                \"TCURR\".\"FCURR\",\n                                \"TCURR\".\"TCURR\",\n                                \"TCURR\".\"GDATU\",\n                                \"TCURR\".\"UKURS\",\n                                \"TCURR\".\"FFACT\",\n                                \"TCURR\".\"TFACT\",\n                                DENSE_RANK() OVER (ORDER BY \"TCURR\".\"MANDT\", \"TCURR\".\"KURST\", \"TCURR\".\"FCURR\", \"TCURR\".\"TCURR\") AS \"TCURR_KEY\",\n                                 ROW_NUMBER() OVER (PARTITION BY \"TCURR\".\"MANDT\", \"TCURR\".\"KURST\", \"TCURR\".\"FCURR\", \"TCURR\".\"TCURR\" ORDER BY CAST(\"TCURR\".\"GDATU\" AS INTEGER) DESC) AS \"TCURR_ROWNR\"\n                         FROM \"TCURR\" AS \"TCURR\"\n                         WHERE 99999999 - CAST(\"TCURR\".\"GDATU\" AS INTEGER) >= 18000000 AND\n                             99999999 - CAST(\"TCURR\".\"GDATU\" AS INTEGER) <= 20990000),\n     \"CTE_TCURR_CC\" AS (SELECT *,\n                               CAST(\"LPAD\"(CAST(99999999 - CAST(\"TCURR_TMP\".\"GDATU\" AS INTEGER) AS VARCHAR(10)), 8, '0') || ' ' || '00:00:00' AS TIMESTAMP) AS \"VALID_START\"\n                        FROM \"CTE_TCURR_TMP\" AS \"TCURR_TMP\"),\n     \"CTE_TCURR_CC_2\" AS (SELECT \"TCURR_CC\".*,\n                                 CASE\n                                     WHEN \"TCURR_CC_Offset\".\"TCURR_ROWNR\" IS NOT NULL\n                                         THEN \"TCURR_CC_Offset\".\"VALID_START\"\n                                     ELSE CAST('2099-01-01' AS TIMESTAMP)\n                                     END AS \"VALID_END\"\n                          FROM \"CTE_TCURR_CC\" AS \"TCURR_CC\"\n                                   LEFT JOIN \"CTE_TCURR_CC\" AS \"TCURR_CC_Offset\" ON \"TCURR_CC\".\"TCURR_KEY\" = \"TCURR_CC_Offset\".\"TCURR_KEY\" AND \"TCURR_CC\".\"TCURR_ROWNR\" + 1 = \"TCURR_CC_Offset\".\"TCURR_ROWNR\"),\n     \"CTE_DATE_RANGE\" AS (SELECT CAST(\"CELONIS_CALENDAR\".\"Date\" AS TIMESTAMP) AS \"_DATE\"\n                          FROM \"CELONIS_CALENDAR\"\n                          WHERE \"CELONIS_CALENDAR\".\"Date\" >= '2017-01-01' AND\n                              \"CELONIS_CALENDAR\".\"Date\" <= \"NOW\"()\n                          ORDER BY \"CELONIS_CALENDAR\".\"Date\"),\n     \"CTE_TCURX\" AS (SELECT \"TCURX\".\"CURRKEY\",\n                            CAST(\"TCURX\".\"CURRDEC\" AS INTEGER) AS \"CURRDEC\",\n                            POWER(CAST(10 AS FLOAT), 2 - \"CURRDEC\") AS \"TDEC\"\n                     FROM \"TCURX\" AS \"TCURX\") ,\n     \"CTE_DIRECT_CONVERSION\" AS (\n         SELECT\n             \"TCURR_CC_2\".\"FCURR\" || '::' || \"TCURR_CC_2\".\"TCURR\" || '::' || \"_DATE\" || '::' || \"TCURR_CC_2\".\"MANDT\" AS \"ID\",\n             \"TCURR_CC_2\".\"FCURR\" AS \"FromCurrency\",\n             \"TCURR_CC_2\".\"TCURR\" AS \"ToCurrency\",\n             \"DATE_RANGE\".\"_DATE\" AS \"FromDate\",\n             \"DATE_RANGE\".\"_DATE\" AS \"ToDate\",\n             CASE\n                 WHEN \"TCURR_CC_2\".\"UKURS\" < 0\n                     THEN 1 / ABS(\"TCURR_CC_2\".\"UKURS\")\n                 ELSE \"TCURR_CC_2\".\"UKURS\"\n                 END\n                 * COALESCE(\"TCURX\".\"TDEC\", 1)\n                 /\n             CASE\n                 WHEN COALESCE(\"TCURF_CC_2\".\"FFACT\", \"TCURR_CC_2\".\"FFACT\", 0) = 0 THEN 1\n                 ELSE COALESCE(\"TCURF_CC_2\".\"FFACT\", \"TCURR_CC_2\".\"FFACT\", 1)\n                 END\n                 *\n             CASE\n                 WHEN COALESCE(\"TCURF_CC_2\".\"TFACT\", \"TCURR_CC_2\".\"TFACT\", 0) = 0 THEN 1\n                 ELSE COALESCE(\"TCURF_CC_2\".\"TFACT\", \"TCURR_CC_2\".\"TFACT\", 1)\n                 END              AS \"Rate\",\n             \"TCURR_CC_2\".\"MANDT\" AS \"SourceSystemInstance\",\n             \"TCURR_CC_2\".\"KURST\" AS \"ExchangeRateType\",\n             'Direct'             AS \"ConversionType\"\n         FROM \"CTE_DATE_RANGE\" AS \"DATE_RANGE\"\n                  LEFT JOIN \"CTE_TCURR_CC_2\" AS \"TCURR_CC_2\"\n                            ON \"DATE_RANGE\".\"_DATE\" >= \"TCURR_CC_2\".\"VALID_START\"\n                                AND \"DATE_RANGE\".\"_DATE\" < \"TCURR_CC_2\".\"VALID_END\"\n                  LEFT JOIN \"CTE_TCURF_CC_2\" AS \"TCURF_CC_2\"\n                            ON \"TCURR_CC_2\".\"MANDT\" = \"TCURF_CC_2\".\"MANDT\"\n                                AND \"TCURR_CC_2\".\"TCURR\" = \"TCURF_CC_2\".\"TCURR\"\n                                AND \"TCURR_CC_2\".\"FCURR\" = \"TCURF_CC_2\".\"FCURR\"\n                                AND \"TCURR_CC_2\".\"KURST\" = \"TCURF_CC_2\".\"KURST\"\n                                AND \"DATE_RANGE\".\"_DATE\" >= \"TCURF_CC_2\".\"VALID_START\"\n                                AND \"DATE_RANGE\".\"_DATE\" < \"TCURF_CC_2\".\"VALID_END\"\n                  LEFT JOIN \"CTE_TCURX\" AS \"TCURX\"\n                            ON \"TCURR_CC_2\".\"FCURR\" = \"TCURX\".\"CURRKEY\"\n         WHERE \"TCURR_CC_2\".\"MANDT\" IS NOT NULL),\n     \"CTE_INVERSE_CONVERSION\" AS (\n         SELECT\n             \"TCURR_CC_2\".\"TCURR\" || '::' || \"TCURR_CC_2\".\"FCURR\" || '::' || \"_DATE\" || '::' || \"TCURR_CC_2\".\"MANDT\" AS \"ID\",\n             \"TCURR_CC_2\".\"TCURR\"                                                 AS \"FromCurrency\",\n             \"TCURR_CC_2\".\"FCURR\"                                                 AS \"ToCurrency\",\n             \"DATE_RANGE\".\"_DATE\"                                                 AS \"FromDate\",\n             \"DATE_RANGE\".\"_DATE\"                                                 AS \"ToDate\",\n             (1 /\n              (CASE\n                   WHEN \"TCURR_CC_2\".\"UKURS\" < 0 THEN (1 / ABS(\"TCURR_CC_2\".\"UKURS\"))\n                   ELSE \"TCURR_CC_2\".\"UKURS\" END\n                   *\n               COALESCE(\"TCURX\".\"TDEC\", 1)\n                   /\n               COALESCE(\"TCURF_CC_2\".\"FFACT\", \"TCURR_CC_2\".\"FFACT\", 1)\n                  *\n               COALESCE(\"TCURF_CC_2\".\"TFACT\", \"TCURR_CC_2\".\"TFACT\", 1)\n                  )\n                 )                                                                    AS \"Rate\",\n             \"TCURR_CC_2\".\"MANDT\"                                                 AS \"SourceSystemInstance\",\n             \"TCURR_CC_2\".\"KURST\"                                                 AS \"ExchangeRateType\",\n             'Inverse'                                                            AS \"ConversionType\"\n         FROM \"CTE_DATE_RANGE\" AS \"DATE_RANGE\"\n                  LEFT JOIN \"CTE_TCURR_CC_2\" AS \"TCURR_CC_2\"\n                            ON \"DATE_RANGE\".\"_DATE\" >= \"TCURR_CC_2\".\"VALID_START\"\n                                AND \"DATE_RANGE\".\"_DATE\" < \"TCURR_CC_2\".\"VALID_END\"\n                  LEFT JOIN \"CTE_TCURF_CC_2\" AS \"TCURF_CC_2\"\n                            ON \"TCURR_CC_2\".\"MANDT\" = \"TCURF_CC_2\".\"MANDT\"\n                                AND \"TCURR_CC_2\".\"TCURR\" = \"TCURF_CC_2\".\"TCURR\"\n                                AND \"TCURR_CC_2\".\"FCURR\" = \"TCURF_CC_2\".\"FCURR\"\n                                AND \"TCURR_CC_2\".\"KURST\" = \"TCURF_CC_2\".\"KURST\"\n                                AND \"DATE_RANGE\".\"_DATE\" >= \"TCURF_CC_2\".\"VALID_START\"\n                                AND \"DATE_RANGE\".\"_DATE\" < \"TCURF_CC_2\".\"VALID_END\"\n                  LEFT JOIN \"CTE_TCURX\" AS \"TCURX\"\n                            ON \"TCURR_CC_2\".\"FCURR\" = \"TCURX\".\"CURRKEY\"\n         WHERE \"TCURR_CC_2\".\"MANDT\" IS NOT NULL),\n    \"CTE_DIRECT_CONVERSION_TO\" AS (\n            SELECT \"DIRECT_CONVERSION\".*\n            FROM \"CTE_DIRECT_CONVERSION\" AS \"DIRECT_CONVERSION\"\n            WHERE\n                (\n                    \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%>  \n                    AND \"DIRECT_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey%>  \n                )\n               OR\n                (\n                    \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%>   \n                    AND \"DIRECT_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey_2%>   \n                )\n        ),\n    \"CTE_DIRECT_CONVERSION_FROM\" AS (\n            SELECT \"DIRECT_CONVERSION\".*\n            FROM \"CTE_DIRECT_CONVERSION\" AS \"DIRECT_CONVERSION\"\n            WHERE\n                (\n                    \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%>  \n                        AND \"DIRECT_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey%>  \n                    )\n               OR\n                (\n                    \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%>  \n                        AND \"DIRECT_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey_2%>  \n                    )\n        ),\n    \"CTE_INVERSE_CONVERSION_TO\" AS (\n            SELECT \"INVERSE_CONVERSION\".*\n            FROM \"CTE_INVERSE_CONVERSION\" AS \"INVERSE_CONVERSION\"\n            WHERE\n                (\n                    \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%>  \n                        AND \"INVERSE_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey%>  \n                    )\n               OR\n                (\n                    \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%>  \n                        AND \"INVERSE_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey_2%>  \n                    )\n        ),\n    \"CTE_INVERSE_CONVERSION_FROM\" AS (\n            SELECT \"INVERSE_CONVERSION\".*\n            FROM \"CTE_INVERSE_CONVERSION\" AS \"INVERSE_CONVERSION\"\n            WHERE\n                (\n                    \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%>  \n                        AND \"INVERSE_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey%>  \n                    )\n               OR\n                (\n                    \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%>  \n                        AND \"INVERSE_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey_2%>  \n                    )\n        ),\n    \"CTE_CONVERSION_ALL\" AS (\n            SELECT \"DIRECT_CONVERSION_TO\".*\n            FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n            UNION ALL\n            SELECT \"DIRECT_CONVERSION_FROM\".*\n            FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\"\n            WHERE \"DIRECT_CONVERSION_FROM\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                        FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\")\n            UNION ALL\n            SELECT \"INVERSE_CONVERSION_FROM\".*\n            FROM \"CTE_INVERSE_CONVERSION_FROM\" AS \"INVERSE_CONVERSION_FROM\"\n            WHERE \"INVERSE_CONVERSION_FROM\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                         FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n                                                         UNION ALL\n                                                         SELECT \"DIRECT_CONVERSION_FROM\".\"ID\"\n                                                         FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\")\n            UNION ALL\n            SELECT \"INVERSE_CONVERSION_TO\".*\n            FROM \"CTE_INVERSE_CONVERSION_TO\" AS \"INVERSE_CONVERSION_TO\"\n            WHERE \"INVERSE_CONVERSION_TO\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                       FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n                                                       UNION ALL\n                                                       SELECT \"DIRECT_CONVERSION_FROM\".\"ID\"\n                                                       FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\"\n                                                       UNION ALL\n                                                       SELECT \"INVERSE_CONVERSION_FROM\".\"ID\"\n                                                       FROM \"CTE_INVERSE_CONVERSION_FROM\" AS \"INVERSE_CONVERSION_FROM\")\n        )\nSELECT <%=sourceSystem%> || '::' || \"CONVERSION_ALL\".\"ID\"                           AS \"ID\",\n       \"CONVERSION_ALL\".\"FromCurrency\"                                              AS \"FromCurrency\",\n       \"CONVERSION_ALL\".\"ToCurrency\"                                                AS \"ToCurrency\",\n       \"CONVERSION_ALL\".\"FromDate\"                                                  AS \"FromDate\",\n       \"CONVERSION_ALL\".\"ToDate\"                                                    AS \"ToDate\",\n       \"CONVERSION_ALL\".\"Rate\"                                                      AS \"Rate\",\n\t    <%=sourceSystem%> || '::' ||  \"CONVERSION_ALL\".\"SourceSystemInstance\"       AS \"SourceSystemInstance\",\n       \"CONVERSION_ALL\".\"ExchangeRateType\"                                          AS \"ExchangeRateType\",\n       \"CONVERSION_ALL\".\"ConversionType\"                                            AS \"ConversionType\"\nFROM \"CTE_CONVERSION_ALL\" AS \"CONVERSION_ALL\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1759915549051.0,
+        "changed_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749646060711.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "CurrencyConversion - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "956f6941-990f-4e3b-997e-ae40b57d82d8",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "CurrencyKey",
+                "value": "'EUR'"
+            },
+            {
+                "name": "CurrencyKey_2",
+                "value": "'USD'"
+            },
+            {
+                "name": "ExchangeRateType",
+                "value": "'EURX'"
+            },
+            {
+                "name": "ExchangeRateType_2",
+                "value": "'M'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ConversionType",
+                    "ExchangeRateType",
+                    "FromCurrency",
+                    "FromDate",
+                    "ID",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "ToCurrency",
+                    "ToDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CurrencyConversionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_TCURF_TMP\" AS (SELECT \"TCURF\".\"MANDT\",\n                                \"TCURF\".\"KURST\",\n                                \"TCURF\".\"FCURR\",\n                                \"TCURF\".\"TCURR\",\n                                \"TCURF\".\"GDATU\",\n                                \"TCURF\".\"FFACT\",\n                                \"TCURF\".\"TFACT\",\n                                DENSE_RANK()\n                                    OVER (ORDER BY \"TCURF\".\"MANDT\", \"TCURF\".\"KURST\", \"TCURF\".\"FCURR\", \"TCURF\".\"TCURR\") AS \"TCURF_KEY\",\n                                 ROW_NUMBER() OVER (PARTITION BY \"TCURF\".\"MANDT\", \"TCURF\".\"KURST\", \"TCURF\".\"FCURR\", \"TCURF\".\"TCURR\" ORDER BY CAST(\"TCURF\".\"GDATU\" AS INTEGER) DESC) AS \"TCURF_ROWNR\"\n                         FROM \"TCURF\" AS \"TCURF\"\n                         WHERE 99999999 - CAST(\"TCURF\".\"GDATU\" AS INTEGER) >= 18000000 AND\n                             99999999 - CAST(\"TCURF\".\"GDATU\" AS INTEGER) <= 20990000),\n     \"CTE_TCURF_CC\" AS (SELECT *,\n                               CAST(\"LPAD\"(CAST(99999999 - CAST(\"TCURF_TMP\".\"GDATU\" AS INTEGER) AS VARCHAR(10)), 8, '0') || ' ' || '00:00:00' AS TIMESTAMP) AS \"VALID_START\"\n                        FROM \"CTE_TCURF_TMP\" AS \"TCURF_TMP\"),\n     \"CTE_TCURF_CC_2\" AS (SELECT \"TCURF_CC\".*,\n                                 CASE\n                                     WHEN \"TCURF_CC_Offset\".\"TCURF_ROWNR\" IS NOT NULL\n                                         THEN \"TCURF_CC_Offset\".\"VALID_START\"\n                                     ELSE CAST('2099-01-01' AS TIMESTAMP)\n                                     END AS \"VALID_END\"\n                          FROM \"CTE_TCURF_CC\" AS \"TCURF_CC\"\n                                   LEFT JOIN \"CTE_TCURF_CC\" AS \"TCURF_CC_Offset\" ON \"TCURF_CC\".\"TCURF_KEY\" = \"TCURF_CC_Offset\".\"TCURF_KEY\" AND \"TCURF_CC\".\"TCURF_ROWNR\" + 1 = \"TCURF_CC_Offset\".\"TCURF_ROWNR\"),\n     \"CTE_TCURR_TMP\" AS (SELECT \"TCURR\".\"MANDT\",\n                                \"TCURR\".\"KURST\",\n                                \"TCURR\".\"FCURR\",\n                                \"TCURR\".\"TCURR\",\n                                \"TCURR\".\"GDATU\",\n                                \"TCURR\".\"UKURS\",\n                                \"TCURR\".\"FFACT\",\n                                \"TCURR\".\"TFACT\",\n                                DENSE_RANK() OVER (ORDER BY \"TCURR\".\"MANDT\", \"TCURR\".\"KURST\", \"TCURR\".\"FCURR\", \"TCURR\".\"TCURR\") AS \"TCURR_KEY\",\n                                 ROW_NUMBER() OVER (PARTITION BY \"TCURR\".\"MANDT\", \"TCURR\".\"KURST\", \"TCURR\".\"FCURR\", \"TCURR\".\"TCURR\" ORDER BY CAST(\"TCURR\".\"GDATU\" AS INTEGER) DESC) AS \"TCURR_ROWNR\"\n                         FROM \"TCURR\" AS \"TCURR\"\n                         WHERE 99999999 - CAST(\"TCURR\".\"GDATU\" AS INTEGER) >= 18000000 AND\n                             99999999 - CAST(\"TCURR\".\"GDATU\" AS INTEGER) <= 20990000),\n     \"CTE_TCURR_CC\" AS (SELECT *,\n                               CAST(\"LPAD\"(CAST(99999999 - CAST(\"TCURR_TMP\".\"GDATU\" AS INTEGER) AS VARCHAR(10)), 8, '0') || ' ' || '00:00:00' AS TIMESTAMP) AS \"VALID_START\"\n                        FROM \"CTE_TCURR_TMP\" AS \"TCURR_TMP\"),\n     \"CTE_TCURR_CC_2\" AS (SELECT \"TCURR_CC\".*,\n                                 CASE\n                                     WHEN \"TCURR_CC_Offset\".\"TCURR_ROWNR\" IS NOT NULL\n                                         THEN \"TCURR_CC_Offset\".\"VALID_START\"\n                                     ELSE CAST('2099-01-01' AS TIMESTAMP)\n                                     END AS \"VALID_END\"\n                          FROM \"CTE_TCURR_CC\" AS \"TCURR_CC\"\n                                   LEFT JOIN \"CTE_TCURR_CC\" AS \"TCURR_CC_Offset\" ON \"TCURR_CC\".\"TCURR_KEY\" = \"TCURR_CC_Offset\".\"TCURR_KEY\" AND \"TCURR_CC\".\"TCURR_ROWNR\" + 1 = \"TCURR_CC_Offset\".\"TCURR_ROWNR\"),\n     \"CTE_DATE_RANGE\" AS (SELECT CAST(\"CELONIS_CALENDAR\".\"Date\" AS TIMESTAMP) AS \"_DATE\"\n                          FROM \"CELONIS_CALENDAR\"\n                          WHERE \"CELONIS_CALENDAR\".\"Date\" >= '2017-01-01' AND\n                              \"CELONIS_CALENDAR\".\"Date\" <= \"NOW\"()\n                          ORDER BY \"CELONIS_CALENDAR\".\"Date\"),\n     \"CTE_TCURX\" AS (SELECT \"TCURX\".\"CURRKEY\",\n                            CAST(\"TCURX\".\"CURRDEC\" AS INTEGER) AS \"CURRDEC\",\n                            POWER(CAST(10 AS FLOAT), 2 - \"CURRDEC\") AS \"TDEC\"\n                     FROM \"TCURX\" AS \"TCURX\") ,\n     \"CTE_DIRECT_CONVERSION\" AS (\n         SELECT\n             \"TCURR_CC_2\".\"FCURR\" || '::' || \"TCURR_CC_2\".\"TCURR\" || '::' || \"_DATE\" || '::' || \"TCURR_CC_2\".\"MANDT\" AS \"ID\",\n             \"TCURR_CC_2\".\"FCURR\" AS \"FromCurrency\",\n             \"TCURR_CC_2\".\"TCURR\" AS \"ToCurrency\",\n             \"DATE_RANGE\".\"_DATE\" AS \"FromDate\",\n             \"DATE_RANGE\".\"_DATE\" AS \"ToDate\",\n             CASE\n                 WHEN \"TCURR_CC_2\".\"UKURS\" < 0\n                     THEN 1 / ABS(\"TCURR_CC_2\".\"UKURS\")\n                 ELSE \"TCURR_CC_2\".\"UKURS\"\n                 END\n                 * COALESCE(\"TCURX\".\"TDEC\", 1)\n                 /\n             CASE\n                 WHEN COALESCE(\"TCURF_CC_2\".\"FFACT\", \"TCURR_CC_2\".\"FFACT\", 0) = 0 THEN 1\n                 ELSE COALESCE(\"TCURF_CC_2\".\"FFACT\", \"TCURR_CC_2\".\"FFACT\", 1)\n                 END\n                 *\n             CASE\n                 WHEN COALESCE(\"TCURF_CC_2\".\"TFACT\", \"TCURR_CC_2\".\"TFACT\", 0) = 0 THEN 1\n                 ELSE COALESCE(\"TCURF_CC_2\".\"TFACT\", \"TCURR_CC_2\".\"TFACT\", 1)\n                 END              AS \"Rate\",\n             \"TCURR_CC_2\".\"MANDT\" AS \"SourceSystemInstance\",\n             \"TCURR_CC_2\".\"KURST\" AS \"ExchangeRateType\",\n             'Direct'             AS \"ConversionType\"\n         FROM \"CTE_DATE_RANGE\" AS \"DATE_RANGE\"\n                  LEFT JOIN \"CTE_TCURR_CC_2\" AS \"TCURR_CC_2\"\n                            ON \"DATE_RANGE\".\"_DATE\" >= \"TCURR_CC_2\".\"VALID_START\"\n                                AND \"DATE_RANGE\".\"_DATE\" < \"TCURR_CC_2\".\"VALID_END\"\n                  LEFT JOIN \"CTE_TCURF_CC_2\" AS \"TCURF_CC_2\"\n                            ON \"TCURR_CC_2\".\"MANDT\" = \"TCURF_CC_2\".\"MANDT\"\n                                AND \"TCURR_CC_2\".\"TCURR\" = \"TCURF_CC_2\".\"TCURR\"\n                                AND \"TCURR_CC_2\".\"FCURR\" = \"TCURF_CC_2\".\"FCURR\"\n                                AND \"TCURR_CC_2\".\"KURST\" = \"TCURF_CC_2\".\"KURST\"\n                                AND \"DATE_RANGE\".\"_DATE\" >= \"TCURF_CC_2\".\"VALID_START\"\n                                AND \"DATE_RANGE\".\"_DATE\" < \"TCURF_CC_2\".\"VALID_END\"\n                  LEFT JOIN \"CTE_TCURX\" AS \"TCURX\"\n                            ON \"TCURR_CC_2\".\"FCURR\" = \"TCURX\".\"CURRKEY\"\n         WHERE \"TCURR_CC_2\".\"MANDT\" IS NOT NULL),\n     \"CTE_INVERSE_CONVERSION\" AS (\n         SELECT\n             \"TCURR_CC_2\".\"TCURR\" || '::' || \"TCURR_CC_2\".\"FCURR\" || '::' || \"_DATE\" || '::' || \"TCURR_CC_2\".\"MANDT\" AS \"ID\",\n             \"TCURR_CC_2\".\"TCURR\"                                                 AS \"FromCurrency\",\n             \"TCURR_CC_2\".\"FCURR\"                                                 AS \"ToCurrency\",\n             \"DATE_RANGE\".\"_DATE\"                                                 AS \"FromDate\",\n             \"DATE_RANGE\".\"_DATE\"                                                 AS \"ToDate\",\n             (1 /\n              (CASE\n                   WHEN \"TCURR_CC_2\".\"UKURS\" < 0 THEN (1 / ABS(\"TCURR_CC_2\".\"UKURS\"))\n                   ELSE \"TCURR_CC_2\".\"UKURS\" END\n                   *\n               COALESCE(\"TCURX\".\"TDEC\", 1)\n                   /\n               COALESCE(\"TCURF_CC_2\".\"FFACT\", \"TCURR_CC_2\".\"FFACT\", 1)\n                  *\n               COALESCE(\"TCURF_CC_2\".\"TFACT\", \"TCURR_CC_2\".\"TFACT\", 1)\n                  )\n                 )                                                                    AS \"Rate\",\n             \"TCURR_CC_2\".\"MANDT\"                                                 AS \"SourceSystemInstance\",\n             \"TCURR_CC_2\".\"KURST\"                                                 AS \"ExchangeRateType\",\n             'Inverse'                                                            AS \"ConversionType\"\n         FROM \"CTE_DATE_RANGE\" AS \"DATE_RANGE\"\n                  LEFT JOIN \"CTE_TCURR_CC_2\" AS \"TCURR_CC_2\"\n                            ON \"DATE_RANGE\".\"_DATE\" >= \"TCURR_CC_2\".\"VALID_START\"\n                                AND \"DATE_RANGE\".\"_DATE\" < \"TCURR_CC_2\".\"VALID_END\"\n                  LEFT JOIN \"CTE_TCURF_CC_2\" AS \"TCURF_CC_2\"\n                            ON \"TCURR_CC_2\".\"MANDT\" = \"TCURF_CC_2\".\"MANDT\"\n                                AND \"TCURR_CC_2\".\"TCURR\" = \"TCURF_CC_2\".\"TCURR\"\n                                AND \"TCURR_CC_2\".\"FCURR\" = \"TCURF_CC_2\".\"FCURR\"\n                                AND \"TCURR_CC_2\".\"KURST\" = \"TCURF_CC_2\".\"KURST\"\n                                AND \"DATE_RANGE\".\"_DATE\" >= \"TCURF_CC_2\".\"VALID_START\"\n                                AND \"DATE_RANGE\".\"_DATE\" < \"TCURF_CC_2\".\"VALID_END\"\n                  LEFT JOIN \"CTE_TCURX\" AS \"TCURX\"\n                            ON \"TCURR_CC_2\".\"FCURR\" = \"TCURX\".\"CURRKEY\"\n         WHERE \"TCURR_CC_2\".\"MANDT\" IS NOT NULL),\n    \"CTE_DIRECT_CONVERSION_TO\" AS (\n            SELECT \"DIRECT_CONVERSION\".*\n            FROM \"CTE_DIRECT_CONVERSION\" AS \"DIRECT_CONVERSION\"\n            WHERE\n                (\n                    \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%>  \n                    AND \"DIRECT_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey%>  \n                )\n               OR\n                (\n                    \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%>   \n                    AND \"DIRECT_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey_2%>   \n                )\n        ),\n    \"CTE_DIRECT_CONVERSION_FROM\" AS (\n            SELECT \"DIRECT_CONVERSION\".*\n            FROM \"CTE_DIRECT_CONVERSION\" AS \"DIRECT_CONVERSION\"\n            WHERE\n                (\n                    \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%>  \n                        AND \"DIRECT_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey%>  \n                    )\n               OR\n                (\n                    \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%>  \n                        AND \"DIRECT_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey_2%>  \n                    )\n        ),\n    \"CTE_INVERSE_CONVERSION_TO\" AS (\n            SELECT \"INVERSE_CONVERSION\".*\n            FROM \"CTE_INVERSE_CONVERSION\" AS \"INVERSE_CONVERSION\"\n            WHERE\n                (\n                    \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%>  \n                        AND \"INVERSE_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey%>  \n                    )\n               OR\n                (\n                    \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%>  \n                        AND \"INVERSE_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey_2%>  \n                    )\n        ),\n    \"CTE_INVERSE_CONVERSION_FROM\" AS (\n            SELECT \"INVERSE_CONVERSION\".*\n            FROM \"CTE_INVERSE_CONVERSION\" AS \"INVERSE_CONVERSION\"\n            WHERE\n                (\n                    \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%>  \n                        AND \"INVERSE_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey%>  \n                    )\n               OR\n                (\n                    \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%>  \n                        AND \"INVERSE_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey_2%>  \n                    )\n        ),\n    \"CTE_CONVERSION_ALL\" AS (\n            SELECT \"DIRECT_CONVERSION_TO\".*\n            FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n            UNION ALL\n            SELECT \"DIRECT_CONVERSION_FROM\".*\n            FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\"\n            WHERE \"DIRECT_CONVERSION_FROM\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                        FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\")\n            UNION ALL\n            SELECT \"INVERSE_CONVERSION_FROM\".*\n            FROM \"CTE_INVERSE_CONVERSION_FROM\" AS \"INVERSE_CONVERSION_FROM\"\n            WHERE \"INVERSE_CONVERSION_FROM\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                         FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n                                                         UNION ALL\n                                                         SELECT \"DIRECT_CONVERSION_FROM\".\"ID\"\n                                                         FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\")\n            UNION ALL\n            SELECT \"INVERSE_CONVERSION_TO\".*\n            FROM \"CTE_INVERSE_CONVERSION_TO\" AS \"INVERSE_CONVERSION_TO\"\n            WHERE \"INVERSE_CONVERSION_TO\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                       FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n                                                       UNION ALL\n                                                       SELECT \"DIRECT_CONVERSION_FROM\".\"ID\"\n                                                       FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\"\n                                                       UNION ALL\n                                                       SELECT \"INVERSE_CONVERSION_FROM\".\"ID\"\n                                                       FROM \"CTE_INVERSE_CONVERSION_FROM\" AS \"INVERSE_CONVERSION_FROM\")\n        )\nSELECT <%=sourceSystem%> || '::' || \"CONVERSION_ALL\".\"ID\"                           AS \"ID\",\n       \"CONVERSION_ALL\".\"FromCurrency\"                                              AS \"FromCurrency\",\n       \"CONVERSION_ALL\".\"ToCurrency\"                                                AS \"ToCurrency\",\n       \"CONVERSION_ALL\".\"FromDate\"                                                  AS \"FromDate\",\n       \"CONVERSION_ALL\".\"ToDate\"                                                    AS \"ToDate\",\n       \"CONVERSION_ALL\".\"Rate\"                                                      AS \"Rate\",\n\t   <%=sourceSystem%> || '::' || \"CONVERSION_ALL\".\"SourceSystemInstance\"         AS \"SourceSystemInstance\",\n       \"CONVERSION_ALL\".\"ExchangeRateType\"                                          AS \"ExchangeRateType\",\n       \"CONVERSION_ALL\".\"ConversionType\"                                            AS \"ConversionType\"\nFROM \"CTE_CONVERSION_ALL\" AS \"CONVERSION_ALL\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1764690895275.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630813986.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "CurrencyConversion transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "04e27724-3b37-4fac-87bf-8a78cf5ba3fb",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "CurrencyKey",
+                "value": "'USD'"
+            },
+            {
+                "name": "CurrencyKey_2",
+                "value": "'EUR'"
+            },
+            {
+                "name": "ExchangeRateType",
+                "value": "'Corporate'"
+            },
+            {
+                "name": "ExchangeRateType_2",
+                "value": "'Corporate'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ConversionType",
+                    "ExchangeRateType",
+                    "FromCurrency",
+                    "FromDate",
+                    "ID",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "ToCurrency",
+                    "ToDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CurrencyConversionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_DIRECT_CONVERSION\" AS (\n            SELECT \"GL_DAILY_RATES\".\"FROM_CURRENCY\" || '::' || \"GL_DAILY_RATES\".\"TO_CURRENCY\" \n                 || '::'|| \"GL_DAILY_RATES\".\"CONVERSION_DATE\"        AS \"ID\",\n               \"GL_DAILY_RATES\".\"FROM_CURRENCY\"                      AS \"FromCurrency\",\n               \"GL_DAILY_RATES\".\"TO_CURRENCY\"                        AS \"ToCurrency\",\n               CAST(\"GL_DAILY_RATES\".\"CONVERSION_DATE\" AS TIMESTAMP) AS \"FromDate\",\n               CAST(CAST(\"GL_DAILY_RATES\".\"CONVERSION_DATE\" AS DATE)\n                    + (INTERVAL '86399' SECOND) AS TIMESTAMP)        AS \"ToDate\",\n               \"GL_DAILY_RATES\".\"CONVERSION_RATE\"                    AS \"Rate\",\n              <%=sourceSystem%>                                      AS \"SourceSystemInstance\",\n               \"GL_DAILY_RATES\".\"CONVERSION_TYPE\"                    AS \"ExchangeRateType\",\n               'Direct'                                              AS \"ConversionType\"\n            FROM \"GL_DAILY_RATES\" AS \"GL_DAILY_RATES\"),\n     \"CTE_INVERSE_CONVERSION\" AS (\n             SELECT \"GL_DAILY_RATES\".\"TO_CURRENCY\" || '::' || \"GL_DAILY_RATES\".\"FROM_CURRENCY\" \n             || '::' || \"GL_DAILY_RATES\".\"CONVERSION_DATE\"                AS \"ID\",\n                    \"GL_DAILY_RATES\".\"TO_CURRENCY\"                        AS \"FromCurrency\",\n                    \"GL_DAILY_RATES\".\"FROM_CURRENCY\"                      AS \"ToCurrency\",\n                    CAST(\"GL_DAILY_RATES\".\"CONVERSION_DATE\" AS TIMESTAMP) AS \"FromDate\",\n                    CAST(CAST(\"GL_DAILY_RATES\".\"CONVERSION_DATE\" AS DATE)\n                    + (INTERVAL '86399' SECOND) AS TIMESTAMP)             AS \"ToDate\",\n                    1 / (\"GL_DAILY_RATES\".\"CONVERSION_RATE\")              AS \"Rate\",\n                    <%=sourceSystem%>                                     AS \"SourceSystemInstance\",\n                    \"GL_DAILY_RATES\".\"CONVERSION_TYPE\"                    AS \"ExchangeRateType\",\n                    'Inverse'                                             AS \"ConversionType\"\n             FROM \"GL_DAILY_RATES\" AS \"GL_DAILY_RATES\"),\n     \"CTE_DIRECT_CONVERSION_TO\" AS (\n         SELECT \"DIRECT_CONVERSION\".*\n         FROM \"CTE_DIRECT_CONVERSION\" AS \"DIRECT_CONVERSION\"\n         WHERE\n             (\n                 \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%> \n                     AND \"DIRECT_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey%> \n                 )\n            OR\n             (\n                 \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%> \n                     AND \"DIRECT_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey_2%> \n                 )\n     ),\n     \"CTE_DIRECT_CONVERSION_FROM\" AS (\n         SELECT \"DIRECT_CONVERSION\".*\n         FROM \"CTE_DIRECT_CONVERSION\" AS \"DIRECT_CONVERSION\"\n         WHERE\n             (\n                 \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%> \n                     AND \"DIRECT_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey%> \n                 )\n            OR\n             (\n                 \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%> \n                     AND \"DIRECT_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey_2%> \n                 )\n     ),\n     \"CTE_INVERSE_CONVERSION_TO\" AS (\n         SELECT \"INVERSE_CONVERSION\".*\n         FROM \"CTE_INVERSE_CONVERSION\" AS \"INVERSE_CONVERSION\"\n         WHERE\n             (\n                 \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%> \n                     AND \"INVERSE_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey%> \n                 )\n            OR\n             (\n                 \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%> \n                     AND \"INVERSE_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey_2%> \n                 )\n     ),\n     \"CTE_INVERSE_CONVERSION_FROM\" AS (\n         SELECT \"INVERSE_CONVERSION\".*\n         FROM \"CTE_INVERSE_CONVERSION\" AS \"INVERSE_CONVERSION\"\n         WHERE\n             (\n                 \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%> \n                     AND \"INVERSE_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey%> \n                 )\n            OR\n             (\n                 \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%> \n                     AND \"INVERSE_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey_2%> \n                 )\n     ),\n     \"CTE_CONVERSION_ALL\" AS (\n         SELECT \"DIRECT_CONVERSION_TO\".*\n         FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n         UNION ALL\n         SELECT \"DIRECT_CONVERSION_FROM\".*\n         FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\"\n         WHERE \"DIRECT_CONVERSION_FROM\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                     FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\")\n         UNION ALL\n         SELECT \"INVERSE_CONVERSION_FROM\".*\n         FROM \"CTE_INVERSE_CONVERSION_FROM\" AS \"INVERSE_CONVERSION_FROM\"\n         WHERE \"INVERSE_CONVERSION_FROM\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                      FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n                                                      UNION ALL\n                                                      SELECT \"DIRECT_CONVERSION_FROM\".\"ID\"\n                                                      FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\")\n         UNION ALL\n         SELECT \"INVERSE_CONVERSION_TO\".*\n         FROM \"CTE_INVERSE_CONVERSION_TO\" AS \"INVERSE_CONVERSION_TO\"\n         WHERE \"INVERSE_CONVERSION_TO\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                    FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n                                                    UNION ALL\n                                                    SELECT \"DIRECT_CONVERSION_FROM\".\"ID\"\n                                                    FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\"\n                                                    UNION ALL\n                                                    SELECT \"INVERSE_CONVERSION_FROM\".\"ID\"\n                                                    FROM \"CTE_INVERSE_CONVERSION_FROM\" AS \"INVERSE_CONVERSION_FROM\")\n     )\nSELECT <%=sourceSystem%> || '::' ||  \"CONVERSION_ALL\".\"ID\" AS \"ID\",\n       \"CONVERSION_ALL\".\"FromCurrency\"                                      AS \"FromCurrency\",\n       \"CONVERSION_ALL\".\"ToCurrency\"                                        AS \"ToCurrency\",\n       \"CONVERSION_ALL\".\"FromDate\"                                          AS \"FromDate\",\n       \"CONVERSION_ALL\".\"ToDate\"                                            AS \"ToDate\",\n       \"CONVERSION_ALL\".\"Rate\"                                              AS \"Rate\",\n       \"CONVERSION_ALL\".\"SourceSystemInstance\"                              AS \"SourceSystemInstance\",\n       \"CONVERSION_ALL\".\"ExchangeRateType\"                                  AS \"ExchangeRateType\",\n       \"CONVERSION_ALL\".\"ConversionType\"                                    AS \"ConversionType\"\nFROM \"CTE_CONVERSION_ALL\" AS \"CONVERSION_ALL\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1764690904064.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1751993694461.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "CurrencyConversion_OracleFusion",
+        "draft": null,
+        "factory_id": "f962c055-06d6-44ea-b04d-8ea51452aafc",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "CurrencyKey",
+                "value": "'USD'"
+            },
+            {
+                "name": "CurrencyKey_2",
+                "value": "'EUR'"
+            },
+            {
+                "name": "ExchangeRateType",
+                "value": "'Corporate'"
+            },
+            {
+                "name": "ExchangeRateType_2",
+                "value": "'Corporate'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ConversionType",
+                    "ExchangeRateType",
+                    "FromCurrency",
+                    "FromDate",
+                    "ID",
+                    "Rate",
+                    "SourceSystemInstance",
+                    "ToCurrency",
+                    "ToDate"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CurrencyConversionAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_DIRECT_CONVERSION\" AS (\n            SELECT \"DailyRateExtractPVO\".\"DailyRateFromCurrency\" || '::'\n                   || \"DailyRateExtractPVO\".\"DailyRateToCurrency\" || '::'\n                   || \"DailyRateExtractPVO\".\"DailyRateConversionDate\"                 AS \"ID\",\n                   \"DailyRateExtractPVO\".\"DailyRateFromCurrency\"                      AS \"FromCurrency\",\n                   \"DailyRateExtractPVO\".\"DailyRateToCurrency\"                        AS \"ToCurrency\",\n                   CAST(\"DailyRateExtractPVO\".\"DailyRateConversionDate\" AS TIMESTAMP) AS \"FromDate\",\n                   CAST(CAST(\"DailyRateExtractPVO\".\"DailyRateConversionDate\" AS DATE)\n                        + INTERVAL '86399' SECOND AS TIMESTAMP)                       AS \"ToDate\",\n                   \"DailyRateExtractPVO\".\"DailyRateConversionRate\"                    AS \"Rate\",\n                   <%=sourceSystem%>                                                  AS \"SourceSystemInstance\",\n                   \"DailyRateExtractPVO\".\"DailyRateConversionType\"                    AS \"ExchangeRateType\",\n                   'Direct'                                                           AS \"ConversionType\"\n            FROM \"FscmTopModelAM_FinExtractAM_GlBiccExtractAM_DailyRateExtractPVO\" AS \"DailyRateExtractPVO\"\n        ),\n     \"CTE_INVERSE_CONVERSION\" AS (\n             SELECT \"DailyRateExtractPVO\".\"DailyRateToCurrency\" || '::'\n                    || \"DailyRateExtractPVO\".\"DailyRateFromCurrency\" || '::'\n                    || \"DailyRateExtractPVO\".\"DailyRateConversionDate\"                 AS \"ID\",\n                    \"DailyRateExtractPVO\".\"DailyRateToCurrency\"                        AS \"FromCurrency\",\n                    \"DailyRateExtractPVO\".\"DailyRateFromCurrency\"                      AS \"ToCurrency\",\n                    CAST(\"DailyRateExtractPVO\".\"DailyRateConversionDate\" AS TIMESTAMP) AS \"FromDate\",\n                    CAST(CAST(\"DailyRateExtractPVO\".\"DailyRateConversionDate\" AS DATE)\n                        + INTERVAL '86399' SECOND AS TIMESTAMP)                        AS \"ToDate\",\n                    1 / (\"DailyRateExtractPVO\".\"DailyRateConversionRate\")              AS \"Rate\",\n                    <%=sourceSystem%>                                                  AS \"SourceSystemInstance\",\n                    \"DailyRateExtractPVO\".\"DailyRateConversionType\"                    AS \"ExchangeRateType\",\n                    'Inverse'                                                          AS \"ConversionType\"\n             FROM \"FscmTopModelAM_FinExtractAM_GlBiccExtractAM_DailyRateExtractPVO\" AS \"DailyRateExtractPVO\"\n        ),\n     \"CTE_DIRECT_CONVERSION_TO\" AS (\n         SELECT \"DIRECT_CONVERSION\".*\n         FROM \"CTE_DIRECT_CONVERSION\" AS \"DIRECT_CONVERSION\"\n         WHERE\n             (\n                 \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%> \n                     AND \"DIRECT_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey%> \n                 )\n            OR\n             (\n                 \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%> \n                     AND \"DIRECT_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey_2%> \n                 )\n        ),\n     \"CTE_DIRECT_CONVERSION_FROM\" AS (\n         SELECT \"DIRECT_CONVERSION\".*\n         FROM \"CTE_DIRECT_CONVERSION\" AS \"DIRECT_CONVERSION\"\n         WHERE\n             (\n                 \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%> \n                     AND \"DIRECT_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey%> \n                 )\n            OR\n             (\n                 \"DIRECT_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%> \n                     AND \"DIRECT_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey_2%> \n                 )\n        ),\n     \"CTE_INVERSE_CONVERSION_TO\" AS (\n         SELECT \"INVERSE_CONVERSION\".*\n         FROM \"CTE_INVERSE_CONVERSION\" AS \"INVERSE_CONVERSION\"\n         WHERE\n             (\n                 \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%> \n                     AND \"INVERSE_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey%> \n                 )\n            OR\n             (\n                 \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%> \n                     AND \"INVERSE_CONVERSION\".\"ToCurrency\" = <%=CurrencyKey_2%> \n                 )\n        ),\n     \"CTE_INVERSE_CONVERSION_FROM\" AS (\n         SELECT \"INVERSE_CONVERSION\".*\n         FROM \"CTE_INVERSE_CONVERSION\" AS \"INVERSE_CONVERSION\"\n         WHERE\n             (\n                 \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType%> \n                     AND \"INVERSE_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey%> \n                 )\n            OR\n             (\n                 \"INVERSE_CONVERSION\".\"ExchangeRateType\" = <%=ExchangeRateType_2%> \n                     AND \"INVERSE_CONVERSION\".\"FromCurrency\" = <%=CurrencyKey_2%> \n                 )\n        ),\n     \"CTE_CONVERSION_ALL\" AS (\n         SELECT \"DIRECT_CONVERSION_TO\".*\n         FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n         UNION ALL\n         SELECT \"DIRECT_CONVERSION_FROM\".*\n         FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\"\n         WHERE \"DIRECT_CONVERSION_FROM\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                     FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\")\n         UNION ALL\n         SELECT \"INVERSE_CONVERSION_FROM\".*\n         FROM \"CTE_INVERSE_CONVERSION_FROM\" AS \"INVERSE_CONVERSION_FROM\"\n         WHERE \"INVERSE_CONVERSION_FROM\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                      FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n                                                      UNION ALL\n                                                      SELECT \"DIRECT_CONVERSION_FROM\".\"ID\"\n                                                      FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\")\n         UNION ALL\n         SELECT \"INVERSE_CONVERSION_TO\".*\n         FROM \"CTE_INVERSE_CONVERSION_TO\" AS \"INVERSE_CONVERSION_TO\"\n         WHERE \"INVERSE_CONVERSION_TO\".\"ID\" NOT IN (SELECT \"DIRECT_CONVERSION_TO\".\"ID\"\n                                                    FROM \"CTE_DIRECT_CONVERSION_TO\" AS \"DIRECT_CONVERSION_TO\"\n                                                    UNION ALL\n                                                    SELECT \"DIRECT_CONVERSION_FROM\".\"ID\"\n                                                    FROM \"CTE_DIRECT_CONVERSION_FROM\" AS \"DIRECT_CONVERSION_FROM\"\n                                                    UNION ALL\n                                                    SELECT \"INVERSE_CONVERSION_FROM\".\"ID\"\n                                                    FROM \"CTE_INVERSE_CONVERSION_FROM\" AS \"INVERSE_CONVERSION_FROM\")\n     )\nSELECT <%=sourceSystem%> || '::' || \"CONVERSION_ALL\".\"ID\"                    AS \"ID\",\n       \"CONVERSION_ALL\".\"FromCurrency\"                                       AS \"FromCurrency\",\n       \"CONVERSION_ALL\".\"ToCurrency\"                                         AS \"ToCurrency\",\n       \"CONVERSION_ALL\".\"FromDate\"                                           AS \"FromDate\",\n       \"CONVERSION_ALL\".\"ToDate\"                                             AS \"ToDate\",\n       \"CONVERSION_ALL\".\"Rate\"                                               AS \"Rate\",\n       \"CONVERSION_ALL\".\"SourceSystemInstance\"                               AS \"SourceSystemInstance\",\n       \"CONVERSION_ALL\".\"ExchangeRateType\"                                   AS \"ExchangeRateType\",\n       \"CONVERSION_ALL\".\"ConversionType\"                                     AS \"ConversionType\"\nFROM \"CTE_CONVERSION_ALL\" AS \"CONVERSION_ALL\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

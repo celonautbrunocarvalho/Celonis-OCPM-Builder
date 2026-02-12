@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1760433266498.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1752243905053.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "CreateCustomerInvoice - 1",
+        "factory_id": "9fbbc6ce-dfda-4ed4-9036-ac06aec1c4e8",
+        "has_overwrites": null,
+        "name": "CreateCustomerInvoice - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreateCustomerInvoice",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

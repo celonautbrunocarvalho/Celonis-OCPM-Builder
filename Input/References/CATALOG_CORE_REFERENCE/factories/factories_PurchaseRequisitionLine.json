@@ -1,0 +1,212 @@
+[
+    {
+        "change_date": 1764704684230.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634400303.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem - 00. Central Extraction Pool_TS1",
+        "factory_id": "20d4afd9-e397-4d77-9dec-a150a92407bc",
+        "has_overwrites": null,
+        "name": "PurchaseRequisitionItem - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1761733967476.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630790068.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "factory_id": "9d74abef-0f13-41c7-9aa7-713f12c5a8ab",
+        "has_overwrites": null,
+        "name": "PurchaseRequisitionItem transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1763481717446.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649605230.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "factory_id": "020464f1-0678-46a5-8b7c-cf5291a2d5dc",
+        "has_overwrites": null,
+        "name": "PurchaseRequisitionItem - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1768487470178.0,
+        "changed_by": {
+            "id": "ad8e74d9-353a-421d-88c1-3aae61ac7eb6",
+            "name": "Jayatheertha Ayachit",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "creation_date": 1764586023744.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "disabled": null,
+        "display_name": "PurchaseRequisitionLine - MS Dynamics 365",
+        "factory_id": "14121c7a-cc1d-4cb0-9de6-2200a6e5d864",
+        "has_overwrites": null,
+        "name": "PurchaseRequisitionLine - MS Dynamics 365",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1761317351664.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1752585639287.0,
+        "data_connection_id": "1b87451d-df3c-4f06-b5e6-622d18c93682",
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem - 00. Central Extraction Pool_ARIBA",
+        "factory_id": "020f4a03-0a56-4cad-8c92-e755ec8be1c5",
+        "has_overwrites": null,
+        "name": "PurchaseRequisitionItem - 00. Central Extraction Pool_ARIBA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1766781534273.0,
+        "changed_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "c8f85336-92c4-4edf-b363-3489e2310c8b",
+            "name": "Corrie",
+            "type_": "USER"
+        },
+        "creation_date": 1765763253039.0,
+        "data_connection_id": "bb2bd2e3-5af0-4cda-b7c8-552ed55569b6",
+        "disabled": true,
+        "display_name": "PurchaseRequisitionLine - Coupa",
+        "factory_id": "09b1b2df-1ba5-4069-b9c3-8691b9c56b3d",
+        "has_overwrites": null,
+        "name": "PurchaseRequisitionLine - Coupa",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1768313467778.0,
+        "changed_by": {
+            "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+            "name": "Modester Mwangi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2589b288-6fa5-4412-b75b-180b8acb07d0",
+            "name": "Carolina Ventura",
+            "type_": "USER"
+        },
+        "creation_date": 1750689033262.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "PurchaseRequisitionItem - 00. Central Extraction Pool_Oracle Fusion",
+        "factory_id": "18046981-fb08-47f8-bcfd-ea43615753f3",
+        "has_overwrites": null,
+        "name": "PurchaseRequisitionItem - 00. Central Extraction Pool_Oracle Fusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

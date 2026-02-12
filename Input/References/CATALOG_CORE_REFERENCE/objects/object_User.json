@@ -1,0 +1,430 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "AccountsReceivable",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1760518279033.0,
+    "changed_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630705443.0,
+    "description": "Contains master data for users associated with the business data being analyzed, including changes made to the employee emails and IDs. ",
+    "fields": [
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "LastName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "FirstName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Type",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "DisplayName",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "f70a4051-1773-464b-b866-5d47937fdf34",
+    "managed": true,
+    "multi_link": false,
+    "name": "User",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CreatePayableItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PayableItem",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ReceivableItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "ReceivableItem",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseDocument",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseDocument",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseOrder",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseOrder",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "GoodsReceipt",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "GoodsReceipt",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ReleasedCustomers",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "ReleasedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "CustomerBlock",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "BlockedCustomers",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "BlockedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "CustomerBlock",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialMovement",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "MaterialMovement",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "GoodsIssue",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "GoodsIssue",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrder",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrder",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderBlockReleaseBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "ReleasedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrderBlock",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderBlockBlockedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "BlockedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrderBlock",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderLineBlockBlockedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "BlockedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrderScheduleLineBlock",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderLineBlockReleasedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "ReleasedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrderScheduleLineBlock",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "DeliveryCreatedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "Delivery",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "VendorInvoice",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "User",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "VendorInvoice",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "DeliveryLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "DeliveryLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerInvoice",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "CustomerInvoice",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CustomerInvoiceLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "CustomerInvoiceLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseDocumentLineCreatedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseDocumentLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseDocumentLineRequestedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "RequestedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseDocumentLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseOrderLineRequestedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "RequestedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseOrderLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseOrderLineCreatedBy",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "CreatedBy",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseOrderLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionLineCreatedby",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "Createdby",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseRequisitionLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "AccountsPayable",
+        "AccountsReceivable",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

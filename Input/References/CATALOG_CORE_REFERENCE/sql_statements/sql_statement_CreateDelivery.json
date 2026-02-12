@@ -1,0 +1,75 @@
+[
+    {
+        "change_date": 1760428765454.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1750065436846.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "CreateDelivery- 1",
+        "draft": null,
+        "factory_id": "40941cd2-15a3-40bd-b24f-78cf66312b76",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CreateDelivery",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "Delivery"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CreateDeliveryHeaderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'CreateDelivery' || '::' || \"Delivery\".\"ID\"      AS \"ID\",\n       \"Delivery\".\"ID\"                                  AS \"Delivery\",\n       \"Delivery\".\"CreationTime\"                        AS \"Time\",\n       \"Delivery\".\"CreatedBy_ID\"                        AS \"ExecutedBy\",\n       \"Delivery\".\"CreationExecutionType\"               AS \"ExecutionType\"\nFROM \"o_custom_Delivery\" AS \"Delivery\"\nWHERE \"Delivery\".\"CreationTime\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "SalesOrderScheduleLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipSalesOrderScheduleLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT\n\t DISTINCT 'CreateDelivery' || '::' || \"DeliveryLine\".\"Delivery_ID\"          AS \"ID\",\n\t\"DeliveryLine__SalesOrderScheduleLines\".\"SalesOrderScheduleLines_ID\"        AS \"SalesOrderScheduleLine\"\nFROM \"r_o_custom_DeliveryLine__SalesOrderScheduleLines\" AS \"DeliveryLine__SalesOrderScheduleLines\"\n\tLEFT JOIN \"o_custom_DeliveryLine\" AS \"DeliveryLine\"\n\t    ON \"DeliveryLine__SalesOrderScheduleLines\".\"ID\" = \"DeliveryLine\".\"ID\"\nWHERE \"DeliveryLine__SalesOrderScheduleLines\".\"SalesOrderScheduleLines_ID\" IS NOT NULL\n    AND \"DeliveryLine\".\"Delivery_ID\" IS NOT NULL"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

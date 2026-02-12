@@ -1,0 +1,22 @@
+{
+    "change_date": 1764584108227.0,
+    "changed_by": {
+        "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+        "name": "j.vita-martinez",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "807e30df-a523-4155-ac66-f9540f471893",
+        "name": "Ephraim Feldblum",
+        "type_": "USER"
+    },
+    "creation_date": 1750802182950.0,
+    "data_source_connections": [],
+    "description": null,
+    "display_name": "Procurement",
+    "enable_date": 1764584108002.0,
+    "enabled": false,
+    "event_count": 64,
+    "name": "Procurement",
+    "object_count": 50
+}

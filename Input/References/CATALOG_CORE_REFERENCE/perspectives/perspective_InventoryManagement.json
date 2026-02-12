@@ -1,0 +1,1146 @@
+{
+    "base_ref": null,
+    "categories": [],
+    "change_date": 1761748261669.0,
+    "changed_by": {
+        "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+        "name": "j.rosenbauer",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+        "name": "j.rosenbauer",
+        "type_": "USER"
+    },
+    "creation_date": 1749722037860.0,
+    "default_projection": "ProductionOrderActivities",
+    "description": null,
+    "events": [
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "CancelSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "CancelSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Purchase Document",
+            "entity_metadata": {
+                "name": "ChangePurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "ChangePurchaseDocument",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Purchase Document Line",
+            "entity_metadata": {
+                "name": "ChangePurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "ChangePurchaseDocumentLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Purchase Requisition Line",
+            "entity_metadata": {
+                "name": "ChangePurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "name": "ChangePurchaseRequisitionLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Purchase Schedule Line",
+            "entity_metadata": {
+                "name": "ChangePurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "ChangePurchaseScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Sales Order",
+            "entity_metadata": {
+                "name": "ChangeSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "ChangeSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Purchase Document",
+            "entity_metadata": {
+                "name": "CreatePurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "CreatePurchaseDocument",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Purchase Document Line",
+            "entity_metadata": {
+                "name": "CreatePurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "CreatePurchaseDocumentLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Purchase Requisition Line",
+            "entity_metadata": {
+                "name": "CreatePurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "name": "CreatePurchaseRequisitionLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Purchase Schedule Line",
+            "entity_metadata": {
+                "name": "CreatePurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "CreatePurchaseScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Enter Vendor Invoice",
+            "entity_metadata": {
+                "name": "EnterVendorInvoice",
+                "namespace": "custom"
+            },
+            "name": "EnterVendorInvoice",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Post Goods Receipt",
+            "entity_metadata": {
+                "name": "PostGoodsReceipt",
+                "namespace": "custom"
+            },
+            "name": "PostGoodsReceipt",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Approve Purchase Document",
+            "entity_metadata": {
+                "name": "ApprovePurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "ApprovePurchaseDocument",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Approve Purchase Requisition Line",
+            "entity_metadata": {
+                "name": "ApprovePurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "name": "ApprovePurchaseRequisitionLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Production Order",
+            "entity_metadata": {
+                "name": "CreateProductionOrder",
+                "namespace": "custom"
+            },
+            "name": "CreateProductionOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Finish Production Order",
+            "entity_metadata": {
+                "name": "FinishProductionOrder",
+                "namespace": "custom"
+            },
+            "name": "FinishProductionOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Post Goods Issue",
+            "entity_metadata": {
+                "name": "PostGoodsIssue",
+                "namespace": "custom"
+            },
+            "name": "PostGoodsIssue",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Set Block On Sales Order",
+            "entity_metadata": {
+                "name": "SetBlockOnSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "SetBlockOnSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Release Block On Sales Order",
+            "entity_metadata": {
+                "name": "ReleaseBlockOnSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "ReleaseBlockOnSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Start Production",
+            "entity_metadata": {
+                "name": "StartProduction",
+                "namespace": "custom"
+            },
+            "name": "StartProduction",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Set Block On Customer",
+            "entity_metadata": {
+                "name": "SetBlockOnCustomer",
+                "namespace": "custom"
+            },
+            "name": "SetBlockOnCustomer",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Release Block On Customer",
+            "entity_metadata": {
+                "name": "ReleaseBlockOnCustomer",
+                "namespace": "custom"
+            },
+            "name": "ReleaseBlockOnCustomer",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "ChangeSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "ChangeSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Sales Order",
+            "entity_metadata": {
+                "name": "CreateSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "CreateSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "CreateSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "CreateSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Delivery",
+            "entity_metadata": {
+                "name": "CreateDelivery",
+                "namespace": "custom"
+            },
+            "name": "CreateDelivery",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Delivery Line",
+            "entity_metadata": {
+                "name": "CreateDeliveryLine",
+                "namespace": "custom"
+            },
+            "name": "CreateDeliveryLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Set Block On Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "SetBlockOnSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "SetBlockOnSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Block On Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "ChangeBlockOnSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "ChangeBlockOnSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Release Block On Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "ReleaseBlockOnSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "ReleaseBlockOnSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Customer Invoice Line",
+            "entity_metadata": {
+                "name": "CreateCustomerInvoiceLine",
+                "namespace": "custom"
+            },
+            "name": "CreateCustomerInvoiceLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Customer Invoice",
+            "entity_metadata": {
+                "name": "CreateCustomerInvoice",
+                "namespace": "custom"
+            },
+            "name": "CreateCustomerInvoice",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Customer Invoice",
+            "entity_metadata": {
+                "name": "CancelCustomerInvoice",
+                "namespace": "custom"
+            },
+            "name": "CancelCustomerInvoice",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Delivery Line",
+            "entity_metadata": {
+                "name": "ChangeDeliveryLine",
+                "namespace": "custom"
+            },
+            "name": "ChangeDeliveryLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Purchase Document",
+            "entity_metadata": {
+                "name": "CancelPurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "CancelPurchaseDocument",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Purchase Document Line",
+            "entity_metadata": {
+                "name": "CancelPurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "CancelPurchaseDocumentLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Purchase Requisition Line",
+            "entity_metadata": {
+                "name": "CancelPurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "name": "CancelPurchaseRequisitionLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Purchase Schedule Line",
+            "entity_metadata": {
+                "name": "CancelPurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "CancelPurchaseScheduleLine",
+            "namespace": "custom"
+        }
+    ],
+    "id": "05f0be79-d9b0-4ed1-a791-b70c4b230e94",
+    "name": "InventoryManagement",
+    "namespace": "custom",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": "Bill Of Material Component",
+            "entity_metadata": {
+                "name": "BillOfMaterialComponent",
+                "namespace": "custom"
+            },
+            "name": "BillOfMaterialComponent",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Bill Of Material Product",
+            "entity_metadata": {
+                "name": "BillOfMaterialProduct",
+                "namespace": "custom"
+            },
+            "name": "BillOfMaterialProduct",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Currency Conversion",
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Customer",
+            "entity_metadata": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "name": "Customer",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrder",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Delivery Line",
+            "entity_metadata": {
+                "name": "DeliveryLine",
+                "namespace": "custom"
+            },
+            "name": "DeliveryLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderScheduleLines",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Material",
+            "entity_metadata": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "name": "Material",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Material Master Plant",
+            "entity_metadata": {
+                "name": "MaterialMasterPlant",
+                "namespace": "custom"
+            },
+            "name": "MaterialMasterPlant",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "Material",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "MaterialMovement",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "MaterialRequirement",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "MaterialReservationItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "PlannedSupply",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Plant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "ProductionOrderItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "PurchaseScheduleLine",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "RelationshipBillOfMaterialsComponent",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "StockHistory",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Material Movement",
+            "entity_metadata": {
+                "name": "MaterialMovement",
+                "namespace": "custom"
+            },
+            "name": "MaterialMovement",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Material Requirement",
+            "entity_metadata": {
+                "name": "MaterialRequirement",
+                "namespace": "custom"
+            },
+            "name": "MaterialRequirement",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Material Reservation",
+            "entity_metadata": {
+                "name": "MaterialReservation",
+                "namespace": "custom"
+            },
+            "name": "MaterialReservation",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Planned Supply",
+            "entity_metadata": {
+                "name": "PlannedSupply",
+                "namespace": "custom"
+            },
+            "name": "PlannedSupply",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Plant",
+            "entity_metadata": {
+                "name": "Plant",
+                "namespace": "custom"
+            },
+            "name": "Plant",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Production Order",
+            "entity_metadata": {
+                "name": "ProductionOrder",
+                "namespace": "custom"
+            },
+            "name": "ProductionOrder",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Purchase Document",
+            "entity_metadata": {
+                "name": "PurchaseDocument",
+                "namespace": "custom"
+            },
+            "name": "PurchaseDocument",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "Vendor",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Purchase Document Line",
+            "entity_metadata": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "PurchaseDocumentLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "Header",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "PurchaseScheduleLine",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Purchase Requisition Line",
+            "entity_metadata": {
+                "name": "PurchaseRequisitionLine",
+                "namespace": "custom"
+            },
+            "name": "PurchaseRequisitionLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "Vendor",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "EMBED"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Purchase Schedule Line",
+            "entity_metadata": {
+                "name": "PurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "PurchaseScheduleLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Quantity Conversion",
+            "entity_metadata": {
+                "name": "QuantityConversion",
+                "namespace": "custom"
+            },
+            "name": "QuantityConversion",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Relationship Bill Of Materials",
+            "entity_metadata": {
+                "name": "RelationshipBillOfMaterials",
+                "namespace": "custom"
+            },
+            "name": "RelationshipBillOfMaterials",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlantComponent",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Sales Order",
+            "entity_metadata": {
+                "name": "SalesOrder",
+                "namespace": "custom"
+            },
+            "name": "SalesOrder",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "Customer",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "SalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "SalesOrderScheduleLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "DeliveryLine",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "SalesOrder",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Stock History",
+            "entity_metadata": {
+                "name": "StockHistory",
+                "namespace": "custom"
+            },
+            "name": "StockHistory",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "MaterialMasterPlant",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Vendor",
+            "entity_metadata": {
+                "name": "Vendor",
+                "namespace": "custom"
+            },
+            "name": "Vendor",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "PurchaseDocument",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "InventoryManagement",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CreateProductionOrder",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "FinishProductionOrder",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "StartProduction",
+                    "namespace": "custom"
+                }
+            ],
+            "lead_object": {
+                "name": "ProductionOrder",
+                "namespace": "custom"
+            },
+            "name": "ProductionOrderActivities",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            }
+        },
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "CreatePurchaseDocumentLine",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "PostGoodsReceipt",
+                    "namespace": "custom"
+                }
+            ],
+            "lead_object": {
+                "name": "PurchaseDocumentLine",
+                "namespace": "custom"
+            },
+            "name": "PurchaseDocumentLineActivities",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            }
+        },
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "PostGoodsIssue",
+                    "namespace": "custom"
+                }
+            ],
+            "lead_object": {
+                "name": "SalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "SalesOrderScheduleLineActivities",
+            "origin_ref": {
+                "name": "InventoryManagement",
+                "namespace": "custom"
+            }
+        }
+    ],
+    "tags": []
+}

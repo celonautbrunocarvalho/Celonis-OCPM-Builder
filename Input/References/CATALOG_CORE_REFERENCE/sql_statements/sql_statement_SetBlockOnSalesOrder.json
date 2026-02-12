@@ -1,0 +1,63 @@
+[
+    {
+        "change_date": 1751279566272.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1749823516854.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "SetBlockOnSalesOrder - 1",
+        "draft": null,
+        "factory_id": "19b15ae4-f8ac-4922-80a4-642ee5b82496",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SetBlockOnSalesOrder",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "SalesOrder",
+                    "SalesOrderBlock"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BlockReason",
+                    "BlockType",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "SetBlockOnSalesOrderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'SetBlockOnSalesOrder' || '::' || \"SalesOrderBlock\".\"ID\" AS \"ID\",\n       \"SalesOrderBlock\".\"ID\"                             AS \"SalesOrderBlock\",\n       \"SalesOrder\".\"ID\"                                  AS \"SalesOrder\",\n       \"SalesOrderBlock\".\"CreationTime\"                   AS \"Time\",\n       \"SalesOrderBlock\".\"BlockedBy_ID\"                   AS \"ExecutedBy\",\n       \"SalesOrderBlock\".\"BlockExecutionType\"             AS \"ExecutionType\",\n       \"SalesOrderBlock\".\"BlockType\"                      AS \"BlockType\",\n       \"SalesOrderBlock\".\"FirstBlockReason\"               AS \"BlockReason\"\nFROM \"o_custom_SalesOrder\" AS \"SalesOrder\"\n         LEFT JOIN \"o_custom_SalesOrderBlock\" AS \"SalesOrderBlock\"\n                   ON \"SalesOrder\".\"ID\" = \"SalesOrderBlock\".\"SalesOrder_ID\"\nWHERE \"SalesOrderBlock\".\"CreationTime\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

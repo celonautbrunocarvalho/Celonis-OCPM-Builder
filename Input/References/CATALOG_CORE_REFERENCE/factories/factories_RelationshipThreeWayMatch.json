@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1760545848912.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630792715.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "RelationshipThreeWayMatch transformation - OCPM Schema - 1",
+        "factory_id": "72145ef9-25fd-42b8-8d1f-223703b2fa8a",
+        "has_overwrites": null,
+        "name": "RelationshipThreeWayMatch transformation - OCPM Schema - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "RelationshipThreeWayMatch",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

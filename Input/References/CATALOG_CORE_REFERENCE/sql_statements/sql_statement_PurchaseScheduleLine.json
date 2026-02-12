@@ -1,0 +1,415 @@
+[
+    {
+        "change_date": 1766154662909.0,
+        "changed_by": {
+            "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+            "name": "Gokul",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764741417935.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseScheduleLine - MSDynamics_365",
+        "draft": null,
+        "factory_id": "ab92f0ea-8870-4094-ae2f-0acd79c046e1",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "DeliveryNumber",
+                    "ExpectedDeliveryDate",
+                    "ExpectedQuantity",
+                    "ID",
+                    "LineNumber",
+                    "PurchaseDocumentNumber",
+                    "QuantityUnit",
+                    "ReceivedQuantity",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseScheduleLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\n\n\nSELECT\n    <%=sourceSystem%> ||'::'|| ProductReceiptLinesV2.PurchaseOrderLineNumber                    AS ID,\n    ProductReceiptLinesV2.ExpectedDeliveryDate                                                  AS CreationTime,\n    ProductReceiptLinesV2.ReceivedPurchaseQuantity                                              AS ReceivedQuantity,\n    ProductReceiptLinesV2.ExpectedDeliveryDate                                                  AS ExpectedDeliveryDate,\n    <%=sourceSystem%> ||'::'|| ProductReceiptLinesV2.ItemNumber                                 AS PurchaseDocumentLine,\n    ProductReceiptLinesV2.PurchaseUnitSymbol                                                    AS QuantityUnit,\n    ProductReceiptLinesV2.RemainingPurchaseQuantity                                             AS ExpectedQuantity,\n    <%=sourceSystem%> ||'::'|| PurchaseOrderHeadersV2.dataAreaId                                AS Plant,\n    ProductReceiptLinesV2.ItemNumber                                                            AS LineNumber,\n    ProductReceiptLinesV2.PurchaseOrderNumber                                                   AS PurchaseDocumentNumber,\n    NULL AS SourceSystemInstance,\n    NULL AS DeliveryNumber,\n    <%=sourceSystem%>||'::'||\"PurchaseOrderLinesV2\".\"ITEMNUMBER\"||'::'|| PurchaseOrderHeadersV2.DefaultReceivingSiteId AS MaterialMasterPlant\nFROM ProductReceiptLinesV2\n\tLEFT JOIN PurchaseOrderLinesV3 AS PurchaseOrderLinesV2\n        ON ProductReceiptLinesV2.PurchaseOrderNumber = PurchaseOrderLinesV2.PurchaseOrderNumber\n        AND ProductReceiptLinesV2.dataAreaId = PurchaseOrderLinesV2.dataAreaId\n        AND ProductReceiptLinesV2.ItemNumber = PurchaseOrderLinesV2.ItemNumber\n    LEFT JOIN PurchaseOrderHeadersV2\n        ON PurchaseOrderHeadersV2.PurchaseOrderNumber = PurchaseOrderLinesV2.PurchaseOrderNumber\n        AND PurchaseOrderHeadersV2.dataAreaId = PurchaseOrderLinesV2.dataAreaId\n\n-- WHERE PurchaseOrderHeadersV2.DefaultReceivingSiteId IS NOT NULL\n\n\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763978097977.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749658897518.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseScheduleLines - 00. Central Extraction Pool_Oracle Fusion",
+        "draft": null,
+        "factory_id": "5d2004d1-9a92-435c-98f5-e94861e32cb4",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "ALL",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> ||'::'|| \"PO_LINE_LOCATIONS_ALL\".\"LineLocationId\" \n        ||'::'|| \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" \n        ||'::'|| \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"DATE\"                               AS \"ID\",\n    <%=sourceSystem%> ||'::'|| \"PO_LINE_LOCATIONS_ALL\".\"LineLocationId\"                         AS \"ObjectID\",\n    \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"DATE\"                                            AS \"Time\",\n    CASE\n        WHEN \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'NeedByDate' \n            THEN 'ItemDeliveryDate'\n        WHEN \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'QuantityReceived' \n            THEN 'ReceivedQuantity'\n        WHEN \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'Quantity' \n            THEN 'ExpectedQuantity'\n        WHEN \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'UomCode' \n            THEN 'QuantityUnit'\n        WHEN \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" = 'CancelFlag' \n            THEN 'DeletionIndicator'\n    END                                                                                         AS \"Attribute\",\n    \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"OLD_VALUE\"                                       AS \"OldValue\",\n    \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"NEW_VALUE\"                                       AS \"NewValue\",\n    <%=sourceSystem%>   ||'::'||  \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"USER\"              AS \"ChangedBy\",\n    \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"TYPE\"                                            AS \"OperationType\",\n    NULL                                                                                        AS \"OperationID\",\n    NULL                                                                                        AS \"ExecutionType\"\nFROM \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentLineLocationExtractPVO_CELONIS_CHANGELOG\" AS \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentLineLocationExtractPVO\" AS \"PO_LINE_LOCATIONS_ALL\"\n        ON \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"ID\" = \"PO_LINE_LOCATIONS_ALL\".\"LineLocationId\"\nWHERE \"PO_LINE_LOCATIONS_ALL\".\"LineLocationId\" IS NOT NULL\n    AND \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"COLUMN\" IN ('NeedByDate', 'CancelFlag','QuantityReceived','Quantity','UomCode')\n    AND \"PO_LINE_LOCATIONS_ALL_CELONIS_CHANGELOG\".\"TYPE\" = 'update'"
+                    }
+                ],
+                "foreign_key_names": [
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "DeliveryNumber",
+                    "ExpectedDeliveryDate",
+                    "ExpectedQuantity",
+                    "ID",
+                    "LineNumber",
+                    "PurchaseDocumentNumber",
+                    "QuantityUnit",
+                    "ReceivedQuantity",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseScheduleLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  ||'::'|| \"PurchasingDocumentLineLocationExtractPVO\".\"LineLocationId\"           AS \"ID\",\n    <%=sourceSystem%>  ||'::'|| \"PurchasingDocumentLineLocationExtractPVO\".\"PoLineId\"                 AS \"PurchaseDocumentLine\",\n    <%=sourceSystem%>  ||'::'|| \"PurchasingDocumentLineLocationExtractPVO\".\"ShipToOrganizationId\"     AS \"Plant\",\n    <%=sourceSystem%>  ||'::'|| \"PurchasingDocumentLineLocationExtractPVO\".\"ShipToOrganizationId\"  \n        || '::' || \"PurchasingDocumentLineExtractPVO\".\"ItemId\"                                        AS \"MaterialMasterPlant\",    \n    \"PurchasingDocumentLineLocationExtractPVO\".\"CreationDate\"                                         AS \"CreationTime\",\n    \"PurchasingDocumentLineLocationExtractPVO\".\"QuantityReceived\"                                     AS \"ReceivedQuantity\",\n    \"PurchasingDocumentLineLocationExtractPVO\".\"NeedByDate\"                                           AS \"ExpectedDeliveryDate\",\n    \"PurchasingDocumentLineLocationExtractPVO\".\"UomCode\"                                              AS \"QuantityUnit\",\n    \"PurchasingDocumentLineLocationExtractPVO\".\"Quantity\"                                             AS \"ExpectedQuantity\",\n    CAST(\"PurchasingDocumentLineExtractPVO\".\"LineNum\" AS VARCHAR(255))                                AS \"LineNumber\",    \n    CAST(\"PurchasingDocumentHeaderExtractPVO\".\"Segment1\" AS VARCHAR(255))                             AS \"PurchaseDocumentNumber\", \n    CAST(\"PurchasingDocumentLineLocationExtractPVO\".\"ShipmentNum\" AS VARCHAR(255))                    AS \"DeliveryNumber\",       \n    <%=sourceSystem%>                                                                                 AS \"SourceSystemInstance\"\nFROM \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentLineLocationExtractPVO\" AS \"PurchasingDocumentLineLocationExtractPVO\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentLineExtractPVO\" AS \"PurchasingDocumentLineExtractPVO\"\n        ON \"PurchasingDocumentLineLocationExtractPVO\".\"PoLineId\" = \"PurchasingDocumentLineExtractPVO\".\"PoLineId\"\n    LEFT JOIN \"FscmTopModelAM_PrcExtractAM_PoBiccExtractAM_PurchasingDocumentHeaderExtractPVO\" AS PurchasingDocumentHeaderExtractPVO\n        ON \"PurchasingDocumentLineLocationExtractPVO\".\"PoHeaderId\" = \"PurchasingDocumentHeaderExtractPVO\".\"PoHeaderId\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763481619684.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649683934.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseScheduleLines - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "b77ab540-3122-4bf0-b245-159ec8bc1039",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> \n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)\n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 14, 5) \n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 19, 4)                                 AS \"ObjectID\",\n\t<%=sourceSystem%>  \n            || '::' || \"CDPOS\".\"TABKEY\" \n            || '::' || \"CDPOS\".\"TABNAME\" \n            || '::' || \"CDPOS\".\"FNAME\"\n            || '::' || \"CDPOS\".\"CHANGENR\"\n            || '::' || \"CDPOS\".\"CHNGIND\"                                                AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(\"CDHDR\".\"UTIME\" AS TIME)                    AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'EINDT' THEN 'ItemDeliveryDate'\n           WHEN \"CDPOS\".\"FNAME\" = 'MENGE' THEN 'ExpectedQuantity'\n        END                                                                   AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\" \n        END                                                                   AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_NEW\" \n        END                                                                   AS \"NewValue\",\n       \t<%=sourceSystem%>  \n            || '::' || \"CDHDR\".\"MANDANT\" \n            || '::' || \"CDHDR\".\"USERNAME\"                                AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                        AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                                     AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' \n        END                                                                   AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n            ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n    LEFT JOIN \"EKET\" AS \"EKET\"\n            ON \"EKET\".\"MANDT\" || \"EKET\".\"EBELN\" || \"EKET\".\"EBELP\" || \"EKET\".\"ETENR\" = \"CDPOS\".\"TABKEY\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n            ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDHDR\".\"UDATE\" IS NOT NULL\n  AND \"CDPOS\".\"OBJECTCLAS\" = 'EINKBELEG'\n  AND \"CDPOS\".\"TABNAME\" = 'EKET'\n  AND \"CDPOS\".\"FNAME\" IN ('EINDT' , 'MENGE')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"EKET\".\"MANDT\" IS NOT NULL"
+                    },
+                    {
+                        "id": "CDPOS1",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> \n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)\n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 14, 5) \n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 19, 4)                                       AS \"ObjectID\",\n\t<%=sourceSystem%>  \n        || '::' || \"CDPOS\".\"TABKEY\" \n        || '::' || \"CDPOS\".\"FNAME\"\n        || '::' || \"CDPOS\".\"TABKEY\" \n        || '::' || \"CDPOS\".\"TABNAME\" \n        || '::' || \"CDPOS\".\"FNAME\"\n        || '::' || \"CDPOS\".\"CHANGENR\" \n        || '::' || \"CDPOS\".\"CHNGIND\"                                               AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + COALESCE(CAST(\"CDHDR\".\"UTIME\" AS TIME), TIME '23:59:59') AS \"Time\",\n    CASE\n           WHEN \"CDPOS\".\"CHNGIND\" = 'I' THEN 'CreationTime'\n           WHEN \"CDPOS\".\"CHNGIND\" = 'D' THEN 'DeletionTime'\n           END                                                                               AS \"Attribute\",\n    CAST(NULL AS VARCHAR(255))                                                               AS \"OldValue\",\n    CAST(NULL AS VARCHAR(255))                                                               AS \"NewValue\",\n    \t<%=sourceSystem%>  \n        || '::' || \"CDHDR\".\"MANDANT\" \n        || '::' || \"CDHDR\".\"USERNAME\"                                                           AS \"ChangedBy\",\n    \"CDHDR\".\"TCODE\"                                                                          AS \"OperationType\",\n    \"CDHDR\".\"CHANGENR\"                                                                       AS \"OperationID\",\n    CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                                                 AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'EINKBELEG'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"TABNAME\" = 'EKET'\n  AND \"CDPOS\".\"FNAME\" = 'KEY'\n  AND \"CDPOS\".\"CHNGIND\" IN ('I' , 'D')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL"
+                    }
+                ],
+                "foreign_key_names": [
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "DeliveryNumber",
+                    "ExpectedDeliveryDate",
+                    "ExpectedQuantity",
+                    "ID",
+                    "LineNumber",
+                    "PurchaseDocumentNumber",
+                    "QuantityUnit",
+                    "ReceivedQuantity",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseScheduleLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  \n        || '::' || \"EKET\".\"MANDT\" \n        || '::' || \"EKET\".\"EBELN\" \n        || '::' || \"EKET\".\"EBELP\" \n        || '::' || \"EKET\".\"ETENR\"                                                                                                   AS \"ID\",\n    CAST(NULL AS TIMESTAMP)                                                                                                         AS \"CreationTime\",\n\t<%=sourceSystem%>  \n        || '::' || \"EKET\".\"MANDT\" \n        || '::' || \"EKET\".\"EBELN\" \n        || '::' || \"EKET\".\"EBELP\"                                                                                                   AS \"PurchaseDocumentLine\",\n    CAST(\"EKET\".\"EINDT\" AS TIMESTAMP)                                                                                             AS \"ExpectedDeliveryDate\",\n    \"EKET\".\"WEMNG\"                                                                                                                AS \"ReceivedQuantity\",\n    \"EKET\".\"MENGE\"                                                                                                                AS \"ExpectedQuantity\",\n    \"EKPO\".\"MEINS\"                                                                                                                AS \"QuantityUnit\",\n\t<%=sourceSystem%>  || '::' || \"EKET\".\"MANDT\"                                                                                  AS \"SourceSystemInstance\",\n    \"EKET\".\"EBELN\"                                                                                                                AS \"PurchaseDocumentNumber\",\n    CAST(\"EKET\".\"EBELP\" AS VARCHAR(255))                                                                                          AS \"LineNumber\",\n    \"EKET\".\"ETENR\"                                                                                                                AS \"DeliveryNumber\",\n    <%=sourceSystem%>  || '::' || \"EKPO\".\"MANDT\" || '::' || \"EKPO\".\"WERKS\"                                                        AS \"Plant\",\n    <%=sourceSystem%>  || '::' || \"EKPO\".\"MANDT\" || '::' || \"EKPO\".\"MATNR\" || '::' || \"EKPO\".\"WERKS\"                              AS \"MaterialMasterPlant\"\nFROM \"EKET\" AS \"EKET\"\n    LEFT JOIN \"EKPO\" AS \"EKPO\"\n        ON \"EKET\".\"MANDT\" = \"EKPO\".\"MANDT\"\n            AND \"EKET\".\"EBELN\" = \"EKPO\".\"EBELN\"\n            AND \"EKET\".\"EBELP\" = \"EKPO\".\"EBELP\"\nWHERE \"EKET\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1764705082433.0,
+        "changed_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634452195.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseScheduleLines - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "45dd3a90-0d6c-493c-b30e-f2fcc0b88010",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "CDPOS",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> \n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)\n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 14, 5) \n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 19, 4)                                 AS \"ObjectID\",\n\t<%=sourceSystem%>  \n            || '::' || \"CDPOS\".\"TABKEY\" \n            || '::' || \"CDPOS\".\"TABNAME\" \n            || '::' || \"CDPOS\".\"FNAME\"\n            || '::' || \"CDPOS\".\"CHANGENR\"\n            || '::' || \"CDPOS\".\"CHNGIND\"                                      AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE),\n                    \"CDHDR\".\"UTIME\") AS INTERVAL SECOND)                      AS \"Time\",\n       CASE\n           WHEN \"CDPOS\".\"FNAME\" = 'EINDT' THEN 'ItemDeliveryDate'\n           WHEN \"CDPOS\".\"FNAME\" = 'MENGE' THEN 'ExpectedQuantity'\n        END                                                                   AS \"Attribute\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_OLD\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_OLD\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_OLD\" \n        END                                                                   AS \"OldValue\",\n       CASE\n           WHEN \"CDPOS\".\"VALUE_NEW\" LIKE '%-' THEN CONCAT('-', REPLACE(LTRIM(\"CDPOS\".\"VALUE_NEW\"), '-', ''))\n           ELSE \"CDPOS\".\"VALUE_NEW\" \n        END                                                                   AS \"NewValue\",\n       \t<%=sourceSystem%>  \n            || '::' || \"CDHDR\".\"MANDANT\" \n            || '::' || \"CDHDR\".\"USERNAME\"                                AS \"ChangedBy\",\n       \"CDHDR\".\"TCODE\"                                                        AS \"OperationType\",\n       \"CDHDR\".\"CHANGENR\"                                                     AS \"OperationID\",\n       CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' \n        END                                                                   AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n    LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n            ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n    LEFT JOIN \"EKET\" AS \"EKET\"\n            ON \"EKET\".\"MANDT\" || \"EKET\".\"EBELN\" || \"EKET\".\"EBELP\" || \"EKET\".\"ETENR\" = \"CDPOS\".\"TABKEY\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n            ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDHDR\".\"UDATE\" IS NOT NULL\n  AND \"CDPOS\".\"OBJECTCLAS\" = 'EINKBELEG'\n  AND \"CDPOS\".\"TABNAME\" = 'EKET'\n  AND \"CDPOS\".\"FNAME\" IN ('EINDT' , 'MENGE')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"EKET\".\"MANDT\" IS NOT NULL"
+                    },
+                    {
+                        "id": "CDPOS1",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%> \n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 1, 3)\n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 4, 10)\n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 14, 5) \n            || '::' || SUBSTRING(\"CDPOS\".\"TABKEY\", 19, 4)                                       AS \"ObjectID\",\n\t<%=sourceSystem%>  \n        || '::' || \"CDPOS\".\"TABKEY\" \n        || '::' || \"CDPOS\".\"FNAME\"\n        || '::' || \"CDPOS\".\"TABKEY\" \n        || '::' || \"CDPOS\".\"TABNAME\" \n        || '::' || \"CDPOS\".\"FNAME\"\n        || '::' || \"CDPOS\".\"CHANGENR\" \n        || '::' || \"CDPOS\".\"CHNGIND\"                                                         AS \"ID\",\n       CAST(\"CDHDR\".\"UDATE\" AS DATE) + COALESCE(CAST(TIMESTAMPDIFF(SECOND, CAST(\"CDHDR\".\"UTIME\" AS DATE),\n                    \"CDHDR\".\"UTIME\") AS INTERVAL SECOND), INTERVAL '86399' SECOND)           AS \"Time\",\n    CASE\n           WHEN \"CDPOS\".\"CHNGIND\" = 'I' THEN 'CreationTime'\n           WHEN \"CDPOS\".\"CHNGIND\" = 'D' THEN 'DeletionTime'\n           END                                                                               AS \"Attribute\",\n    CAST(NULL AS VARCHAR(255))                                                               AS \"OldValue\",\n    CAST(NULL AS VARCHAR(255))                                                               AS \"NewValue\",\n    \t<%=sourceSystem%>  \n        || '::' || \"CDHDR\".\"MANDANT\" \n        || '::' || \"CDHDR\".\"USERNAME\"                                                           AS \"ChangedBy\",\n    \"CDHDR\".\"TCODE\"                                                                          AS \"OperationType\",\n    \"CDHDR\".\"CHANGENR\"                                                                       AS \"OperationID\",\n    CASE\n           WHEN \"USR02\".\"USTYP\" IN ('B', 'C') THEN 'Automatic'\n           ELSE 'Manual' END                                                                 AS \"ExecutionType\"\nFROM \"CDPOS\" AS \"CDPOS\"\n         LEFT JOIN \"CDHDR\" AS \"CDHDR\"\n                   ON \"CDPOS\".\"MANDANT\" = \"CDHDR\".\"MANDANT\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = \"CDHDR\".\"OBJECTCLAS\"\n                       AND \"CDPOS\".\"OBJECTID\" = \"CDHDR\".\"OBJECTID\"\n                       AND \"CDPOS\".\"CHANGENR\" = \"CDHDR\".\"CHANGENR\"\n                       AND \"CDPOS\".\"OBJECTCLAS\" = 'EINKBELEG'\n         LEFT JOIN \"USR02\" AS \"USR02\"\n                   ON \"CDHDR\".\"USERNAME\" = \"USR02\".\"BNAME\"\n                       AND \"CDHDR\".\"MANDANT\" = \"USR02\".\"MANDT\"\nWHERE \"CDPOS\".\"TABNAME\" = 'EKET'\n  AND \"CDPOS\".\"FNAME\" = 'KEY'\n  AND \"CDPOS\".\"CHNGIND\" IN ('I' , 'D')\n  AND \"CDPOS\".\"MANDANT\" IS NOT NULL\n  AND \"CDHDR\".\"MANDANT\" IS NOT NULL\n  "
+                    }
+                ],
+                "foreign_key_names": [
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "DeliveryNumber",
+                    "ExpectedDeliveryDate",
+                    "ExpectedQuantity",
+                    "ID",
+                    "LineNumber",
+                    "PurchaseDocumentNumber",
+                    "QuantityUnit",
+                    "ReceivedQuantity",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseScheduleLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  \n        || '::' || \"EKET\".\"MANDT\" \n        || '::' || \"EKET\".\"EBELN\" \n        || '::' || \"EKET\".\"EBELP\" \n        || '::' || \"EKET\".\"ETENR\"                                                                                                   AS \"ID\",\n    CAST(NULL AS TIMESTAMP)                                                                                                         AS \"CreationTime\",\n\t<%=sourceSystem%>  \n        || '::' || \"EKET\".\"MANDT\" \n        || '::' || \"EKET\".\"EBELN\" \n        || '::' || \"EKET\".\"EBELP\"                                                                                                   AS \"PurchaseDocumentLine\",\n    CAST(\"EKET\".\"EINDT\" AS TIMESTAMP)                                                                                             AS \"ExpectedDeliveryDate\",\n    \"EKET\".\"WEMNG\"                                                                                                                AS \"ReceivedQuantity\",\n    \"EKET\".\"MENGE\"                                                                                                                AS \"ExpectedQuantity\",\n    \"EKPO\".\"MEINS\"                                                                                                                AS \"QuantityUnit\",\n\t<%=sourceSystem%>  || '::' || \"EKET\".\"MANDT\"                                                                                  AS \"SourceSystemInstance\",\n    \"EKET\".\"EBELN\"                                                                                                                AS \"PurchaseDocumentNumber\",\n    CAST(\"EKET\".\"EBELP\" AS VARCHAR(255))                                                                                          AS \"LineNumber\",\n    \"EKET\".\"ETENR\"                                                                                                                AS \"DeliveryNumber\",\n    <%=sourceSystem%>  || '::' || \"EKPO\".\"MANDT\" || '::' || \"EKPO\".\"WERKS\"                                                        AS \"Plant\",\n    <%=sourceSystem%>  || '::' || \"EKPO\".\"MANDT\" || '::' || \"EKPO\".\"MATNR\" || '::' || \"EKPO\".\"WERKS\"                              AS \"MaterialMasterPlant\"\nFROM \"EKET\" AS \"EKET\"\n    LEFT JOIN \"EKPO\" AS \"EKPO\"\n        ON \"EKET\".\"MANDT\" = \"EKPO\".\"MANDT\"\n            AND \"EKET\".\"EBELN\" = \"EKPO\".\"EBELN\"\n            AND \"EKET\".\"EBELP\" = \"EKPO\".\"EBELP\"\nWHERE \"EKET\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1761316911935.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630831892.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "PurchaseScheduleLines transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "e9146e71-9e4d-42b7-8d01-8049614b1de2",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "ALL",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_All_entries\" AS (\n    SELECT \n        \"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"LINE_LOCATION_ID\"                                 AS \"LINE_LOCATION_ID\",\n        \"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"LAST_UPDATE_DATE\"                                 AS \"LAST_UPDATE_DATE\",\n        CAST(\"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"LAST_UPDATED_BY\" AS VARCHAR(255))            AS \"LAST_UPDATED_BY\",\n        CAST(\"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"REVISION_NUM\" AS VARCHAR(255))               AS \"REVISION_NUM\",\n        CAST(\"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"NEED_BY_DATE\" AS VARCHAR(255))               AS \"NEED_BY_DATE\",\n        CAST(\"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"QUANTITY\" AS VARCHAR(255))                   AS \"EXP_QUANTITY\",\n        CAST(\"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"QUANTITY_RECEIVED\" AS VARCHAR(255))          AS \"REC_QUANTITY\",\n        CAST(\"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"UNIT_MEAS_LOOKUP_CODE\" AS VARCHAR(255))      AS \"QUANTITY_UNIT\",\n        CAST(\"PO_LINE_LOCATIONS_ARCHIVE_ALL\".\"CANCEL_FLAG\" AS VARCHAR(255))                AS \"CANCEL_FLAG\"\n    FROM \"PO_LINE_LOCATIONS_ARCHIVE_ALL\" AS \"PO_LINE_LOCATIONS_ARCHIVE_ALL\"\n    UNION\n    SELECT \n        \"PO_LINE_LOCATIONS_ALL\".\"LINE_LOCATION_ID\"                                 AS \"LINE_LOCATION_ID\",\n        \"PO_LINE_LOCATIONS_ALL\".\"LAST_UPDATE_DATE\"                                 AS \"LAST_UPDATE_DATE\",\n        CAST(\"PO_LINE_LOCATIONS_ALL\".\"LAST_UPDATED_BY\" AS VARCHAR(255))            AS \"LAST_UPDATED_BY\",\n        ''                                                                         AS \"REVISION_NUM\",\n        CAST(\"PO_LINE_LOCATIONS_ALL\".\"NEED_BY_DATE\" AS VARCHAR(255))               AS \"NEED_BY_DATE\",\n        CAST(\"PO_LINE_LOCATIONS_ALL\".\"QUANTITY\" AS VARCHAR(255))                   AS \"EXP_QUANTITY\",\n        CAST(\"PO_LINE_LOCATIONS_ALL\".\"QUANTITY_RECEIVED\" AS VARCHAR(255))          AS \"REC_QUANTITY\",\n        CAST(\"PO_LINE_LOCATIONS_ALL\".\"UNIT_MEAS_LOOKUP_CODE\" AS VARCHAR(255))      AS \"QUANTITY_UNIT\",\n        CAST(\"PO_LINE_LOCATIONS_ALL\".\"CANCEL_FLAG\" AS VARCHAR(255))                AS \"CANCEL_FLAG\"\n    FROM \"PO_LINE_LOCATIONS_ALL\" AS \"PO_LINE_LOCATIONS_ALL\"\n),\n    \"CTE_Sorting\" AS (\n    SELECT \n        \"All_entries\".\"LINE_LOCATION_ID\"                                                                                                   AS \"LINE_LOCATION_ID\",\n        \"All_entries\".\"LAST_UPDATE_DATE\"                                                                                                   AS \"LAST_UPDATE_DATE\",\n        \"All_entries\".\"LAST_UPDATED_BY\"                                                                                                    AS \"LAST_UPDATED_BY\",\n        \"All_entries\".\"REVISION_NUM\"                                                                                                       AS \"REVISION_NUM\",\n        \"All_entries\".\"NEED_BY_DATE\"                                                                                                       AS \"NEED_BY_DATE\",\n        \"All_entries\".\"EXP_QUANTITY\"                                                                                                       AS \"EXP_QUANTITY\",\n        \"All_entries\".\"REC_QUANTITY\"                                                                                                       AS \"REC_QUANTITY\",\n        \"All_entries\".\"QUANTITY_UNIT\"                                                                                                      AS \"QUANTITY_UNIT\",\n        \"All_entries\".\"CANCEL_FLAG\"                                                                                                        AS \"CANCEL_FLAG\",\n        ROW_NUMBER()\n        OVER (PARTITION BY \"All_entries\".\"LINE_LOCATION_ID\" ORDER BY \"All_entries\".\"LAST_UPDATE_DATE\")                                     AS \"rn\"\n    FROM \"CTE_All_entries\" AS \"All_entries\"\n        LEFT JOIN \"PO_LINE_LOCATIONS_ALL\" AS \"PO_LINE_LOCATIONS_ALL\"\n            ON \"All_entries\".\"LINE_LOCATION_ID\" = \"PO_LINE_LOCATIONS_ALL\".\"LINE_LOCATION_ID\"\n        LEFT JOIN \"PO_HEADERS_ALL\" AS \"PO_HEADERS_ALL\"\n            ON \"PO_LINE_LOCATIONS_ALL\".\"PO_HEADER_ID\" = \"PO_HEADERS_ALL\".\"PO_HEADER_ID\"\n    WHERE \"PO_HEADERS_ALL\".\"TYPE_LOOKUP_CODE\" IN ('STANDARD','BLANKET','CONTRACT','PLANNED')\n        AND \"PO_LINE_LOCATIONS_ALL\".\"PO_LINE_ID\" IS NOT NULL\n), \n    \"CTE_Pairs\" AS (\n    SELECT \n        \"Sorting_Offset\".\"LINE_LOCATION_ID\"  AS \"LINE_LOCATION_ID\",\n        \"Sorting\".\"LAST_UPDATE_DATE\"         AS \"LAST_UPDATE_DATE\",\n        \"Sorting\".\"LAST_UPDATED_BY\"          AS \"LAST_UPDATED_BY\",\n        \"Sorting_Offset\".\"REVISION_NUM\"      AS \"REVISION_NUM\",\n        \"Sorting\".\"NEED_BY_DATE\"             AS \"NEED_BY_DATE\",\n        \"Sorting\".\"CANCEL_FLAG\"              AS \"CANCEL_FLAG\",\n        \"Sorting\".\"EXP_QUANTITY\"             AS \"EXP_QUANTITY\",\n        \"Sorting\".\"REC_QUANTITY\"             AS \"REC_QUANTITY\",\n        \"Sorting\".\"QUANTITY_UNIT\"            AS \"QUANTITY_UNIT\",\n        \"Sorting_Offset\".\"NEED_BY_DATE\"      AS \"NEED_BY_DATE_old\",\n        \"Sorting_Offset\".\"CANCEL_FLAG\"       AS \"CANCEL_FLAG_old\",\n        \"Sorting_Offset\".\"EXP_QUANTITY\"      AS \"EXP_QUANTITY_old\",\n        \"Sorting_Offset\".\"REC_QUANTITY\"      AS \"REC_QUANTITY_old\",\n        \"Sorting_Offset\".\"QUANTITY_UNIT\"     AS \"QUANTITY_UNIT_old\"\n    FROM \"CTE_Sorting\" AS \"Sorting_Offset\"\n        LEFT JOIN \"CTE_Sorting\" AS \"Sorting\"\n            ON \"Sorting_Offset\".\"LINE_LOCATION_ID\" = \"Sorting\".\"LINE_LOCATION_ID\"\n                AND \"Sorting_Offset\".\"rn\" + 1 = \"Sorting\".\"rn\"\n),\n    \"CTE_ChangeFlags\" AS (\n    SELECT \n        \"Pairs\".\"LINE_LOCATION_ID\"    AS \"LINE_LOCATION_ID\",\n        \"Pairs\".\"LAST_UPDATE_DATE\"    AS \"LAST_UPDATE_DATE\",\n        \"Pairs\".\"LAST_UPDATED_BY\"     AS \"LAST_UPDATED_BY\",\n        \"Pairs\".\"REVISION_NUM\"        AS \"REVISION_NUM\",\n        \"Pairs\".\"NEED_BY_DATE\"        AS \"NEED_BY_DATE\",\n        \"Pairs\".\"CANCEL_FLAG\"         AS \"CANCEL_FLAG\",\n        \"Pairs\".\"EXP_QUANTITY\"        AS \"EXP_QUANTITY\",\n        \"Pairs\".\"REC_QUANTITY\"        AS \"REC_QUANTITY\",\n        \"Pairs\".\"QUANTITY_UNIT\"       AS \"QUANTITY_UNIT\",\n        \"Pairs\".\"NEED_BY_DATE_old\"    AS \"NEED_BY_DATE_old\",\n        \"Pairs\".\"CANCEL_FLAG_old\"     AS \"CANCEL_FLAG_old\",\n        \"Pairs\".\"EXP_QUANTITY_old\"    AS \"EXP_QUANTITY_old\",\n        \"Pairs\".\"REC_QUANTITY_old\"    AS \"REC_QUANTITY_old\",\n        \"Pairs\".\"QUANTITY_UNIT_old\"   AS \"QUANTITY_UNIT_old\",\n        CASE\n            WHEN \"Pairs\".\"NEED_BY_DATE\" <> \"Pairs\".\"NEED_BY_DATE_old\" \n                THEN 1\n            ELSE 0 \n        END                           AS \"NEED_BY_DATE_FLAG\",\n        CASE\n            WHEN \"Pairs\".\"CANCEL_FLAG\" <> \"Pairs\".\"CANCEL_FLAG_old\" \n                THEN 1\n            ELSE 0 \n        END                           AS \"CANCEL_FLAG_FLAG\",\n        CASE\n            WHEN \"Pairs\".\"EXP_QUANTITY\" <> \"Pairs\".\"EXP_QUANTITY_old\" \n                THEN 1\n            ELSE 0 \n        END                           AS \"EXP_QUANTITY_FLAG\",\n        CASE\n            WHEN \"Pairs\".\"REC_QUANTITY\" <> \"Pairs\".\"REC_QUANTITY_old\" \n                THEN 1\n            ELSE 0 \n        END                           AS \"REC_QUANTITY_FLAG\",\n        CASE\n            WHEN \"Pairs\".\"QUANTITY_UNIT\" <> \"Pairs\".\"QUANTITY_UNIT_old\" \n                THEN 1\n            ELSE 0 \n        END                           AS \"QUANTITY_UNIT_FLAG\"\n    FROM \"CTE_Pairs\" AS \"Pairs\"\n),\n    \"CTE_CDMock\" AS (\n    SELECT \n        \"ChangeFlags\".\"LINE_LOCATION_ID\"         AS \"TABKEY\",\n        \"ChangeFlags\".\"REVISION_NUM\"             AS \"REVISION_NUM\",\n        'PO_LINE_LOCATIONS_ALL'                  AS \"TABNAME\",\n        'NEED_BY_DATE'                           AS \"FNAME\",\n        \"ChangeFlags\".\"NEED_BY_DATE_old\"         AS \"Value_old\",\n        \"ChangeFlags\".\"NEED_BY_DATE\"             AS \"Value_new\",\n        \"ChangeFlags\".\"LAST_UPDATE_DATE\"         AS \"ChangeDate\",\n        \"ChangeFlags\".\"LAST_UPDATED_BY\"          AS \"ChangeUser\"\n    FROM \"CTE_ChangeFlags\" AS \"ChangeFlags\"\n    WHERE \"ChangeFlags\".\"NEED_BY_DATE_FLAG\" = 1\n    UNION\n    SELECT \n        \"ChangeFlags\".\"LINE_LOCATION_ID\"         AS \"TABKEY\",\n        \"ChangeFlags\".\"REVISION_NUM\"             AS \"REVISION_NUM\",\n        'PO_LINE_LOCATIONS_ALL'                  AS \"TABNAME\",\n        'CANCEL_FLAG'                            AS \"FNAME\",\n        \"ChangeFlags\".\"CANCEL_FLAG_old\"          AS \"Value_old\",\n        \"ChangeFlags\".\"CANCEL_FLAG\"              AS \"Value_new\",\n        \"ChangeFlags\".\"LAST_UPDATE_DATE\"         AS \"ChangeDate\",\n        \"ChangeFlags\".\"LAST_UPDATED_BY\"          AS \"ChangeUser\"\n    FROM \"CTE_ChangeFlags\" AS \"ChangeFlags\"\n    WHERE \"ChangeFlags\".\"CANCEL_FLAG_FLAG\" = 1\n    UNION\n    SELECT \n        \"ChangeFlags\".\"LINE_LOCATION_ID\"         AS \"TABKEY\",\n        \"ChangeFlags\".\"REVISION_NUM\"             AS \"REVISION_NUM\",\n        'PO_LINE_LOCATIONS_ALL'                  AS \"TABNAME\",\n        'EXP_QUANTITY'                           AS \"FNAME\",\n        \"ChangeFlags\".\"EXP_QUANTITY_old\"         AS \"Value_old\",\n        \"ChangeFlags\".\"EXP_QUANTITY\"             AS \"Value_new\",\n        \"ChangeFlags\".\"LAST_UPDATE_DATE\"         AS \"ChangeDate\",\n        \"ChangeFlags\".\"LAST_UPDATED_BY\"          AS \"ChangeUser\"\n    FROM \"CTE_ChangeFlags\" AS \"ChangeFlags\"\n    WHERE \"ChangeFlags\".\"EXP_QUANTITY_FLAG\" = 1\n    UNION\n    SELECT \n        \"ChangeFlags\".\"LINE_LOCATION_ID\"         AS \"TABKEY\",\n        \"ChangeFlags\".\"REVISION_NUM\"             AS \"REVISION_NUM\",\n        'PO_LINE_LOCATIONS_ALL'                  AS \"TABNAME\",\n        'REC_QUANTITY'                           AS \"FNAME\",\n        \"ChangeFlags\".\"REC_QUANTITY_old\"         AS \"Value_old\",\n        \"ChangeFlags\".\"REC_QUANTITY\"             AS \"Value_new\",\n        \"ChangeFlags\".\"LAST_UPDATE_DATE\"         AS \"ChangeDate\",\n        \"ChangeFlags\".\"LAST_UPDATED_BY\"          AS \"ChangeUser\"\n    FROM \"CTE_ChangeFlags\" AS \"ChangeFlags\"\n    WHERE \"ChangeFlags\".\"REC_QUANTITY_FLAG\" = 1\n    UNION\n    SELECT \n        \"ChangeFlags\".\"LINE_LOCATION_ID\"         AS \"TABKEY\",\n        \"ChangeFlags\".\"REVISION_NUM\"             AS \"REVISION_NUM\",\n        'PO_LINE_LOCATIONS_ALL'                  AS \"TABNAME\",\n        'QUANTITY_UNIT'                          AS \"FNAME\",\n        \"ChangeFlags\".\"QUANTITY_UNIT_old\"        AS \"Value_old\",\n        \"ChangeFlags\".\"QUANTITY_UNIT\"            AS \"Value_new\",\n        \"ChangeFlags\".\"LAST_UPDATE_DATE\"         AS \"ChangeDate\",\n        \"ChangeFlags\".\"LAST_UPDATED_BY\"          AS \"ChangeUser\"\n    FROM \"CTE_ChangeFlags\" AS \"ChangeFlags\"\n    WHERE \"ChangeFlags\".\"QUANTITY_UNIT_FLAG\" = 1\n)\nSELECT \n    <%=sourceSystem%> || '::' || \"CDMock\".\"TABKEY\" || '::' || \"CDMock\".\"REVISION_NUM\" || '::' || \"CDMock\".\"FNAME\" \n        || '::' || \"CDMock\".\"ChangeDate\"                                                      AS \"ID\",\n    <%=sourceSystem%> || '::' || \"CDMock\".\"TABKEY\"                                            AS \"ObjectID\",\n    \"CDMock\".\"ChangeDate\"                                                                     AS \"Time\",\n    CASE\n        WHEN \"CDMock\".\"FNAME\" = 'NEED_BY_DATE' \n            THEN 'ExpectedDeliveryDate'\n        WHEN \"CDMock\".\"FNAME\" = 'CANCEL_FLAG' \n            THEN 'DeletionIndicator' \n        WHEN \"CDMock\".\"FNAME\" = 'EXP_QUANTITY' \n            THEN 'ExpectedQuantity'\n        WHEN \"CDMock\".\"FNAME\" = 'REC_QUANTITY' \n            THEN 'ReceivedQuantity'\n        WHEN \"CDMock\".\"FNAME\" = 'QUANTITY_UNIT' \n            THEN 'QuantityUnit' \n    END                                                                                       AS \"Attribute\",\n    \"CDMock\".\"Value_old\"                                                                      AS \"OldValue\",\n    \"CDMock\".\"Value_new\"                                                                      AS \"NewValue\",\n    <%=sourceSystem%> || '::' || \"CDMock\".\"ChangeUser\"                                        AS \"ChangedBy\",\n    NULL                                                                                      AS \"OperationType\",\n    NULL                                                                                      AS \"OperationID\",\n    NULL                                                                                      AS \"ExecutionType\"\nFROM \"CTE_CDMock\" AS \"CDMock\""
+                    }
+                ],
+                "foreign_key_names": [
+                    "MaterialMasterPlant",
+                    "Plant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationTime",
+                    "DeliveryNumber",
+                    "ExpectedDeliveryDate",
+                    "ExpectedQuantity",
+                    "ID",
+                    "LineNumber",
+                    "PurchaseDocumentNumber",
+                    "QuantityUnit",
+                    "ReceivedQuantity",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseOrderScheduleLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    <%=sourceSystem%>  || '::' || \"PO_LINE_LOCATIONS_ALL\".\"LINE_LOCATION_ID\"        AS \"ID\",\n    <%=sourceSystem%>  || '::' || \"PO_LINE_LOCATIONS_ALL\".\"PO_LINE_ID\"              AS \"PurchaseDocumentLine\",\n    <%=sourceSystem%>  || '::' || \"PO_LINE_LOCATIONS_ALL\".\"SHIP_TO_ORGANIZATION_ID\" AS \"Plant\",\n    <%=sourceSystem%>  || '::' || \"PO_LINE_LOCATIONS_ALL\".\"SHIP_TO_ORGANIZATION_ID\" \n        || '::' || \"PO_LINES_ALL\".\"ITEM_ID\"                                         AS \"MaterialMasterPlant\",\n    \"PO_LINE_LOCATIONS_ALL\".\"CREATION_DATE\"                                         AS \"CreationTime\",   \n    \"PO_LINE_LOCATIONS_ALL\".\"QUANTITY_RECEIVED\"                                     AS \"ReceivedQuantity\",\n    \"PO_LINE_LOCATIONS_ALL\".\"NEED_BY_DATE\"                                          AS \"ExpectedDeliveryDate\",\n    \"PO_LINE_LOCATIONS_ALL\".\"UNIT_MEAS_LOOKUP_CODE\"                                 AS \"QuantityUnit\",\n    \"PO_LINE_LOCATIONS_ALL\".\"QUANTITY\"                                              AS \"ExpectedQuantity\",\n    CAST(\"PO_LINES_ALL\".\"LINE_NUM\" AS VARCHAR(255))                                 AS \"LineNumber\",\n    CAST(\"PO_HEADERS_ALL\".\"SEGMENT1\" AS VARCHAR(255))                               AS \"PurchaseDocumentNumber\",\n    CAST(\"PO_LINE_LOCATIONS_ALL\".\"SHIPMENT_NUM\" AS VARCHAR(255))                    AS \"DeliveryNumber\",\n    <%=sourceSystem%>                                                               AS \"SourceSystemInstance\"\nFROM \"PO_LINE_LOCATIONS_ALL\" AS \"PO_LINE_LOCATIONS_ALL\"\n    LEFT JOIN \"PO_HEADERS_ALL\" AS \"PO_HEADERS_ALL\"\n        ON \"PO_LINE_LOCATIONS_ALL\".\"PO_HEADER_ID\" = \"PO_HEADERS_ALL\".\"PO_HEADER_ID\"\n    LEFT JOIN \"PO_LINES_ALL\" AS \"PO_LINES_ALL\"\n        ON \"PO_LINE_LOCATIONS_ALL\".\"PO_LINE_ID\" = \"PO_LINES_ALL\".\"PO_LINE_ID\"\nWHERE \"PO_HEADERS_ALL\".\"TYPE_LOOKUP_CODE\" IN ('STANDARD','BLANKET','CONTRACT','PLANNED')\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

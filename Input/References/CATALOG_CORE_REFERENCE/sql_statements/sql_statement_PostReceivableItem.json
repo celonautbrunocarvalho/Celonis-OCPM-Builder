@@ -1,0 +1,62 @@
+[
+    {
+        "change_date": 1760347586897.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630882259.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "PostReceivableItem transformation - copy - 1",
+        "draft": null,
+        "factory_id": "6ce053eb-d2b6-4bfd-b203-bd8aabf33e73",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PostReceivableItem",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CustomerInvoice",
+                    "ReceivableItem"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DocumentCategory",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PostReceivableItemAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'PostReceivableItem' || '::' || \"ReceivableItem\".\"ID\"                     AS \"ID\",\n    \"ReceivableItem\".\"ID\"                                                     AS \"ReceivableItem\",\n    \"ReceivableItem\".\"CustomerInvoice_ID\"                                     AS \"CustomerInvoice\",\n    \"ReceivableItem\".\"CreationTime\"                                           AS \"Time\",\n    \"ReceivableItem\".\"CreatedBy_ID\"                                           AS \"ExecutedBy\",\n    \"ReceivableItem\".\"CreationExecutionType\"                                  AS \"ExecutionType\",\n    \"ReceivableItem\".\"DocumentCategory\"                                       AS \"DocumentCategory\"\nFROM \"o_custom_ReceivableItem\" AS \"ReceivableItem\"\nWHERE \"ReceivableItem\".\"CreationTime\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

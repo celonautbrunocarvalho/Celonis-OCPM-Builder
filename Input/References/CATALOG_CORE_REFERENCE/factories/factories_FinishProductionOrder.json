@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1759868332035.0,
+        "changed_by": {
+            "id": "44ce8cdf-0fde-492e-825c-530c92bc1d7e",
+            "name": "k.shethia@celonis.com",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "creation_date": 1749721260760.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "FinishProductionOrder",
+        "factory_id": "52794cc5-8db2-423b-941b-1bbeea52dc91",
+        "has_overwrites": null,
+        "name": "FinishProductionOrder",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "FinishProductionOrder",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

@@ -1,0 +1,122 @@
+[
+    {
+        "change_date": 1758528527868.0,
+        "changed_by": {
+            "id": "9009518c-e25c-4997-b8d1-49ec38885680",
+            "name": "Pooja Singh Dohare",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752756260285.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "disabled": null,
+        "display_name": "SalesOrderBlock - OracleFusion",
+        "factory_id": "f506dcd0-e060-4afc-b860-846a9705ae97",
+        "has_overwrites": null,
+        "name": "SalesOrderBlock - OracleFusion",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrderBlock",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1764062120012.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1749641059830.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "disabled": null,
+        "display_name": "SalesOrderBlock - 00. Central Extraction Pool_Oracle-ebs",
+        "factory_id": "179ad754-2723-435e-9717-c38abef19717",
+        "has_overwrites": null,
+        "name": "SalesOrderBlock - 00. Central Extraction Pool_Oracle-ebs",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrderBlock",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1762782265325.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749634858875.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "disabled": null,
+        "display_name": "SalesOrderBlock - 00. Central Extraction Pool_TS1",
+        "factory_id": "e7691b49-5f68-47cf-a8d7-09bdf94f76cf",
+        "has_overwrites": null,
+        "name": "SalesOrderBlock - 00. Central Extraction Pool_TS1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrderBlock",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    },
+    {
+        "change_date": 1762782470542.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "545b42ca-1ca9-4aca-86de-105246b55399",
+            "name": "Alvaro Gomez",
+            "type_": "USER"
+        },
+        "creation_date": 1751375448812.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "disabled": null,
+        "display_name": "SalesOrderBlock - S4HANA",
+        "factory_id": "15a29478-3b38-4f4d-9d58-ad58c41966b9",
+        "has_overwrites": null,
+        "name": "SalesOrderBlock - S4HANA",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SalesOrderBlock",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

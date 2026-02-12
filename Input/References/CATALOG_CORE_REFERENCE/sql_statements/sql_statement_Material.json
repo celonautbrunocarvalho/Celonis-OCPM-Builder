@@ -1,0 +1,342 @@
+[
+    {
+        "change_date": 1763978878928.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1751377169014.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "Material - Oracle Fusion",
+        "draft": null,
+        "factory_id": "e7b10080-bb28-48f6-be96-9b4f52685d79",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialGroupName",
+                    "MaterialGroupNumber",
+                    "MaterialName",
+                    "MaterialNumber",
+                    "SourceSystemInstance",
+                    "StockKeepingUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_MATERIAL_MASTER\" AS (\n    SELECT\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOInventoryItemId\"         AS \"INVENTORY_ITEM_ID\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOInventoryOrganizationId\" AS \"ORGANIZATION_ID\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOCreationDate\"            AS \"CREATION_DATE\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOBomItemType\"             AS \"BOM_ITEM_TYPE\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOItemCatalogGroupId\"      AS \"ITEM_CATALOG_GROUP_ID\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOPrimaryUomCode\"          AS \"PRIMARY_UOM_CODE\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOItemNumber\"              AS \"SEGMENT1\",\n        \"ITEM_CATALOG\".\"CatalogTranslationPEOCategorySetName\"     AS \"ITEM_CATALOG_NAME\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ItemTranslationPEODescription\"      AS \"DESCRIPTION\",\n        ROW_NUMBER() OVER (\n            PARTITION BY\n                \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOInventoryItemId\"\n            ORDER BY\n                \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOCreationDate\"\n        ) AS \"RN\"\n    FROM \"FscmTopModelAM_ScmExtractAM_EgpBiccExtractAM_ItemExtractPVO\" AS \"MTL_SYSTEM_ITEMS_B\"\n        LEFT JOIN \"FscmTopModelAM_EgpItemsPublicModelAM_ItemCategory\" AS \"ITEM_CATEGORY\"\n            ON \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOInventoryItemId\" = \"ITEM_CATEGORY\".\"InventoryItemId\"\n            AND \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOInventoryOrganizationId\" = \"ITEM_CATEGORY\".\"OrganizationId\"\n        LEFT JOIN \"FscmTopModelAM_ScmExtractAM_EgpBiccExtractAM_CatalogExtractPVO\" AS \"ITEM_CATALOG\"\n            ON \"ITEM_CATEGORY\".\"CatalogBasePEOCategorySetId\" = \"ITEM_CATALOG\".\"CatalogBasePEOCategorySetId\"\n    WHERE EXISTS (\n            SELECT\n                1\n            FROM \"FscmTopModelAM_ScmExtractAM_ScmRcsBiccExtractAM_InvOrgParametersExtractPVO\" AS \"MTL_PARAMETERS\"\n            WHERE \"MTL_SYSTEM_ITEMS_B\".\"ItemBasePEOInventoryOrganizationId\" = \"MTL_PARAMETERS\".\"OrganizationId\"\n        )\n)\nSELECT\n    <%=sourceSystem%> || '::' || \"MATERIAL_MASTER\".\"INVENTORY_ITEM_ID\"        AS \"ID\",\n    CAST(\"MATERIAL_MASTER\".\"ITEM_CATALOG_NAME\" AS VARCHAR(255))               AS \"MaterialGroupName\",\n    CAST(\"MATERIAL_MASTER\".\"ITEM_CATALOG_GROUP_ID\" AS VARCHAR(255))           AS \"MaterialGroupNumber\",\n    \"MATERIAL_MASTER\".\"DESCRIPTION\"                                           AS \"MaterialName\",\n    <%=sourceSystem%>                                                         AS \"SourceSystemInstance\",\n    \"MATERIAL_MASTER\".\"PRIMARY_UOM_CODE\"                                      AS \"StockKeepingUnit\",\n    CAST(\"MATERIAL_MASTER\".\"SEGMENT1\" AS VARCHAR(255))                        AS \"MaterialNumber\"\nFROM \"CTE_MATERIAL_MASTER\" AS \"MATERIAL_MASTER\"\nWHERE \"MATERIAL_MASTER\".\"RN\" = 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763037175825.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633360906.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "Material - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "8991388c-9a85-4ce3-805e-dac8ce1dadb2",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "SI-Unit",
+                "value": "'ST'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialGroupName",
+                    "MaterialGroupNumber",
+                    "MaterialName",
+                    "MaterialNumber",
+                    "SourceSystemInstance",
+                    "StockKeepingUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || \"MARA\".\"MANDT\" || '::' || \"MARA\".\"MATNR\" AS \"ID\",\n    \"MAKT\".\"MAKTX\"                                                           AS \"MaterialName\",\n    \"MARA\".\"MATKL\"                                                           AS \"MaterialGroupNumber\",\n    \"T023T\".\"WGBEZ\"                                                          AS \"MaterialGroupName\",\n    \"MARA\".\"MATNR\"                                                           AS \"MaterialNumber\",\n    CASE\n        WHEN \"T006\".\"DIMID\" != 'AAAADL'\n            THEN \"T006D\".\"MSSIE\"\n        WHEN \"T006\".\"DIMID\" = 'AAAADL'\n            THEN \"MARM\".\"MEINH\"\n    END                                                                      AS \"StockKeepingUnit\",\n    <%=sourceSystem%> || '::' || \"MARA\".\"MANDT\"                              AS \"SourceSystemInstance\"\nFROM \"MARA\" AS \"MARA\"\n         LEFT JOIN \"MAKT\" AS \"MAKT\"\n                   ON \"MARA\".\"MANDT\" = \"MAKT\".\"MANDT\"\n                       AND \"MARA\".\"MATNR\" = \"MAKT\".\"MATNR\"\n                       AND \"MAKT\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"T023T\" AS \"T023T\"\n                   ON \"MARA\".\"MANDT\" = \"T023T\".\"MANDT\"\n                       AND \"MARA\".\"MATKL\" = \"T023T\".\"MATKL\"\n                       AND \"T023T\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"T006\" AS \"T006\"\n                   ON \"MARA\".\"MANDT\" = \"T006\".\"MANDT\"\n                       AND \"MARA\".\"MEINS\" = \"T006\".\"MSEHI\"\n         LEFT JOIN \"T006D\" AS \"T006D\"\n                   ON \"T006\".\"MANDT\" = \"T006D\".\"MANDT\"\n                       AND \"T006\".\"DIMID\" = \"T006D\".\"DIMID\"\n         LEFT JOIN \"MARM\" AS \"MARM\"\n                   ON \"MARA\".\"MANDT\" = \"MARM\".\"MANDT\"\n                       AND \"MARA\".\"MATNR\" = \"MARM\".\"MATNR\"\n                       AND \"MARM\".\"MEINH\" = <%=SI-Unit%> "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1766055496561.0,
+        "changed_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764588589615.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": true,
+        "display_name": "Material - MSDynamics 365",
+        "draft": null,
+        "factory_id": "ef4fd145-6688-49d4-8012-1d595b24377d",
+        "factory_validation_status": "NOT_VALIDATED",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialGroupName",
+                    "MaterialGroupNumber",
+                    "MaterialName",
+                    "MaterialNumber",
+                    "SourceSystemInstance",
+                    "StockKeepingUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\nSELECT\n\t<%=sourceSystem%>||'::'||\"ReleasedProducts\".\"ItemNumber\"            AS \"ID\",\n    \"ProductGroups\".\"GroupId\"                                           AS \"MaterialGroupName\",\n    \"ReleasedProducts\".\"ProductSearchName\"                              AS \"MaterialName\",\n    \"ReleasedProducts\".\"ItemNumber\"                                     AS \"MaterialNumber\",\n    \"ProductCategoryAssignments\".\"ProductCategoryName\"                  AS \"ProductHierarchy\",\n    <%=sourceSystem%> ||'::'||\"ReleasedProducts\".\"dataAreaId\"           AS \"SourceSystemInstance\",\n    NULL                                                                AS StockKeepingUnit,\n    NULL                                                                AS MaterialGroupNumber\nFROM \"ReleasedProductsV2\" AS ReleasedProducts\n\tLEFT JOIN \"ProductCategoryAssignments\"\n\t    ON \"ProductCategoryAssignments\".\"ProductNumber\" = \"ReleasedProducts\".\"ProductNumber\"\n    LEFT JOIN \"ProductGroups\"\n        ON \"ProductGroups\".dataAreaId = ReleasedProducts.dataAreaId\n        AND \"ProductGroups\".GroupId = ReleasedProducts.ProductGroupId\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763037128787.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749648750133.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "Material - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "36e07c86-5c01-45fb-ac43-901454b9f5c0",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "SI-Unit",
+                "value": "'ST'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialGroupName",
+                    "MaterialGroupNumber",
+                    "MaterialName",
+                    "MaterialNumber",
+                    "SourceSystemInstance",
+                    "StockKeepingUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || \"MARA\".\"MANDT\" || '::' || \"MARA\".\"MATNR\" AS \"ID\",\n    \"MAKT\".\"MAKTX\"                                                           AS \"MaterialName\",\n    \"MARA\".\"MATKL\"                                                           AS \"MaterialGroupNumber\",\n    \"T023T\".\"WGBEZ\"                                                          AS \"MaterialGroupName\",\n    \"MARA\".\"MATNR\"                                                           AS \"MaterialNumber\",\n    CASE\n        WHEN \"T006\".\"DIMID\" != 'AAAADL'\n            THEN \"T006D\".\"MSSIE\"\n        WHEN \"T006\".\"DIMID\" = 'AAAADL'\n            THEN \"MARM\".\"MEINH\"\n    END                                                                      AS \"StockKeepingUnit\",\n    <%=sourceSystem%> || '::' || \"MARA\".\"MANDT\"                              AS \"SourceSystemInstance\"\nFROM \"MARA\" AS \"MARA\"\n         LEFT JOIN \"MAKT\" AS \"MAKT\"\n                   ON \"MARA\".\"MANDT\" = \"MAKT\".\"MANDT\"\n                       AND \"MARA\".\"MATNR\" = \"MAKT\".\"MATNR\"\n                       AND \"MAKT\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"T023T\" AS \"T023T\"\n                   ON \"MARA\".\"MANDT\" = \"T023T\".\"MANDT\"\n                       AND \"MARA\".\"MATKL\" = \"T023T\".\"MATKL\"\n                       AND \"T023T\".\"SPRAS\" = <%=LanguageKey%> \n         LEFT JOIN \"T006\" AS \"T006\"\n                   ON \"MARA\".\"MANDT\" = \"T006\".\"MANDT\"\n                       AND \"MARA\".\"MEINS\" = \"T006\".\"MSEHI\"\n         LEFT JOIN \"T006D\" AS \"T006D\"\n                   ON \"T006\".\"MANDT\" = \"T006D\".\"MANDT\"\n                       AND \"T006\".\"DIMID\" = \"T006D\".\"DIMID\"\n         LEFT JOIN \"MARM\" AS \"MARM\"\n                   ON \"MARA\".\"MANDT\" = \"MARM\".\"MANDT\"\n                       AND \"MARA\".\"MATNR\" = \"MARM\".\"MATNR\"\n                       AND \"MARM\".\"MEINH\" = <%=SI-Unit%> "
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1763976788048.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630784425.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "Material transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "834c76af-779a-44d9-8384-c690b4fb379d",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'US'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Material",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "MaterialGroupName",
+                    "MaterialGroupNumber",
+                    "MaterialName",
+                    "MaterialNumber",
+                    "SourceSystemInstance",
+                    "StockKeepingUnit"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_MATERIAL_MASTER\" AS (\n    SELECT\n        \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\"        AS \"INVENTORY_ITEM_ID\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\"          AS \"ORGANIZATION_ID\",\n        \"MTL_SYSTEM_ITEMS_B\".\"CREATION_DATE\"            AS \"CREATION_DATE\",\n        \"MTL_SYSTEM_ITEMS_B\".\"DESCRIPTION\"              AS \"DESCRIPTION\",\n        \"MTL_SYSTEM_ITEMS_B\".\"BOM_ITEM_TYPE\"            AS \"BOM_ITEM_TYPE\",\n        \"MTL_SYSTEM_ITEMS_B\".\"ITEM_CATALOG_GROUP_ID\"    AS \"ITEM_CATALOG_GROUP_ID\",\n        \"MTL_SYSTEM_ITEMS_B\".\"PRIMARY_UOM_CODE\"         AS \"PRIMARY_UOM_CODE\",\n        \"MTL_SYSTEM_ITEMS_B\".\"SEGMENT1\"                 AS \"SEGMENT1\",\n        ROW_NUMBER() OVER (\n            PARTITION BY\n                \"MTL_SYSTEM_ITEMS_B\".\"INVENTORY_ITEM_ID\"\n            ORDER BY\n                \"MTL_SYSTEM_ITEMS_B\".\"CREATION_DATE\"\n        ) AS \"RN\"\n    FROM \"MTL_SYSTEM_ITEMS_B\" AS \"MTL_SYSTEM_ITEMS_B\"\n    WHERE EXISTS (\n            SELECT\n                1\n            FROM\n                \"MTL_PARAMETERS\" AS \"MTL_PARAMETERS\"\n            WHERE\n                \"MTL_SYSTEM_ITEMS_B\".\"ORGANIZATION_ID\" = \"MTL_PARAMETERS\".\"MASTER_ORGANIZATION_ID\"\n        )\n)\nSELECT\n    <%=sourceSystem%> || '::' || \"MATERIAL_MASTER\".\"INVENTORY_ITEM_ID\" AS \"ID\",\n    <%=sourceSystem%>                                                  AS \"SourceSystemInstance\",\n    \"MATERIAL_MASTER\".\"DESCRIPTION\"                                    AS \"MaterialName\",\n    CAST(\"MATERIAL_MASTER\".\"ITEM_CATALOG_GROUP_ID\" AS VARCHAR(255))    AS \"MaterialGroupNumber\",\n    \"MTL_ITEM_CATALOG_GROUPS_TL\".\"DESCRIPTION\"                         AS \"MaterialGroupName\",\n    \"MATERIAL_MASTER\".\"PRIMARY_UOM_CODE\"                               AS \"StockKeepingUnit\",\n    CAST(\"MATERIAL_MASTER\".\"SEGMENT1\" AS VARCHAR(255))                 AS \"MaterialNumber\"\nFROM \"CTE_MATERIAL_MASTER\" AS \"MATERIAL_MASTER\"\n    LEFT JOIN \"MTL_ITEM_CATALOG_GROUPS_B\" AS \"MTL_ITEM_CATALOG_GROUPS_B\"\n        ON \"MATERIAL_MASTER\".\"ITEM_CATALOG_GROUP_ID\" = \"MTL_ITEM_CATALOG_GROUPS_B\".\"ITEM_CATALOG_GROUP_ID\"\n    LEFT JOIN \"MTL_ITEM_CATALOG_GROUPS_TL\" AS \"MTL_ITEM_CATALOG_GROUPS_TL\"\n        ON \"MTL_ITEM_CATALOG_GROUPS_B\".\"ITEM_CATALOG_GROUP_ID\" = \"MTL_ITEM_CATALOG_GROUPS_TL\".\"ITEM_CATALOG_GROUP_ID\"\n        AND \"MTL_ITEM_CATALOG_GROUPS_TL\".\"LANGUAGE\" = <%=LanguageKey%>\nWHERE \"MATERIAL_MASTER\".\"RN\" = 1"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

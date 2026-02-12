@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1758870210586.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "creation_date": 1749823963300.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "StartProduction - 1",
+        "factory_id": "26845595-b7d3-46c6-bd94-673e5b9be61a",
+        "has_overwrites": null,
+        "name": "StartProduction - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "StartProduction",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1760437608708.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "0c9ee607-6f4d-4976-af88-bac083fc9169",
+            "name": "j.vita-martinez",
+            "type_": "USER"
+        },
+        "creation_date": 1753774007051.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "CancelPurchaseScheduleLine - 1",
+        "factory_id": "dfe1625e-f87e-45a6-8135-38c29dfcd5f1",
+        "has_overwrites": null,
+        "name": "CancelPurchaseScheduleLine - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CancelPurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

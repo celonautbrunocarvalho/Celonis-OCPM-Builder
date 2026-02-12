@@ -1,0 +1,58 @@
+[
+    {
+        "change_date": 1758103314590.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630890302.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "PayableItemDueDate transformation - copy - 1",
+        "draft": null,
+        "factory_id": "655ac278-3c95-44a6-9163-69d32871fd20",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PayableItemDueDate",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PayableItem"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PayableItemDueDateAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'PayableItemDueDate' || '::' || \"PayableItem\".\"ID\"       AS \"ID\",\n    \"PayableItem\".\"ID\"                                       AS \"PayableItem\",\n    \"PayableItem\".\"NetDueDate\"                               AS \"Time\"\nFROM \"o_custom_PayableItem\" AS \"PayableItem\"\nWHERE \"PayableItem\".\"NetDueDate\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

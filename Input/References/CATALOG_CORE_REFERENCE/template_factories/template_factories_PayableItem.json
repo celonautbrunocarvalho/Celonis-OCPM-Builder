@@ -1,0 +1,31 @@
+[
+    {
+        "change_date": 1764069002669.0,
+        "changed_by": {
+            "id": "af10323b-7030-4dbe-af1b-cbf71f532c06",
+            "name": "l.lutz",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "creation_date": 1753883377264.0,
+        "description": "",
+        "id": "e7701ba4-df30-4f2f-914f-48cc9ccf9dfa",
+        "instance_names": [
+            "PayableItem - SAP ECC",
+            "PayableItem - SAP S/4 HANA"
+        ],
+        "instances_count": 2,
+        "name": "PayableItem - SAP ECC - 1",
+        "target": {
+            "entity_ref": {
+                "name": "PayableItem",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        }
+    }
+]

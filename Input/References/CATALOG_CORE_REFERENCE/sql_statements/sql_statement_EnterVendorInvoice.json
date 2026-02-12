@@ -1,0 +1,76 @@
+[
+    {
+        "change_date": 1760436762752.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630839955.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "EnterVendorInvoice transformation - copy - 1",
+        "draft": null,
+        "factory_id": "92f72a72-ba3f-43eb-86e1-15cd1f850e83",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "EnterVendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "VendorInvoice"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "InvoiceCategory",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "EnterVendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'EnterVendorInvoice' || '::' || \"VendorInvoice\".\"ID\"         AS \"ID\",\n    \"VendorInvoice\".\"ID\"                                         AS \"VendorInvoice\",\n    \"VendorInvoice\".\"CreationTime\"                               AS \"Time\",\n    \"VendorInvoice\".\"User_ID\"                                    AS \"ExecutedBy\",\n    \"VendorInvoice\".\"CreationExecutionType\"                      AS \"ExecutionType\",\n    \"VendorInvoice\".\"InvoiceCategory\"                            AS \"InvoiceCategory\"\nFROM \"o_custom_VendorInvoice\" AS \"VendorInvoice\"\nWHERE \"VendorInvoice\".\"CreationTime\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "PurchaseDocumentLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "RelationshipPurchaseDocumentLine",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT DISTINCT \n    \"Event\".\"ID\"                     AS \"ID\",\n    \"Object\".\"ID\"                    AS \"PurchaseDocumentLine\"\nFROM \"e_custom_EnterVendorInvoice\" AS \"Event\"\n    LEFT JOIN \"o_custom_VendorInvoice\" AS \"VendorInvoice\"\n        ON \"Event\".\"VendorInvoice_ID\" = \"VendorInvoice\".\"ID\"\n    LEFT JOIN \"o_custom_VendorInvoiceLine\" AS \"VendorInvoiceLine\"\n        ON \"VendorInvoice\".\"ID\" = \"VendorInvoiceLine\".\"VendorInvoice_ID\"\n    LEFT JOIN \"o_custom_PurchaseDocumentLine\" AS \"Object\"\n        ON \"VendorInvoiceLine\".\"PurchaseDocumentLine_ID\" = \"Object\".\"ID\"\nWHERE \"Object\".\"ID\" IS NOT NULL"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

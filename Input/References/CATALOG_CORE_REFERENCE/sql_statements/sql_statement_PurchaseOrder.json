@@ -1,0 +1,80 @@
+[
+    {
+        "change_date": 1758031288145.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1751033494144.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "PurchaseOrder - OCPM Schema",
+        "draft": null,
+        "factory_id": "df56de13-4d81-4cfa-b8b5-afe632c434a6",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseOrder",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [
+                    {
+                        "id": "Changes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    \"PurchaseDocument_Changes\".\"ID\"               AS \"ID\",\n    \"PurchaseDocument_Changes\".\"ObjectID\"         AS \"ObjectID\",\n    \"PurchaseDocument_Changes\".\"Time\"             AS \"Time\",\n    \"PurchaseDocument_Changes\".\"Attribute\"        AS \"Attribute\",\n    \"PurchaseDocument_Changes\".\"OldValue\"         AS \"OldValue\",\n    \"PurchaseDocument_Changes\".\"NewValue\"         AS \"NewValue\",\n    \"PurchaseDocument_Changes\".\"ChangedBy\"        AS \"ChangedBy\",\n    \"PurchaseDocument_Changes\".\"OperationID\"      AS \"OperationID\",\n    \"PurchaseDocument_Changes\".\"OperationType\"    AS \"OperationType\",\n    \"PurchaseDocument_Changes\".\"ExecutionType\"    AS \"ExecutionType\"\nFROM \"c_o_custom_PurchaseDocument\" AS \"PurchaseDocument_Changes\"\n    LEFT JOIN \"o_custom_PurchaseDocument\" AS \"PurchaseDocument\"\n        ON \"PurchaseDocument_Changes\".\"ObjectID\" = \"PurchaseDocument\".\"ID\"\nWHERE \"PurchaseDocument\".\"DocumentCategory\" IN ('Standard PO') "
+                    }
+                ],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "Vendor"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CreationExecutionType",
+                    "CreationTime",
+                    "Currency",
+                    "DocumentCategory",
+                    "DocumentType",
+                    "DocumentTypeText",
+                    "ID",
+                    "IsCanceled",
+                    "PaymentTerms",
+                    "PurchaseDocumentNumber",
+                    "PurchaseOrganization",
+                    "PurchaseOrganizationName",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PurchaseOrderAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    \"PurchaseDocument\".\"ID\"                                                           AS \"ID\",\n    \"PurchaseDocument\".\"CreatedBy_ID\"                                                 AS \"CreatedBy\",\n    \"PurchaseDocument\".\"Vendor_ID\"                                                    AS \"Vendor\",\n\t\"PurchaseDocument\".\"CreationExecutionType\"                                        AS \"CreationExecutionType\",\n    \"PurchaseDocument\".\"CreationTime\"                                                 AS \"CreationTime\",\n    \"PurchaseDocument\".\"Currency\"                                                     AS \"Currency\",\n    \"PurchaseDocument\".\"PaymentTerms\"                                                 AS \"PaymentTerms\",\n\t\"PurchaseDocument\".\"DocumentCategory\"                                             AS \"DocumentCategory\",\n    \"PurchaseDocument\".\"DocumentType\"                                                 AS \"DocumentType\",\n    \"PurchaseDocument\".\"DocumentTypeText\"                                             AS \"DocumentTypeText\",\n    \"PurchaseDocument\".\"PurchaseOrganization\"                                         AS \"PurchaseOrganization\",\n    \"PurchaseDocument\".\"PurchaseOrganizationName\"                                     AS \"PurchaseOrganizationName\",\n    \"PurchaseDocument\".\"PurchaseDocumentNumber\"                                       AS \"PurchaseDocumentNumber\",\n\t\"PurchaseDocument\".\"IsCanceled\"\t\t\t\t\t\t\t\t\t\t              AS \"IsCanceled\",\n    \"PurchaseDocument\".\"SourceSystemInstance\"\t                                      AS \"SourceSystemInstance\"\nFROM \"o_custom_PurchaseDocument\"  AS \"PurchaseDocument\"\nWHERE \"PurchaseDocument\".\"DocumentCategory\" IN ('Standard PO')"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

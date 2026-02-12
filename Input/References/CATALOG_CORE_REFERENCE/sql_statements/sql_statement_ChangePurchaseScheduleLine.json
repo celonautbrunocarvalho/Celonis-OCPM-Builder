@@ -1,0 +1,65 @@
+[
+    {
+        "change_date": 1760437445074.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630860283.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "ChangePurchaseScheduleLine transformation - copy - 1",
+        "draft": null,
+        "factory_id": "a915ec85-e382-45a3-b62f-c10704b45efa",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ChangePurchaseScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PurchaseDocumentLine",
+                    "PurchaseOrderLine",
+                    "PurchaseScheduleLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ChangedAttribute",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "NewValue",
+                    "OldValue",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ChangePurchaseScheduleLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'ChangePurchaseScheduleLine' || '::' || \"PurchaseScheduleLine_Changes\".\"ID\"     AS \"ID\",\n    \"PurchaseScheduleLine\".\"ID\"                                                     AS \"PurchaseScheduleLine\",\n    \"PurchaseScheduleLine\".\"PurchaseDocumentLine_ID\"                                AS \"PurchaseDocumentLine\",\n    \"PurchaseScheduleLine\".\"PurchaseDocumentLine_ID\"                                AS \"PurchaseOrderLine\",\n    \"PurchaseScheduleLine_Changes\".\"Time\"                                           AS \"Time\",\n    \"PurchaseScheduleLine_Changes\".\"ChangedBy\"                                      AS \"ExecutedBy\",\n    \"PurchaseScheduleLine_Changes\".\"Attribute\"                                      AS \"ChangedAttribute\",\n    \"PurchaseScheduleLine_Changes\".\"ExecutionType\"                                  AS \"ExecutionType\",\n    \"PurchaseScheduleLine_Changes\".\"OldValue\"                                       AS \"OldValue\",\n    \"PurchaseScheduleLine_Changes\".\"NewValue\"                                       AS \"NewValue\"\nFROM \"o_custom_PurchaseScheduleLine\" AS \"PurchaseScheduleLine\"\n    LEFT JOIN \"c_o_custom_PurchaseScheduleLine\" AS \"PurchaseScheduleLine_Changes\"\n        ON \"PurchaseScheduleLine\".\"ID\" = \"PurchaseScheduleLine_Changes\".\"ObjectID\"\nWHERE \"PurchaseScheduleLine_Changes\".\"Attribute\" IN ('ExpectedQuantity','ItemDeliveryDate')\n    AND \"PurchaseScheduleLine_Changes\".\"OldValue\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

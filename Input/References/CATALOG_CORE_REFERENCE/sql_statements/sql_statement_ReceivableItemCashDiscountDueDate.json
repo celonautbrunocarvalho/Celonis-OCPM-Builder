@@ -1,0 +1,60 @@
+[
+    {
+        "change_date": 1758102326486.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630878074.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "ReceivableItemCashDiscountDueDate transformation - copy - 1",
+        "draft": null,
+        "factory_id": "a630de00-9658-49aa-923e-b5136ab71bca",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReceivableItemCashDiscountDueDate",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "ReceivableItem"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "CashDiscountPercentage",
+                    "DiscountTermOrder",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ReceivableItemCashDiscountDueDateAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Cash_Discounts\" AS (\n    SELECT \n        \"ReceivableItem\".\"ID\"                       AS \"ID\",\n        \"ReceivableItem\".\"CashDiscountDueDate1\"     AS \"CashDiscountDueDate\",\n        \"ReceivableItem\".\"CashDiscountPercentage1\"  AS \"CashDiscountPercentage\"\n    FROM \"o_custom_ReceivableItem\" AS \"ReceivableItem\"\n    WHERE \"ReceivableItem\".\"CashDiscountDueDate1\" IS NOT NULL\n    UNION ALL \n    SELECT \n        \"ReceivableItem\".\"ID\"                       AS \"ID\",\n        \"ReceivableItem\".\"CashDiscountDueDate2\"     AS \"CashDiscountDueDate\",\n        \"ReceivableItem\".\"CashDiscountPercentage2\"  AS \"CashDiscountPercentage\"\n    FROM \"o_custom_ReceivableItem\" AS \"ReceivableItem\"\n    WHERE \"ReceivableItem\".\"CashDiscountDueDate2\" IS NOT NULL\n),\n    \"CTE_DiscTerms_Order\" AS (\n    SELECT \n        \"Cash_Discounts\".\"ID\"                                               AS \"ID\",\n        \"Cash_Discounts\".\"CashDiscountDueDate\"                              AS \"CashDiscountDueDate\",\n        \"Cash_Discounts\".\"CashDiscountPercentage\"                           AS \"CashDiscountPercentage\",\n        ROW_NUMBER() OVER (PARTITION BY \"Cash_Discounts\".\"ID\"\n        ORDER BY \"Cash_Discounts\".\"CashDiscountPercentage\")                 AS \"DiscountTermOrder\"\n    FROM \"CTE_Cash_Discounts\" AS \"Cash_Discounts\"\n)                        \nSELECT \n    'CashDiscountDueDate' || '::' || \"CashDiscountTerms\".\"ID\" || '::' || \"CashDiscountTerms\". \"DiscountTermOrder\"       AS \"ID\",\n    \"CashDiscountTerms\".\"ID\"                                                                                            AS \"ReceivableItem\",\n    \"CashDiscountTerms\".\"CashDiscountDueDate\"                                                                           AS \"Time\",\n    \"CashDiscountTerms\".\"DiscountTermOrder\"                                                                             AS \"DiscountTermOrder\",\n    \"CashDiscountTerms\".\"CashDiscountPercentage\"                                                                        AS \"CashDiscountPercentage\"\nFROM \"CTE_DiscTerms_Order\" AS \"CashDiscountTerms\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

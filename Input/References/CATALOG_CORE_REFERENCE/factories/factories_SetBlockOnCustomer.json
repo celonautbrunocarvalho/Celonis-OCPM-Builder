@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1752775989586.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "creation_date": 1749829073202.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "SetBlockOnCustomer - 1",
+        "factory_id": "9c31cc66-291e-4bb0-ae2f-b24576c4cd9d",
+        "has_overwrites": null,
+        "name": "SetBlockOnCustomer - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "SetBlockOnCustomer",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

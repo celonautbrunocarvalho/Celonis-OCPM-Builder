@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1761317284027.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1751035700804.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "PurchaseOrderLine - OCPM Schma",
+        "factory_id": "7ad5f007-f714-4017-ab53-bd6c85beb3bb",
+        "has_overwrites": null,
+        "name": "PurchaseOrderLine - OCPM Schma",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "PurchaseOrderLine",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

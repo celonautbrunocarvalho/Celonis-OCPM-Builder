@@ -1,0 +1,195 @@
+[
+    {
+        "change_date": 1758035495387.0,
+        "changed_by": {
+            "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+            "name": "Andi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+            "name": "Robert Connolly",
+            "type_": "USER"
+        },
+        "creation_date": 1753903442890.0,
+        "description": null,
+        "draft": null,
+        "id": "b42bd5b3-0eaf-48c5-8adc-e1710e6e7b2b",
+        "local_parameters": [],
+        "name": "Customer - SAP ECC - 1",
+        "sql_factory_transports": [
+            {
+                "change_date": 1758035495387.0,
+                "changed_by": {
+                    "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+                    "name": "Andi",
+                    "type_": "USER"
+                },
+                "created_by": {
+                    "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+                    "name": "Robert Connolly",
+                    "type_": "USER"
+                },
+                "creation_date": 1753903572559.0,
+                "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+                "description": null,
+                "disabled": null,
+                "display_name": "Customer - SAP ECC",
+                "draft": null,
+                "factory_id": "4db73501-fc16-4b81-8b96-d3a715442554",
+                "factory_validation_status": "VALID",
+                "has_user_template": true,
+                "local_parameters": [
+                    {
+                        "name": "sourceSystem",
+                        "value": "'SAP_ECC'"
+                    }
+                ],
+                "namespace": "custom",
+                "target": {
+                    "entity_ref": {
+                        "name": "Customer",
+                        "namespace": "custom"
+                    },
+                    "kind": "OBJECT"
+                },
+                "transformations": [
+                    {
+                        "change_sql_factory_datasets": [],
+                        "foreign_key_names": [],
+                        "namespace": "custom",
+                        "property_names": [
+                            "Address",
+                            "City",
+                            "Country",
+                            "ID",
+                            "InternalFlag",
+                            "Name",
+                            "Number",
+                            "PostalCode",
+                            "Region",
+                            "SourceSystemInstance"
+                        ],
+                        "property_sql_factory_datasets": [
+                            {
+                                "id": "CustomerAttributes",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "\nSELECT <%=sourceSystem%>  || '::' || \"KNA1\".\"MANDT\" || '::' || \"KNA1\".\"KUNNR\"   AS \"ID\",\n    \"KNA1\".\"NAME1\"                                                              AS \"Name\",\n    CASE WHEN \"KNA1\".\"VBUND\" IS NULL THEN FALSE ELSE TRUE END                   AS \"InternalFlag\",\n    \"KNA1\".\"LAND1\"                                                              AS \"Country\",\n    \"KNA1\".\"REGIO\"                                                              AS \"Region\",\n    \"KNA1\".\"ORT01\"                                                              AS \"City\",\n    \"KNA1\".\"PSTLZ\"                                                              AS \"PostalCode\",\n    \"KNA1\".\"STRAS\"                                                              AS \"Address\",\n    \"KNA1\".\"KUNNR\"                                                              AS \"Number\",\n\t<%=sourceSystem%> || '::' || \"KNA1\".\"MANDT\"                                 AS \"SourceSystemInstance\"\nFROM \"KNA1\" AS \"KNA1\"\nWHERE \"KNA1\".\"MANDT\" IS NOT NULL\n"
+                            }
+                        ],
+                        "relationship_transformations": []
+                    }
+                ]
+            },
+            {
+                "change_date": 1758035495387.0,
+                "changed_by": {
+                    "id": "bdec2b77-569a-4c86-86a1-73c0f6bbb6c4",
+                    "name": "Andi",
+                    "type_": "USER"
+                },
+                "created_by": {
+                    "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+                    "name": "Robert Connolly",
+                    "type_": "USER"
+                },
+                "creation_date": 1753903654323.0,
+                "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+                "description": null,
+                "disabled": null,
+                "display_name": "Customer - SAP S4 HANA",
+                "draft": null,
+                "factory_id": "c63a0069-13b3-4e83-a556-156da39f4b7c",
+                "factory_validation_status": "VALID",
+                "has_user_template": true,
+                "local_parameters": [
+                    {
+                        "name": "sourceSystem",
+                        "value": "'SAP_S4_HANA'"
+                    }
+                ],
+                "namespace": "custom",
+                "target": {
+                    "entity_ref": {
+                        "name": "Customer",
+                        "namespace": "custom"
+                    },
+                    "kind": "OBJECT"
+                },
+                "transformations": [
+                    {
+                        "change_sql_factory_datasets": [],
+                        "foreign_key_names": [],
+                        "namespace": "custom",
+                        "property_names": [
+                            "Address",
+                            "City",
+                            "Country",
+                            "ID",
+                            "InternalFlag",
+                            "Name",
+                            "Number",
+                            "PostalCode",
+                            "Region",
+                            "SourceSystemInstance"
+                        ],
+                        "property_sql_factory_datasets": [
+                            {
+                                "id": "CustomerAttributes",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "\nSELECT <%=sourceSystem%>  || '::' || \"KNA1\".\"MANDT\" || '::' || \"KNA1\".\"KUNNR\"   AS \"ID\",\n    \"KNA1\".\"NAME1\"                                                              AS \"Name\",\n    CASE WHEN \"KNA1\".\"VBUND\" IS NULL THEN FALSE ELSE TRUE END                   AS \"InternalFlag\",\n    \"KNA1\".\"LAND1\"                                                              AS \"Country\",\n    \"KNA1\".\"REGIO\"                                                              AS \"Region\",\n    \"KNA1\".\"ORT01\"                                                              AS \"City\",\n    \"KNA1\".\"PSTLZ\"                                                              AS \"PostalCode\",\n    \"KNA1\".\"STRAS\"                                                              AS \"Address\",\n    \"KNA1\".\"KUNNR\"                                                              AS \"Number\",\n\t<%=sourceSystem%> || '::' || \"KNA1\".\"MANDT\"                                 AS \"SourceSystemInstance\"\nFROM \"KNA1\" AS \"KNA1\"\nWHERE \"KNA1\".\"MANDT\" IS NOT NULL\n"
+                            }
+                        ],
+                        "relationship_transformations": []
+                    }
+                ]
+            }
+        ],
+        "target": {
+            "entity_ref": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Address",
+                    "City",
+                    "Country",
+                    "ID",
+                    "InternalFlag",
+                    "Name",
+                    "Number",
+                    "PostalCode",
+                    "Region",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CustomerAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\nSELECT <%=sourceSystem%>  || '::' || \"KNA1\".\"MANDT\" || '::' || \"KNA1\".\"KUNNR\"   AS \"ID\",\n    \"KNA1\".\"NAME1\"                                                              AS \"Name\",\n    CASE WHEN \"KNA1\".\"VBUND\" IS NULL THEN FALSE ELSE TRUE END                   AS \"InternalFlag\",\n    \"KNA1\".\"LAND1\"                                                              AS \"Country\",\n    \"KNA1\".\"REGIO\"                                                              AS \"Region\",\n    \"KNA1\".\"ORT01\"                                                              AS \"City\",\n    \"KNA1\".\"PSTLZ\"                                                              AS \"PostalCode\",\n    \"KNA1\".\"STRAS\"                                                              AS \"Address\",\n    \"KNA1\".\"KUNNR\"                                                              AS \"Number\",\n\t<%=sourceSystem%> || '::' || \"KNA1\".\"MANDT\"                                 AS \"SourceSystemInstance\"\nFROM \"KNA1\" AS \"KNA1\"\nWHERE \"KNA1\".\"MANDT\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

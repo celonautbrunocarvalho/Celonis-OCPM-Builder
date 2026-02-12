@@ -1,0 +1,75 @@
+[
+    {
+        "change_date": 1760108643639.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630883455.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "CancelSalesOrderScheduleLine transformation",
+        "draft": null,
+        "factory_id": "580c8f1c-756f-4a4a-88d9-ee3e2922d4cd",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "CancelSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "NewValue",
+                    "OldValue",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "CancelSalesOrderLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT DISTINCT\n    'CancelSalesOrderScheduleLine' || '::' || \"SalesOrderScheduleLine_Changes\".\"ID\"          AS \"ID\",\n    \"SalesOrderScheduleLine_Changes\".\"Time\"                                          AS \"Time\",\n    \"SalesOrderScheduleLine_Changes\".\"ChangedBy\"                                     AS \"ExecutedBy\",\n    \"SalesOrderScheduleLine_Changes\".\"ExecutionType\"                                 AS \"ExecutionType\",\n    \"SalesOrderScheduleLine_Changes\".\"OldValue\"                                      AS \"OldValue\",\n    \"SalesOrderScheduleLine_Changes\".\"NewValue\"                                      AS \"NewValue\"\nFROM \"c_o_custom_SalesOrderScheduleLine\" AS \"SalesOrderScheduleLine_Changes\"        \nWHERE \"SalesOrderScheduleLine_Changes\".\"ID\" IS NOT NULL  \n    AND \"SalesOrderScheduleLine_Changes\".\"Attribute\" IN ('IsCanceled')\n    AND \"SalesOrderScheduleLine_Changes\".\"Time\" IS NOT NULL\n    AND \"SalesOrderScheduleLine_Changes\".\"OldValue\" = 'f'\n    AND \"SalesOrderScheduleLine_Changes\".\"NewValue\" = 't'\n"
+                    }
+                ],
+                "relationship_transformations": [
+                    {
+                        "relationship_name": "SalesOrderScheduleLine",
+                        "sql_factory_datasets": [
+                            {
+                                "id": "Relationship",
+                                "type_": "SQL_FACTORY_DATA_SET",
+                                "complete_overwrite": false,
+                                "disabled": false,
+                                "materialise_cte": false,
+                                "overwrite": null,
+                                "sql": "SELECT 'CancelSalesOrderScheduleLine' || '::' || \"SalesOrderScheduleLine_Changes\".\"ID\"          AS \"ID\",\n       \"SalesOrderScheduleLine\".\"ID\"                                                    AS \"SalesOrderScheduleLine\"\nFROM \"o_custom_SalesOrderScheduleLine\" AS \"SalesOrderScheduleLine\"\nLEFT JOIN \"c_o_custom_SalesOrderScheduleLine\" AS \"SalesOrderScheduleLine_Changes\"\n    ON \"SalesOrderScheduleLine\".\"ID\" = \"SalesOrderScheduleLine_Changes\".\"ObjectID\"\n        AND \"SalesOrderScheduleLine_Changes\".\"Attribute\" IN ('IsCanceled')\nWHERE \"SalesOrderScheduleLine_Changes\".\"ID\" IS NOT NULL\n    AND\"SalesOrderScheduleLine_Changes\".\"Time\" IS NOT NULL\n    AND \"SalesOrderScheduleLine_Changes\".\"OldValue\" = 'f'\n    AND \"SalesOrderScheduleLine_Changes\".\"NewValue\" = 't'"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+]

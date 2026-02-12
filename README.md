@@ -8,10 +8,13 @@ This project contains a modular set of AI assistant prompts that work in sequenc
 
 | Stage | Module | Prompt File | Status |
 | :--- | :--- | :--- | :--- |
+| 0 | **Design Guidelines** | `Tools/0_Design_Guidelines.md` | Active |
 | 1 | **Requirements Gathering** | `Tools/1_Requirements.md` | Active |
 | 2 | **OCPM Builder** | `Tools/2_OCPM_Builder.md` | Active |
 | 3 | **Knowledge Model** | `Tools/3_Knowledge_Model.md` | Planned |
 | 4 | **Apps** | `Tools/4_Apps.md` | Planned |
+
+Stage 0 is not an executable stage — it is a reference document consumed by Stage 1 and Stage 2 to enforce consistent naming conventions, ID construction, relationship patterns, and modeling standards.
 
 ## Project Structure
 
@@ -26,12 +29,16 @@ This project contains a modular set of AI assistant prompts that work in sequenc
 │   ├── orchestrator.py               <- Multi-stage pipeline engine
 │   └── run.py                        <- CLI entry point
 ├── Tools/                            <- Prompt instructions for each module
+│   ├── 0_Design_Guidelines.md        <- Design guidelines & modeling standards
 │   ├── 1_Requirements.md             <- Stage 1: Requirements Gathering
 │   ├── 2_OCPM_Builder.md             <- Stage 2: OCPM JSON Builder
 │   ├── 3_Knowledge_Model.md          <- Stage 3: Knowledge Model (planned)
 │   └── 4_Apps.md                     <- Stage 4: Apps (planned)
 ├── Input/
 │   ├── Project input files/          <- Place your raw project files here
+│   ├── References/                   <- Modeling guidelines and catalog reference
+│   │   ├── Catalog Guidelines & Modeling Best Practices V1.0.pdf
+│   │   └── CATALOG_CORE_REFERENCE/   <- Celonis catalog export (objects, events, SQL, etc.)
 │   └── TEMPLATE/                     <- Reference template (valid Celonis OCPM export)
 ├── Output/                           <- All generated outputs, organized by module
 │   ├── 1_Requirements/               <- Requirements spec (Markdown)
@@ -50,13 +57,48 @@ This project contains a modular set of AI assistant prompts that work in sequenc
 
 ---
 
+## Stage 0: Design Guidelines (Reference)
+
+**File:** `Tools/0_Design_Guidelines.md`
+
+### What it is
+
+A consolidated reference document containing all OCPM design principles, naming conventions, and modeling standards. It was derived from two authoritative sources:
+
+- **Catalog Guidelines & Modeling Best Practices V1.0** (PDF) — Celonis official guidelines covering catalog taxonomy (Core/Extension/SSDM), discovery and modeling principles, event modeling complexities, attribute naming conventions, relationship rules, and perspective strategies.
+- **CATALOG_CORE_REFERENCE** (catalog export) — Real-world patterns extracted from the current Celonis catalog deployment, including 43+ objects, 62+ events, 102+ factories, and 102+ SQL statements.
+
+### Key Contents
+
+| Section | Covers |
+| :--- | :--- |
+| Catalog Taxonomy | Core vs Extension vs SSDM decision framework |
+| General Design Principles | Discovery principles, modeling principles (#1–#5) |
+| Object Naming | PascalCase rules, attribute suffix table, categories, color coding |
+| Event Naming | Verb+Object pattern, mandatory fields, event type patterns |
+| ID Construction | `::` delimiter, `<%=sourceSystem%>` parameter, composite key patterns |
+| Relationships | Cardinality rules, `mapped_by` convention, M:N with explicit multilink objects |
+| Perspectives | LINK vs EMBED strategies, lead object selection, projections |
+| SQL Standards | Table prefixes (`o_`, `e_`, `c_`, `r_`, `x_`, `y_`), common transformation patterns |
+| Factory Standards | Display name conventions, `data_connection_id` patterns |
+| Deployment & Validation | Bottom-up validation checklist, source table type recommendations |
+| Process Organization | Standard processes with their objects and events |
+
+### How it's used
+
+- **Stage 1** (`1_Requirements.md`) references the design guidelines to ensure requirements output follows correct naming conventions, ID patterns, and relationship structures.
+- **Stage 2** (`2_OCPM_Builder.md`) uses the same standards when generating JSON configuration files.
+- Both stages include validation checks against these guidelines.
+
+---
+
 ## Stage 1: Requirements Gathering
 
 **Prompt file:** `Tools/1_Requirements.md`
 
 ### What it does
 
-Converts raw, unstructured business inputs into a standardized OCPM requirements document that the Builder can consume. It acts as the "analyst" that interprets your project materials and translates them into a formal specification.
+Converts raw, unstructured business inputs into a standardized OCPM requirements document that the Builder can consume. It acts as the "analyst" that interprets your project materials and translates them into a formal specification, enforcing the naming conventions and modeling standards defined in `Tools/0_Design_Guidelines.md`.
 
 ### Input
 
@@ -240,9 +282,18 @@ To add a new provider, create a new adapter file in `app/llm/` that implements t
 
 ---
 
-## Reference Template
+## Reference Materials
 
-The `Input/TEMPLATE/` folder contains a complete, valid Celonis OCPM export (SAP ECC Procurement, Accounts Payable, Order Management, etc.). It serves two purposes:
+### Template (`Input/TEMPLATE/`)
+
+A complete, valid Celonis OCPM export (SAP ECC Procurement, Accounts Payable, Order Management, etc.). It serves two purposes:
 
 1. **Format reference** for the Builder to understand the expected JSON structure
 2. **Validation baseline** to verify generated output matches the platform's expected format
+
+### References (`Input/References/`)
+
+Source materials used to build the Design Guidelines:
+
+- **Catalog Guidelines & Modeling Best Practices V1.0.pdf** — Official Celonis document covering catalog taxonomy, naming conventions, event modeling complexities, relationship patterns, perspective strategies, and deployment practices.
+- **CATALOG_CORE_REFERENCE/** — Extracted Celonis catalog export containing 346 JSON files across objects, events, factories, SQL statements, processes, perspectives, categories, and more. Used to derive real-world naming patterns and structural conventions.

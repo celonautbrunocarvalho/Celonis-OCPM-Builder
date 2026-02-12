@@ -1,0 +1,63 @@
+[
+    {
+        "change_date": 1760108231534.0,
+        "changed_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1751365541906.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "ReleaseBlockOnSalesOrderScheduleLine - 1",
+        "draft": null,
+        "factory_id": "2ffbb6b2-9b5b-41a0-a57c-c605e6ec3592",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReleaseBlockOnSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "SalesOrderScheduleLine",
+                    "SalesOrderScheduleLineBlock"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "BlockReason",
+                    "BlockType",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ReleaseBlockOnSalesOrderLineAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT 'ReleaseBlockOnSalesOrderScheduleLine' || '::' || \"SalesOrderScheduleLineBlock\".\"ID\" AS \"ID\",\n       \"SalesOrderScheduleLineBlock\".\"ID\"                                 AS \"SalesOrderScheduleLineBlock\",\n       \"SalesOrderScheduleLine\".\"ID\"                                      AS \"SalesOrderScheduleLine\",\n       \"SalesOrderScheduleLineBlock\".\"ReleaseTime\"                        AS \"Time\",\n       \"SalesOrderScheduleLineBlock\".\"ReleasedBy_ID\"                      AS \"ExecutedBy\",\n       \"SalesOrderScheduleLineBlock\".\"ReleaseExecutionType\"               AS \"ExecutionType\",\n       \"SalesOrderScheduleLineBlock\".\"BlockType\"                          AS \"BlockType\",\n       \"SalesOrderScheduleLineBlock\".\"ReleaseReason\"                      AS \"BlockReason\"\nFROM \"o_custom_SalesOrderScheduleLine\" AS \"SalesOrderScheduleLine\"\n         LEFT JOIN \"o_custom_SalesOrderScheduleLineBlock\" AS \"SalesOrderScheduleLineBlock\"\n                   ON \"SalesOrderScheduleLine\".\"ID\" = \"SalesOrderScheduleLineBlock\".\"SalesOrderScheduleLine_ID\"\nWHERE \"SalesOrderScheduleLineBlock\".\"ReleaseTime\" IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

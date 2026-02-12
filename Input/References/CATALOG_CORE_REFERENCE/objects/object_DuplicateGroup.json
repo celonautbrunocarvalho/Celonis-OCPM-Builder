@@ -1,0 +1,112 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "useCases",
+                "namespace": "custom"
+            },
+            "values": [
+                {
+                    "name": "duplicateInvoiceChecker",
+                    "namespace": "custom"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "AccountsPayable",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1763958019653.0,
+    "changed_by": {
+        "id": "af10323b-7030-4dbe-af1b-cbf71f532c06",
+        "name": "l.lutz",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1763725902090.0,
+    "description": "DuplicateGroup",
+    "fields": [
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "RecurringFlag",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "UniqueDocFlag",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "ReversedFlag",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ReversalStatus",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "MatchScore",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MatchPattern",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "Fingerprint",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "CreationTime",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "abc53574-42a2-4c44-8cb5-a50399f07069",
+    "managed": true,
+    "multi_link": false,
+    "name": "DuplicateGroup",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "CheckedInvoice",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "DuplicateGroup",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "CheckedInvoice",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "AccountsPayable"
+    ]
+}

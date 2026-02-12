@@ -1,0 +1,63 @@
+[
+    {
+        "change_date": 1760096268827.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630870037.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": "",
+        "disabled": null,
+        "display_name": "ChangeVendorInvoice transformation - copy - 1",
+        "draft": null,
+        "factory_id": "39d905b4-8c95-483c-855a-dba165ad8931",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ChangeVendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "VendorInvoice"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "ChangedAttribute",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "NewValue",
+                    "OldValue",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ChangeVendorInvoiceAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'ChangeVendorInvoice' || '::' || \"VendorInvoice_Changes\".\"ID\"      AS \"ID\",\n    \"VendorInvoice\".\"ID\"                                               AS \"VendorInvoice\",\n    \"VendorInvoice_Changes\".\"Time\"                                     AS \"Time\",\n    \"VendorInvoice_Changes\".\"ChangedBy\"                                AS \"ExecutedBy\",\n    \"VendorInvoice_Changes\".\"Attribute\"                                AS \"ChangedAttribute\",\n    \"VendorInvoice_Changes\".\"ExecutionType\"                            AS \"ExecutionType\",\n    \"VendorInvoice_Changes\".\"OldValue\"                                 AS \"OldValue\",\n    \"VendorInvoice_Changes\".\"NewValue\"                                 AS \"NewValue\"\nFROM \"o_custom_VendorInvoice\" AS \"VendorInvoice\"\n    LEFT JOIN \"c_o_custom_VendorInvoice\" AS \"VendorInvoice_Changes\"\n        ON \"VendorInvoice\".\"ID\" = \"VendorInvoice_Changes\".\"ObjectID\"\nWHERE \"VendorInvoice_Changes\".\"Attribute\" NOT IN ('Cancellation')\n    AND \"VendorInvoice_Changes\".\"Time\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

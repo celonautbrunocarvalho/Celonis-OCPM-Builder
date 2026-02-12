@@ -1,0 +1,63 @@
+[
+    {
+        "change_date": 1758205328770.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "creation_date": 1749716087688.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "description": null,
+        "disabled": null,
+        "display_name": "ApprovePurchaseDocument - 2",
+        "draft": null,
+        "factory_id": "6fc9bcf2-82a8-4d8d-b53a-4e50882db503",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ApprovePurchaseDocument",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "PurchaseDocument",
+                    "PurchaseOrder"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "DocumentCategory",
+                    "ExecutedBy",
+                    "ExecutionType",
+                    "ID",
+                    "Level",
+                    "Time"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "ApprovePurchaseDocumentAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT \n    'ApprovePurchaseDocument' || '::' || \"PurchaseDocument_Changes\".\"ID\"     AS \"ID\",\n    \"PurchaseDocument\".\"ID\"                                                  AS \"PurchaseDocument\",\n    \"PurchaseDocument\".\"DocumentCategory\"                                    AS \"DocumentCategory\",\n    \"PurchaseDocument\".\"ID\"                                                  AS \"PurchaseOrder\",\n    \"PurchaseDocument_Changes\".\"Time\"                                        AS \"Time\",\n    \"PurchaseDocument_Changes\".\"ChangedBy\"                                   AS \"ExecutedBy\",\n    \"PurchaseDocument_Changes\".\"NewValue\"                                    AS \"Level\",\n    \"PurchaseDocument_Changes\".\"ExecutionType\"                               AS \"ExecutionType\"\nFROM \"o_custom_PurchaseDocument\" AS \"PurchaseDocument\"\n    LEFT JOIN \"c_o_custom_PurchaseDocument\" AS \"PurchaseDocument_Changes\"\n        ON \"PurchaseDocument\".\"ID\" = \"PurchaseDocument_Changes\".\"ObjectID\"\nWHERE \"PurchaseDocument_Changes\".\"Attribute\" = 'ApprovalLevel'\n    AND \"PurchaseDocument_Changes\".\"Time\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

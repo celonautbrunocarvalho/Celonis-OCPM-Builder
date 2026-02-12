@@ -1,0 +1,32 @@
+[
+    {
+        "change_date": 1758102351572.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630868801.0,
+        "data_connection_id": "00000000-0000-0000-0000-000000000000",
+        "disabled": null,
+        "display_name": "ReceivableItemDueDate transformation - copy - 1",
+        "factory_id": "a12dbf1a-8094-4ae0-ab2a-8dc388191522",
+        "has_overwrites": null,
+        "name": "ReceivableItemDueDate transformation - copy - 1",
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "ReceivableItemDueDate",
+                "namespace": "custom"
+            },
+            "kind": "EVENT"
+        },
+        "user_factory_template_reference": null,
+        "validation_status": "VALID"
+    }
+]

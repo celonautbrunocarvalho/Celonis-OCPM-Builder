@@ -1,0 +1,458 @@
+[
+    {
+        "change_date": 1766073484892.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630802516.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "MaterialMovement transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "65c8f6ef-6335-436e-b824-eeb1a6e69bfe",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMovement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "DeliveryLine",
+                    "MaterialMasterPlant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "CreationTime",
+                    "Currency",
+                    "DocumentQuantity",
+                    "DocumentQuantityUnit",
+                    "ID",
+                    "IsInventoryRelevant",
+                    "MaterialMovementNumber",
+                    "MaterialTransactionType",
+                    "MovementDirection",
+                    "MovementQuantity",
+                    "MovementQuantityUnit",
+                    "SourceSystemInstance",
+                    "StorageLocation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMovementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"FINAL_MATERIAL_MOVEMENT\" AS\n(\n     -- 1. INCOMING (RCV_TRANSACTIONS)\n  WITH \"CTE_MTL_MATERIAL_TRANSACTIONS\" AS (\n    SELECT\n        RCV_TRANSACTION_ID,\n        ORGANIZATION_ID,\n        INVENTORY_ITEM_ID,\n        PICKING_LINE_ID,\n        ROW_NUMBER() OVER (PARTITION BY RCV_TRANSACTION_ID ORDER BY TRANSACTION_ID) AS rn\n    FROM MTL_MATERIAL_TRANSACTIONS\n)\n    SELECT\n        <%=sourceSystem%> || '::' || 'RCV_' || CAST(\"RCV_TRANSACTIONS\".\"TRANSACTION_ID\" AS VARCHAR(255)) AS \"ID\",\n        <%=sourceSystem%> || '::' || \"RCV_TRANSACTIONS\".\"PO_LINE_ID\"                               AS \"PurchaseDocumentLine\",\n        CAST(\"RCV_TRANSACTIONS\".\"CREATION_DATE\" AS TIMESTAMP)                                      AS \"CreationTime\",\n        CASE\n            WHEN \"RCV_TRANSACTIONS\".\"TRANSACTION_TYPE\" = 'RETURN TO VENDOR' THEN 'Outgoing'\n            ELSE 'Incoming'\n        END                                                                                        AS \"MovementDirection\",\n        FALSE                                                                                      AS \"IsInventoryRelevant\",\n        CASE\n            WHEN \"RCV_TRANSACTIONS\".\"TRANSACTION_TYPE\" IN ('RECEIVE', 'DELIVER') THEN 'GoodsReceipt'\n            WHEN \"RCV_TRANSACTIONS\".\"TRANSACTION_TYPE\" = 'RETURN TO VENDOR' THEN 'GoodsReceiptReversal'\n            ELSE 'Other'\n        END                                                                                        AS \"MaterialTransactionType\",\n        CAST(\"RCV_TRANSACTIONS\".\"QUANTITY\" AS FLOAT)                                              AS \"MovementQuantity\",\n        \"RCV_TRANSACTIONS\".\"UNIT_OF_MEASURE\"                                                       AS \"MovementQuantityUnit\",\n        CAST(\"RCV_TRANSACTIONS\".\"SOURCE_DOC_QUANTITY\" AS FLOAT)                                   AS \"DocumentQuantity\",\n        \"RCV_TRANSACTIONS\".\"SOURCE_DOC_UNIT_OF_MEASURE\"                                            AS \"DocumentQuantityUnit\",\n        CAST(\"RCV_TRANSACTIONS\".\"LOCATION_ID\" AS VARCHAR(255))                                     AS \"StorageLocation\",\n        CAST(\"RCV_TRANSACTIONS\".\"AMOUNT_BILLED\" AS FLOAT)                                          AS \"Amount\",\n        \"RCV_TRANSACTIONS\".\"CURRENCY_CODE\"                                                         AS \"Currency\",\n        <%=sourceSystem%>                                                                          AS \"SourceSystemInstance\",\n        CAST(\"RCV_SHIPMENT_HEADERS\".\"RECEIPT_NUM\" AS VARCHAR(255))                                 AS \"MaterialMovementNumber\",\n        <%=sourceSystem%> || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"PICKING_LINE_ID\"                 AS \"DeliveryLine\",\n        <%=sourceSystem%> || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"ORGANIZATION_ID\"\n        || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"INVENTORY_ITEM_ID\"                                 AS \"MaterialMasterPlant\",\n        <%=sourceSystem%> || '::' || \"RCV_TRANSACTIONS\".\"CREATED_BY\"                               AS \"CreatedBy\"\n    FROM \"RCV_TRANSACTIONS\" AS \"RCV_TRANSACTIONS\"\n        LEFT JOIN \"RCV_SHIPMENT_HEADERS\" AS \"RCV_SHIPMENT_HEADERS\"\n            ON \"RCV_TRANSACTIONS\".\"SHIPMENT_HEADER_ID\" = \"RCV_SHIPMENT_HEADERS\".\"SHIPMENT_HEADER_ID\"\n       LEFT JOIN \"CTE_MTL_MATERIAL_TRANSACTIONS\" AS \"MTL_MATERIAL_TRANSACTIONS\"\n           ON \"RCV_TRANSACTIONS\".\"TRANSACTION_ID\" = \"MTL_MATERIAL_TRANSACTIONS\".\"RCV_TRANSACTION_ID\"\n           AND \"MTL_MATERIAL_TRANSACTIONS\".rn = 1\n    WHERE \"RCV_TRANSACTIONS\".\"DESTINATION_TYPE_CODE\" = 'RECEIVING'\nUNION ALL\n    -- 2. OUTGOING (MTL_MATERIAL_TRANSACTIONS)\n   SELECT\n        <%=sourceSystem%> || '::' || 'MTL_' || CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\" AS VARCHAR(255)) AS \"ID\",\n        ''                                                                                                  AS \"PurchaseDocumentLine\",\n        CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"CREATION_DATE\" AS TIMESTAMP)                                      AS \"CreationTime\",\n        CASE\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_QUANTITY\" >= 0\n            THEN 'Incoming'\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_QUANTITY\" < 0\n            THEN 'Outgoing'\n            ELSE NULL\n        END                                                                                                 AS \"MovementDirection\",\n        CASE\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ACTION_ID\" NOT IN (2, 8, 28, 30, 31, 33, 36, 52)\n            THEN TRUE\n            ELSE FALSE\n        END                                                                                                 AS \"IsInventoryRelevant\",\n        CASE\n           --Sales Order Issue\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_TYPE_ID\" = '33' \n            AND \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ACTION_ID\" = '1' \n            AND \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_SOURCE_TYPE_ID\" = '2' THEN 'GoodsIssue'\n            --Internal order issue\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_TYPE_ID\" = '34' \n            AND \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ACTION_ID\" = '1' \n            AND \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_SOURCE_TYPE_ID\" = '8' THEN 'GoodsIssue'\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_TYPE_ID\" = '37' \n            AND \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ACTION_ID\" = '1' \n            AND \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_SOURCE_TYPE_ID\" = '12' THEN 'GoodsReceiptReversal'\n        END                                                                                                AS \"MaterialTransactionType\",\n        CAST( \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_QUANTITY\" AS FLOAT)                             AS \"MovementQuantity\",\n        \"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_UOM\"                                                      AS \"MovementQuantityUnit\",\n        NULL                                                                                               AS \"DocumentQuantity\",\n        NULL                                                                                               AS \"DocumentQuantityUnit\",\n        CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"SHIP_TO_LOCATION_ID\" AS VARCHAR(255))                            AS \"StorageLocation\",\n        NULL                                                                                               AS \"Amount\",\n        NULL                                                                                               AS \"Currency\",\n        <%=sourceSystem%>                                                                                  AS \"SourceSystemInstance\",\n        CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"TRANSACTION_ID\" AS VARCHAR(255))                                 AS \"MaterialMovementNumber\" ,\n        <%=sourceSystem%> || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"PICKING_LINE_ID\"                         AS \"DeliveryLine\",\n        <%=sourceSystem%> || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"ORGANIZATION_ID\"\n        || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"INVENTORY_ITEM_ID\"                                         AS \"MaterialMasterPlant\",\n        <%=sourceSystem%> || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"CREATED_BY\"                              AS \"CreatedBy\"\n   FROM \"MTL_MATERIAL_TRANSACTIONS\" AS \"MTL_MATERIAL_TRANSACTIONS\"\n)\nSELECT\n    \"FINAL_MATERIAL_MOVEMENT\".\"ID\"                                  AS \"ID\",\n    CAST(\"FINAL_MATERIAL_MOVEMENT\".\"CreationTime\" AS TIMESTAMP)     AS \"CreationTime\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MovementDirection\"                   AS \"MovementDirection\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"IsInventoryRelevant\"                 AS \"IsInventoryRelevant\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MaterialTransactionType\"             AS \"MaterialTransactionType\",\n    CAST(\"FINAL_MATERIAL_MOVEMENT\".\"MovementQuantity\" AS FLOAT)     AS \"MovementQuantity\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MovementQuantityUnit\"                AS \"MovementQuantityUnit\",\n    CAST(\"FINAL_MATERIAL_MOVEMENT\".\"DocumentQuantity\" AS FLOAT)     AS \"DocumentQuantity\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"DocumentQuantityUnit\"                AS \"DocumentQuantityUnit\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"StorageLocation\"                     AS \"StorageLocation\",\n    CAST(\"FINAL_MATERIAL_MOVEMENT\".\"Amount\" AS FLOAT)               AS \"Amount\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"Currency\"                            AS \"Currency\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"SourceSystemInstance\"                AS \"SourceSystemInstance\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MaterialMovementNumber\"              AS \"MaterialMovementNumber\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"PurchaseDocumentLine\"                AS \"PurchaseDocumentLine\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"DeliveryLine\"                        AS \"DeliveryLine\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MaterialMasterPlant\"                 AS \"MaterialMasterPlant\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"CreatedBy\"                           AS \"CreatedBy\"\nFROM \"FINAL_MATERIAL_MOVEMENT\"\nWHERE \"FINAL_MATERIAL_MOVEMENT\".\"ID\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1768260466480.0,
+        "changed_by": {
+            "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+            "name": "Modester Mwangi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "baa4e63e-f8f8-4e48-b1ee-af539386867c",
+            "name": "Bruno Carvalho",
+            "type_": "USER"
+        },
+        "creation_date": 1757037769963.0,
+        "data_connection_id": "1b87451d-df3c-4f06-b5e6-622d18c93682",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMovement - 00. Central Extraction Pool_ARIBA",
+        "draft": null,
+        "factory_id": "df223c3f-a455-493a-bf27-33269e3b2548",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ARIBA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMovement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "DeliveryLine",
+                    "MaterialMasterPlant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "CreationTime",
+                    "Currency",
+                    "DocumentQuantity",
+                    "DocumentQuantityUnit",
+                    "ID",
+                    "IsInventoryRelevant",
+                    "MaterialMovementNumber",
+                    "MaterialTransactionType",
+                    "MovementDirection",
+                    "MovementQuantity",
+                    "MovementQuantityUnit",
+                    "SourceSystemInstance",
+                    "StorageLocation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMovementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT\n\tCASE \n        WHEN \"Receipt\".\"Type\" = 'ariba.receiving.core.Receipt' THEN 'GoodsReceipt'\n        ELSE \"Receipt\".\"Type\"\n        END  AS \"MovementDirection\",\n\tCAST(\"ReceiptItems\".\"AmountAccepted_Amount\" AS DOUBLE) AS \"Amount\",\n\t\"ReceiptItems\".\"AmountAccepted_Currency_UniqueName\" AS \"Currency\",\n\t<%=sourceSystem%> AS \"SourceSystemInstance\",\n    \"Receipt\".\"InitialUniqueName\" AS \"MaterialMovementNumber\",\n\t-- AS \"StorageLocation\",\n\t\"ReceiptItems\".\"LineItem_Description_UnitOfMeasure_UniqueName\" AS \"MovementQuantityUnit\",\n\tCAST(\"ReceiptItems\".\"NumberAccepted\" AS DOUBLE) AS \"MovementQuantity\",\n\tCASE \n        WHEN \"Receipt\".\"Type\" = 'ariba.receiving.core.Receipt' THEN 'GoodsReceipt'\n        ELSE \"Receipt\".\"Type\"\n        END                              AS \"MaterialTransactionType\",\n\t\"Receipt\".\"CreateDate\" AS \"CreationTime\",\n\t<%=sourceSystem%> || '::' || \"Receipt\".\"InitialUniqueName\" || '::' || \"ReceiptItems\".\"NumberInCollection\" AS \"ID\",\n\t\"Receipt\".\"Requester_UniqueName\" AS \"CreatedBy\",\n\t\"Receipt\".\"Order\" AS \"DeliveryLine\",\n    CAST(COALESCE(\"ReceiptItems\".\"AmountReconciled_Amount\", 0.0) AS DOUBLE) AS \"DocumentQuantity\",---Need review\n    \"ERPOrderLineItems\".\"Description_UnitOfMeasure_UniqueName\" AS \"DocumentQuantityUnit\",\n\t<%=sourceSystem%> || '::' || \"Receipt\".\"InitialUniqueName\" || '::' || \"ReceiptItems\".\"NumberInCollection\" AS \"MaterialMasterPlant\",\n\t<%=sourceSystem%> || '::' || COALESCE(\"ERPOrder\".\"InitialUniqueName\", \"DirectOrder\".\"InitialUniqueName\") || '::' || \"ReceiptItems\".\"LineItem_NumberInCollection\" AS \"PurchaseDocumentLine\"\nFROM \"Receipt\" AS \"Receipt\"\nJOIN \"ReceiptItems\" AS \"ReceiptItems\"\n    ON \"Receipt\".\"UniqueName\" = \"ReceiptItems\".\"Receipt_UniqueName\"\nLEFT JOIN \"ERPOrder\"\n    ON \"Receipt\".\"Order_UniqueName\" = \"ERPOrder\".\"UniqueName\"\nLEFT JOIN \"DirectOrder\"\n    ON \"Receipt\".\"Order_UniqueName\" = \"DirectOrder\".\"UniqueName\"\nLEFT JOIN \"ERPOrderLineItems\" AS \"ERPOrderLineItems\"\n ON \"ERPOrderLineItems\".\"ERPOrder_UniqueName\" = \"ERPOrder\".\"UniqueName\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1760613938225.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633542434.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMovement - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "e63c5265-023a-4968-a197-6a04647dc036",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMovement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "DeliveryLine",
+                    "MaterialMasterPlant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "CreationTime",
+                    "Currency",
+                    "DocumentQuantity",
+                    "DocumentQuantityUnit",
+                    "ID",
+                    "IsInventoryRelevant",
+                    "MaterialMovementNumber",
+                    "MaterialTransactionType",
+                    "MovementDirection",
+                    "MovementQuantity",
+                    "MovementQuantityUnit",
+                    "SourceSystemInstance",
+                    "StorageLocation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMovementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_EKBE\" AS (SELECT DISTINCT \"EKBE\".\"MANDT\",\n                                   \"EKBE\".\"BELNR\",\n                                   \"EKBE\".\"GJAHR\",\n                                   \"EKBE\".\"BUZEI\",\n                                   \"EKBE\".\"WAERS\",\n                                   \"EKBE\".\"MENGE\",\n                                   \"EKBE\".\"WRBTR\",\n                                   \"EKBE\".\"BWART\",\n                                   \"EKBE\".\"BUDAT\",\n                                   \"EKBE\".\"BLDAT\",\n                                   \"EKBE\".\"BEWTP\",\n                                   \"EKBE\".\"DMBTR\"\n                   FROM \"EKBE\" AS \"EKBE\"\n                   WHERE \"EKBE\".\"VGABE\" = '1')\nSELECT \n    <%=sourceSystem%> || '::' || \"MSEG\".\"MANDT\" || '::' || \"MSEG\".\"MBLNR\" || '::' || \"MSEG\".\"MJAHR\" || '::' || \"MSEG\".\"ZEILE\"        AS \"ID\",\n    CAST(\"MSEG\".\"CPUDT_MKPF\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"MSEG\".\"CPUTM_MKPF\" AS DATE), \n            \"MSEG\".\"CPUTM_MKPF\") AS INTERVAL SECOND)                                                                                 AS \"CreationTime\",\n    CASE\n      WHEN \"MSEG\".\"SHKZG\" = 'S' THEN 'Incoming'\n      WHEN \"MSEG\".\"SHKZG\" = 'H' THEN 'Outgoing'\n      ELSE NULL\n    END                                                                                                                              AS \"MovementDirection\",\n    CASE WHEN NULLIF(\"MSEG\".\"BWTAR\", '') IS NULL THEN TRUE ELSE FALSE END                                                            AS \"IsInventoryRelevant\",\n    CASE        \n        WHEN \"MSEG\".\"BWART\" = '101' THEN 'GoodsReceipt'\n        WHEN \"MSEG\".\"BWART\" = '102' THEN 'GoodsReceiptReversal'\n        WHEN \"MSEG\".\"BWART\" = '122' THEN 'ReturnDeliveryToVendor'\n        WHEN \"MSEG\".\"BWART\" = '123' THEN 'ReturnDeliveryToVendorReversal'\n        WHEN \"MSEG\".\"BWART\" = '231' THEN 'GoodsIssueForSalesOrder'\n        WHEN \"MSEG\".\"BWART\" = '232' THEN 'GoodsIssueForSalesOrderReversal'\n        WHEN \"MSEG\".\"BWART\" = '601' THEN 'GoodsIssue'\n        WHEN \"MSEG\".\"BWART\" = '602' THEN 'GoodsIssueReversal'\n        WHEN \"MSEG\".\"BWART\" = '603' THEN 'GoodsIssueForSTO'\n        WHEN \"MSEG\".\"BWART\" = '604' THEN 'GoodsIssueForSTOReversal'\n        WHEN \"MSEG\".\"BWART\" = '623' THEN 'GoodsIssueFromReturnablePackagingStock'\n        WHEN \"MSEG\".\"BWART\" = '624' THEN 'GoodsIssueFromReturnablePackagingStockReversal'\n        WHEN \"MSEG\".\"BWART\" = '633' THEN 'GoodsIssueFromCustomerConsignment'\n        WHEN \"MSEG\".\"BWART\" = '634' THEN 'GoodsIssueFromCustomerConsignmentReversal'\n        WHEN \"MSEG\".\"BWART\" = '641' THEN 'GoodsIssueForStockTransportOrder'\n        WHEN \"MSEG\".\"BWART\" = '642' THEN 'GoodsIssueForStockTransportOrderReversal'\n        WHEN \"MSEG\".\"BWART\" = '643' THEN 'GoodsIssueForCrossCompanyStockTransportOrder'\n        WHEN \"MSEG\".\"BWART\" = '644' THEN 'GoodsIssueForCrossCompanyStockTransportOrderReversal'\n        WHEN \"MSEG\".\"BWART\" = '645' THEN 'GoodsIssueForCrossCompanyStockTransportOrderOneStep'\n        WHEN \"MSEG\".\"BWART\" = '646' THEN 'GoodsIssueForCrossCompanyStockTransportOrderOneStepReversal'\n        WHEN \"MSEG\".\"BWART\" = '647' THEN 'GoodsIssueForStockTransportOrderOneStep'\n        WHEN \"MSEG\".\"BWART\" = '648' THEN 'GoodsIssueForStockTransportOrderOneStepReversal'\n        WHEN \"MSEG\".\"BWART\" = '651' THEN 'ReturnGoodsReceipt'\n\t  ELSE 'Other'\n    END                                                                                                                             AS \"MaterialTransactionType\",\n    CASE\n        WHEN \"MSEG\".\"SHKZG\" = 'S' AND NULLIF(\"MSEG\".\"MATNR\", '') IS NULL THEN \"EKBE\".\"MENGE\"\n        WHEN \"MSEG\".\"SHKZG\" = 'H' AND NULLIF(\"MSEG\".\"MATNR\", '') IS NULL THEN \"EKBE\".\"MENGE\" * (-1)\n        WHEN \"MSEG\".\"SHKZG\" = 'S' THEN \"MSEG\".\"MENGE\"\n        WHEN \"MSEG\".\"SHKZG\" = 'H' THEN \"MSEG\".\"MENGE\" * (-1)\n    END                                                                                                                             AS \"MovementQuantity\",\n    \"MSEG\".\"MEINS\"                                                                                                                  AS \"MovementQuantityUnit\",\n    \"MSEG\".\"ERFMG\"                                                                                                                  AS \"DocumentQuantity\",\n    \"MSEG\".\"ERFME\"                                                                                                                  AS \"DocumentQuantityUnit\",\n    \"MSEG\".\"LGORT\"                                                                                                                  AS \"StorageLocation\",\n    <%=sourceSystem%> || '::' || \"MSEG\".\"MANDT\"                                                                                     AS \"SourceSystemInstance\",\n    \"MSEG\".\"MBLNR\"                                                                                                                  AS \"MaterialMovementNumber\",\n    CASE\n        WHEN \"MSEG\".\"SHKZG\" = 'S' AND NULLIF(\"MSEG\".\"MATNR\", '') IS NULL THEN \"EKBE\".\"WRBTR\"\n        WHEN \"MSEG\".\"SHKZG\" = 'H' AND NULLIF(\"MSEG\".\"MATNR\", '') IS NULL THEN \"EKBE\".\"WRBTR\" * (-1)\n        WHEN \"MSEG\".\"SHKZG\" = 'S' THEN \"EKBE\".\"WRBTR\"\n        WHEN \"MSEG\".\"SHKZG\" = 'H' THEN \"EKBE\".\"WRBTR\" * (-1)\n    END                                                                                                                             AS \"Amount\",\n    \"EKBE\".\"WAERS\"                                                                                                                  AS \"Currency\",\n    -- Relationships\n    <%=sourceSystem%> || '::' || \"MSEG\".\"MANDT\" || '::' || \"MSEG\".\"USNAM_MKPF\"                                                      AS \"CreatedBy\",\n    <%=sourceSystem%> || '::' || \"MSEG\".\"MANDT\" || '::' || \"MSEG\".\"EBELN\" || '::' || \"MSEG\".\"EBELP\"                                 AS \"PurchaseDocumentLine\",\n    <%=sourceSystem%> || '::' || \"MSEG\".\"MANDT\" || '::' || \"MSEG\".\"MATNR\" || '::' || \"MSEG\".\"WERKS\"                                 AS \"MaterialMasterPlant\",\n    <%=sourceSystem%> || '::' || \"MSEG\".\"MANDT\" || '::' || \"MSEG\".\"VBELN_IM\" || '::' || \"MSEG\".\"VBELP_IM\"                           AS \"DeliveryLine\"\nFROM \"MSEG\" AS \"MSEG\"\n         LEFT JOIN \"CTE_EKBE\" AS \"EKBE\"\n                   ON \"MSEG\".\"MANDT\" = \"EKBE\".\"MANDT\"\n                       AND \"MSEG\".\"MBLNR\" = \"EKBE\".\"BELNR\"\n                       AND \"MSEG\".\"MJAHR\" = \"EKBE\".\"GJAHR\"\n                       AND \"MSEG\".\"ZEILE\" = \"EKBE\".\"BUZEI\"\n         LEFT JOIN \"T156\" AS \"T156\"\n                   ON \"MSEG\".\"MANDT\" = \"T156\".\"MANDT\"\n                       AND \"MSEG\".\"BWART\" = \"T156\".\"BWART\"\nWHERE NULLIF(\"MSEG\".\"MANDT\", '') IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1765362326170.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749648897875.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMovement - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "10081570-a88a-40da-8792-c712ef2ee37e",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMovement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "DeliveryLine",
+                    "MaterialMasterPlant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "CreationTime",
+                    "Currency",
+                    "DocumentQuantity",
+                    "DocumentQuantityUnit",
+                    "ID",
+                    "IsInventoryRelevant",
+                    "MaterialMovementNumber",
+                    "MaterialTransactionType",
+                    "MovementDirection",
+                    "MovementQuantity",
+                    "MovementQuantityUnit",
+                    "SourceSystemInstance",
+                    "StorageLocation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMovementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_EKBE\" AS (SELECT DISTINCT \"EKBE\".\"MANDT\",\n                                   \"EKBE\".\"BELNR\",\n                                   \"EKBE\".\"GJAHR\",\n                                   \"EKBE\".\"BUZEI\",\n                                   \"EKBE\".\"WAERS\",\n                                   \"EKBE\".\"MENGE\",\n                                   \"EKBE\".\"WRBTR\",\n                                   \"EKBE\".\"BWART\",\n                                   \"EKBE\".\"BUDAT\",\n                                   \"EKBE\".\"BLDAT\",\n                                   \"EKBE\".\"BEWTP\",\n                                   \"EKBE\".\"DMBTR\"\n                   FROM \"EKBE\" AS \"EKBE\"\n                   WHERE \"EKBE\".\"VGABE\" = '1')\nSELECT \n    <%=sourceSystem%> || '::' || \"MATDOC\".\"MANDT\" || '::' || \"MATDOC\".\"KEY1\" || '::' || \n        \"MATDOC\".\"KEY2\" || '::' || \"MATDOC\".\"KEY3\" || '::' || \"MATDOC\".\"KEY4\" || '::' || \n        \"MATDOC\".\"KEY5\" || '::' || \"MATDOC\".\"KEY6\"                                                                                   AS \"ID\",\n    CAST(\"MATDOC\".\"CPUDT\" AS DATE) + CAST(TIMESTAMPDIFF(SECOND, CAST(\"MATDOC\".\"CPUTM\" AS DATE), \n            \"MATDOC\".\"CPUTM\") AS INTERVAL SECOND)                                                                                    AS \"CreationTime\",\n    CASE\n      WHEN \"MATDOC\".\"SHKZG\" = 'S' THEN 'Incoming'\n      WHEN \"MATDOC\".\"SHKZG\" = 'H' THEN 'Outgoing'\n      ELSE NULL\n    END                                                                                                                              AS \"MovementDirection\",\n    CASE WHEN NULLIF(\"MATDOC\".\"BWTAR\", '') IS NULL THEN TRUE ELSE FALSE END                                                          AS \"IsInventoryRelevant\",\n    CASE        \n        WHEN \"MATDOC\".\"BWART\" = '101' THEN 'GoodsReceipt'\n        WHEN \"MATDOC\".\"BWART\" = '102' THEN 'GoodsReceiptReversal'\n        WHEN \"MATDOC\".\"BWART\" = '122' THEN 'ReturnDeliveryToVendor'\n        WHEN \"MATDOC\".\"BWART\" = '123' THEN 'ReturnDeliveryToVendorReversal'\n        WHEN \"MATDOC\".\"BWART\" = '231' THEN 'GoodsIssueForSalesOrder'\n        WHEN \"MATDOC\".\"BWART\" = '232' THEN 'GoodsIssueForSalesOrderReversal'\n        WHEN \"MATDOC\".\"BWART\" = '601' THEN 'GoodsIssue'\n        WHEN \"MATDOC\".\"BWART\" = '602' THEN 'GoodsIssueReversal'\n        WHEN \"MATDOC\".\"BWART\" = '603' THEN 'GoodsIssueForSTO'\n        WHEN \"MATDOC\".\"BWART\" = '604' THEN 'GoodsIssueForSTOReversal'\n        WHEN \"MATDOC\".\"BWART\" = '623' THEN 'GoodsIssueFromReturnablePackagingStock'\n        WHEN \"MATDOC\".\"BWART\" = '624' THEN 'GoodsIssueFromReturnablePackagingStockReversal'\n        WHEN \"MATDOC\".\"BWART\" = '633' THEN 'GoodsIssueFromCustomerConsignment'\n        WHEN \"MATDOC\".\"BWART\" = '634' THEN 'GoodsIssueFromCustomerConsignmentReversal'\n        WHEN \"MATDOC\".\"BWART\" = '641' THEN 'GoodsIssueForStockTransportOrder'\n        WHEN \"MATDOC\".\"BWART\" = '642' THEN 'GoodsIssueForStockTransportOrderReversal'\n        WHEN \"MATDOC\".\"BWART\" = '643' THEN 'GoodsIssueForCrossCompanyStockTransportOrder'\n        WHEN \"MATDOC\".\"BWART\" = '644' THEN 'GoodsIssueForCrossCompanyStockTransportOrderReversal'\n        WHEN \"MATDOC\".\"BWART\" = '645' THEN 'GoodsIssueForCrossCompanyStockTransportOrderOneStep'\n        WHEN \"MATDOC\".\"BWART\" = '646' THEN 'GoodsIssueForCrossCompanyStockTransportOrderOneStepReversal'\n        WHEN \"MATDOC\".\"BWART\" = '647' THEN 'GoodsIssueForStockTransportOrderOneStep'\n        WHEN \"MATDOC\".\"BWART\" = '648' THEN 'GoodsIssueForStockTransportOrderOneStepReversal'\n        WHEN \"MATDOC\".\"BWART\" = '651' THEN 'ReturnGoodsReceipt'\n\t  ELSE 'Other'\n    END                                                                                                                             AS \"MaterialTransactionType\",\n    CASE\n        WHEN \"MATDOC\".\"SHKZG\" = 'S' AND NULLIF(\"MATDOC\".\"MATNR\", '') IS NULL THEN \"EKBE\".\"MENGE\"\n        WHEN \"MATDOC\".\"SHKZG\" = 'H' AND NULLIF(\"MATDOC\".\"MATNR\", '') IS NULL THEN \"EKBE\".\"MENGE\" * (-1)\n        WHEN \"MATDOC\".\"SHKZG\" = 'S' THEN \"MATDOC\".\"MENGE\"\n        WHEN \"MATDOC\".\"SHKZG\" = 'H' THEN \"MATDOC\".\"MENGE\" * (-1)\n    END                                                                                                                             AS \"MovementQuantity\",\n    \"MATDOC\".\"MEINS\"                                                                                                                AS \"MovementQuantityUnit\",\n    \"MATDOC\".\"ERFMG\"                                                                                                                AS \"DocumentQuantity\",\n    \"MATDOC\".\"ERFME\"                                                                                                                AS \"DocumentQuantityUnit\",\n    \"MATDOC\".\"LGORT\"                                                                                                                AS \"StorageLocation\",\n    <%=sourceSystem%> || '::' || \"MATDOC\".\"MANDT\"                                                                                   AS \"SourceSystemInstance\",\n    \"MATDOC\".\"MBLNR\"                                                                                                                AS \"MaterialMovementNumber\",\n    CASE\n        WHEN \"MATDOC\".\"SHKZG\" = 'S' AND NULLIF(\"MATDOC\".\"MATNR\", '') IS NULL THEN \"EKBE\".\"WRBTR\"\n        WHEN \"MATDOC\".\"SHKZG\" = 'H' AND NULLIF(\"MATDOC\".\"MATNR\", '') IS NULL THEN \"EKBE\".\"WRBTR\" * (-1)\n        WHEN \"MATDOC\".\"SHKZG\" = 'S' THEN \"EKBE\".\"WRBTR\"\n        WHEN \"MATDOC\".\"SHKZG\" = 'H' THEN \"EKBE\".\"WRBTR\" * (-1)\n    END                                                                                                                             AS \"Amount\",\n    \"EKBE\".\"WAERS\"                                                                                                                  AS \"Currency\",\n    -- Relationships\n    <%=sourceSystem%> || '::' || \"MATDOC\".\"MANDT\" || '::' || \"MATDOC\".\"USNAM\"                                                       AS \"CreatedBy\",\n    <%=sourceSystem%> || '::' || \"MATDOC\".\"MANDT\" || '::' || \"MATDOC\".\"EBELN\" || '::' || \"MATDOC\".\"EBELP\"                           AS \"PurchaseDocumentLine\",\n    <%=sourceSystem%> || '::' || \"MATDOC\".\"MANDT\" || '::' || \"MATDOC\".\"MATNR\" || '::' || \"MATDOC\".\"WERKS\"                           AS \"MaterialMasterPlant\",\n    <%=sourceSystem%> || '::' || \"MATDOC\".\"MANDT\" || '::' || \"MATDOC\".\"VBELN_IM\" || '::' || \"MATDOC\".\"VBELP_IM\"                     AS \"DeliveryLine\"\nFROM \"MATDOC\" AS \"MATDOC\"\n    LEFT JOIN \"CTE_EKBE\" AS \"EKBE\"\n        ON \"MATDOC\".\"MANDT\" = \"EKBE\".\"MANDT\"\n            AND \"MATDOC\".\"MBLNR\" = \"EKBE\".\"BELNR\"\n            AND \"MATDOC\".\"MJAHR\" = \"EKBE\".\"GJAHR\"\n            AND \"MATDOC\".\"ZEILE\" = \"EKBE\".\"BUZEI\"\n            AND \"MATDOC\".\"RECORD_TYPE\" = 'MDOC'\n    LEFT JOIN \"T156\" AS \"T156\"\n        ON \"MATDOC\".\"MANDT\" = \"T156\".\"MANDT\"\n            AND \"MATDOC\".\"BWART\" = \"T156\".\"BWART\"\n    LEFT JOIN \"USR02\" AS \"USR02\"\n        ON \"MATDOC\".\"MANDT\" = \"USR02\".\"MANDT\"\n            AND \"MATDOC\".\"USNAM\" = \"USR02\".\"BNAME\"\n    LEFT JOIN \"MATDOC\" AS \"MATDOC_CANCELLED\"\n        ON \"MATDOC\".\"MANDT\" = \"MATDOC_CANCELLED\".\"MANDT\"\n            AND \"MATDOC\".\"SMBLN\" = \"MATDOC_CANCELLED\".\"MBLNR\"\n            AND \"MATDOC\".\"SJAHR\" = \"MATDOC_CANCELLED\".\"MJAHR\"\n            AND \"MATDOC\".\"SMBLP\" = \"MATDOC_CANCELLED\".\"ZEILE\"\n            AND \"MATDOC_CANCELLED\".\"RECORD_TYPE\" = 'MDOC'\nWHERE NULLIF(\"MATDOC\".\"MANDT\", '') IS NOT NULL\n    AND \"MATDOC\".\"RECORD_TYPE\" = 'MDOC'\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1768300050013.0,
+        "changed_by": {
+            "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+            "name": "Modester Mwangi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764588931105.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMovement - MSDynamics365",
+        "draft": null,
+        "factory_id": "0a00aeb6-7e57-4f1d-8e51-316cf8f07803",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMovement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "DeliveryLine",
+                    "MaterialMasterPlant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "CreationTime",
+                    "Currency",
+                    "DocumentQuantity",
+                    "DocumentQuantityUnit",
+                    "ID",
+                    "IsInventoryRelevant",
+                    "MaterialMovementNumber",
+                    "MaterialTransactionType",
+                    "MovementDirection",
+                    "MovementQuantity",
+                    "MovementQuantityUnit",
+                    "SourceSystemInstance",
+                    "StorageLocation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMovementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\nWITH CTE_Deduplicate AS (\nSELECT\n    <%=sourceSystem%> ||'::'|| PurchaseOrderHeadersV2.PURCHASEORDERNUMBER                                        AS  ID,\n    COALESCE(ReleasedProductsV2.UnitCost, 0.0)                                                                                AS  Amount,\n     PurchaseOrderHeadersV2.RequestedDeliveryDate                                                               AS  CreationTime,\n    InventTransCDSEntities.CurrencyCode                                                                         AS  Currency,\n    InventTransCDSEntities.StatusReceipt                                                                        AS  MaterialTransactionType,\n    InventTransCDSEntities.Qty                                                                                  AS  DocumentQuantity,\n    ReleasedProductsV2.InventoryUnitSymbol                                                                      AS  DocumentQuantityUnit,\n    PurchaseOrderLinesV2.ReceivingWarehouseId                                                                   AS  StorageLocation,\n    NULL AS IsInventoryRelevant,\n    NULL AS MovementDirection,\n    <%=sourceSystem%> AS SourceSystemInstance,\n    InventTransCDSEntities.ItemId                                                                               AS MaterialMovementNumber,\n    NULL AS MovementQuantityUnit,\n    NULL AS MovementQuantity,\n\n    <%=sourceSystem%>||'::'||PurchaseOrderHeadersV2.OrdererPersonnelNumber                                                 AS CreatedBy,\n    NULL AS DeliveryLine,\n    <%=sourceSystem%>||'::'||PurchaseOrderHeadersV2.PURCHASEORDERNUMBER||'::'||PurchaseOrderLinesV2.PurchaseOrderNumber    AS PurchaseDocumentLine,\n    <%=sourceSystem%> ||'::'|| ReleasedProductsV2.ItemNumber ||'::'|| PurchaseOrderHeadersV2.DefaultReceivingSiteId        AS MaterialMasterPlant,\n    ROW_NUMBER() OVER (PARTITION BY PurchaseOrderHeadersV2.PURCHASEORDERNUMBER ORDER BY PurchaseOrderHeadersV2.PURCHASEORDERNUMBER) AS rn\n\n    --<%=sourceSystem%> ||'::'|| PurchaseOrderHeadersV2.DefaultReceivingSiteId                                     AS  MaterialMasterPlant\n    -- <%=sourceSystem%>||'::'||\"ReleasedProducts\".\"ItemNumber\"\n\n\nFROM PurchaseOrderHeadersV2\nLEFT JOIN PurchaseOrderLinesV3 AS PurchaseOrderLinesV2\n    ON  PurchaseOrderHeadersV2.PurchaseOrderNumber =  PurchaseOrderLinesV2.PurchaseOrderNumber\n    AND PurchaseOrderHeadersV2.dataAreaId = PurchaseOrderLinesV2.dataAreaId\nLEFT JOIN ReleasedProductsV2 \n    ON  ReleasedProductsV2.ItemNumber =  PurchaseOrderLinesV2.ItemNumber\n    AND ReleasedProductsV2.dataAreaId = PurchaseOrderLinesV2.dataAreaId\nLEFT JOIN InventTransCDSEntities \n    ON  ReleasedProductsV2.ItemNumber =  InventTransCDSEntities.ItemID\n    AND ReleasedProductsV2.dataAreaId = InventTransCDSEntities.dataAreaId\nLEFT JOIN ProductReceiptLinesV2 \n    ON  PurchaseOrderLinesV2.PurchaseOrderNumber =  ProductReceiptLinesV2.PurchaseOrderNumber\n    AND PurchaseOrderLinesV2.ItemNumber = ProductReceiptLinesV2.ItemNumber\n    AND PurchaseOrderLinesV2.dataAreaId = ProductReceiptLinesV2.dataAreaId\n) SELECT \n    * FROM CTE_Deduplicate \nWHERE rn = 1\n\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1768313347662.0,
+        "changed_by": {
+            "id": "39bb72ab-39e0-456a-ac46-b9768079a9fe",
+            "name": "Modester Mwangi",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752227759201.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "MaterialMovement_OracleFusion",
+        "draft": null,
+        "factory_id": "ddc90e55-b704-4cf2-9903-02a9e9023534",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "MaterialMovement",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [
+                    "CreatedBy",
+                    "DeliveryLine",
+                    "MaterialMasterPlant",
+                    "PurchaseDocumentLine"
+                ],
+                "namespace": "custom",
+                "property_names": [
+                    "Amount",
+                    "CreationTime",
+                    "Currency",
+                    "DocumentQuantity",
+                    "DocumentQuantityUnit",
+                    "ID",
+                    "IsInventoryRelevant",
+                    "MaterialMovementNumber",
+                    "MaterialTransactionType",
+                    "MovementDirection",
+                    "MovementQuantity",
+                    "MovementQuantityUnit",
+                    "SourceSystemInstance",
+                    "StorageLocation"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "MaterialMovementAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\n     -- 1. INCOMING (RCV_TRANSACTIONS)\n  WITH \"CTE_MTL_MATERIAL_TRANSACTIONS\" AS (\n    SELECT\n        InventoryTransactionPEORcvTransactionId,\n        InventoryTransactionPEOOrganizationId,\n        InventoryTransactionPEOInventoryItemId,\n        ROW_NUMBER() OVER (PARTITION BY InventoryTransactionPEORcvTransactionId ORDER BY InventoryTransactionPEOTransactionId) AS rn\n    FROM \"FscmTopModelAM_ScmExtractAM_InvBiccExtractAM_InventoryTransactionDetailExtractPVO\"\n),\n    -- INCOMING\n    \"FINAL_MATERIAL_MOVEMENT\" AS (\n    SELECT\n        <%=sourceSystem%> || '::' ||'RCV_'|| CAST(\"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOTransactionId\" AS VARCHAR(255))   AS \"ID\",\n        <%=sourceSystem%> || '::' || \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOPoLineId\"                              AS \"PurchaseDocumentLine\",\n        CAST(\"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOCreationDate\" AS TIMESTAMP)                                    AS \"CreationTime\",\n        CASE\n            WHEN \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOTransactionType\" = 'RETURN TO VENDOR'  THEN 'Outgoing'\n            ELSE 'Incoming'\n        END                                                                                                              AS \"MovementDirection\",\n        FALSE                                                                                                            AS \"IsInventoryRelevant\",\n        CASE\n            WHEN \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOTransactionType\" IN ('RECEIVE', 'DELIVER') THEN 'GoodsReceipt'\n            WHEN \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOTransactionType\" = 'RETURN TO VENDOR' THEN 'GoodsReceiptReversal'\n            ELSE 'Other'\n        END                                                                                                              AS \"MaterialTransactionType\",\n        TRY_CAST(\"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOQuantity\" AS FLOAT)                                        AS \"MovementQuantity\",\n        \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOUomCode\"                                                            AS \"MovementQuantityUnit\",\n        TRY_CAST(\"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOSourceDocQuantity\" AS FLOAT)                               AS \"DocumentQuantity\",\n        \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOSourceDocUomCode\"                                                   AS \"DocumentQuantityUnit\",\n        CAST(\"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOLocationId\" AS VARCHAR(255))                                   AS \"StorageLocation\",\n        TRY_CAST(COALESCE(\"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOAmountBilled\", 0) AS FLOAT)                                    AS \"Amount\",\n        \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOCurrencyCode\"                                                       AS \"Currency\",\n        <%=sourceSystem%>                                                                                                AS \"SourceSystemInstance\",\n        CAST(\"RCV_TRANSACTIONS\".\"RcvngShpmntReceiptHdrPEOReceiptNum\" AS VARCHAR(255))                                    AS \"MaterialMovementNumber\",\n        ''                                                                                                               AS \"DeliveryLine\",\n        <%=sourceSystem%> || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOOrganizationId\" || '::'\n        || \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOInventoryItemId\"                                          AS \"MaterialMasterPlant\",\n        \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOCreatedBy\"                                                          AS \"CreatedBy\"\n    FROM \"FscmTopModelAM_ScmExtractAM_RcvBiccExtractAM_ReceivingReceiptTransactionExtractPVO\" AS \"RCV_TRANSACTIONS\"\n        LEFT JOIN \"CTE_MTL_MATERIAL_TRANSACTIONS\" AS \"MTL_MATERIAL_TRANSACTIONS\"--Chngead from Alias MTL_MATERIAL_TRANSACTIONS to MTL_LOOKUP--\n            ON \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEOInvTransactionId\" = \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEORcvTransactionId\"\n             AND \"MTL_MATERIAL_TRANSACTIONS\".rn = 1\n    WHERE \"RCV_TRANSACTIONS\".\"RcvngRcptTrnsctnExtrctPEODestinationTypeCode\" = 'RECEIVING'\n    UNION ALL\n    -- OUTGOING\n    SELECT\n        <%=sourceSystem%> || '::' ||'MTL_'|| CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionId\" AS VARCHAR(255))  AS \"ID\",\n        ''                                                                                                                     AS \"PurchaseDocumentLine\",\n        CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOCreationDate\" AS TIMESTAMP)                                   AS \"CreationTime\",\n        CASE\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionQuantity\" >= 0 THEN 'Incoming'\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionQuantity\" < 0 THEN 'Outgoing' \n            ELSE NULL\n        END                                                                                                                    AS \"MovementDirection\",\n        CASE \n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionActionId\" NOT IN (2, 8, 28, 30, 31, 33, 36, 52) THEN true \n            ELSE FALSE \n        END                                                                                                                    AS \"IsInventoryRelevant\",\n        CASE\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionTypeId\" = '33'\n                AND \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionActionId\" = '1'\n                AND \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionSourceTypeId\" = '2' THEN 'GoodsIssue'\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionTypeId\" = '34'\n                AND \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionActionId\" = '1'\n                AND \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionSourceTypeId\" = '8' THEN 'GoodsIssue'\n            WHEN \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionTypeId\" = '37'\n                AND \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionActionId\" = '1'\n                AND \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionSourceTypeId\" = '12' THEN 'GoodsReceiptReversal'\n        END                                                                                                                   AS \"MaterialTransactionType\",\n        TRY_CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionQuantity\" AS FLOAT)                           AS \"MovementQuantity\",\n        \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionUom\"                                                   AS \"MovementQuantityUnit\",\n        NULL                                                                                                                  AS \"DocumentQuantity\",\n        NULL                                                                                                                  AS \"DocumentQuantityUnit\",\n        CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOShipToLocationId\" AS VARCHAR(255))                           AS \"StorageLocation\",\n        0.0                                                                                                                   AS \"Amount\",\n        ''                                                                                                                    AS \"Currency\",\n        <%=sourceSystem%>                                                                                                     AS \"SourceSystemInstance\",\n        CAST(\"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOTransactionId\" AS VARCHAR(255))                              AS \"MaterialMovementNumber\",\n        <%=sourceSystem%> || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOPickingLineId\"                       AS \"DeliveryLine\",\n    \n        <%=sourceSystem%> || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOOrganizationId\" \n        || '::' || \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOInventoryItemId\"                                       AS \"MaterialMasterPlant\",\n        \"MTL_MATERIAL_TRANSACTIONS\".\"InventoryTransactionPEOCreatedBy\"                                                        AS \"CreatedBy\"\n    FROM \"FscmTopModelAM_ScmExtractAM_InvBiccExtractAM_InventoryTransactionDetailExtractPVO\" AS \"MTL_MATERIAL_TRANSACTIONS\"\n)\nSELECT\n    \"FINAL_MATERIAL_MOVEMENT\".\"ID\"                                  AS \"ID\",\n    CAST(\"FINAL_MATERIAL_MOVEMENT\".\"CreationTime\" AS TIMESTAMP)     AS \"CreationTime\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MovementDirection\"                   AS \"MovementDirection\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"IsInventoryRelevant\"                 AS \"IsInventoryRelevant\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MaterialTransactionType\"             AS \"MaterialTransactionType\",\n    CAST(\"FINAL_MATERIAL_MOVEMENT\".\"MovementQuantity\" AS FLOAT)     AS \"MovementQuantity\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MovementQuantityUnit\"                AS \"MovementQuantityUnit\",\n    CAST(\"FINAL_MATERIAL_MOVEMENT\".\"DocumentQuantity\" AS FLOAT)     AS \"DocumentQuantity\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"DocumentQuantityUnit\"                AS \"DocumentQuantityUnit\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"StorageLocation\"                     AS \"StorageLocation\",\n    CAST(COALESCE(\"FINAL_MATERIAL_MOVEMENT\".\"Amount\", 0.0) AS FLOAT)             AS \"Amount\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"Currency\"                            AS \"Currency\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"SourceSystemInstance\"                AS \"SourceSystemInstance\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MaterialMovementNumber\"              AS \"MaterialMovementNumber\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"PurchaseDocumentLine\"                AS \"PurchaseDocumentLine\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"DeliveryLine\"                        AS \"DeliveryLine\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"MaterialMasterPlant\"                 AS \"MaterialMasterPlant\",\n    \"FINAL_MATERIAL_MOVEMENT\".\"CreatedBy\"                           AS \"CreatedBy\"\nFROM \"FINAL_MATERIAL_MOVEMENT\" AS \"FINAL_MATERIAL_MOVEMENT\"\nWHERE \"FINAL_MATERIAL_MOVEMENT\".\"ID\" IS NOT NULL"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

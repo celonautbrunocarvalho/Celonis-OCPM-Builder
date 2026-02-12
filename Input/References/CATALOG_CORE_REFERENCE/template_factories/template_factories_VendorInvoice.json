@@ -1,0 +1,31 @@
+[
+    {
+        "change_date": 1760355081114.0,
+        "changed_by": {
+            "id": "83864e97-dd17-42f7-92e4-2c1d1b9c029d",
+            "name": "Hema priya Sudhakar",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "8b0fa45b-28fe-4314-bf39-c9e18042a5f4",
+            "name": "Johannes Muhr",
+            "type_": "USER"
+        },
+        "creation_date": 1753884418079.0,
+        "description": "",
+        "id": "c049aca3-bb5e-4c44-a2b1-9af0fad34060",
+        "instance_names": [
+            "VendorInvoice - SAP ECC",
+            "VendorInvoice - SAP S/4"
+        ],
+        "instances_count": 2,
+        "name": "VendorInvoice - SAP ECC - 1",
+        "target": {
+            "entity_ref": {
+                "name": "VendorInvoice",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        }
+    }
+]

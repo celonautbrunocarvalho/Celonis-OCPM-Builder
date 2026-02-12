@@ -1,0 +1,353 @@
+{
+    "categories": [
+        {
+            "metadata": {
+                "name": "Metadata",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "MasterData",
+                    "namespace": "celonis"
+                }
+            ]
+        },
+        {
+            "metadata": {
+                "name": "Processes",
+                "namespace": "celonis"
+            },
+            "values": [
+                {
+                    "name": "InventoryManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "OrderManagement",
+                    "namespace": "celonis"
+                },
+                {
+                    "name": "Procurement",
+                    "namespace": "celonis"
+                }
+            ]
+        }
+    ],
+    "change_date": 1765529979804.0,
+    "changed_by": {
+        "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+        "name": "Gokul",
+        "type_": "USER"
+    },
+    "color": "#4608B3",
+    "created_by": {
+        "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+        "name": "l.pigozzi",
+        "type_": "USER"
+    },
+    "creation_date": 1749630699807.0,
+    "description": "Contains material master data specific to a given plant.",
+    "fields": [
+        {
+            "data_type": "CT_BOOLEAN",
+            "name": "IsDiscontinued",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "BaseCurrency",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ValidityPeriodStartDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "SourceSystemInstance",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "PlannedProductionLeadTimeDays",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_LONG",
+            "name": "PlannedDeliveryTimeDays",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "UnitPriceAmount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_INSTANT",
+            "name": "ValidityPeriodEndDate",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "SafetyStockQuantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ProcurementType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MRPType",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "MRPController",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "MinimumLotSizeQuantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "CurrentValuatedStockQuantity",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_DOUBLE",
+            "name": "CurrentValuatedStockAmount",
+            "namespace": "custom"
+        },
+        {
+            "data_type": "CT_UTF8_STRING",
+            "name": "ID",
+            "namespace": "custom"
+        }
+    ],
+    "id": "0a2b6a66-bba2-4842-ad77-e9507c99e544",
+    "managed": true,
+    "multi_link": false,
+    "name": "MaterialMasterPlant",
+    "namespace": "custom",
+    "relationships": [
+        {
+            "cardinality": "HAS_MANY",
+            "name": "StockHistory",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "StockHistory",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PlannedSupply",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PlannedSupply",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "ProductionOrderItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "ProductionOrder",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialReservationItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "MaterialReservation",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialRequirement",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "MaterialRequirement",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "BillOfMaterials",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "BillOfMaterialProduct",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "BillOfMaterialsItem",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "BillOfMaterialComponent",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "MaterialMovement",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "MaterialMovement",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "GoodsIssue",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "GoodsIssue",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Material",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Material",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_ONE",
+            "name": "Plant",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": null,
+                "mapped_by_namespace": null,
+                "object_ref": {
+                    "name": "Plant",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipBillOfMaterialsProduct",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlantProduct",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "RelationshipBillOfMaterialsComponent",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlantComponent",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "RelationshipBillOfMaterials",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "SalesOrderScheduleLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "SalesOrderScheduleLine",
+                    "namespace": "custom"
+                }
+            }
+        },
+        {
+            "cardinality": "HAS_MANY",
+            "name": "PurchaseRequisitionLine",
+            "namespace": "custom",
+            "target": {
+                "mapped_by": "MaterialMasterPlant",
+                "mapped_by_namespace": "custom",
+                "object_ref": {
+                    "name": "PurchaseRequisitionLine",
+                    "namespace": "custom"
+                }
+            }
+        }
+    ],
+    "tags": [
+        "Procurement",
+        "MasterData",
+        "InventoryManagement",
+        "OrderManagement"
+    ]
+}

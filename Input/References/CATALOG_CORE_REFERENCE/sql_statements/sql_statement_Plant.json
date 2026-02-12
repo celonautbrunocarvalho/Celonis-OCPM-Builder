@@ -1,0 +1,325 @@
+[
+    {
+        "change_date": 1761562597988.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749630776392.0,
+        "data_connection_id": "42d53587-d7fa-45cf-8403-26770d8029d0",
+        "description": "",
+        "disabled": null,
+        "display_name": "Plant transformation - 00. Central Extraction Pool_Oracle-ebs - 1",
+        "draft": null,
+        "factory_id": "ada474b7-da8e-48c1-bb07-ba6006fa68ee",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_EBS'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Plant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Country",
+                    "CountryName",
+                    "ID",
+                    "PlantName",
+                    "PlantNumber",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Plant\" AS (\n    SELECT\n        \"HR_ALL_ORGANIZATION_UNITS\".\"ORGANIZATION_ID\"       AS \"ORGANIZATION_ID\",\n        \"HR_ALL_ORGANIZATION_UNITS\".\"NAME\"                  AS \"NAME\",\n        \"HR_ALL_ORGANIZATION_UNITS\".\"LOCATION_ID\"           AS \"LOCATION_ID\",\n        \"ORG_ORGANIZATION_DEFINITIONS\".\"ORGANIZATION_CODE\"  AS \"ORGANIZATION_CODE\"\n    FROM \"ORG_ORGANIZATION_DEFINITIONS\" AS \"ORG_ORGANIZATION_DEFINITIONS\"\n        LEFT JOIN \"HR_ALL_ORGANIZATION_UNITS\" AS \"HR_ALL_ORGANIZATION_UNITS\"\n            ON \"ORG_ORGANIZATION_DEFINITIONS\".\"ORGANIZATION_ID\" = \"HR_ALL_ORGANIZATION_UNITS\".\"ORGANIZATION_ID\"\n    WHERE NULLIF(CAST(\"HR_ALL_ORGANIZATION_UNITS\".\"ORGANIZATION_ID\" AS VARCHAR(255)), '') IS NOT NULL\n)\nSELECT\n    <%=sourceSystem%> || '::' || CAST(\"Plant\".\"ORGANIZATION_ID\" AS VARCHAR(255)) AS \"ID\",\n    CAST(\"Plant\".\"ORGANIZATION_CODE\" AS VARCHAR(255))                            AS \"PlantNumber\",\n    \"Plant\".\"NAME\"                                                               AS \"PlantName\",\n    \"HR_LOCATIONS_ALL\".\"COUNTRY\"                                                 AS \"Country\",\n    \"FND_TERRITORIES\".\"NLS_TERRITORY\"                                            AS \"CountryName\",\n    <%=sourceSystem%>                                                            AS \"SourceSystemInstance\"\nFROM \"CTE_Plant\" AS \"Plant\"\n    INNER JOIN \"HR_LOCATIONS_ALL\" AS \"HR_LOCATIONS_ALL\"\n        ON \"Plant\".\"LOCATION_ID\" = \"HR_LOCATIONS_ALL\".\"LOCATION_ID\"\n    LEFT JOIN \"FND_TERRITORIES\" AS \"FND_TERRITORIES\"\n        ON \"HR_LOCATIONS_ALL\".\"COUNTRY\" = \"FND_TERRITORIES\".\"TERRITORY_CODE\"\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1762248532515.0,
+        "changed_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+            "name": "Brave Gujral",
+            "type_": "USER"
+        },
+        "creation_date": 1752236232700.0,
+        "data_connection_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+        "description": null,
+        "disabled": null,
+        "display_name": "Plant_OracleFusion",
+        "draft": null,
+        "factory_id": "a26d04b0-8578-482c-b4ed-1a11735f4dce",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'Oracle_Fusion'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Plant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Country",
+                    "CountryName",
+                    "ID",
+                    "PlantName",
+                    "PlantNumber",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "WITH \"CTE_Plant\" AS (\n    SELECT \n        DISTINCT \n        \"OrganizationUnitPVO\".\"OrganizationId\"                              AS \"OrganizationId\",\n        \"OrganizationUnitPVO\".\"OrganizationUnitTranslationPEOName\"          AS \"OrganizationUnitTranslationPEOName\",\n        \"OrganizationUnitPVO\".\"OrganizationUnitPEOLocationId\"               AS \"OrganizationUnitPEOLocationId\",\n        \"ItemPVO\".\"ItemOrganizationParameterPEOOrganizationCode\"            AS \"ItemOrganizationParameterPEOOrganizationCode\"\n    FROM \"FscmTopModelAM_OrganizationAM_OrganizationUnitPVO\" AS \"OrganizationUnitPVO\"\n        LEFT JOIN \"FscmTopModelAM_EgpItemsPublicModelAM_Item\" AS \"ItemPVO\"\n            ON \"OrganizationUnitPVO\".\"OrganizationId\" = \"ItemPVO\".\"ItemOrganizationParameterPEOOrganizationId\")\nSELECT\n    <%=sourceSystem%> || '::' || \"Plant\".\"OrganizationId\" AS \"ID\",\n    \"Location\".\"LocationPEOInternalLocationCode\"          AS \"PlantNumber\",\n    \"Plant\".\"OrganizationUnitTranslationPEOName\"          AS \"PlantName\",\n    \"Location\".\"AddressesPEOCountry\"                      AS \"Country\",\n    \"Territory\".\"NlsTerritory\"                            AS \"CountryName\",\n    <%=sourceSystem%>                                     AS \"SourceSystemInstance\"\nFROM \"CTE_Plant\" AS \"Plant\"\n         LEFT JOIN \"FscmTopModelAM_LocationAM_HRLocationsPVO\" AS \"Location\"\n                   ON \"Plant\".\"OrganizationUnitPEOLocationId\" = \"Location\".\"LocationPEOLocationId\"\n         LEFT JOIN \"FscmTopModelAM_FinExtractAM_AnalyticsExtractServiceAM_TerritoriesPVO\" AS \"Territory\"\n                   ON \"Location\".\"AddressesPEOCountry\" = \"Territory\".\"TerritoryCode\""
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1757404050706.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749633864200.0,
+        "data_connection_id": "b9f449da-3a15-43d8-89e3-0e87e54fb5af",
+        "description": null,
+        "disabled": null,
+        "display_name": "Plant - 00. Central Extraction Pool_TS1",
+        "draft": null,
+        "factory_id": "7b8e4d59-113c-4271-b03e-2933fb1b32e9",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_ECC'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Plant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Country",
+                    "CountryName",
+                    "ID",
+                    "PlantName",
+                    "PlantNumber",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || \"T001W\".\"MANDT\" || '::' || \"T001W\".\"WERKS\"     AS \"ID\",\n    \"T001W\".\"WERKS\"                                                                AS \"PlantNumber\",\n    \"T001W\".\"NAME1\"                                                                AS \"PlantName\",\n    \"T001W\".\"LAND1\"                                                                AS \"Country\",\n    \"T005T\".\"LANDX\"                                                                AS \"CountryName\",\n    <%=sourceSystem%> || '::' || \"T001W\".\"MANDT\"                                   AS \"SourceSystemInstance\"\nFROM \"T001W\" AS \"T001W\"\n    LEFT JOIN \"T005T\" AS \"T005T\"\n        ON \"T001W\".\"MANDT\" = \"T005T\".\"MANDT\"\n            AND \"T001W\".\"LAND1\" = \"T005T\".\"LAND1\"\n            AND \"T005T\".\"SPRAS\" = <%=LanguageKey%> \nWHERE NULLIF(\"T001W\".\"MANDT\", '') IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1757404063341.0,
+        "changed_by": {
+            "id": "ae9989fc-2640-4ab1-9754-cb31999ce77e",
+            "name": "j.rosenbauer",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "2202cbc9-7251-4630-bfb2-36812e688613",
+            "name": "l.pigozzi",
+            "type_": "USER"
+        },
+        "creation_date": 1749649214616.0,
+        "data_connection_id": "8939ad05-4472-435c-a065-ed31be1b9fea",
+        "description": null,
+        "disabled": null,
+        "display_name": "Plant - 00. SAP S/4 HANA Extraction Pool_S4H-HANA",
+        "draft": null,
+        "factory_id": "936cefb3-8d2c-48e7-9849-7b53446715f0",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "LanguageKey",
+                "value": "'E'"
+            },
+            {
+                "name": "sourceSystem",
+                "value": "'SAP_S4_HANA'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Plant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Country",
+                    "CountryName",
+                    "ID",
+                    "PlantName",
+                    "PlantNumber",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "SELECT <%=sourceSystem%> || '::' || \"T001W\".\"MANDT\" || '::' || \"T001W\".\"WERKS\"     AS \"ID\",\n    \"T001W\".\"WERKS\"                                                                AS \"PlantNumber\",\n    \"T001W\".\"NAME1\"                                                                AS \"PlantName\",\n    \"T001W\".\"LAND1\"                                                                AS \"Country\",\n    \"T005T\".\"LANDX\"                                                                AS \"CountryName\",\n    <%=sourceSystem%> || '::' || \"T001W\".\"MANDT\"                                   AS \"SourceSystemInstance\"\nFROM \"T001W\" AS \"T001W\"\n    LEFT JOIN \"T005T\" AS \"T005T\"\n        ON \"T001W\".\"MANDT\" = \"T005T\".\"MANDT\"\n            AND \"T001W\".\"LAND1\" = \"T005T\".\"LAND1\"\n            AND \"T005T\".\"SPRAS\" = <%=LanguageKey%> \nWHERE NULLIF(\"T001W\".\"MANDT\", '') IS NOT NULL\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    },
+    {
+        "change_date": 1765530157114.0,
+        "changed_by": {
+            "id": "18f1c3ed-024c-44fb-9163-4a9768c7844f",
+            "name": "Gokul",
+            "type_": "USER"
+        },
+        "created_by": {
+            "id": "4622cbb7-ba9b-4f8d-9415-2b9ef8a9db64",
+            "name": "Rahul Bhat TR",
+            "type_": "USER"
+        },
+        "creation_date": 1764664806387.0,
+        "data_connection_id": "35a670b4-96f2-4f18-a811-7a12343a4d2a",
+        "description": null,
+        "disabled": null,
+        "display_name": "Plant - MSDynamics_365",
+        "draft": null,
+        "factory_id": "21f6262d-7dd6-4d43-b344-55d3f3beac0e",
+        "factory_validation_status": "VALID",
+        "has_user_template": null,
+        "local_parameters": [
+            {
+                "name": "sourceSystem",
+                "value": "'MSDynamics_365'"
+            }
+        ],
+        "namespace": "custom",
+        "target": {
+            "entity_ref": {
+                "name": "Plant",
+                "namespace": "custom"
+            },
+            "kind": "OBJECT"
+        },
+        "transformations": [
+            {
+                "change_sql_factory_datasets": [],
+                "foreign_key_names": [],
+                "namespace": "custom",
+                "property_names": [
+                    "Country",
+                    "CountryName",
+                    "ID",
+                    "PlantName",
+                    "PlantNumber",
+                    "SourceSystemInstance"
+                ],
+                "property_sql_factory_datasets": [
+                    {
+                        "id": "PlantAttributes",
+                        "type_": "SQL_FACTORY_DATA_SET",
+                        "complete_overwrite": false,
+                        "disabled": false,
+                        "materialise_cte": false,
+                        "overwrite": null,
+                        "sql": "\n\nSELECT\n    ID,\n    COUNT(*) AS rc\nFROM (\n\n\nSELECT\n    <%=sourceSystem%>||'::'||\"PartyContactsV3\".LocationId                  AS ID,\n\t\"CDSPostalAddressHistoryV2\".CountryRegionId                            AS Country,\n    \"PartyContactsV3\".Description                                          AS CountryText,\n    \"OperationalSitesV2\".SiteId                                            AS PlantName,\n    \"OperationalSitesV2\".SiteId                                            AS PlantNumber,\n    NULL                                                                   AS CountryName,\n    NULL                                                                   AS SourceSystemInstance\nFROM \"PartyContactsV3\"\n\tLEFT JOIN \"CDSPostalAddressHistoryV2\" \n\tON \"PartyContactsV3\".LocationId = \"CDSPostalAddressHistoryV2\".LocationId\n    LEFT JOIN \"OperationalSitesV2\"\n    ON \"OperationalSitesV2\".PrimaryAddressZipCode = \"CDSPostalAddressHistoryV2\".ZipCode\n\n\n\n) t\nGROUP BY ID\nHAVING COUNT(*) > 1\norder by COUNT(*) desc\n\n\n"
+                    }
+                ],
+                "relationship_transformations": []
+            }
+        ]
+    }
+]

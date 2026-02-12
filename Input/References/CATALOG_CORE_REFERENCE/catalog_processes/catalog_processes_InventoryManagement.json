@@ -1,0 +1,33 @@
+{
+    "change_date": 1758616782005.0,
+    "changed_by": {
+        "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+        "name": "Brave Gujral",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "4d82ae0d-2047-4c83-ac8c-e2da04a3b5a0",
+        "name": "Brave Gujral",
+        "type_": "USER"
+    },
+    "creation_date": 1753868790328.0,
+    "data_source_connections": [
+        {
+            "custom_transformation_count": 0,
+            "data_source_id": "03736e95-3931-4eda-8dfe-fc16e11388bc",
+            "data_source_name": "00. Central Extraction Pool_Oracle Fusion",
+            "data_source_type": "imported",
+            "enabled": false,
+            "global_transformation_count": 29,
+            "mitigate_ccdm_differences": true,
+            "transformation_type": "oracle-cloud-bicc"
+        }
+    ],
+    "description": null,
+    "display_name": "Inventory Management",
+    "enable_date": 1758616781648.0,
+    "enabled": false,
+    "event_count": 14,
+    "name": "InventoryManagement",
+    "object_count": 47
+}

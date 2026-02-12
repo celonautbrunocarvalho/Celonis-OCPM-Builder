@@ -1,0 +1,818 @@
+{
+    "base_ref": null,
+    "categories": [],
+    "change_date": 1761749787079.0,
+    "changed_by": {
+        "id": "5477e5f1-b56c-404c-b581-116f9517bb0d",
+        "name": "Robert Connolly",
+        "type_": "USER"
+    },
+    "created_by": {
+        "id": "a7933268-841f-4712-8831-62682f5e89e0",
+        "name": "Dan Danov",
+        "type_": "USER"
+    },
+    "creation_date": 1749799231731.0,
+    "default_projection": "ReceivableItem",
+    "description": null,
+    "events": [
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "CancelSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "CancelSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Receivable Item",
+            "entity_metadata": {
+                "name": "ChangeReceivableItem",
+                "namespace": "custom"
+            },
+            "name": "ChangeReceivableItem",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Sales Order",
+            "entity_metadata": {
+                "name": "ChangeSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "ChangeSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Clear Receivable Item",
+            "entity_metadata": {
+                "name": "ClearReceivableItem",
+                "namespace": "custom"
+            },
+            "name": "ClearReceivableItem",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Post Receivable Item",
+            "entity_metadata": {
+                "name": "PostReceivableItem",
+                "namespace": "custom"
+            },
+            "name": "PostReceivableItem",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Receivable Item Cash Discount Due Date",
+            "entity_metadata": {
+                "name": "ReceivableItemCashDiscountDueDate",
+                "namespace": "custom"
+            },
+            "name": "ReceivableItemCashDiscountDueDate",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Receivable Item Due Date",
+            "entity_metadata": {
+                "name": "ReceivableItemDueDate",
+                "namespace": "custom"
+            },
+            "name": "ReceivableItemDueDate",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Receive Incoming Payment",
+            "entity_metadata": {
+                "name": "ReceiveIncomingPayment",
+                "namespace": "custom"
+            },
+            "name": "ReceiveIncomingPayment",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Release Dunning Block",
+            "entity_metadata": {
+                "name": "ReleaseDunningBlock",
+                "namespace": "custom"
+            },
+            "name": "ReleaseDunningBlock",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Send Dunning Notices",
+            "entity_metadata": {
+                "name": "SendDunningNotices",
+                "namespace": "custom"
+            },
+            "name": "SendDunningNotices",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Set Dunning Block",
+            "entity_metadata": {
+                "name": "SetDunningBlock",
+                "namespace": "custom"
+            },
+            "name": "SetDunningBlock",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Post Goods Issue",
+            "entity_metadata": {
+                "name": "PostGoodsIssue",
+                "namespace": "custom"
+            },
+            "name": "PostGoodsIssue",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Set Block On Sales Order",
+            "entity_metadata": {
+                "name": "SetBlockOnSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "SetBlockOnSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Release Block On Sales Order",
+            "entity_metadata": {
+                "name": "ReleaseBlockOnSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "ReleaseBlockOnSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Block On Sales Order",
+            "entity_metadata": {
+                "name": "ChangeBlockOnSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "ChangeBlockOnSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Set Block On Customer",
+            "entity_metadata": {
+                "name": "SetBlockOnCustomer",
+                "namespace": "custom"
+            },
+            "name": "SetBlockOnCustomer",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Release Block On Customer",
+            "entity_metadata": {
+                "name": "ReleaseBlockOnCustomer",
+                "namespace": "custom"
+            },
+            "name": "ReleaseBlockOnCustomer",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "ChangeSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "ChangeSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Sales Order",
+            "entity_metadata": {
+                "name": "CreateSalesOrder",
+                "namespace": "custom"
+            },
+            "name": "CreateSalesOrder",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "CreateSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "CreateSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Delivery",
+            "entity_metadata": {
+                "name": "CreateDelivery",
+                "namespace": "custom"
+            },
+            "name": "CreateDelivery",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Delivery Line",
+            "entity_metadata": {
+                "name": "CreateDeliveryLine",
+                "namespace": "custom"
+            },
+            "name": "CreateDeliveryLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Execute Picking",
+            "entity_metadata": {
+                "name": "ExecutePicking",
+                "namespace": "custom"
+            },
+            "name": "ExecutePicking",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Sign Proof Of Delivery",
+            "entity_metadata": {
+                "name": "SignProofOfDelivery",
+                "namespace": "custom"
+            },
+            "name": "SignProofOfDelivery",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Set Block On Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "SetBlockOnSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "SetBlockOnSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Block On Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "ChangeBlockOnSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "ChangeBlockOnSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Release Block On Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "ReleaseBlockOnSalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "ReleaseBlockOnSalesOrderScheduleLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Customer Invoice Line",
+            "entity_metadata": {
+                "name": "CreateCustomerInvoiceLine",
+                "namespace": "custom"
+            },
+            "name": "CreateCustomerInvoiceLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Create Customer Invoice",
+            "entity_metadata": {
+                "name": "CreateCustomerInvoice",
+                "namespace": "custom"
+            },
+            "name": "CreateCustomerInvoice",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Cancel Customer Invoice",
+            "entity_metadata": {
+                "name": "CancelCustomerInvoice",
+                "namespace": "custom"
+            },
+            "name": "CancelCustomerInvoice",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Delivery",
+            "entity_metadata": {
+                "name": "ChangeDelivery",
+                "namespace": "custom"
+            },
+            "name": "ChangeDelivery",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Change Delivery Line",
+            "entity_metadata": {
+                "name": "ChangeDeliveryLine",
+                "namespace": "custom"
+            },
+            "name": "ChangeDeliveryLine",
+            "namespace": "custom"
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Apply Customer Invoice Line",
+            "entity_metadata": {
+                "name": "ApplyCustomerInvoiceLine",
+                "namespace": "custom"
+            },
+            "name": "ApplyCustomerInvoiceLine",
+            "namespace": "custom"
+        }
+    ],
+    "id": "9985a09c-62e4-4d45-9913-3dbdf6e811a9",
+    "name": "AccountsReceivable",
+    "namespace": "custom",
+    "objects": [
+        {
+            "custom_alias": null,
+            "default_alias": "Currency Conversion",
+            "entity_metadata": {
+                "name": "CurrencyConversion",
+                "namespace": "custom"
+            },
+            "name": "CurrencyConversion",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Customer",
+            "entity_metadata": {
+                "name": "Customer",
+                "namespace": "custom"
+            },
+            "name": "Customer",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "ReceivableItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Customer Invoice",
+            "entity_metadata": {
+                "name": "CustomerInvoice",
+                "namespace": "custom"
+            },
+            "name": "CustomerInvoice",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "CustomerInvoiceLine",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "ReceivableItem",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Customer Invoice Line",
+            "entity_metadata": {
+                "name": "CustomerInvoiceLine",
+                "namespace": "custom"
+            },
+            "name": "CustomerInvoiceLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "CustomerInvoice",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "SalesOrderScheduleLines",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Delivery",
+            "entity_metadata": {
+                "name": "Delivery",
+                "namespace": "custom"
+            },
+            "name": "Delivery",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Delivery Line",
+            "entity_metadata": {
+                "name": "DeliveryLine",
+                "namespace": "custom"
+            },
+            "name": "DeliveryLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "Delivery",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "GoodsIssue",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Goods Issue",
+            "entity_metadata": {
+                "name": "GoodsIssue",
+                "namespace": "custom"
+            },
+            "name": "GoodsIssue",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": []
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Receivable Item",
+            "entity_metadata": {
+                "name": "ReceivableItem",
+                "namespace": "custom"
+            },
+            "name": "ReceivableItem",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "Customer",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Sales Order",
+            "entity_metadata": {
+                "name": "SalesOrder",
+                "namespace": "custom"
+            },
+            "name": "SalesOrder",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrderBlock",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Sales Order Block",
+            "entity_metadata": {
+                "name": "SalesOrderBlock",
+                "namespace": "custom"
+            },
+            "name": "SalesOrderBlock",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "SalesOrder",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "Sales Order Schedule Line",
+            "entity_metadata": {
+                "name": "SalesOrderScheduleLine",
+                "namespace": "custom"
+            },
+            "name": "SalesOrderScheduleLine",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": [
+                {
+                    "name": "CustomerInvoiceLine",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "DeliveryLine",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                },
+                {
+                    "name": "SalesOrder",
+                    "namespace": "custom",
+                    "origin_ref": {
+                        "name": "AccountsReceivable",
+                        "namespace": "custom"
+                    },
+                    "strategy": "LINK"
+                }
+            ]
+        },
+        {
+            "custom_alias": null,
+            "default_alias": "User",
+            "entity_metadata": {
+                "name": "User",
+                "namespace": "custom"
+            },
+            "name": "User",
+            "namespace": "custom",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            },
+            "relationships": []
+        }
+    ],
+    "projections": [
+        {
+            "event_list": [],
+            "events": [
+                {
+                    "name": "ApplyCustomerInvoiceLine",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "CancelCustomerInvoice",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ChangeReceivableItem",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ClearReceivableItem",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "CreateCustomerInvoice",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "CreateCustomerInvoiceLine",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "PostReceivableItem",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReceivableItemCashDiscountDueDate",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReceivableItemDueDate",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReceiveIncomingPayment",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReleaseDunningBlock",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "SendDunningNotices",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "SetDunningBlock",
+                    "namespace": "custom"
+                }
+            ],
+            "lead_object": {
+                "name": "CustomerInvoiceLine",
+                "namespace": "custom"
+            },
+            "name": "CustomerInvoiceLineExtended",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            }
+        },
+        {
+            "event_list": [
+                {
+                    "breakdown_attributes": [
+                        {
+                            "metadata": {
+                                "data_type": "CT_UTF8_STRING",
+                                "name": "ChangedAttribute",
+                                "namespace": "custom"
+                            }
+                        }
+                    ],
+                    "name": "ChangeReceivableItem",
+                    "namespace": "custom"
+                },
+                {
+                    "breakdown_attributes": [
+                        {
+                            "metadata": {
+                                "data_type": "CT_UTF8_STRING",
+                                "name": "DocumentCategory",
+                                "namespace": "custom"
+                            }
+                        }
+                    ],
+                    "name": "PostReceivableItem",
+                    "namespace": "custom"
+                }
+            ],
+            "events": [
+                {
+                    "name": "CancelCustomerInvoice",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "CancelSalesOrderScheduleLine",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ChangeBlockOnSalesOrderScheduleLine",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ClearReceivableItem",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "CreateSalesOrder",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "CreateSalesOrderScheduleLine",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReceivableItemCashDiscountDueDate",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReceivableItemDueDate",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReceiveIncomingPayment",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "ReleaseDunningBlock",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "SendDunningNotices",
+                    "namespace": "custom"
+                },
+                {
+                    "name": "SetDunningBlock",
+                    "namespace": "custom"
+                }
+            ],
+            "lead_object": {
+                "name": "ReceivableItem",
+                "namespace": "custom"
+            },
+            "name": "ReceivableItem",
+            "origin_ref": {
+                "name": "AccountsReceivable",
+                "namespace": "custom"
+            }
+        }
+    ],
+    "tags": []
+}
