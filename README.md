@@ -8,7 +8,7 @@ This project contains a modular set of AI assistant prompts that work in sequenc
 
 | Stage | Module | Prompt File | Status |
 | :--- | :--- | :--- | :--- |
-| 0 | **Design Guidelines** | `Tools/0_Design_Guidelines.md` | Active |
+| 0 | **Design Guidelines** | `Tools/Libraries/0_Design_Guidelines.md` | Active |
 | 1 | **Requirements Gathering** | `Tools/1_Requirements.md` | Active |
 | 2 | **OCPM Builder** | `Tools/2_OCPM_Builder.md` | Active |
 | 3 | **Knowledge Model** | `Tools/3_Knowledge_Model.md` | Planned |
@@ -20,16 +20,10 @@ Stage 0 is not an executable stage — it is a reference document consumed by St
 
 ```
 .
-├── app/                              <- Python automation app
-│   ├── llm/
-│   │   ├── base.py                   <- Abstract LLM interface
-│   │   └── anthropic.py              <- Claude adapter (swap for other providers)
-│   ├── config.py                     <- Configuration loader
-│   ├── tools.py                      <- File I/O and validation tools
-│   ├── orchestrator.py               <- Multi-stage pipeline engine
-│   └── run.py                        <- CLI entry point
 ├── Tools/                            <- Prompt instructions for each module
-│   ├── 0_Design_Guidelines.md        <- Design guidelines & modeling standards
+│   ├── Libraries/                    <- Supporting reference documents
+│   │   ├── 0_Design_Guidelines.md    <- Design guidelines & modeling standards
+│   │   └── 1_OCPM_API_Reference.md   <- BL API reference for programmatic OCPM management
 │   ├── 1_Requirements.md             <- Stage 1: Requirements Gathering
 │   ├── 2_OCPM_Builder.md             <- Stage 2: OCPM JSON Builder
 │   ├── 3_Knowledge_Model.md          <- Stage 3: Knowledge Model (planned)
@@ -50,8 +44,6 @@ Stage 0 is not an executable stage — it is a reference document consumed by St
 │       ├── dashboards/
 │       ├── actions/
 │       └── assets/
-├── config.yaml                       <- App configuration (LLM provider, model, paths)
-├── requirements.txt                  <- Python dependencies
 └── README.md
 ```
 
@@ -59,7 +51,7 @@ Stage 0 is not an executable stage — it is a reference document consumed by St
 
 ## Stage 0: Design Guidelines (Reference)
 
-**File:** `Tools/0_Design_Guidelines.md`
+**File:** `Tools/Libraries/0_Design_Guidelines.md`
 
 ### What it is
 
@@ -92,27 +84,58 @@ A consolidated reference document containing all OCPM design principles, naming 
 
 ---
 
+## Libraries: OCPM API Reference
+
+**File:** `Tools/Libraries/1_OCPM_API_Reference.md`
+
+### What it is
+
+A comprehensive reference document for the Celonis Business Landscape (BL) API that enables programmatic creation, reading, updating, and deletion of OCPM entities (objects, events, SQL factories, perspectives). This document is designed for LLM agents that need to interact with Celonis data pools programmatically via REST API calls.
+
+### Key Contents
+
+| Section | Covers |
+| :--- | :--- |
+| Prerequisites | API token requirements, workspace ID, environment parameters |
+| API Endpoints | Full endpoint map for objects, events, SQL factories, perspectives, relationships |
+| JSON Schema: Objects | Complete request/response schemas with real examples (PurchaseOrder) |
+| JSON Schema: Events | Event-specific schemas with mandatory fields (CreatePurchaseDocument) |
+| JSON Schema: SQL Factories | Factory creation/update payloads, SQL embedding, validation modes |
+| JSON Schema: Perspectives | Perspective definitions with projections, LINK/EMBED strategies |
+| Enums & Data Types | DataType, Cardinality, ResourceKind, SaveMode enums |
+| Common Patterns | Namespace conventions, pagination, error handling, V1/V2 API selection |
+| End-to-End Examples | Complete workflows for adding objects, events, factories, and perspectives |
+
+### How it's used
+
+- **LLM agents** that need to programmatically manage OCPM models can use this as a complete reference for API operations.
+- **Stage 2 extensions** that generate and deploy OCPM configs directly to Celonis without manual import.
+- **Automation scripts** that need to create or modify objects, events, transformations, or perspectives via the BL API.
+
+This reference is based on the `export-import-ocpm` toolset and documents the V2 BL API endpoints (`/bl/api/v2/workspaces/{workspace_id}/...`).
+
+---
+
 ## Stage 1: Requirements Gathering
 
 **Prompt file:** `Tools/1_Requirements.md`
 
 ### What it does
 
-Converts raw, unstructured business inputs into a standardized OCPM requirements document that the Builder can consume. It acts as the "analyst" that interprets your project materials and translates them into a formal specification, enforcing the naming conventions and modeling standards defined in `Tools/0_Design_Guidelines.md`.
+Converts raw, unstructured business inputs into a standardized OCPM requirements document that the Builder can consume. It acts as the "analyst" that interprets your project materials and translates them into a formal specification, enforcing the naming conventions and modeling standards defined in `Tools/Libraries/0_Design_Guidelines.md`.
 
 ### Input
 
-Place all your project files in `Input/Project input files/`. The assistant accepts any combination of:
+The user provides project materials directly to the LLM (paste text, upload files, provide context). Accepted input formats:
 
-- Text / Markdown / CSV files (process descriptions, data schemas, field mappings)
-- JSON files (table definitions, API schemas, data dictionaries)
-- Images (Figma boards, ERDs, process flow diagrams)
-- PDFs (technical documentation, architecture docs)
-- Meeting transcripts / notes (workshop outputs, stakeholder interviews)
+- Text / Markdown / CSV content (pasted process descriptions, data schemas, field mappings)
+- JSON content (pasted table definitions, API schemas, data dictionaries)
+- Uploaded files: Images (Figma boards, ERDs, process flow diagrams), PDFs (technical documentation, architecture docs)
+- Audio transcripts / meeting notes (workshop outputs, stakeholder interviews)
 
 ### Output
 
-A Markdown file saved to `Output/1_Requirements/<ProcessName>_Requirements.md` containing:
+A Markdown document named `<ProcessName>_Requirements.md` containing:
 
 | Section | Description |
 | :--- | :--- |
@@ -125,9 +148,11 @@ A Markdown file saved to `Output/1_Requirements/<ProcessName>_Requirements.md` c
 
 ### Usage
 
-1. Drop your project files into `Input/Project input files/`.
-2. Open a new AI chat session and load `Tools/1_Requirements.md` as the system prompt.
-3. The assistant will scan the input folder, read all files, and generate the requirements document in `Output/1_Requirements/`.
+1. Open a new AI chat session and load `Tools/1_Requirements.md` as the system prompt.
+2. Provide your project materials (paste text, upload files, or provide context).
+3. The assistant will process the materials and generate the requirements document.
+   - **Local environments (Claude Code):** Saves to `Output/1_Requirements/<ProcessName>_Requirements.md`
+   - **Cloud LLMs (Gemini Gems, ChatGPT):** Outputs the document in the conversation for you to save locally
 
 ---
 
@@ -137,52 +162,79 @@ A Markdown file saved to `Output/1_Requirements/<ProcessName>_Requirements.md` c
 
 ### What it does
 
-Takes the structured requirements specification (from Stage 1) and generates a complete, import-ready set of Celonis OCPM JSON configuration files. It also validates all output against the reference template in `Input/TEMPLATE/` to ensure format compliance.
+Takes the structured requirements specification (from Stage 1) and **deploys the OCPM model directly to Celonis** via the Business Landscape (BL) API. It programmatically creates objects, events, SQL transformations, and perspectives in the target Data Pool, eliminating the need for manual ZIP imports.
 
 ### Input
 
-The Markdown requirements file generated by Stage 1 (or a manually authored equivalent) containing:
+**Required inputs:**
 
-- Business problem / process description
-- Data schema (tables, columns, types, relationships)
-- Source system type
+1. **Requirements document** from Stage 1 containing:
+   - Process overview, source system type
+   - Object definitions (attributes, data types)
+   - Event definitions (mandatory fields, foreign keys)
+   - Relationships (O:O, O:E linkages, cardinality)
+   - SQL transformations
+
+2. **Celonis connection parameters:**
+   - Team URL (e.g., `https://dev.eu-1.celonis.cloud`)
+   - API Key (with "Edit Data Pool" permission)
+   - Workspace ID (Data Pool UUID)
+   - Environment (`develop` or `production`)
+   - Data Connection ID mappings per source system
+
+### How to obtain connection parameters
+
+| Parameter | Where to find it |
+| :--- | :--- |
+| **Team URL** | Your Celonis platform URL (address bar when logged in) |
+| **API Key** | Celonis Platform → Admin & Settings → API Keys → Create New Key (ensure "Edit Data Pool" permission) |
+| **Workspace ID** | Data Integration → Data Pools → Select data pool → Settings → Copy UUID from URL or panel |
+| **Environment** | Use `develop` for dev/test, `production` for live |
+| **Data Connection IDs** | Data Integration → Data Connections → Select connection → Copy UUID from settings |
 
 ### Output
 
-A full Celonis OCPM package written to `Output/2_OCPM_Builder/` with this folder structure:
+The OCPM model is deployed **directly to your Celonis Data Pool** via API calls. No local files are generated.
 
-| Folder | Files | Description |
-| :--- | :--- | :--- |
-| `catalog_processes/` | `catalog_processes_<Process>.json` | Process catalog metadata |
-| `data_sources/` | `data_sources_<Name>.json` | Data connection definitions |
-| `environments/` | `environments_develop.json`, `environments_production.json` | Environment configs |
-| `events/` | `event_<EventName>.json` | Event/activity definitions |
-| `factories/` | `factories_<Entity>.json` | Data transformation configurations |
-| `objects/` | `object_<ObjectName>.json` | Business object definitions |
-| `perspectives/` | `perspective_<Process>.json` | Analytical view definitions |
-| `processes/` | `process_<Process>.json` | Process groupings of objects and events |
-| `sql_statements/` | `sql_statement_<Entity>.json` | SQL/PQL transformation logic |
-| `categories/` | *(empty)* | Reserved |
-| `parameters/` | *(empty)* | Reserved |
-| `template_factories/` | *(empty)* | Reserved |
-| `templates/` | *(empty)* | Reserved |
+**Entities created:**
 
-### Validation
+- **Objects** (business entities with attributes and relationships)
+- **Events** (activities/milestones with timestamps)
+- **SQL Transformations** (data extraction logic linked to objects/events)
+- **Perspectives** (analytical views with projections)
 
-After generating all files, the Builder runs a validation step that checks:
+**Progress reporting:**
 
-- **Folder structure** matches the 13 subfolders in `Input/TEMPLATE/`
-- **File naming** uses the correct prefixes (`object_`, `event_`, `factories_`, etc.)
-- **JSON schema** for each file type has all required keys matching the template structure
-- **Mandatory fields** exist (e.g., `ID` on objects, `ID` + `Time` on events)
-- **Cross-file consistency** (relationships reference existing objects, factory IDs match, counts are accurate)
+The assistant provides real-time progress updates:
+
+```
+✓ Connected to https://dev.eu-1.celonis.cloud
+✓ Data Pool: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+✓ Created Object: PurchaseOrder (ID: ...)
+✓ Created Event: CreatePurchaseOrder (ID: ...)
+✓ Created factory shell for: PurchaseOrder
+✓ Updated transformation for: PurchaseOrder (SQL loaded)
+✓ Created Perspective: Procurement
+✓ OCPM Model Deployment Complete! (15 objects, 23 events, 38 transformations, 1 perspective)
+```
+
+### Execution Order
+
+The Builder follows the correct dependency order:
+
+1. **Connection validation** → Test API connectivity
+2. **Objects** (3-pass approach to handle circular dependencies)
+3. **Events** → Created after all objects exist
+4. **Factories & SQL Transformations** → Object transformations first, then events
+5. **Perspectives** → Created last after all entities exist
 
 ### Usage
 
-1. Ensure the requirements Markdown file is ready (either from Stage 1 or manually created).
-2. Open a new AI chat session and load `Tools/2_OCPM_Builder.md` as the system prompt.
-3. Provide the requirements file as input.
-4. The assistant generates all JSON files in `Output/2_OCPM_Builder/` and runs validation against the template.
+1. Open a new AI chat session and load `Tools/2_OCPM_Builder.md` as the system prompt.
+2. Provide the connection parameters (Team URL, API Key, Workspace ID, Environment, Data Connection mappings).
+3. The assistant validates the connection and confirms it can proceed.
+4. Provide the requirements document from Stage 1.
+5. The assistant deploys the OCPM model directly to Celonis and reports progress for each entity created.
 
 ---
 
@@ -209,76 +261,81 @@ Generates Celonis application configurations (views, dashboards, action flows) u
 ## End-to-End Workflow
 
 ```
-Input/Project input files/     Stage 1: Requirements       Output/1_Requirements/
-  (transcripts, schemas,   -->   Gathering              -->   <Process>_Requirements.md
+User-provided materials         Stage 1: Requirements       <Process>_Requirements.md
+  (transcripts, schemas,   -->   Gathering              -->   (Markdown document)
    ERDs, Figma, docs...)
 
-Output/1_Requirements/          Stage 2: OCPM            Output/2_OCPM_Builder/
-  <Process>_Requirements.md -->   Builder              -->   objects/, events/, factories/,
-                                                              sql_statements/, processes/, ...
+<Process>_Requirements.md       Stage 2: OCPM                Celonis Data Pool
+  + Connection parameters   -->   Builder              -->   (Objects, Events, Factories,
+  (Team URL, API Key, etc.)       (API-based execution)       SQL Transformations, Perspectives
+                                                              deployed directly via BL API)
 
-Output/2_OCPM_Builder/          Stage 3: Knowledge       Output/3_Knowledge_Model/
-  (OCPM JSON files)         -->   Model (planned)      -->   (KPIs, filters, variables, ...)
+Celonis Data Pool               Stage 3: Knowledge           Output/3_Knowledge_Model/
+  (OCPM entities)           -->   Model (planned)      -->   (KPIs, filters, variables, ...)
 
-Output/3_Knowledge_Model/       Stage 4: Apps            Output/4_Apps/
-  (KM config files)         -->   (planned)            -->   views/, dashboards/, actions/, ...
+Output/3_Knowledge_Model/       Stage 4: Apps                Output/4_Apps/
+  (KM config files)         -->   (planned)            -->   (views/, dashboards/, actions/, ...)
 ```
 
-## Running with the Python App (Automated)
+## Usage
 
-The `app/` folder provides a CLI tool that automates the full pipeline. The LLM layer is isolated behind an adapter pattern, so the provider can be swapped by editing `config.yaml`.
-
-### First-Time Setup
-
-```bash
-# 1. Install dependencies
-pip install -r requirements.txt
-
-# 2. Set your API key
-export ANTHROPIC_API_KEY="sk-ant-..."
-
-# 3. (Optional) Edit config.yaml to change model or provider
-```
-
-### Running the Pipeline
-
-```bash
-# Full pipeline: Stage 1 + Stage 2 + Validation
-python app/run.py
-
-# Only Stage 1 (analyze inputs, generate requirements)
-python app/run.py --stage 1
-
-# Only Stage 2 (generate JSON files from existing requirements)
-python app/run.py --stage 2
-
-# Only validate existing Output/2_OCPM_Builder/ against the template (no LLM calls)
-python app/run.py --validate-only
-```
+This project is designed to be used with any LLM interface that supports system prompts and file operations (e.g., Claude Code, Google Gemini Gems, ChatGPT with Code Interpreter, GitHub Copilot Workspace, etc.).
 
 ### Typical Consultant Workflow
 
-| Step | Action | Command |
+| Step | Action | How |
 | :--- | :--- | :--- |
-| 1 | Drop project files into `Input/Project input files/` | *(manual)* |
-| 2 | Run the full pipeline | `python app/run.py` |
-| 3 | Review `Output/1_Requirements/<Process>_Requirements.md` | *(manual)* |
-| 4 | Fill in Data Connection Technical IDs (Section 5) if not auto-detected | *(manual)* |
-| 5 | If requirements need edits, fix the `.md` file and re-run Stage 2 | `python app/run.py --stage 2` |
-| 6 | Zip `Output/2_OCPM_Builder/` contents and import into Celonis | *(manual)* |
+| 1 | Prepare project materials | Gather process descriptions, data schemas, ERDs, technical docs |
+| 2 | Run Stage 1 (Requirements Gathering) | Load `Tools/1_Requirements.md` as system prompt, provide project materials |
+| 3 | Review generated requirements document | *(manual review)* |
+| 4 | Gather Celonis connection parameters | Obtain Team URL, API Key, Workspace ID, Environment, Data Connection IDs |
+| 5 | Run Stage 2 (OCPM Builder) | Load `Tools/2_OCPM_Builder.md` as system prompt, provide connection params + requirements document |
+| 6 | Monitor deployment progress | Watch real-time progress as entities are created in Celonis |
+| 7 | Verify deployment in Celonis UI | Data Integration → Data Pool → Verify objects, events, transformations, perspectives exist |
+| 8 | Load data into data pool | Execute factories to populate objects and events with actual data |
 
-### Switching LLM Provider
+### Using with External LLM Tools
 
-The LLM is configured in `config.yaml`:
-
-```yaml
-llm:
-  provider: anthropic                # Change to: openai, google, ollama
-  model: claude-sonnet-4-5-20250929  # Model ID for the chosen provider
-  api_key: ${ANTHROPIC_API_KEY}      # Environment variable reference
+**Option 1: Claude Code**
+```bash
+# Clone or sync this repository
+# Open in VS Code with Claude Code extension
+# Load the desired stage prompt (Tools/1_Requirements.md or Tools/2_OCPM_Builder.md)
+# The assistant will automatically read files from Input/ and write to Output/
 ```
 
-To add a new provider, create a new adapter file in `app/llm/` that implements the `LLMBase` interface from `app/llm/base.py`, and register it in `app/llm/__init__.py`.
+**Option 2: Google Gemini Gems**
+```
+# Create a new Gem
+# Copy the contents of Tools/1_Requirements.md as the Gem's instruction set
+# Upload project files or provide links to the Input/ folder
+# The Gem will generate the requirements document
+```
+
+**Option 3: ChatGPT / Claude.ai Web Interface**
+```
+# Start a new conversation
+# Copy/paste the full contents of Tools/1_Requirements.md
+# Upload your project files (transcripts, schemas, diagrams)
+# Copy the generated output to Output/1_Requirements/<Process>_Requirements.md
+```
+
+**Option 4: GitHub Copilot Workspace / VS Code**
+```
+# Open this repository in VS Code
+# Use Copilot Chat with the workspace context
+# Reference the stage prompt file: "@workspace Tools/1_Requirements.md"
+# The assistant will use the prompt as guidance and access Input/ files
+```
+
+### Integrating with Custom Automation
+
+The prompts in `Tools/` are designed to be consumed programmatically. You can:
+
+- **Clone this repository** into your automation environment (CI/CD, Zapier, Make, etc.)
+- **Reference prompts via git URLs** for version-controlled instructions
+- **Build custom integrations** using the BL API reference in `Tools/Libraries/1_OCPM_API_Reference.md`
+- **Embed in Gemini Gems, Custom GPTs, or Claude Projects** for reusable AI assistants
 
 ---
 
