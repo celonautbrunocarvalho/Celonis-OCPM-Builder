@@ -2,4 +2,19 @@
 __pycache__/
 *.pyc
 .env
+.DS_Store
 Input/References/export-import-ocpm/
+
+# Ignore contents of project input files but keep folder
+Input/Project input files/*
+!Input/Project input files/.gitkeep
+
+# Ignore contents of output folders but keep folders
+Output/1_Requirements/*
+!Output/1_Requirements/.gitkeep
+Output/2_OCPM_Builder/*
+!Output/2_OCPM_Builder/.gitkeep
+Output/3_Knowledge_Model/*
+!Output/3_Knowledge_Model/.gitkeep
+Output/4_Apps/*
+!Output/4_Apps/.gitkeep
