@@ -212,6 +212,19 @@ Relationships in OCPM are bidirectional. Supported cardinalities:
 - Named with `Relationship` prefix (e.g., `RelationshipOrderToInvoice`, `RelationshipBillOfMaterials`)
 - Connected with `HAS_MANY` from both participating objects
 
+### Circular / Loop Relationships
+- **Object-level loops ARE permitted.** It is valid for objects to form cycles in their relationship definitions (e.g., WorkOrder → Operation → EPD → WorkOrder). Define all relationships regardless of cycles. The object model should represent the complete real-world data structure.
+- **Perspective-level loops are NOT permitted.** When assembling a perspective, break every cycle by switching one relationship in the cycle from LINK to EMBED. See Section 7 for details.
+- **Choosing which to EMBED:** Prefer embedding the master-data or less-granular side of the cycle. If both sides are transactional, embed the side that is less central to the analytical question being answered by the perspective.
+
+### Relationship Exhaustiveness
+- For each object, examine ALL its attributes that reference other objects (e.g., PlantCode, MaterialNumber, VendorNumber). Each such attribute should have a corresponding O:O relationship.
+- Enumerate ALL relationship paths between objects, not just the primary hierarchical ones. Include:
+  - Direct parent-child relationships (e.g., WorkOrder → WorkOrderItem)
+  - Master data lookups (e.g., WorkOrder → Plant via PlantCode)
+  - Cross-process links (e.g., EPD → WorkOrder)
+  - Alternative paths between the same pair of objects
+
 ### Best Practices
 - Avoid unnecessary connections — only include relationships relevant to the analysis
 - Hierarchical relationships should only go one level deep (Header → Item, not Header → Item → ScheduleLine without the middle step)
@@ -237,11 +250,29 @@ A perspective includes objects, events, relationships, and projections for a spe
 - **Never EMBED** transactional objects (leads to data redundancy and performance issues)
 - **Resolve cyclic relationships** using EMBED on one side, or use multilink relationship objects
 
+### Cycle-Free Requirement
+- **Perspectives MUST NOT contain relationship cycles when using LINK strategy.** If a path A → B → C → A exists where all relationships are LINK, the perspective will fail or produce incorrect results.
+- If the underlying object model has cycles (which is allowed — see Section 6), break them in the perspective by switching one relationship in each cycle to EMBED.
+- Document which relationships were switched from LINK to EMBED to break cycles and why.
+- When choosing which relationship to EMBED: prefer the master-data side; if both are transactional, embed the side less central to the perspective's analytical question.
+
+### Required Perspective Components
+Each perspective definition must include:
+1. **Objects** — each object listed with its specific relationships and a per-relationship LINK/EMBED strategy
+2. **Events** — all events relevant to this analytical view
+3. **Projections** — each with a lead object and an event list defining which events are visible in that analytical cut
+4. **Default projection** — the name of the primary analytical view
+
 ### Projections
 - **Lead object** sets the analysis granularity — usually a line-item level object
   - Order Management: `SalesOrderScheduleLine` (projection: `SalesOrderScheduleLineActivities`)
   - Procurement: `PurchaseDocumentLine`
 - Event breakdowns enable dimensional filtering via `breakdown_attributes`
+
+### Exhaustiveness in Perspectives
+- Every transactional object that has events should appear in at least one perspective
+- Every event should appear in at least one projection
+- Master data objects should appear as EMBED'd relationships within other objects, not as standalone entries
 
 ### Best Practices
 - Start with the lead object and incrementally add objects and events relevant to the use case
@@ -276,9 +307,19 @@ A perspective includes objects, events, relationships, and projections for a spe
 }
 ```
 
+### Event Transformation Source Rule
+
+**Event transformations MUST read from OCPM object tables (`o_custom_*`) and object change tables (`c_o_custom_*`), NOT directly from source system tables.** This ensures:
+- Events inherit the clean, standardized data produced by object transformations (correct IDs, NULL handling, deduplication)
+- Foreign key columns automatically match the target object's ID format
+- Changes to object transformations propagate to events without requiring event SQL updates
+- A clear separation of concerns: object transformations handle source-system-specific logic, event transformations handle event derivation logic
+
+**The only exception** is when an event requires data that is not available in any object or change table (e.g., a dedicated workflow/audit table with no corresponding object). In such cases, document the exception and the justification.
+
 ### Common SQL Patterns
 
-**Simple Event Creation (from transactional object):**
+**Simple Event Creation (from object table):**
 ```sql
 SELECT
     'CreatePurchaseDocument' || '::' || "PurchaseDocument"."ID" AS "ID",
