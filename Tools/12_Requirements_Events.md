@@ -62,6 +62,36 @@ Generate a Markdown document named `<ProcessName>_Events.md`.
 
 
 
+## Summary
+
+Provide a quick-reference summary table at the top of the document listing all events defined below and their linked objects. This allows reviewers to verify completeness at a glance.
+
+| # | Event Name | Event Type | Linked Object(s) | Source |
+| :--- | :--- | :--- | :--- | :--- |
+| 1 | CreatePurchaseOrder | Create | PurchaseOrder | Object table |
+| 2 | ChangePurchaseOrder | Change | PurchaseOrder | Change table |
+| ... | ... | ... | ... | ... |
+
+**Totals:**
+- Total events: {count}
+- Objects with events: {count}
+- Objects without events (master data): {count}
+- Objects without events (transactional — **gaps**): {count}
+
+**Coverage matrix** (quick check that every transactional object has events):
+
+| Object | Create | Change | Status | Approve | Other | Total Events |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| PurchaseOrder | yes | yes | yes | — | — | 3 |
+| Vendor | — | — | — | — | — | 0 (master data) |
+| ... | ... | ... | ... | ... | ... | ... |
+
+
+
+---
+
+
+
 ## 2. Event Log Definitions (Events)
 
 Defines the activities/milestones associated with objects. Follow the naming conventions from the Design Guidelines (`Tools/Libraries/0_Design_Guidelines.md` Section 4).

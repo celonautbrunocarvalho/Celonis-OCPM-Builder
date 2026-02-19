@@ -97,6 +97,28 @@ Generate a Markdown document named `<ProcessName>_Objects.md` with the following
 
 
 
+## Summary
+
+Provide a quick-reference summary table at the top of the document listing all objects defined below. This allows reviewers to verify completeness at a glance before reading the full definitions.
+
+| # | Object Name | Category | Type | Relationships (O:O) | LINK/EMBED |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 1 | PurchaseOrder | Procurement | Transactional | Vendor (N:1), PurchaseOrderLine (1:N) | LINK |
+| 2 | Vendor | MasterData | Master Data | — | EMBED |
+| ... | ... | ... | ... | ... | ... |
+
+**Totals:**
+- Transactional objects: {count}
+- Master data objects: {count}
+- Total objects: {count}
+- Total O:O relationships: {count}
+
+
+
+---
+
+
+
 ## 0. Process Overview & Source System Context
 
 Provide a high-level summary that downstream scripts will use as foundational input.
